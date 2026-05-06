@@ -391,6 +391,106 @@ async function handleSummary(env) {
   });
 }
 
+async function handleCitySummary(url, env) {
+  await ensureSchema(env);
+  const nowMs = Date.now();
+  const dayEt = dayInET(new Date(nowMs));
+  const city = (url.searchParams.get("city") || "").trim().slice(0, 120);
+  const country = (url.searchParams.get("country") || "").trim().slice(0, 8);
+  if (!city || !country) return json({ ok: false, error: "city_country_required" }, 400);
+
+  const baseBind = [dayEt, city, country];
+  const allAgg = (await env.VISITS_DB.prepare(
+    `SELECT COUNT(*) AS sessions, SUM(CASE WHEN is_bot = 1 THEN 1 ELSE 0 END) AS botSessions
+     FROM visit_sessions WHERE day_et = ? AND city = ? AND country = ?`
+  ).bind(...baseBind).first()) || {};
+  const allSessions = allAgg.sessions || 0;
+  const botSessions = allAgg.botSessions || 0;
+  const signalReasons = [];
+  const botOnly = allSessions > 0 && botSessions >= allSessions;
+
+  const totalsRow = (await env.VISITS_DB.prepare(
+    `SELECT COUNT(*) AS sessions, COUNT(DISTINCT visitor_hash) AS visitors, SUM(page_views) AS pageViews,
+      SUM(clicks) AS clicks, SUM(heartbeats) AS heartbeats,
+      SUM(MIN(?, MAX(0, last_seen_ms - first_seen_ms))) AS tabTimeMs,
+      MIN(first_seen_ms) AS firstSeenMs, MAX(last_seen_ms) AS lastSeenMs
+     FROM visit_sessions
+     WHERE day_et = ? AND city = ? AND country = ? AND is_bot = 0`
+  ).bind(MAX_SESSION_MS, ...baseBind).first()) || {};
+
+  const paths = (await env.VISITS_DB.prepare(
+    `SELECT path, COUNT(*) AS views, COUNT(DISTINCT visitor_hash) AS visitors, MAX(ts_ms) AS lastSeenMs
+     FROM visit_events
+     WHERE day_et = ? AND city = ? AND country = ? AND is_bot = 0 AND type = "pageview" AND path != ""
+     GROUP BY path ORDER BY views DESC, lastSeenMs DESC LIMIT 6`
+  ).bind(...baseBind).all()).results || [];
+  const clicks = (await env.VISITS_DB.prepare(
+    `SELECT COALESCE(NULLIF(app_slug, ""), NULLIF(target, ""), "internal") AS label, COUNT(*) AS clicks, MAX(ts_ms) AS lastSeenMs
+     FROM visit_events
+     WHERE day_et = ? AND city = ? AND country = ? AND is_bot = 0 AND type = "click"
+     GROUP BY label ORDER BY clicks DESC, lastSeenMs DESC LIMIT 8`
+  ).bind(...baseBind).all()).results || [];
+  const devices = (await env.VISITS_DB.prepare(
+    `SELECT COALESCE(NULLIF(device, ""), "unknown") AS device, COUNT(*) AS sessions
+     FROM visit_sessions
+     WHERE day_et = ? AND city = ? AND country = ? AND is_bot = 0
+     GROUP BY device ORDER BY sessions DESC LIMIT 5`
+  ).bind(...baseBind).all()).results || [];
+  const referrers = (await env.VISITS_DB.prepare(
+    `SELECT COALESCE(NULLIF(referrer_host, ""), "direct") AS referrerHost, COUNT(*) AS sessions
+     FROM visit_sessions
+     WHERE day_et = ? AND city = ? AND country = ? AND is_bot = 0
+     GROUP BY referrerHost ORDER BY sessions DESC LIMIT 5`
+  ).bind(...baseBind).all()).results || [];
+  const timeline = (await env.VISITS_DB.prepare(
+    `SELECT ts_ms, type, COALESCE(NULLIF(path, ""), NULLIF(app_slug, ""), "activity") AS label
+     FROM visit_events
+     WHERE day_et = ? AND city = ? AND country = ? AND is_bot = 0
+     ORDER BY ts_ms DESC LIMIT 12`
+  ).bind(...baseBind).all()).results || [];
+
+  const sessions = totalsRow.sessions || 0;
+  const pageViews = totalsRow.pageViews || 0;
+  const heartbeats = totalsRow.heartbeats || 0;
+  const tabTimeMs = totalsRow.tabTimeMs || 0;
+  const unknownDeviceSessions = devices.find((d) => d.device === "unknown")?.sessions || 0;
+  if (tabTimeMs === 0 && heartbeats === 0) signalReasons.push("zero-tab", "no-heartbeat");
+  if (sessions <= 2 && pageViews <= 2 && tabTimeMs < 3000) signalReasons.push("short-session");
+  if (sessions > 0 && unknownDeviceSessions / sessions >= 0.6) signalReasons.push("unknown-device");
+  if (heartbeats === 0 && (totalsRow.lastSeenMs || 0) < nowMs - 30000 && pageViews > 0) signalReasons.push("no-heartbeat");
+
+  const signal = botOnly
+    ? { label: "bot", reasons: ["bot-only"] }
+    : signalReasons.length
+      ? { label: "suspect", reasons: [...new Set(signalReasons)] }
+      : { label: "normal", reasons: [] };
+
+  return json({
+    ok: true,
+    generatedAt: new Date(nowMs).toISOString(),
+    timezone: ET_TIMEZONE,
+    city,
+    country,
+    totals: {
+      sessions,
+      visitors: totalsRow.visitors || 0,
+      pageViews,
+      clicks: totalsRow.clicks || 0,
+      heartbeats,
+      tabTimeMs,
+      tabTimeLabel: durationLabel(tabTimeMs),
+      firstSeenTime: totalsRow.firstSeenMs ? timeInET(totalsRow.firstSeenMs) : "--:--:--",
+      lastSeenTime: totalsRow.lastSeenMs ? timeInET(totalsRow.lastSeenMs) : "--:--:--"
+    },
+    signal,
+    paths: paths.map((x) => ({ path: x.path || "/", views: x.views || 0, visitors: x.visitors || 0, lastSeenTime: x.lastSeenMs ? timeInET(x.lastSeenMs) : "--:--:--" })),
+    clicks: clicks.map((x) => ({ label: x.label || "internal", clicks: x.clicks || 0, lastSeenTime: x.lastSeenMs ? timeInET(x.lastSeenMs) : "--:--:--" })),
+    devices: devices.map((x) => ({ device: x.device || "unknown", sessions: x.sessions || 0 })),
+    referrers: referrers.map((x) => ({ referrerHost: x.referrerHost || "direct", sessions: x.sessions || 0 })),
+    timeline: timeline.map((x) => ({ time: timeInET(x.ts_ms || nowMs).slice(0, 5), type: x.type || "event", label: x.label || "activity" }))
+  });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -401,6 +501,9 @@ export default {
 
     if (request.method === "GET" && url.pathname === "/api/visits/summary") {
       return handleSummary(env);
+    }
+    if (request.method === "GET" && url.pathname === "/api/visits/city") {
+      return handleCitySummary(url, env);
     }
 
     return env.ASSETS.fetch(request);
