@@ -240,7 +240,8 @@
     .log {
       position: relative;
       min-height: 0;
-      padding: 2px 0 4px;
+      padding: 2px 0 6px;
+      overflow-x: hidden;
     }
 
     .cmd-block {
@@ -338,10 +339,11 @@
     .visits-compact { margin: 0; }
     .visits-pre {
       margin: 0;
+      max-width: 100%;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
       font: inherit;
-      line-height: 1.28;
+      line-height: 1.24;
     }
 
     @media (max-width: 820px) {
@@ -838,11 +840,11 @@
         : dt.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
       const status = state.stale ? "stale" : "live";
       const geoItems = (data.countriesActive || []).map((x) => `${safeLabel(x.country || "--", 3)}:${x.sessions ?? 0}`);
-      const hotItems = (data.citiesActive || []).map((x) => `${safeLabel(x.city || "unknown", 14)}:${x.sessions ?? 0}/${safeLabel(x.ageLabel || "0s", 6)}`);
+      const hotItems = (data.citiesActive || []).map((x) => `${safeLabel(x.city || "unknown", 14)}:${x.sessions ?? 0}/${safeLabel(x.ageLabel || "0s", 5)}`);
       const hot = compactList(hotItems, 5);
       const rows = (data.citiesToday || []).slice(0, 8).map((x) => {
-        const cityLabel = safeLabel(`${x.city || "unknown"} ${x.country || "--"}`, 20);
-        return `${padRight(cityLabel, 20)} ${padLeft(x.sessions ?? 0, 3)} ${padLeft(x.pageViews ?? 0, 4)} ${padLeft(safeLabel(x.tabTimeLabel || "0s", 7), 7)} ${padLeft(safeLabel(x.lastSeenTime || "--:--:--", 8), 8)}`;
+        const cityLabel = safeLabel(`${x.city || "unknown"} ${x.country || "--"}`, 16);
+        return `${padRight(cityLabel, 16)} ${padLeft(x.sessions ?? 0, 3)} ${padLeft(x.pageViews ?? 0, 4)} ${padLeft(safeLabel(x.tabTimeLabel || "0s", 4), 4)} ${padLeft(safeLabel(x.lastSeenTime || "--:--:--", 8), 8)}`;
       });
       const hiddenCities = Math.max(0, (data.citiesToday || []).length - rows.length);
       const clicksItems = (data.clicksToday || []).map((x) => `${safeLabel(x.appSlug || x.targetHost || x.target || "internal", 18)}:${x.clicks ?? 0}`);
@@ -853,7 +855,7 @@
         `geo ${geoItems.length ? geoItems.join(" ") : "none"}`,
         `hot ${hot.text || "none"}`,
         "",
-        `${padRight("city", 20)} ${padLeft("ses", 3)} ${padLeft("view", 4)} ${padLeft("tab", 7)} ${padLeft("last", 8)}`,
+        `${padRight("city", 16)} ${padLeft("ses", 3)} ${padLeft("view", 4)} ${padLeft("tab", 4)} ${padLeft("last", 8)}`,
         ...(rows.length ? rows : ["none"])
       ];
       if (hiddenCities > 0) lines.push(`... +${hiddenCities} cities`);
