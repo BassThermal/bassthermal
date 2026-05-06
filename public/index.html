@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>BassThermal</title>
   <meta name="description" content="BassThermal software index." />
+  <link rel="canonical" href="https://bassthermal.com/" />
   <meta name="theme-color" content="#000000" />
   <meta property="og:title" content="BassThermal" />
   <meta property="og:description" content="BassThermal software index." />
@@ -12,714 +13,165 @@
   <meta property="og:url" content="https://bassthermal.com/" />
   <meta property="og:image" content="https://bassthermal.com/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "BassThermal",
-    "url": "https://bassthermal.com/",
-    "sameAs": [
-      "https://www.dualticker.com/",
-      "https://play.google.com/store/apps/developer?id=BassThermal",
-      "https://apps.microsoft.com/search/publisher?name=BassThermal"
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "BassThermal software index",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "DualTicker", "url": "https://www.dualticker.com/" },
-      { "@type": "ListItem", "position": 2, "name": "RetroFy" },
-      { "@type": "ListItem", "position": 3, "name": "Coptic Dictionary" },
-      { "@type": "ListItem", "position": 4, "name": "Icon Pack Builder" },
-      { "@type": "ListItem", "position": 5, "name": "Favicon Harvester" },
-      { "@type": "ListItem", "position": 6, "name": "ISBN Manager" },
-      { "@type": "ListItem", "position": 7, "name": "RSS Finder" }
-    ]
-  }
-  </script>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #000;
-      --fg: #c9d1d9;
-      --soft: #8b949e;
-      --dim: #484f58;
-      --dead: #30363d;
-      --hot: #f0f6fc;
-      --ok: #7ee787;
-      --warn: #d29922;
-      --bad: #ff7b72;
-      --web: #79c0ff;
-      --windows: #58a6ff;
-      --android: #7ee787;
-      --store: #d2a8ff;
-      --info: #ffa657;
-      --violet: #d2a8ff;
-      --line: rgba(48, 54, 61, 0.74);
-      --font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    }
-
-    * { box-sizing: border-box; }
-
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      background: var(--bg);
-      color: var(--fg);
-      font-family: var(--font);
-      font-size: 14px;
-      line-height: 1.38;
-      overflow: hidden;
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-    }
-
-    body {
-      padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
-    }
-
-    a,
-    button,
-    input { font: inherit; }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-      touch-action: manipulation;
-    }
-
-    button {
-      display: inline;
-      padding: 0;
-      margin: 0;
-      color: inherit;
-      background: transparent;
-      border: 0;
-      cursor: pointer;
-      text-align: left;
-      touch-action: manipulation;
-    }
-
-    a:hover,
-    a:focus-visible,
-    button:hover,
-    button:focus-visible {
-      color: var(--hot);
-      text-decoration: underline;
-      outline: 0;
-    }
-
-    ::selection {
-      color: #000;
-      background: var(--fg);
-    }
-
-    .term {
-      width: min(1220px, 100%);
-      height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)));
-      display: grid;
-      grid-template-rows: auto minmax(154px, auto) minmax(0, 1fr) auto;
-      gap: 9px;
-      overflow: hidden;
-    }
-
-    .topline {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: baseline;
-      gap: 18px;
-      color: var(--dim);
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    .brand {
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .brand strong {
-      color: var(--hot);
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
-
-    .right {
-      color: var(--dim);
-      text-align: right;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .index {
-      min-height: 0;
-      overflow: auto;
-      overscroll-behavior: contain;
-      scrollbar-width: none;
-      padding-right: 2px;
-    }
-
-    .index::-webkit-scrollbar,
-    .log::-webkit-scrollbar { width: 0; height: 0; }
-
-    .statement {
-      max-width: 78ch;
-      margin: 0 0 10px;
-      color: var(--soft);
-    }
-
-    .table {
-      display: grid;
-      gap: 0;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 36px minmax(170px, 1.08fr) minmax(156px, 0.78fr) minmax(80px, 0.34fr) minmax(260px, 1fr);
-      gap: 14px;
-      min-height: 24px;
-      align-items: baseline;
-    }
-
-    .row.head {
-      min-height: 22px;
-      color: var(--dim);
-      text-transform: lowercase;
-    }
-
-    .row.app-row + .row.app-row {
-      border-top: 1px solid transparent;
-    }
-
-    .app-name { color: var(--hot); }
-    .app-name:hover,
-    .app-name:focus-visible { color: var(--info); }
-
-    .links {
-      min-width: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-    }
-
-    .tag {
-      display: inline-block;
-      white-space: nowrap;
-    }
-
-    .tag::before { content: "["; color: var(--dead); }
-    .tag::after { content: "]"; color: var(--dead); }
-    .tag.disabled { color: var(--dead); cursor: default; }
-    .tag.disabled:hover,
-    .tag.disabled:focus-visible { color: var(--dead); text-decoration: none; }
-
-    .separator {
-      margin-top: 8px;
-      color: var(--dead);
-      white-space: nowrap;
-      overflow: hidden;
-      user-select: none;
-    }
-
-    .log {
-      min-height: 0;
-      overflow: auto;
-      overscroll-behavior: contain;
-      scrollbar-width: none;
-      padding: 1px 0 4px;
-      scroll-padding-top: 0;
-    }
-
-    .cmd-block {
-      padding: 0 0 9px;
-      scroll-margin-top: 0;
-    }
-
-    .cmd-block + .cmd-block {
-      padding-top: 2px;
-    }
-
-    .cmd-block.past { opacity: 0.74; }
-    .cmd-block.past:hover,
-    .cmd-block.past:focus-within { opacity: 1; }
-
-    .line {
-      min-height: 1.38em;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-
-    .dossier {
-      display: grid;
-      grid-template-columns: 78px minmax(0, 1fr);
-      gap: 0 14px;
-      max-width: 82ch;
-      padding-top: 1px;
-    }
-
-    .dossier .span { grid-column: 1 / -1; }
-    .label { color: var(--dim); }
-
-    .inputbar {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      min-height: 22px;
-      padding-top: 2px;
-      background: var(--bg);
-    }
-
-    .prompt {
-      flex: 0 0 auto;
-      color: var(--ok);
-      white-space: nowrap;
-    }
-
-    #cmd {
-      flex: 1 1 0;
-      min-width: 0;
-      padding: 0;
-      color: var(--fg);
-      caret-color: var(--hot);
-      background: var(--bg);
-      border: 0;
-      border-radius: 0;
-      outline: 0;
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    .dim { color: var(--dim); }
-    .soft { color: var(--soft); }
-    .dead { color: var(--dead); }
-    .hot { color: var(--hot); }
-    .ok { color: var(--ok); }
-    .warn { color: var(--warn); }
-    .bad { color: var(--bad); }
-    .web { color: var(--web); }
-    .windows { color: var(--windows); }
-    .android { color: var(--android); }
-    .store { color: var(--store); }
-    .info { color: var(--info); }
-    .violet { color: var(--violet); }
-
-    @media (max-width: 860px) {
-      html,
-      body { font-size: 12px; }
-
-      body {
-        padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
-      }
-
-      .term {
-        height: calc(100dvh - max(10px, env(safe-area-inset-top)) - max(10px, env(safe-area-inset-bottom)));
-        grid-template-rows: auto minmax(230px, 48dvh) minmax(0, 1fr) auto;
-        gap: 8px;
-      }
-
-      .topline {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 2px;
-      }
-
-      .right {
-        text-align: left;
-        white-space: normal;
-      }
-
-      .statement {
-        margin-bottom: 8px;
-      }
-
-      .row.head { display: none; }
-
-      .row {
-        grid-template-columns: 30px minmax(0, 1fr) auto;
-        gap: 2px 10px;
-        min-height: 0;
-        padding: 7px 0;
-      }
-
-      .row.app-row + .row.app-row {
-        border-top: 1px solid var(--line);
-      }
-
-      .row > span:nth-child(1) { grid-column: 1; grid-row: 1 / span 3; }
-      .row > span:nth-child(2) { grid-column: 2; grid-row: 1; min-width: 0; }
-      .row > span:nth-child(3) { grid-column: 2 / 4; grid-row: 2; }
-      .row > span:nth-child(4) { grid-column: 3; grid-row: 1; text-align: right; }
-      .row > span:nth-child(5) { grid-column: 2 / 4; grid-row: 3; }
-
-      .links { gap: 6px; }
-
-      .separator { margin-top: 6px; }
-
-      .dossier {
-        grid-template-columns: 64px minmax(0, 1fr);
-        gap: 0 10px;
-      }
-    }
-
-    @media (max-width: 430px) {
-      html,
-      body { font-size: 11.5px; }
-
-      .term {
-        grid-template-rows: auto minmax(220px, 50dvh) minmax(0, 1fr) auto;
-      }
-
-      .row {
-        grid-template-columns: 27px minmax(0, 1fr) auto;
-        gap: 2px 8px;
-        padding: 6px 0;
-      }
-
-      .app-name { max-width: 100%; }
-      .dossier { grid-template-columns: 58px minmax(0, 1fr); }
-    }
-
-    @media (max-height: 620px) and (max-width: 860px) {
-      .statement { display: none; }
-      .term { grid-template-rows: auto minmax(184px, 46dvh) minmax(0, 1fr) auto; }
-      .row { padding: 5px 0; }
-    }
-  </style>
+  <link rel="stylesheet" href="/style.css" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"BassThermal","url":"https://bassthermal.com/","sameAs":["https://www.dualticker.com/","https://apps.microsoft.com/search/publisher?name=BassThermal&hl=en-US&gl=CA","https://play.google.com/store/apps/developer?id=BassThermal"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","name":"BassThermal software index","itemListElement":[{"@type":"ListItem","position":1,"name":"DualTicker","url":"https://bassthermal.com/apps/dualticker/"},{"@type":"ListItem","position":2,"name":"RetroFy","url":"https://bassthermal.com/apps/retrofy/"},{"@type":"ListItem","position":3,"name":"Coptic Dictionary","url":"https://bassthermal.com/apps/coptic-dictionary/"},{"@type":"ListItem","position":4,"name":"Icon Pack Builder","url":"https://bassthermal.com/apps/icon-pack-builder/"},{"@type":"ListItem","position":5,"name":"Favicon Harvester","url":"https://bassthermal.com/apps/favicon-harvester/"},{"@type":"ListItem","position":6,"name":"ISBN Manager","url":"https://bassthermal.com/apps/isbn-manager/"},{"@type":"ListItem","position":7,"name":"RSS Finder","url":"https://bassthermal.com/apps/rss-finder/"}]}</script>
 </head>
+
 <body>
-  <main class="term" aria-label="BassThermal terminal">
+  <main class="terminal home" aria-label="BassThermal terminal">
     <header class="topline">
       <div class="brand"><strong>BASSTHERMAL</strong> / software index</div>
       <div class="right" id="readout">live:6 lab:1</div>
     </header>
-
     <section class="index" id="index" aria-label="Software index">
-      <div class="table" id="appTable" role="list"></div>
+      <div class="table" id="appTable" role="list">
+        <div class="row head" aria-hidden="true"><span>id</span><span>name</span><span>class</span><span>state</span><span>surface</span></div>
+        <div class="row head" aria-hidden="true"><span>--</span><span>--------------------</span><span>------------------</span><span>--------</span><span>------------------------------</span></div>
+        <div class="row app-row" role="listitem">
+          <span class="dim">01</span>
+          <span><a class="app-name" href="/apps/dualticker/" data-command="info dualticker">DualTicker</a></span>
+          <span class="soft">signal/interface</span>
+          <span class="ok">live</span>
+          <span class="links"><a class="tag web" href="https://www.dualticker.com/" target="_blank" rel="noopener noreferrer" title="DualTicker web" data-command="open dualticker web" data-log-open="1">web</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&amp;gl=CA" target="_blank" rel="noopener noreferrer" title="DualTicker windows" data-command="open dualticker windows" data-log-open="1">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens" target="_blank" rel="noopener noreferrer" title="DualTicker android" data-command="open dualticker android" data-log-open="1">android</a></span>
+        </div>
+        <div class="row app-row" role="listitem">
+          <span class="dim">02</span>
+          <span><a class="app-name" href="/apps/retrofy/" data-command="info retrofy">RetroFy</a></span>
+          <span class="soft">image/processor</span>
+          <span class="ok">live</span>
+          <span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&amp;gl=CA" target="_blank" rel="noopener noreferrer" title="RetroFy windows" data-command="open retrofy windows" data-log-open="1">windows</a> <a class="tag android" href="https://play.google.com/store/apps/developer?id=BassThermal" target="_blank" rel="noopener noreferrer" title="RetroFy android publisher hub" data-command="open retrofy android" data-log-open="1">android</a></span>
+        </div>
+        <div class="row app-row" role="listitem">
+          <span class="dim">03</span>
+          <span><a class="app-name" href="/apps/coptic-dictionary/" data-command="info coptic-dictionary">Coptic Dictionary</a></span>
+          <span class="soft">language/reference</span>
+          <span class="ok">live</span>
+          <span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&amp;gl=CA" target="_blank" rel="noopener noreferrer" title="Coptic Dictionary windows" data-command="open coptic-dictionary windows" data-log-open="1">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary" target="_blank" rel="noopener noreferrer" title="Coptic Dictionary android" data-command="open coptic-dictionary android" data-log-open="1">android</a></span>
+        </div>
+        <div class="row app-row" role="listitem">
+          <span class="dim">04</span>
+          <span><a class="app-name" href="/apps/icon-pack-builder/" data-command="info icon-pack-builder">Icon Pack Builder</a></span>
+          <span class="soft">asset/compiler</span>
+          <span class="ok">live</span>
+          <span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&amp;gl=CA" target="_blank" rel="noopener noreferrer" title="Icon Pack Builder windows" data-command="open icon-pack-builder windows" data-log-open="1">windows</a></span>
+        </div>
+        <div class="row app-row" role="listitem">
+          <span class="dim">05</span>
+          <span><a class="app-name" href="/apps/favicon-harvester/" data-command="info favicon-harvester">Favicon Harvester</a></span>
+          <span class="soft">web/extractor</span>
+          <span class="ok">live</span>
+          <span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&amp;gl=CA" target="_blank" rel="noopener noreferrer" title="Favicon Harvester windows" data-command="open favicon-harvester windows" data-log-open="1">windows</a></span>
+        </div>
+        <div class="row app-row" role="listitem">
+          <span class="dim">06</span>
+          <span><a class="app-name" href="/apps/isbn-manager/" data-command="info isbn-manager">ISBN Manager</a></span>
+          <span class="soft">inventory/system</span>
+          <span class="ok">live</span>
+          <span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&amp;gl=CA" target="_blank" rel="noopener noreferrer" title="ISBN Manager windows" data-command="open isbn-manager windows" data-log-open="1">windows</a></span>
+        </div>
+        <div class="row app-row" role="listitem">
+          <span class="dim">07</span>
+          <span><a class="app-name" href="/apps/rss-finder/" data-command="info rss-finder">RSS Finder</a></span>
+          <span class="soft">feed/discovery</span>
+          <span class="violet">lab</span>
+          <span class="links"><span class="tag disabled" aria-disabled="true">pending</span></span>
+        </div>
+      </div>
       <div class="separator">──────────────────────────────────────────────────────────────────────────────</div>
     </section>
-
     <section class="log" id="log" aria-label="Command log" aria-live="polite"></section>
-
     <form class="inputbar" id="form" autocomplete="off">
       <label class="sr-only" for="cmd">Command</label>
       <span class="prompt">bt:~$</span>
       <input id="cmd" spellcheck="false" autocapitalize="none" autocomplete="off" inputmode="text" />
     </form>
   </main>
-
   <script>
     const STORE_HUB_WINDOWS = "https://apps.microsoft.com/search/publisher?name=BassThermal&hl=en-US&gl=CA";
     const STORE_HUB_ANDROID = "https://play.google.com/store/apps/developer?id=BassThermal";
-
-    const apps = [
-      {
-        id: "01",
-        slug: "dualticker",
-        aliases: ["dt", "dual"],
-        name: "DualTicker",
-        type: "signal/interface",
-        status: "live",
-        statusClass: "ok",
-        line: "Parallel headline streams for watching competing narratives move in real time.",
-        links: [
-          { platform: "web", url: "https://www.dualticker.com/", direct: true },
-          { platform: "windows", url: "https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA", direct: true },
-          { platform: "android", url: "https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens", direct: true }
-        ]
-      },
-      {
-        id: "02",
-        slug: "retrofy",
-        aliases: ["retro", "retrofy"],
-        name: "RetroFy",
-        type: "image/processor",
-        status: "live",
-        statusClass: "ok",
-        line: "Hardware-inspired image conversion: palettes, dithering, pixel output.",
-        links: [
-          { platform: "windows", url: "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA", direct: true },
-          { platform: "android", url: STORE_HUB_ANDROID, direct: false }
-        ]
-      },
-      {
-        id: "03",
-        slug: "coptic",
-        aliases: ["coptic-dictionary", "dictionary"],
-        name: "Coptic Dictionary",
-        type: "language/reference",
-        status: "live",
-        statusClass: "ok",
-        line: "Offline Coptic lookup utility built for focused reference work.",
-        links: [
-          { platform: "windows", url: "https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA", direct: true },
-          { platform: "android", url: STORE_HUB_ANDROID, direct: false }
-        ]
-      },
-      {
-        id: "04",
-        slug: "iconpack",
-        aliases: ["icon", "icons", "icon-pack", "icon-pack-builder"],
-        name: "Icon Pack Builder",
-        type: "asset/compiler",
-        status: "live",
-        statusClass: "ok",
-        line: "Deterministic icon-pack generation from source artwork into platform-ready assets.",
-        links: [
-          { platform: "windows", url: "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA", direct: true }
-        ]
-      },
-      {
-        id: "05",
-        slug: "favicon",
-        aliases: ["favicons", "favicon-harvester", "harvester"],
-        name: "Favicon Harvester",
-        type: "web/extractor",
-        status: "live",
-        statusClass: "ok",
-        line: "Fast favicon extraction from URLs and domains for builders, designers, and app prep.",
-        links: [
-          { platform: "windows", url: "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA", direct: true }
-        ]
-      },
-      {
-        id: "06",
-        slug: "isbn",
-        aliases: ["isbn-manager", "books"],
-        name: "ISBN Manager",
-        type: "inventory/system",
-        status: "live",
-        statusClass: "ok",
-        line: "Book inventory, lookup, export, and label workflow system.",
-        links: [
-          { platform: "windows", url: "https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA", direct: true }
-        ]
-      },
-      {
-        id: "07",
-        slug: "rss",
-        aliases: ["rss-finder", "feed", "feeds"],
-        name: "RSS Finder",
-        type: "feed/discovery",
-        status: "lab",
-        statusClass: "violet",
-        line: "Feed discovery and source inspection surface for RSS-heavy workflows.",
-        links: [
-          { platform: "web", url: "", direct: false, disabled: true }
-        ]
-      }
-    ];
-
+    const apps = [{"id": "01", "slug": "dualticker", "aliases": ["dt", "dual"], "name": "DualTicker", "klass": "signal/interface", "status": "live", "statusClass": "ok", "platforms": ["web", "windows", "android"], "category": "NewsApplication", "line": "Parallel headline streams for monitoring live news coverage and comparing how stories move across sources.", "capabilities": ["Live headline monitoring", "Parallel feed comparison", "Web, Windows, and Android surfaces", "Configurable sources and topics"], "links": [["web", "https://www.dualticker.com/", true], ["windows", "https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA", true], ["android", "https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens", true]]}, {"id": "02", "slug": "retrofy", "aliases": ["retro", "retrofy"], "name": "RetroFy", "klass": "image/processor", "status": "live", "statusClass": "ok", "platforms": ["windows", "android"], "category": "MultimediaApplication", "line": "Retro image conversion utility with palette, dithering, and pixel-output workflows.", "capabilities": ["Retro image conversion", "Palette-limited output", "Dithering workflows", "Export-ready image processing"], "links": [["windows", "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA", true], ["android", "https://play.google.com/store/apps/developer?id=BassThermal", false]]}, {"id": "03", "slug": "coptic-dictionary", "aliases": ["coptic", "dictionary"], "name": "Coptic Dictionary", "klass": "language/reference", "status": "live", "statusClass": "ok", "platforms": ["windows", "android"], "category": "EducationalApplication", "line": "Coptic lookup and study utility for words, meanings, transliterations, forms, and saved vocabulary.", "capabilities": ["Coptic word search", "Meanings and transliterations", "Saved vocabulary", "Study and quiz workflow"], "links": [["windows", "https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA", true], ["android", "https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary", true]]}, {"id": "04", "slug": "icon-pack-builder", "aliases": ["icon", "icons", "iconpack", "icon-pack"], "name": "Icon Pack Builder", "klass": "asset/compiler", "status": "live", "statusClass": "ok", "platforms": ["windows"], "category": "DeveloperApplication", "line": "Icon-pack generation utility for turning source artwork into platform-ready icon assets.", "capabilities": ["Batch icon generation", "Multi-platform asset output", "Source-image workflow", "Desktop utility surface"], "links": [["windows", "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA", true]]}, {"id": "05", "slug": "favicon-harvester", "aliases": ["favicon", "favicons", "harvester"], "name": "Favicon Harvester", "klass": "web/extractor", "status": "live", "statusClass": "ok", "platforms": ["windows"], "category": "DeveloperApplication", "line": "Desktop utility for extracting website favicons from URLs and domains.", "capabilities": ["URL and domain input", "Favicon extraction", "Asset collection", "Developer and designer workflow"], "links": [["windows", "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA", true]]}, {"id": "06", "slug": "isbn-manager", "aliases": ["isbn", "books"], "name": "ISBN Manager", "klass": "inventory/system", "status": "live", "statusClass": "ok", "platforms": ["windows"], "category": "BusinessApplication", "line": "Book inventory workbench for ISBN lookup, catalog cleanup, barcode labels, and export-ready book data.", "capabilities": ["ISBN lookup", "Book inventory cataloging", "Barcode label workflow", "Export-ready book data"], "links": [["windows", "https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA", true]]}, {"id": "07", "slug": "rss-finder", "aliases": ["rss", "feed", "feeds"], "name": "RSS Finder", "klass": "feed/discovery", "status": "lab", "statusClass": "violet", "platforms": ["web"], "category": "DeveloperApplication", "line": "Feed discovery and source inspection surface for RSS-heavy workflows.", "capabilities": ["RSS discovery", "Feed inspection", "Source workflow support", "Lab-stage web surface"], "links": []}];
     const appTable = document.getElementById("appTable");
     const log = document.getElementById("log");
     const form = document.getElementById("form");
     const cmd = document.getElementById("cmd");
-
-    function esc(value) {
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function platformClass(platform) {
-      if (platform === "web") return "web";
-      if (platform === "windows") return "windows";
-      if (platform === "android") return "android";
-      if (platform === "store") return "store";
-      return "dead";
-    }
-
-    function renderLinks(app, mode = "table") {
+    function esc(value) { return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+    function platformClass(platform) { if(platform==="web")return"web"; if(platform==="windows")return"windows"; if(platform==="android")return"android"; if(platform==="store")return"store"; return"dead"; }
+    function renderLinks(app) {
+      if(!app.links.length) return '<span class="tag disabled" aria-disabled="true">pending</span>';
       return app.links.map((link) => {
-        const label = esc(link.platform);
-        const cls = `tag ${platformClass(link.platform)}${link.disabled ? " disabled" : ""}`;
-        if (link.disabled || !link.url) {
-          return `<span class="${cls}" aria-disabled="true">${label}</span>`;
-        }
-        const title = link.direct ? `${app.name} ${link.platform}` : `${app.name} ${link.platform} hub`;
-        return `<a class="${cls}" href="${esc(link.url)}" target="_blank" rel="noopener noreferrer" title="${esc(title)}" data-command="open ${esc(app.slug)} ${esc(link.platform)}" data-log-open="1">${label}</a>`;
+        const platform = link[0], url = link[1], direct = link[2];
+        const title = direct ? `${app.name} ${platform}` : `${app.name} ${platform} publisher hub`;
+        return `<a class="tag ${platformClass(platform)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="${esc(title)}" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1">${esc(platform)}</a>`;
       }).join(" ");
     }
-
     function renderTable() {
       appTable.innerHTML = `
-        <div class="row head" aria-hidden="true">
-          <span>id</span><span>name</span><span>class</span><span>state</span><span>surface</span>
-        </div>
-        <div class="row head" aria-hidden="true">
-          <span>--</span><span>--------------------</span><span>------------------</span><span>--------</span><span>------------------------------</span>
-        </div>
+        <div class="row head" aria-hidden="true"><span>id</span><span>name</span><span>class</span><span>state</span><span>surface</span></div>
+        <div class="row head" aria-hidden="true"><span>--</span><span>--------------------</span><span>------------------</span><span>--------</span><span>------------------------------</span></div>
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
-            <span><button type="button" class="app-name" data-command="info ${esc(app.slug)}">${esc(app.name)}</button></span>
-            <span class="soft">${esc(app.type)}</span>
+            <span><a class="app-name" href="/apps/${esc(app.slug)}/" data-command="info ${esc(app.slug)}">${esc(app.name)}</a></span>
+            <span class="soft">${esc(app.klass)}</span>
             <span class="${esc(app.statusClass)}">${esc(app.status)}</span>
             <span class="links">${renderLinks(app)}</span>
-          </div>
-        `).join("")}
+          </div>`).join("")}
       `;
     }
-
     function findApp(token) {
       const q = String(token || "").trim().toLowerCase();
-      if (!q) return null;
-      return apps.find((app) => app.slug === q || app.id === q.padStart(2, "0") || app.name.toLowerCase() === q || app.aliases.includes(q));
+      if(!q) return null;
+      return apps.find((app) => app.slug === q || app.id === q.padStart(2,"0") || app.name.toLowerCase() === q || app.aliases.includes(q));
     }
-
-    function activeLinks(app) {
-      return app.links.filter((link) => link.url && !link.disabled);
-    }
-
-    function commandLine(text) {
-      return `<div class="line"><span class="prompt">bt:~$</span> ${esc(text)}</div>`;
-    }
-
+    function activeLinks(app) { return app.links.filter((link)=>link[1]); }
+    function commandLine(text) { return `<div class="line"><span class="prompt">bt:~$</span> ${esc(text)}</div>`; }
     function dossier(app) {
-      const links = renderLinks(app, "dossier") || `<span class="dead">none</span>`;
-      return `
-        <div class="line hot">${esc(app.name.toUpperCase())}</div>
+      const links = renderLinks(app);
+      return `<div class="line hot">${esc(app.name.toUpperCase())}</div>
         <div class="dossier">
-          <div class="label">class</div><div class="soft">${esc(app.type)}</div>
+          <div class="label">class</div><div class="soft">${esc(app.klass)}</div>
           <div class="label">state</div><div class="${esc(app.statusClass)}">${esc(app.status)}</div>
           <div class="label">surface</div><div class="links">${links}</div>
-          <div class="span line"></div>
-          <div class="span line">${esc(app.line)}</div>
-        </div>
-      `;
+          <div class="span line"></div><div class="span line">${esc(app.line)}</div>
+          <div class="label">record</div><div><a class="tag info" href="/apps/${esc(app.slug)}/">page</a></div>
+        </div>`;
     }
-
-    function helpOutput() {
-      return `
-        <div class="line hot">COMMANDS</div>
-        <div class="dossier">
-          <div class="label">info</div><div>info dualticker · info retrofy · info coptic</div>
-          <div class="label">open</div><div>open dualticker web · open retrofy windows</div>
-          <div class="label">index</div><div>apps · live · stores · about · clear</div>
-        </div>
-      `;
-    }
-
-    function appsOutput(filter) {
-      const rows = apps
-        .filter((app) => !filter || app.status === filter)
-        .map((app) => `<div class="line"><span class="dim">${esc(app.id)}</span>  <span class="hot">${esc(app.name)}</span>  <span class="soft">${esc(app.type)}</span>  <span class="${esc(app.statusClass)}">${esc(app.status)}</span></div>`)
-        .join("");
-      return rows || `<div class="line dim">no matching systems</div>`;
-    }
-
-    function storesOutput() {
-      return `
-        <div class="line hot">STORE SURFACES</div>
-        <div class="dossier">
-          <div class="label">windows</div><div><a class="tag windows" href="${STORE_HUB_WINDOWS}" target="_blank" rel="noopener noreferrer" data-command="stores" data-log-open="1">publisher</a></div>
-          <div class="label">android</div><div><a class="tag android" href="${STORE_HUB_ANDROID}" target="_blank" rel="noopener noreferrer" data-command="stores" data-log-open="1">developer</a></div>
-          <div class="label">web</div><div><a class="tag web" href="https://www.dualticker.com/" target="_blank" rel="noopener noreferrer" data-command="open dualticker web" data-log-open="1">dualticker</a></div>
-        </div>
-      `;
-    }
-
-    function aboutOutput() {
-      return `
-        <div class="line hot">BASSTHERMAL</div>
-        <div class="line">public software index</div>
-      `;
-    }
-
+    function helpOutput() { return `<div class="line hot">COMMANDS</div><div class="dossier"><div class="label">info</div><div>info dualticker · info retrofy · info coptic</div><div class="label">open</div><div>open dualticker web · open retrofy windows</div><div class="label">index</div><div>apps · live · stores · about · clear</div></div>`; }
+    function appsOutput(filter) { return apps.filter((app)=>!filter||app.status===filter).map((app)=>`<div class="line"><span class="dim">${esc(app.id)}</span>  <a class="hot" href="/apps/${esc(app.slug)}/">${esc(app.name)}</a>  <span class="soft">${esc(app.klass)}</span>  <span class="${esc(app.statusClass)}">${esc(app.status)}</span></div>`).join("") || `<div class="line dim">no matching systems</div>`; }
+    function storesOutput() { return `<div class="line hot">STORE SURFACES</div><div class="dossier"><div class="label">windows</div><div><a class="tag windows" href="${STORE_HUB_WINDOWS}" target="_blank" rel="noopener noreferrer">publisher</a></div><div class="label">android</div><div><a class="tag android" href="${STORE_HUB_ANDROID}" target="_blank" rel="noopener noreferrer">developer</a></div><div class="label">web</div><div><a class="tag web" href="https://www.dualticker.com/" target="_blank" rel="noopener noreferrer">dualticker</a></div></div>`; }
+    function aboutOutput() { return `<div class="line hot">BASSTHERMAL</div><div class="line">public software index</div>`; }
     function openOutput(parts) {
-      const app = findApp(parts[1]);
-      const platform = (parts[2] || "").toLowerCase();
-      if (!app) return `<div class="line bad">unknown target</div>`;
-      const links = activeLinks(app);
-      if (!links.length) return `<div class="line dim">no public surface</div>`;
-      const link = platform ? links.find((item) => item.platform === platform) : links[0];
-      if (!link) return `<div class="line bad">surface unavailable</div>`;
-      window.open(link.url, "_blank", "noopener,noreferrer");
-      return `<div class="line">opening <span class="hot">${esc(app.name)}</span> <span class="${platformClass(link.platform)}">${esc(link.platform)}</span></div>`;
+      const app = findApp(parts[1]); const platform = (parts[2] || "").toLowerCase();
+      if(!app) return `<div class="line bad">unknown target</div>`;
+      const links = activeLinks(app); if(!links.length) return `<div class="line dim">no public surface</div>`;
+      const link = platform ? links.find((item)=>item[0]===platform) : links[0];
+      if(!link) return `<div class="line bad">surface unavailable</div>`;
+      window.open(link[1], "_blank", "noopener,noreferrer");
+      return `<div class="line">opening <span class="hot">${esc(app.name)}</span> <span class="${platformClass(link[0])}">${esc(link[0])}</span></div>`;
     }
-
     function route(raw) {
-      const text = raw.trim();
-      const normalized = text.toLowerCase().replace(/\s+/g, " ");
-      const parts = normalized.split(" ");
-
-      if (!normalized || normalized === "help" || normalized === "?") return helpOutput();
-      if (normalized === "clear" || normalized === "cls") return "__CLEAR__";
-      if (normalized === "about") return aboutOutput();
-      if (normalized === "apps" || normalized === "index" || normalized === "ls") return appsOutput();
-      if (normalized === "live") return appsOutput("live");
-      if (normalized === "stores" || normalized === "links") return storesOutput();
-      if (parts[0] === "info") {
-        const app = findApp(parts.slice(1).join(" ")) || findApp(parts[1]);
-        return app ? dossier(app) : `<div class="line bad">unknown system</div>`;
-      }
-      if (parts[0] === "open") return openOutput(parts);
-      const direct = findApp(normalized);
-      if (direct) return dossier(direct);
+      const text = raw.trim(); const normalized = text.toLowerCase().replace(/\s+/g," "); const parts = normalized.split(" ");
+      if(!normalized||normalized==="help"||normalized==="?") return helpOutput();
+      if(normalized==="clear"||normalized==="cls") return "__CLEAR__";
+      if(normalized==="about") return aboutOutput();
+      if(normalized==="apps"||normalized==="index"||normalized==="ls") return appsOutput();
+      if(normalized==="live") return appsOutput("live");
+      if(normalized==="stores"||normalized==="links") return storesOutput();
+      if(parts[0]==="info") { const app = findApp(parts.slice(1).join(" ")) || findApp(parts[1]); return app ? dossier(app) : `<div class="line bad">unknown system</div>`; }
+      if(parts[0]==="open") return openOutput(parts);
+      const direct = findApp(normalized); if(direct) return dossier(direct);
       return `<div class="line bad">unknown command</div><div class="line dim">help</div>`;
     }
-
-    function appendCommand(text, options = {}) {
-      const output = route(text);
-      if (output === "__CLEAR__") {
-        log.innerHTML = "";
-        return;
-      }
-
-      [...log.querySelectorAll(".cmd-block")].forEach((block) => block.classList.add("past"));
-      const block = document.createElement("div");
-      block.className = "cmd-block";
-      block.innerHTML = commandLine(text) + output;
-      log.appendChild(block);
-
-      requestAnimationFrame(() => {
-        block.scrollIntoView({ block: "start", inline: "nearest" });
-      });
+    function appendCommand(text) {
+      const output = route(text); if(output==="__CLEAR__") { log.innerHTML=""; return; }
+      [...log.querySelectorAll(".cmd-block")].forEach((block)=>block.classList.add("past"));
+      const block = document.createElement("div"); block.className="cmd-block"; block.innerHTML = commandLine(text) + output; log.appendChild(block);
+      requestAnimationFrame(()=>{ block.scrollIntoView({block:"start", inline:"nearest"}); });
     }
-
-    renderTable();
-    appendCommand("about");
-
-    document.addEventListener("click", (event) => {
-      const trigger = event.target.closest("[data-command]");
-      if (!trigger) return;
-      const text = trigger.getAttribute("data-command");
-      if (!text) return;
-      if (trigger.matches("a[data-log-open]")) {
-        event.preventDefault();
-        appendCommand(text, { link: true });
-        return;
-      }
-      event.preventDefault();
-      appendCommand(text);
-      cmd.focus({ preventScroll: true });
-    });
-
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const text = cmd.value.trim();
-      if (!text) return;
-      appendCommand(text);
-      cmd.value = "";
-    });
+    renderTable(); appendCommand("about");
+    document.addEventListener("click",(event)=>{ const trigger=event.target.closest("[data-command]"); if(!trigger)return; const text=trigger.getAttribute("data-command"); if(!text)return; event.preventDefault(); appendCommand(text); if(!trigger.matches("a[data-log-open]")) cmd.focus({preventScroll:true}); });
+    form.addEventListener("submit",(event)=>{ event.preventDefault(); const text=cmd.value.trim(); if(!text)return; appendCommand(text); cmd.value=""; });
   </script>
 </body>
 </html>
