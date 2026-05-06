@@ -882,13 +882,17 @@
       const geoItems = (data.countriesActive || []).map((x) => `${safeLabel(x.country || "--", 3)}:${x.sessions ?? 0}`);
       const hotItems = (data.citiesActive || []).map((x) => `${safeLabel(x.city || "unknown", 14)}:${x.sessions ?? 0}/${safeLabel(x.ageLabel || "0s", 5)}`);
       const hot = compactList(hotItems, 5);
+      const CITY_COL_W = 16;
+      const SES_COL_W = 4;
+      const VIEW_COL_W = 5;
+      const TAB_COL_W = 7;
+      const LAST_COL_W = 9;
       const rows = (data.citiesToday || []).slice(0, 8).map((x) => {
-        const cityLabel = safeLabel(`${x.city || "unknown"} ${x.country || "--"}`, 18);
+        const cityLabel = safeLabel(`${x.city || "unknown"} ${x.country || "--"}`, CITY_COL_W);
         return {
           city: x.city || "unknown",
           country: x.country || "--",
-          left: padRight(cityLabel, 18),
-          right: ` ${padLeft(x.sessions ?? 0, 3)} ${padLeft(x.pageViews ?? 0, 4)} ${padLeft(safeLabel(compactTabDuration(x.tabTimeLabel || "0s"), 6), 6)} ${padLeft(safeLabel(x.lastSeenTime || "--:--:--", 8), 8)}`
+          line: `${padRight(cityLabel, CITY_COL_W)}${padLeft(x.sessions ?? 0, SES_COL_W)}${padLeft(x.pageViews ?? 0, VIEW_COL_W)}${padLeft(safeLabel(compactTabDuration(x.tabTimeLabel || "0s"), TAB_COL_W), TAB_COL_W)}${padLeft(safeLabel(x.lastSeenTime || "--:--:--", LAST_COL_W), LAST_COL_W)}`
         };
       });
       const hiddenCities = Math.max(0, (data.citiesToday || []).length - rows.length);
@@ -909,8 +913,9 @@
       const mergedGeoHot = `geo ${geoText}        hot ${hotText}`;
       const shouldMergeGeoHot = mergedGeoHot.length <= 66;
 
-      const header = `${padRight("city", 18)} ${padLeft("ses", 3)} ${padLeft("view", 4)} ${padLeft("tab", 6)} ${padLeft("last", 8)}`;
-      const tableRows = rows.length ? rows : [{ left: "none", right: "", city: "", country: "" }];
+      const header = `${padRight("city", CITY_COL_W)}${padLeft("ses", SES_COL_W)}${padLeft("view", VIEW_COL_W)}${padLeft("tab", TAB_COL_W)}${padLeft("last", LAST_COL_W)}`;
+      const separator = "─".repeat(header.length);
+      const tableRows = rows.length ? rows : [{ line: "none", city: "", country: "" }];
 
       const lines = [
         `<div class="visits-line"><span class="visits-live${state.stale ? " visits-stale" : ""}">● ${esc(status)}</span> ${esc(timeLabel)}  <span class="visits-k">r15s</span></div>`,
@@ -927,13 +932,13 @@
       lines.push(
         "<div class=\"visits-line\"></div>",
         `<div class="visits-line"><span class="visits-k">${esc(header)}</span></div>`,
-        '<div class="visits-line visits-sep">────────────────────────────────────────</div>'
+        `<div class="visits-line visits-sep">${esc(separator)}</div>`
       );
 
       lines.push(...tableRows.map((row) => {
-        if (!row.city) return `<div class="visits-line"><span class="visits-city">${esc(row.left)}</span>${esc(row.right)}</div>`;
+        if (!row.city) return `<div class="visits-line"><span class="visits-city">${esc(row.line)}</span></div>`;
         const cmd = `city ${row.city} ${row.country}`;
-        return `<div class="visits-line"><a class="visits-city-link" data-command="${esc(cmd)}">${esc(row.left.trimEnd())}</a>${esc(row.right)}</div>`;
+        return `<div class="visits-line"><a class="visits-city-link" data-command="${esc(cmd)}">${esc(row.line.trimEnd())}</a></div>`;
       }));
       if (hiddenCities > 0) lines.push(`<div class="visits-line"><span class="visits-k">...</span> +${esc(hiddenCities)} <span class="visits-k">cities</span></div>`);
       if (clicksToday > 0 && clicks.text) lines.push("<div class=\"visits-line\"></div>", `<div class="visits-line">${kv("click", `${clicks.text}${clicks.hidden > 0 ? ` +${clicks.hidden}` : ""}`, "")}</div>`);
