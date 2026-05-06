@@ -334,17 +334,22 @@
     .info { color: var(--info); }
 
 
-    .visits-dot { color: var(--ok); }
-    .visits-stale { color: var(--warn); }
-    .visits-compact { margin: 0; }
-    .visits-pre {
+    .visits-compact {
       margin: 0;
-      max-width: 100%;
+      max-width: 68ch;
+    }
+    .visits-line {
+      min-height: 1.24em;
+      line-height: 1.24;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
-      font: inherit;
-      line-height: 1.24;
     }
+    .visits-sep { color: var(--dead); }
+    .visits-k { color: var(--dim); }
+    .visits-v { color: var(--hot); }
+    .visits-live { color: var(--ok); }
+    .visits-stale { color: var(--warn); }
+    .visits-city { color: var(--soft); }
 
     @media (max-width: 820px) {
       html,
@@ -384,6 +389,10 @@
       .row > span:nth-child(4),
       .row > span:nth-child(5) {
         grid-column: 2;
+      }
+
+      .visits-compact {
+        max-width: 100%;
       }
 
       .links {
@@ -816,6 +825,19 @@
       };
     }
 
+    function compactTabDuration(value) {
+      const text = String(value || "0s").trim();
+      const m = text.match(/^(?:(\d+)h\s*)?(?:(\d+)m)?$/i);
+      if (!m) return text;
+      const h = m[1] ? `${Number(m[1])}h` : "";
+      const mins = m[2] ? `${Number(m[2])}m` : "";
+      return `${h}${mins}` || text;
+    }
+
+    function kv(label, value, valueClass = "visits-v") {
+      return `<span class="visits-k">${esc(label)}</span> <span class="${esc(valueClass)}">${esc(value)}</span>`;
+    }
+
     const VISITS_REFRESH_MS = 15000;
 
     function currentAppSlug() {
@@ -838,35 +860,58 @@
       const timeLabel = Number.isNaN(dt.getTime())
         ? safeLabel(generatedAt, 16)
         : dt.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      const status = state.stale ? "stale" : "live";
+      const status = state.stale ? "STALE" : "LIVE";
       const geoItems = (data.countriesActive || []).map((x) => `${safeLabel(x.country || "--", 3)}:${x.sessions ?? 0}`);
       const hotItems = (data.citiesActive || []).map((x) => `${safeLabel(x.city || "unknown", 14)}:${x.sessions ?? 0}/${safeLabel(x.ageLabel || "0s", 5)}`);
       const hot = compactList(hotItems, 5);
       const rows = (data.citiesToday || []).slice(0, 8).map((x) => {
-        const cityLabel = safeLabel(`${x.city || "unknown"} ${x.country || "--"}`, 16);
-        return `${padRight(cityLabel, 16)} ${padLeft(x.sessions ?? 0, 3)} ${padLeft(x.pageViews ?? 0, 4)} ${padLeft(safeLabel(x.tabTimeLabel || "0s", 4), 4)} ${padLeft(safeLabel(x.lastSeenTime || "--:--:--", 8), 8)}`;
+        const cityLabel = safeLabel(`${x.city || "unknown"} ${x.country || "--"}`, 18);
+        return `${padRight(cityLabel, 18)} ${padLeft(x.sessions ?? 0, 3)} ${padLeft(x.pageViews ?? 0, 4)} ${padLeft(safeLabel(compactTabDuration(x.tabTimeLabel || "0s"), 6), 6)} ${padLeft(safeLabel(x.lastSeenTime || "--:--:--", 8), 8)}`;
       });
       const hiddenCities = Math.max(0, (data.citiesToday || []).length - rows.length);
       const clicksItems = (data.clicksToday || []).map((x) => `${safeLabel(x.appSlug || x.targetHost || x.target || "internal", 18)}:${x.clicks ?? 0}`);
       const clicks = compactList(clicksItems, 6);
+      const clicksToday = totals.clicksToday ?? 0;
+
+      const line2 = [
+        kv("act", totals.activeSessions ?? 0),
+        kv("today", totals.sessionsToday ?? 0),
+        kv("views", totals.pageViewsToday ?? 0),
+        ...(clicksToday > 0 ? [kv("clicks", clicksToday)] : []),
+        kv("tab", totals.tabTimeTodayLabel ?? "0s", "")
+      ].join("   ");
+
+      const geoText = geoItems.length ? geoItems.join(" ") : "none";
+      const hotText = `${hot.text || "none"}${hot.hidden > 0 ? ` +${hot.hidden}` : ""}`;
+      const mergedGeoHot = `geo ${geoText}        hot ${hotText}`;
+      const shouldMergeGeoHot = mergedGeoHot.length <= 66;
+
+      const header = `${padRight("city", 18)} ${padLeft("ses", 3)} ${padLeft("view", 4)} ${padLeft("tab", 6)} ${padLeft("last", 8)}`;
+      const tableRows = rows.length ? rows : ["none"];
 
       const lines = [
-        `act ${totals.activeSessions ?? 0}  today ${totals.sessionsToday ?? 0}  views ${totals.pageViewsToday ?? 0}  clicks ${totals.clicksToday ?? 0}  tab ${totals.tabTimeTodayLabel ?? "0s"}`,
-        `geo ${geoItems.length ? geoItems.join(" ") : "none"}`,
-        `hot ${hot.text || "none"}`,
-        "",
-        `${padRight("city", 16)} ${padLeft("ses", 3)} ${padLeft("view", 4)} ${padLeft("tab", 4)} ${padLeft("last", 8)}`,
-        ...(rows.length ? rows : ["none"])
+        `<div class="visits-line"><span class="visits-live${state.stale ? " visits-stale" : ""}">● ${esc(status)}</span> ${esc(timeLabel)}  <span class="visits-k">r15s</span></div>`,
+        `<div class="visits-line">${line2}</div>`
       ];
-      if (hiddenCities > 0) lines.push(`... +${hiddenCities} cities`);
-      if ((totals.clicksToday ?? 0) > 0 && clicks.text) {
-        if (hot.hidden > 0) lines[2] = `${lines[2]} +${hot.hidden}`;
-        lines.push("", `clicks ${clicks.text}${clicks.hidden > 0 ? ` +${clicks.hidden}` : ""}`);
-      } else if (hot.hidden > 0) {
-        lines[2] = `${lines[2]} +${hot.hidden}`;
+
+      if (shouldMergeGeoHot) {
+        lines.push(`<div class="visits-line">${kv("geo", geoText, "")}        ${kv("hot", hotText, "visits-city")}</div>`);
+      } else {
+        lines.push(`<div class="visits-line">${kv("geo", geoText, "")}</div>`);
+        lines.push(`<div class="visits-line">${kv("hot", hotText, "visits-city")}</div>`);
       }
 
-      return `<div class="visits-compact"><div class="line"><span class="visits-dot${state.stale ? " visits-stale" : ""}">●</span> ${esc(status)} ${esc(timeLabel)} r15s</div><pre class="visits-pre">${esc(lines.join("\n"))}</pre></div>`;
+      lines.push(
+        "<div class=\"visits-line\"></div>",
+        `<div class="visits-line"><span class="visits-k">${esc(header)}</span></div>`,
+        '<div class="visits-line visits-sep">────────────────────────────────────────</div>'
+      );
+
+      lines.push(...tableRows.map((row) => `<div class="visits-line"><span class="visits-city">${esc(row.slice(0, 18).trimEnd())}</span>${esc(row.slice(18))}</div>`));
+      if (hiddenCities > 0) lines.push(`<div class="visits-line"><span class="visits-k">...</span> +${esc(hiddenCities)} <span class="visits-k">cities</span></div>`);
+      if (clicksToday > 0 && clicks.text) lines.push("<div class=\"visits-line\"></div>", `<div class="visits-line">${kv("click", `${clicks.text}${clicks.hidden > 0 ? ` +${clicks.hidden}` : ""}`, "")}</div>`);
+
+      return `<div class="visits-compact">${lines.join("")}</div>`;
     }
 
     function renderVisitsError(message, previousData) {
