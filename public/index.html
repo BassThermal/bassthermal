@@ -336,7 +336,16 @@
     .visits-dot { color: var(--ok); }
     .visits-token-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
     .visits-token { border: 1px solid var(--dead); padding: 0 6px; white-space: nowrap; }
-    .visits-ledger { margin-top: 4px; }
+    .visits-ledger { margin-top: 4px; max-width: 100%; }
+    .visits-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 4ch 6ch 9ch 9ch;
+      gap: 0 1ch;
+      align-items: baseline;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .visits-row > span:not(:first-child) { text-align: right; white-space: nowrap; }
 
     @media (max-width: 820px) {
       html,
@@ -760,6 +769,7 @@
       const output = route(text);
 
       if (output === "__CLEAR__") {
+        stopVisitsMonitor();
         log.innerHTML = "";
         return;
       }
@@ -789,45 +799,100 @@
       return " ".repeat(width - text.length) + text;
     }
 
-    function renderVisitsOutput(data) {
+    const VISITS_REFRESH_MS = 15000;
+    const visitsMonitor = {
+      timer: null,
+      block: null,
+      body: null,
+      lastData: null,
+      active: false,
+      inFlight: false
+    };
+
+    function renderVisitsOutput(data, state = {}) {
       const countries = (data.countriesActive || []).map((x) => `<span class="visits-token">${esc(x.country)} ${x.sessions}</span>`).join(" ");
       const cities = (data.citiesActive || []).map((x) => `<span class="visits-token">${esc(x.city)} ${x.sessions} · ${esc(x.ageLabel)}</span>`).join(" ");
+      const status = state.stale ? "signal stale · retrying" : "live";
       const rows = (data.citiesToday || []).map((x) => {
         const left = `${x.city} (${x.country})`;
-        return `<div class="line">${esc(padRight(left, 24))}${esc(padLeft(x.sessions, 5))}${esc(padLeft(x.tabTimeLabel, 10))}${esc(padLeft(x.lastSeenTime, 11))}</div>`;
+        return `<div class="line visits-row"><span>${esc(left)}</span><span>${esc(x.sessions)}</span><span>${esc(x.pageViews)}</span><span>${esc(x.tabTimeLabel)}</span><span>${esc(x.lastSeenTime)}</span></div>`;
       }).join("");
 
       return `
-        <div class="line"><span class="visits-dot">●</span> live • ${esc(data.generatedAt)}</div>
+        <div class="line"><span class="visits-dot">●</span> ${esc(status)} • refresh 15s • ${esc(data.generatedAt)}</div>
+        <div class="line"></div>
+        <div class="line">SUMMARY</div>
+        <div class="line"><span class="dim">active</span> ${esc(data.totals.activeSessions)}   <span class="dim">today</span> ${esc(data.totals.sessionsToday)}   <span class="dim">pageviews</span> ${esc(data.totals.pageviewsToday)}   <span class="dim">tab-time</span> ${esc(data.totals.tabTimeTodayLabel)}</div>
         <div class="line"></div>
         <div class="line">COUNTRIES ${data.totals.activeCountries}</div>
         <div class="visits-token-wrap">${countries || '<span class="dim">none</span>'}</div>
         <div class="line"></div>
-        <div class="line">CITIES ${data.totals.activeCities}</div>
+        <div class="line">CITIES ACTIVE</div>
         <div class="visits-token-wrap">${cities || '<span class="dim">none</span>'}</div>
         <div class="line"></div>
-        <div class="line">CITIES TODAY (ET) — TAB-TIME ${esc(data.totals.tabTimeTodayLabel)}</div>
-        <div class="visits-ledger">${rows || '<div class="line dim">none</div>'}</div>
+        <div class="line">CITIES TODAY (ET)</div>
+        <div class="visits-ledger">
+          <div class="line visits-row dim"><span>city</span><span>ses</span><span>views</span><span>tab-time</span><span>last</span></div>
+          ${rows || '<div class="line dim">none</div>'}
+        </div>
       `;
     }
 
-    async function showVisits(text) {
+    function renderVisitsError(message, previousData) {
+      if (previousData) return renderVisitsOutput(previousData, { stale: true });
+      return `<div class="line bad">${esc(message)}</div>`;
+    }
+
+    function stopVisitsMonitor() {
+      if (visitsMonitor.timer) clearTimeout(visitsMonitor.timer);
+      visitsMonitor.timer = null;
+      visitsMonitor.active = false;
+      visitsMonitor.inFlight = false;
+    }
+
+    function scheduleVisitsRefresh() {
+      if (!visitsMonitor.active) return;
+      if (document.visibilityState !== "visible") return;
+      visitsMonitor.timer = setTimeout(() => refreshVisitsMonitor(), VISITS_REFRESH_MS);
+    }
+
+    async function refreshVisitsMonitor() {
+      if (!visitsMonitor.active || !visitsMonitor.body || visitsMonitor.inFlight) return;
+      if (document.visibilityState !== "visible") return;
+      visitsMonitor.inFlight = true;
+      try {
+        const res = await fetch(`/api/visits/summary?ts=${Date.now()}`, {
+          headers: { accept: "application/json", "cache-control": "no-cache" }
+        });
+        if (!res.ok) throw new Error("request_failed");
+        const data = await res.json();
+        if (!data?.ok) throw new Error("invalid_response");
+        visitsMonitor.lastData = data;
+        visitsMonitor.body.innerHTML = renderVisitsOutput(data, { stale: false });
+      } catch {
+        visitsMonitor.body.innerHTML = renderVisitsError("signal stale · retrying", visitsMonitor.lastData);
+      } finally {
+        visitsMonitor.inFlight = false;
+        scheduleVisitsRefresh();
+      }
+    }
+
+    function startVisitsMonitor(commandText) {
+      stopVisitsMonitor();
       [...log.querySelectorAll(".cmd-block")].forEach((block) => block.classList.add("past"));
       const block = document.createElement("div");
       block.className = "cmd-block";
-      block.innerHTML = commandLine(text) + '<div class="line dim">loading visits…</div>';
+      block.innerHTML = commandLine(commandText);
+      const body = document.createElement("div");
+      body.innerHTML = '<div class="line dim">loading visits…</div>';
+      block.appendChild(body);
       log.appendChild(block);
       scrollBlockToTop(block);
-
-      try {
-        const res = await fetch('/api/visits/summary', { headers: { 'accept': 'application/json' } });
-        if (!res.ok) throw new Error('request_failed');
-        const data = await res.json();
-        if (!data?.ok) throw new Error('invalid_response');
-        block.innerHTML = commandLine(text) + renderVisitsOutput(data);
-      } catch {
-        block.innerHTML = commandLine(text) + '<div class="line bad">visits unavailable</div>';
-      }
+      visitsMonitor.block = block;
+      visitsMonitor.body = body;
+      visitsMonitor.lastData = null;
+      visitsMonitor.active = true;
+      refreshVisitsMonitor();
     }
 
     const VISIT_SESSION_KEY = 'bt_visit_session_id';
@@ -885,8 +950,14 @@
       if (!text) return;
 
       event.preventDefault();
-      if (text.trim().toLowerCase() === "/visits") {
-        showVisits(text);
+      const normalized = text.trim().toLowerCase().replace(/\s+/g, " ");
+      if (normalized === "/visits") {
+        startVisitsMonitor(text);
+      } else if (normalized === "/visits off") {
+        stopVisitsMonitor();
+        appendCommand(text);
+        const lastBlock = log.lastElementChild;
+        if (lastBlock) lastBlock.innerHTML = commandLine(text) + "<div class=\"line dim\">visits monitor stopped</div>";
       } else {
         appendCommand(text);
       }
@@ -905,8 +976,14 @@
       history.push(text);
       historyIndex = history.length;
 
-      if (text.trim().toLowerCase() === "/visits") {
-        showVisits(text);
+      const normalized = text.trim().toLowerCase().replace(/\s+/g, " ");
+      if (normalized === "/visits") {
+        startVisitsMonitor(text);
+      } else if (normalized === "/visits off") {
+        stopVisitsMonitor();
+        appendCommand(text);
+        const lastBlock = log.lastElementChild;
+        if (lastBlock) lastBlock.innerHTML = commandLine(text) + "<div class=\"line dim\">visits monitor stopped</div>";
       } else {
         appendCommand(text);
       }
@@ -979,6 +1056,14 @@
     }, 30000);
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible") sendVisit("heartbeat");
+      if (!visitsMonitor.active) return;
+      if (document.visibilityState === "visible") {
+        if (visitsMonitor.timer) clearTimeout(visitsMonitor.timer);
+        refreshVisitsMonitor();
+      } else if (visitsMonitor.timer) {
+        clearTimeout(visitsMonitor.timer);
+        visitsMonitor.timer = null;
+      }
     });
   </script>
 </body>
