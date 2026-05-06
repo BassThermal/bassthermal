@@ -334,25 +334,14 @@
 
 
     .visits-dot { color: var(--ok); }
-    .visits-token-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-    .visits-token { border: 1px solid var(--dead); padding: 0 6px; white-space: nowrap; display:inline-block; }
-    .visits-ledger { margin-top: 4px; max-width: 100%; }
-    .visits-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 6ch 7ch 8ch;
-      gap: 0 1ch;
-      align-items: baseline;
-      white-space: normal;
+    .visits-stale { color: var(--warn); }
+    .visits-compact { margin: 0; }
+    .visits-pre {
+      margin: 0;
+      white-space: pre-wrap;
       overflow-wrap: anywhere;
-    }
-    .visits-row > span:not(:first-child) { text-align: right; white-space: nowrap; }
-    .visits-row .visits-label { color: var(--soft); text-align: left; }
-
-    @media (max-width: 560px) {
-      .visits-row { grid-template-columns: minmax(0, 1fr) 8ch 7ch; gap: 1px 1ch; }
-      .visits-row > span:first-child { grid-column: 1 / -1; }
-      .visits-row > span:nth-child(2), .visits-row > span:nth-child(3) { text-align: right; }
-      .visits-row > span:nth-child(4) { grid-column: 2; text-align: right; }
+      font: inherit;
+      line-height: 1.28;
     }
 
     @media (max-width: 820px) {
@@ -808,6 +797,23 @@
       return " ".repeat(width - text.length) + text;
     }
 
+    function safeLabel(value, maxLength) {
+      const text = String(value ?? "").replace(/\s+/g, " ").trim() || "unknown";
+      if (!maxLength || text.length <= maxLength) return text;
+      return `${text.slice(0, Math.max(1, maxLength - 1))}…`;
+    }
+
+    function compactList(items, maxItems) {
+      const source = Array.isArray(items) ? items.filter(Boolean) : [];
+      const limit = Math.max(1, maxItems || source.length);
+      const visible = source.slice(0, limit);
+      const hidden = source.length - visible.length;
+      return {
+        text: visible.join(" "),
+        hidden
+      };
+    }
+
     const VISITS_REFRESH_MS = 15000;
 
     function currentAppSlug() {
@@ -825,48 +831,40 @@
 
     function renderVisitsOutput(data, state = {}) {
       const totals = data?.totals || {};
-      const pageViewsToday = data?.totals?.pageViewsToday ?? 0;
-      const countries = (data.countriesActive || []).map((x) => `<span class="visits-token">[${esc(x.country)} ${x.sessions}]</span>`).join(" ");
-      const cities = (data.citiesActive || []).map((x) => `<span class="visits-token">[${esc(x.city)} ${x.sessions} · ${esc(x.ageLabel)}]</span>`).join(" ");
-      const status = state.stale ? "signal stale · retrying" : "live";
-      const cityRows = (data.citiesToday || []).map((x) => {
-        const left = `${x.city} ${x.country}`;
-        return `<div class="line visits-row"><span class="visits-label">${esc(left)}</span><span>${esc(x.sessions)}</span><span>${esc(x.pageViews)}</span><span>${esc(x.tabTimeLabel)}</span><span>${esc(x.lastSeenTime)}</span></div>`;
-      }).join("");
-      const pageRows = (data.pagesToday || []).map((x) => `<div class="line visits-row"><span class="visits-label">${esc(x.path)}</span><span>${esc(x.views)}</span><span></span><span>${esc(x.lastSeenTime)}</span></div>`).join("");
-      const clickRows = (data.clicksToday || []).map((x) => {
-        const target = x.appSlug ? `${x.appSlug} ${x.targetHost || x.target || "internal"}` : (x.targetHost || x.target || "internal");
-        return `<div class="line visits-row"><span class="visits-label">${esc(target)}</span><span>${esc(x.clicks)}</span><span></span><span>${esc(x.lastSeenTime)}</span></div>`;
-      }).join("");
+      const generatedAt = data?.generatedAt || "";
+      const dt = new Date(generatedAt);
+      const timeLabel = Number.isNaN(dt.getTime())
+        ? safeLabel(generatedAt, 16)
+        : dt.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      const status = state.stale ? "stale" : "live";
+      const geoItems = (data.countriesActive || []).map((x) => `${safeLabel(x.country || "--", 3)}:${x.sessions ?? 0}`);
+      const hotItems = (data.citiesActive || []).map((x) => `${safeLabel(x.city || "unknown", 14)}:${x.sessions ?? 0}/${safeLabel(x.ageLabel || "0s", 6)}`);
+      const hot = compactList(hotItems, 5);
+      const rows = (data.citiesToday || []).slice(0, 8).map((x) => {
+        const cityLabel = safeLabel(`${x.city || "unknown"} ${x.country || "--"}`, 20);
+        return `${padRight(cityLabel, 20)} ${padLeft(x.sessions ?? 0, 3)} ${padLeft(x.pageViews ?? 0, 4)} ${padLeft(safeLabel(x.tabTimeLabel || "0s", 7), 7)} ${padLeft(safeLabel(x.lastSeenTime || "--:--:--", 8), 8)}`;
+      });
+      const hiddenCities = Math.max(0, (data.citiesToday || []).length - rows.length);
+      const clicksItems = (data.clicksToday || []).map((x) => `${safeLabel(x.appSlug || x.targetHost || x.target || "internal", 18)}:${x.clicks ?? 0}`);
+      const clicks = compactList(clicksItems, 6);
 
-      return `
-        <div class="line"><span class="visits-dot">●</span> ${esc(status)} • refresh 15s • ${esc(data.generatedAt)}</div>
-        <div class="line"></div>
-        <div class="line">SUMMARY</div>
-        <div class="line"><span class="dim">active</span> ${esc(totals.activeSessions ?? 0)}   <span class="dim">today</span> ${esc(totals.sessionsToday ?? 0)}   <span class="dim">views</span> ${esc(pageViewsToday)}   <span class="dim">clicks</span> ${esc(totals.clicksToday ?? 0)}   <span class="dim">tab</span> ${esc(totals.tabTimeTodayLabel ?? "0s")}</div>
-        <div class="line"></div>
-        <div class="line">COUNTRIES</div>
-        <div class="visits-token-wrap">${countries || '<span class="dim">none</span>'}</div>
-        <div class="line"></div>
-        <div class="line">ACTIVE CITIES</div>
-        <div class="visits-token-wrap">${cities || '<span class="dim">none</span>'}</div>
-        <div class="line"></div>
-        <div class="line">CITIES TODAY</div>
-        <div class="visits-ledger">
-          <div class="line visits-row dim"><span>city</span><span>ses</span><span>views</span><span>tab</span><span>last</span></div>
-          ${cityRows || '<div class="line dim">none</div>'}
-        </div>
-        <div class="line"></div>
-        <div class="line">PAGES TODAY</div>
-        <div class="visits-ledger">
-          ${pageRows || '<div class="line dim">none</div>'}
-        </div>
-        <div class="line"></div>
-        <div class="line">CLICKS TODAY</div>
-        <div class="visits-ledger">
-          ${clickRows || '<div class="line dim">none</div>'}
-        </div>
-      `;
+      const lines = [
+        `act ${totals.activeSessions ?? 0}  today ${totals.sessionsToday ?? 0}  views ${totals.pageViewsToday ?? 0}  clicks ${totals.clicksToday ?? 0}  tab ${totals.tabTimeTodayLabel ?? "0s"}`,
+        `geo ${geoItems.length ? geoItems.join(" ") : "none"}`,
+        `hot ${hot.text || "none"}`,
+        "",
+        `${padRight("city", 20)} ${padLeft("ses", 3)} ${padLeft("view", 4)} ${padLeft("tab", 7)} ${padLeft("last", 8)}`,
+        ...(rows.length ? rows : ["none"])
+      ];
+      if (hiddenCities > 0) lines.push(`... +${hiddenCities} cities`);
+      if ((totals.clicksToday ?? 0) > 0 && clicks.text) {
+        if (hot.hidden > 0) lines[2] = `${lines[2]} +${hot.hidden}`;
+        lines.push("", `clicks ${clicks.text}${clicks.hidden > 0 ? ` +${clicks.hidden}` : ""}`);
+      } else if (hot.hidden > 0) {
+        lines[2] = `${lines[2]} +${hot.hidden}`;
+      }
+
+      return `<div class="visits-compact"><div class="line"><span class="visits-dot${state.stale ? " visits-stale" : ""}">●</span> ${esc(status)} ${esc(timeLabel)} r15s</div><pre class="visits-pre">${esc(lines.join("\n"))}</pre></div>`;
     }
 
     function renderVisitsError(message, previousData) {
