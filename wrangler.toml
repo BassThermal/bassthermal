@@ -1,5 +1,12 @@
 name = "bassthermal"
 compatibility_date = "2026-05-06"
+main = "src/worker.js"
 
 [assets]
 directory = "./public"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "VISITS_DB"
+database_name = "bassthermal_visits"
+database_id = "6bfc14be-bcae-45d2-a56c-a01e7bf1c80e"
