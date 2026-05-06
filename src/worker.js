@@ -291,6 +291,67 @@ async function handleSummary(env) {
     .sort((a, b) => b.sessions - a.sessions || b.lastSeenMs - a.lastSeenMs)
     .map((x) => ({ ...x, ageLabel: ageLabel(nowMs - x.lastSeenMs) }));
 
+  const pagesToday = (await env.VISITS_DB.prepare(
+    `SELECT
+      path,
+      COUNT(*) AS views,
+      COUNT(DISTINCT visitor_hash) AS visitors,
+      MAX(ts_ms) AS lastSeenMs
+     FROM visit_events
+     WHERE is_bot = 0 AND day_et = ? AND type = "pageview" AND path != ""
+     GROUP BY path
+     ORDER BY views DESC, lastSeenMs DESC
+     LIMIT 8`
+  ).bind(dayEt).all()).results.map((x) => ({
+    path: x.path,
+    views: x.views || 0,
+    visitors: x.visitors || 0,
+    lastSeenMs: x.lastSeenMs || 0,
+    lastSeenTime: x.lastSeenMs ? timeInET(x.lastSeenMs) : "--:--:--"
+  }));
+
+  const clicksToday = (await env.VISITS_DB.prepare(
+    `SELECT
+      target,
+      app_slug AS appSlug,
+      COUNT(*) AS clicks,
+      MAX(ts_ms) AS lastSeenMs
+     FROM visit_events
+     WHERE is_bot = 0 AND day_et = ? AND type = "click"
+     GROUP BY target, app_slug
+     ORDER BY clicks DESC, lastSeenMs DESC
+     LIMIT 8`
+  ).bind(dayEt).all()).results.map((x) => ({
+    target: x.target || "",
+    targetHost: parseHost(x.target || ""),
+    appSlug: x.appSlug || "",
+    clicks: x.clicks || 0,
+    lastSeenMs: x.lastSeenMs || 0,
+    lastSeenTime: x.lastSeenMs ? timeInET(x.lastSeenMs) : "--:--:--"
+  }));
+
+  const appsToday = (await env.VISITS_DB.prepare(
+    `SELECT
+      app_slug AS appSlug,
+      SUM(CASE WHEN type = "pageview" THEN 1 ELSE 0 END) AS views,
+      SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks,
+      MAX(ts_ms) AS lastSeenMs
+     FROM visit_events
+     WHERE is_bot = 0 AND day_et = ? AND app_slug IS NOT NULL AND app_slug != ""
+       AND type IN ("pageview", "click")
+     GROUP BY app_slug
+     ORDER BY (views + clicks) DESC, lastSeenMs DESC
+     LIMIT 8`
+  ).bind(dayEt).all()).results.map((x) => ({
+    appSlug: x.appSlug,
+    views: x.views || 0,
+    clicks: x.clicks || 0,
+    lastSeenMs: x.lastSeenMs || 0,
+    lastSeenTime: x.lastSeenMs ? timeInET(x.lastSeenMs) : "--:--:--"
+  }));
+
+  const clicksTodayTotal = clicksToday.reduce((sum, x) => sum + (x.clicks || 0), 0);
+
   const citiesToday = [...todayCityMap.values()]
     .sort((a, b) => b.sessions - a.sessions || b.lastSeenMs - a.lastSeenMs)
     .map((x) => ({
@@ -313,6 +374,9 @@ async function handleSummary(env) {
     countriesActive,
     citiesActive,
     citiesToday,
+    pagesToday,
+    clicksToday,
+    appsToday,
     totals: {
       activeSessions: activeRows.length,
       activeCountries: countriesActive.length,
@@ -320,6 +384,7 @@ async function handleSummary(env) {
       visitorsToday: visitorsToday.size,
       sessionsToday: todayRows.length,
       pageViewsToday,
+      clicksToday: clicksTodayTotal,
       tabTimeTodayMs,
       tabTimeTodayLabel: durationLabel(tabTimeTodayMs)
     }
