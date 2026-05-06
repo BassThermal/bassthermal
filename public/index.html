@@ -1,99 +1,820 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BassThermal</title>
-    <meta
-      name="description"
-      content="BassThermal — independent software, tools, experiments, and weird useful internet machinery."
-    />
-    <style>
-      :root {
-        color-scheme: dark;
-        --bg: #0a0d12;
-        --panel: #10161f;
-        --text: #e6edf5;
-        --muted: #9aabbe;
-        --line: #243042;
-        --accent: #7ec4ff;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BassThermal</title>
+  <meta name="description" content="BassThermal index." />
 
-      * {
-        box-sizing: border-box;
+  <style>
+    :root {
+      color-scheme: dark;
+
+      --bg: #000;
+      --fg: #c9d1d9;
+      --soft: #8b949e;
+      --dim: #484f58;
+      --dead: #30363d;
+      --hot: #f0f6fc;
+
+      --ok: #7ee787;
+      --warn: #d29922;
+      --bad: #ff7b72;
+
+      --web: #79c0ff;
+      --windows: #58a6ff;
+      --android: #7ee787;
+      --chrome: #f2cc60;
+      --store: #d2a8ff;
+      --info: #ffa657;
+
+      --font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      background: #000;
+      color: var(--fg);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.42;
+      overflow: hidden;
+    }
+
+    body {
+      padding: 16px;
+    }
+
+    a,
+    button,
+    input {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible,
+    button:hover,
+    button:focus-visible {
+      color: var(--hot);
+      text-decoration: underline;
+      outline: 0;
+    }
+
+    button {
+      border: 0;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    ::selection {
+      background: var(--fg);
+      color: #000;
+    }
+
+    .term {
+      width: min(1220px, 100%);
+      height: calc(100svh - 32px);
+      display: grid;
+      grid-template-rows: auto minmax(145px, auto) 1fr auto;
+      gap: 8px;
+      overflow: hidden;
+    }
+
+    .topline,
+    .hintline,
+    .separator {
+      white-space: pre;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--dim);
+    }
+
+    .topline strong {
+      color: var(--hot);
+      font-weight: 700;
+    }
+
+    .right {
+      color: var(--dim);
+      text-align: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .separator {
+      color: var(--dead);
+      user-select: none;
+    }
+
+    .index {
+      overflow: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      overscroll-behavior: contain;
+      padding-right: 2px;
+    }
+
+    .index::-webkit-scrollbar,
+    .log::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .table {
+      display: grid;
+      gap: 0;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 36px minmax(150px, 1.05fr) minmax(128px, 0.7fr) minmax(82px, 0.35fr) minmax(300px, 1fr);
+      gap: 14px;
+      min-height: 24px;
+      align-items: baseline;
+    }
+
+    .head {
+      color: var(--dim);
+      text-transform: lowercase;
+    }
+
+    .app-name {
+      color: var(--hot);
+    }
+
+    .app-name:hover,
+    .app-name:focus-visible {
+      color: var(--info);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .tag {
+      white-space: nowrap;
+    }
+
+    .tag::before {
+      content: "[";
+      color: var(--dead);
+    }
+
+    .tag::after {
+      content: "]";
+      color: var(--dead);
+    }
+
+    .tag-hub::after {
+      content: "*]";
+      color: var(--dead);
+    }
+
+    .tag-disabled {
+      color: var(--dead);
+      cursor: default;
+    }
+
+    .line {
+      min-height: 1.42em;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .log {
+      overflow: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      overscroll-behavior: contain;
+      padding: 2px 0 4px;
+    }
+
+    .inputbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #000;
+      padding-top: 2px;
+    }
+
+    .prompt {
+      color: var(--ok);
+      white-space: nowrap;
+    }
+
+    #cmd {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: #000;
+      color: var(--fg);
+      caret-color: var(--hot);
+      padding: 0;
+    }
+
+    .dim { color: var(--dim); }
+    .soft { color: var(--soft); }
+    .dead { color: var(--dead); }
+    .hot { color: var(--hot); }
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .bad { color: var(--bad); }
+    .web { color: var(--web); }
+    .windows { color: var(--windows); }
+    .android { color: var(--android); }
+    .chrome { color: var(--chrome); }
+    .store { color: var(--store); }
+    .info { color: var(--info); }
+
+    @media (max-width: 820px) {
+      html,
+      body {
+        font-size: 12px;
       }
 
       body {
-        margin: 0;
-        min-height: 100vh;
-        background: var(--bg);
-        color: var(--text);
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-        line-height: 1.55;
-        display: grid;
-        place-items: center;
-        padding: 1rem;
+        padding: 10px;
       }
 
-      main {
-        width: min(680px, 100%);
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        padding: clamp(1.25rem, 2vw + 0.75rem, 2rem);
+      .term {
+        height: calc(100svh - 20px);
+        grid-template-rows: auto minmax(128px, 42svh) 1fr auto;
+        gap: 7px;
       }
 
-      h1 {
-        margin: 0;
-        font-size: clamp(1.9rem, 2.3vw + 1.2rem, 2.6rem);
-        letter-spacing: 0.01em;
+      .topline {
+        display: block;
       }
 
-      p {
-        margin: 0.9rem 0 0;
-        color: var(--muted);
-        max-width: 58ch;
+      .right {
+        display: none;
       }
 
-      nav {
-        margin-top: 1.4rem;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.65rem;
+      .row {
+        grid-template-columns: 32px minmax(0, 1fr);
+        gap: 2px 10px;
+        padding: 4px 0;
       }
 
-      a {
-        color: var(--accent);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        padding: 0.45rem 0.8rem;
-        font-weight: 550;
+      .head {
+        display: none;
       }
 
-      a:hover,
-      a:focus-visible {
-        border-color: var(--accent);
-        outline: none;
+      .row > span:nth-child(3),
+      .row > span:nth-child(4),
+      .row > span:nth-child(5) {
+        grid-column: 2;
       }
 
-      footer {
-        margin-top: 1rem;
-        color: var(--muted);
-        font-size: 0.9rem;
+      .links {
+        gap: 6px;
       }
-    </style>
-  </head>
-  <body>
-    <main>
-      <h1>BassThermal</h1>
-      <p>Independent software, tools, experiments, and weird useful internet machinery.</p>
-      <nav aria-label="Primary links">
-        <a href="#" aria-label="DualTicker (placeholder)">DualTicker</a>
-        <a href="#" aria-label="Apps (placeholder)">Apps</a>
-        <a href="#" aria-label="Contact (placeholder)">Contact</a>
-      </nav>
-      <footer>Cloudflare Worker static assets deployment is active.</footer>
-    </main>
-  </body>
+    }
+  </style>
+</head>
+
+<body>
+  <main class="term" aria-label="BassThermal terminal">
+    <div class="topline">
+      <div><strong>BASSTHERMAL</strong> / index</div>
+      <div class="right" id="readout">loading</div>
+    </div>
+
+    <section class="index" id="index" aria-label="App index"></section>
+
+    <section class="log" id="log" aria-label="Command log"></section>
+
+    <form class="inputbar" id="form" autocomplete="off">
+      <span class="prompt">bt:~$</span>
+      <input id="cmd" aria-label="command" spellcheck="false" autofocus />
+    </form>
+  </main>
+
+  <script>
+    const LINKS = {
+      bassthermalWindows: "https://apps.microsoft.com/search/publisher?name=BassThermal&hl=en-US&gl=CA",
+      bassthermalAndroid: "https://play.google.com/store/apps/developer?id=BassThermal",
+      dualtickerWeb: "https://www.dualticker.com",
+      dualtickerAndroid: "https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens",
+      iconPackBuilderWindows: "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA"
+    };
+
+    const APPS = [
+      {
+        key: "dualticker",
+        aliases: ["dt", "dual"],
+        name: "DualTicker",
+        type: "news/interface",
+        status: "live",
+        note: "live dual-feed news surface",
+        links: [
+          { platform: "web", href: LINKS.dualtickerWeb, direct: true },
+          { platform: "windows", href: LINKS.bassthermalWindows, direct: false },
+          { platform: "android", href: LINKS.dualtickerAndroid, direct: true }
+        ]
+      },
+      {
+        key: "retrofy",
+        aliases: ["retro"],
+        name: "RetroFy",
+        type: "image/tool",
+        status: "live",
+        note: "retro palette + dithering workflow",
+        links: [
+          { platform: "windows", href: LINKS.bassthermalWindows, direct: false },
+          { platform: "android", href: LINKS.bassthermalAndroid, direct: false }
+        ]
+      },
+      {
+        key: "coptic",
+        aliases: ["coptic-dictionary", "dictionary"],
+        name: "Coptic Dictionary",
+        type: "language/tool",
+        status: "live",
+        note: "coptic lookup/reference utility",
+        links: [
+          { platform: "windows", href: LINKS.bassthermalWindows, direct: false },
+          { platform: "android", href: LINKS.bassthermalAndroid, direct: false }
+        ]
+      },
+      {
+        key: "iconpack",
+        aliases: ["icon", "icons", "icon-pack-builder"],
+        name: "Icon Pack Builder",
+        type: "asset/tool",
+        status: "live",
+        note: "multi-platform app icon pack generator",
+        links: [
+          { platform: "windows", href: LINKS.iconPackBuilderWindows, direct: true }
+        ]
+      },
+      {
+        key: "favicon",
+        aliases: ["favicon-harvester"],
+        name: "Favicon Harvester",
+        type: "web/tool",
+        status: "live",
+        note: "favicon extraction utility",
+        links: [
+          { platform: "windows", href: LINKS.bassthermalWindows, direct: false }
+        ]
+      },
+      {
+        key: "isbn",
+        aliases: ["isbn-manager"],
+        name: "ISBN Manager",
+        type: "inventory/tool",
+        status: "building",
+        note: "isbn/catalog/label workflow",
+        links: [
+          { platform: "windows", href: LINKS.bassthermalWindows, direct: false }
+        ]
+      },
+      {
+        key: "rss",
+        aliases: ["rss-finder", "feed"],
+        name: "RSS Finder",
+        type: "feed/tool",
+        status: "lab",
+        note: "feed discovery scanner",
+        links: [
+          { platform: "web", href: LINKS.dualtickerWeb, direct: false }
+        ]
+      },
+      {
+        key: "bassforge",
+        aliases: ["forge"],
+        name: "BassForge",
+        type: "build/system",
+        status: "internal",
+        note: "html-to-app packaging pipeline",
+        links: []
+      }
+    ];
+
+    const PLATFORM_ALIASES = {
+      web: "web",
+      site: "web",
+      www: "web",
+      windows: "windows",
+      win: "windows",
+      microsoft: "windows",
+      ms: "windows",
+      android: "android",
+      play: "android",
+      google: "android",
+      gp: "android",
+      chrome: "chrome",
+      extension: "chrome",
+      store: "store"
+    };
+
+    const indexEl = document.getElementById("index");
+    const logEl = document.getElementById("log");
+    const form = document.getElementById("form");
+    const cmd = document.getElementById("cmd");
+    const readout = document.getElementById("readout");
+
+    const started = Date.now();
+    const history = [];
+    let historyIndex = 0;
+
+    function esc(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function print(html = "") {
+      logEl.insertAdjacentHTML("beforeend", `<div class="line">${html}</div>`);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function clearLog() {
+      logEl.innerHTML = "";
+    }
+
+    function statusClass(status) {
+      if (status === "live") return "ok";
+      if (status === "building") return "warn";
+      return "soft";
+    }
+
+    function platformClass(platform) {
+      if (platform === "web") return "web";
+      if (platform === "windows") return "windows";
+      if (platform === "android") return "android";
+      if (platform === "chrome") return "chrome";
+      return "store";
+    }
+
+    function normalizePlatform(value) {
+      return PLATFORM_ALIASES[String(value || "").toLowerCase()] || String(value || "").toLowerCase();
+    }
+
+    function findApp(query) {
+      const q = String(query || "").trim().toLowerCase();
+      if (!q) return null;
+
+      return APPS.find(app =>
+        app.key === q ||
+        app.name.toLowerCase() === q ||
+        app.name.toLowerCase().includes(q) ||
+        app.aliases.includes(q)
+      );
+    }
+
+    function getPrimaryLink(app) {
+      return app.links.find(link => link.direct) || app.links[0] || null;
+    }
+
+    function getPlatformLink(app, platformInput) {
+      const platform = normalizePlatform(platformInput);
+      return app.links.find(link => link.platform === platform) || null;
+    }
+
+    function commandButton(label, command, className = "soft") {
+      return `<button type="button" class="${className}" data-command="${esc(command)}">${esc(label)}</button>`;
+    }
+
+    function tagFor(link) {
+      const cls = platformClass(link.platform);
+      const hub = link.direct ? "" : " tag-hub";
+      const title = link.direct ? `${link.platform} direct link` : `${link.platform} publisher/store hub`;
+
+      return `<a class="tag ${cls}${hub}" href="${esc(link.href)}" target="_blank" rel="noopener noreferrer" title="${esc(title)}" data-open="${esc(link.href)}" data-platform="${esc(link.platform)}">${esc(link.platform)}</a>`;
+    }
+
+    function renderIndex() {
+      const rows = APPS.map((app, i) => {
+        const id = String(i + 1).padStart(2, "0");
+        const links = app.links.length
+          ? app.links.map(tagFor).join(" ")
+          : `<span class="tag tag-disabled">internal</span>`;
+
+        return `
+          <div class="row">
+            <span class="dim">${esc(id)}</span>
+            <span>${commandButton(app.name, `info ${app.key}`, "app-name")}</span>
+            <span class="soft">${esc(app.type)}</span>
+            <span class="${statusClass(app.status)}">${esc(app.status)}</span>
+            <span class="links">${links}</span>
+          </div>
+        `;
+      }).join("");
+
+      indexEl.innerHTML = `
+        <div class="table">
+          <div class="row head">
+            <span>id</span>
+            <span>name</span>
+            <span>type</span>
+            <span>status</span>
+            <span>links</span>
+          </div>
+          <div class="row head">
+            <span>--</span>
+            <span>--------------------</span>
+            <span>----------------</span>
+            <span>--------</span>
+            <span>--------------------------------</span>
+          </div>
+          ${rows}
+        </div>
+        <div class="line dim">* = publisher/store hub until direct app URL is set</div>
+        <div class="line dim">click app name for info · click tags to open · type help</div>
+        <div class="separator">──────────────────────────────────────────────────────────────────────────────</div>
+      `;
+    }
+
+    function renderHelp() {
+      print(`<span class="hot">commands</span>`);
+      print(`<span class="dim">----------------------------------------</span>`);
+      print(`${commandButton("help", "help", "ok")}                   show this`);
+      print(`${commandButton("apps", "apps", "ok")}                   refresh sticky index`);
+      print(`${commandButton("info dualticker", "info dualticker", "ok")}        inspect app`);
+      print(`${commandButton("links retrofy", "links retrofy", "ok")}           show app links`);
+      print(`${commandButton("open dualticker", "open dualticker", "ok")}        open primary link`);
+      print(`${commandButton("open dualticker android", "open dualticker android", "ok")} open platform link`);
+      print(`${commandButton("status", "status", "ok")}                 runtime readout`);
+      print(`${commandButton("clear", "clear", "ok")}                  clear log only`);
+      print(`${commandButton("reset", "reset", "ok")}                  clear log + refresh index`);
+      print("");
+      print(`<span class="dim">keyboard: up/down command history · shift+up/down scroll log · pageup/pagedown scroll log</span>`);
+    }
+
+    function renderInfo(name) {
+      const app = findApp(name);
+
+      if (!app) {
+        print(`<span class="bad">not found:</span> ${esc(name || "")}`);
+        print(`<span class="dim">try: apps</span>`);
+        return;
+      }
+
+      print(`<span class="hot">${esc(app.name)}</span>`);
+      print(`<span class="dim">----------------------------------------</span>`);
+      print(`key:      ${esc(app.key)}`);
+      print(`type:     ${esc(app.type)}`);
+      print(`status:   <span class="${statusClass(app.status)}">${esc(app.status)}</span>`);
+      print(`note:     <span class="soft">${esc(app.note)}</span>`);
+
+      if (!app.links.length) {
+        print(`links:    <span class="dim">internal / not public</span>`);
+      } else {
+        print(`links:    ${app.links.map(tagFor).join(" ")}`);
+      }
+
+      const primary = getPrimaryLink(app);
+      if (primary) print(`open:     <span class="dim">open ${esc(app.key)} ${esc(primary.platform)}</span>`);
+    }
+
+    function renderLinks(name) {
+      const app = findApp(name);
+
+      if (!app) {
+        print(`<span class="bad">not found:</span> ${esc(name || "")}`);
+        return;
+      }
+
+      print(`<span class="hot">${esc(app.name)} links</span>`);
+      print(`<span class="dim">----------------------------------------</span>`);
+
+      if (!app.links.length) {
+        print(`<span class="dim">no public links set</span>`);
+        return;
+      }
+
+      app.links.forEach(link => {
+        const label = link.direct ? link.platform : `${link.platform}*`;
+        print(`${esc(label.padEnd(10, " "))}<a class="${platformClass(link.platform)}" href="${esc(link.href)}" target="_blank" rel="noopener noreferrer">${esc(link.href)}</a>`);
+      });
+
+      print(`<span class="dim">* publisher/store hub</span>`);
+    }
+
+    function openApp(name, platformInput) {
+      const app = findApp(name);
+
+      if (!app) {
+        print(`<span class="bad">not found:</span> ${esc(name || "")}`);
+        return;
+      }
+
+      const link = platformInput ? getPlatformLink(app, platformInput) : getPrimaryLink(app);
+
+      if (!link) {
+        print(`<span class="warn">${esc(app.name)}</span>: no ${platformInput ? esc(platformInput) : "public"} link set`);
+        return;
+      }
+
+      print(`opening ${esc(app.name)} ${esc(link.platform)}${link.direct ? "" : "*"} -> <a class="${platformClass(link.platform)}" href="${esc(link.href)}" target="_blank" rel="noopener noreferrer">${esc(link.href)}</a>`);
+      window.open(link.href, "_blank", "noopener,noreferrer");
+    }
+
+    function renderStatus() {
+      const uptime = Math.floor((Date.now() - started) / 1000);
+      const live = APPS.filter(app => app.status === "live").length;
+      const directLinks = APPS.reduce((n, app) => n + app.links.filter(link => link.direct).length, 0);
+      const hubLinks = APPS.reduce((n, app) => n + app.links.filter(link => !link.direct).length, 0);
+
+      print(`host:      bassthermal.com`);
+      print(`mode:      terminal-index`);
+      print(`apps:      ${APPS.length}`);
+      print(`live:      ${live}`);
+      print(`direct:    ${directLinks}`);
+      print(`hub:       ${hubLinks}`);
+      print(`uptime:    ${uptime}s`);
+    }
+
+    function run(rawInput) {
+      const raw = String(rawInput || "").trim();
+      if (!raw) return;
+
+      print(`<span class="prompt">bt:~$</span> ${esc(raw)}`);
+
+      const parts = raw.split(/\s+/);
+      const command = parts[0].toLowerCase();
+      const arg1 = parts[1] || "";
+      const arg2 = parts[2] || "";
+
+      switch (command) {
+        case "help":
+        case "?":
+          renderHelp();
+          break;
+
+        case "apps":
+        case "ls":
+        case "dir":
+        case "home":
+          renderIndex();
+          print(`<span class="dim">index refreshed</span>`);
+          break;
+
+        case "info":
+        case "cat":
+        case "inspect":
+          if (!arg1) print(`<span class="warn">usage:</span> info &lt;app&gt;`);
+          else renderInfo(arg1);
+          break;
+
+        case "links":
+          if (!arg1) print(`<span class="warn">usage:</span> links &lt;app&gt;`);
+          else renderLinks(arg1);
+          break;
+
+        case "open":
+        case "go":
+          if (!arg1) print(`<span class="warn">usage:</span> open &lt;app&gt; [web|windows|android]`);
+          else openApp(arg1, arg2);
+          break;
+
+        case "status":
+        case "top":
+          renderStatus();
+          break;
+
+        case "clear":
+        case "cls":
+          clearLog();
+          break;
+
+        case "reset":
+          clearLog();
+          renderIndex();
+          bootLog();
+          break;
+
+        default:
+          print(`<span class="bad">command not found:</span> ${esc(command)}`);
+          print(`<span class="dim">type: help</span>`);
+      }
+    }
+
+    function bootLog() {
+      print(`<span class="hot">BassThermal</span>`);
+      print(`<span class="dim">index loaded · app names and platform tags are clickable</span>`);
+      print(`<span class="dim">type help</span>`);
+    }
+
+    indexEl.addEventListener("click", event => {
+      const commandTarget = event.target.closest("[data-command]");
+      if (commandTarget) {
+        event.preventDefault();
+        run(commandTarget.getAttribute("data-command"));
+        cmd.focus();
+      }
+    });
+
+    logEl.addEventListener("click", event => {
+      const commandTarget = event.target.closest("[data-command]");
+      if (commandTarget) {
+        event.preventDefault();
+        run(commandTarget.getAttribute("data-command"));
+        cmd.focus();
+      }
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const value = cmd.value;
+      cmd.value = "";
+
+      if (value.trim()) {
+        history.push(value);
+        historyIndex = history.length;
+      }
+
+      run(value);
+    });
+
+    cmd.addEventListener("keydown", event => {
+      if (event.shiftKey && event.key === "ArrowUp") {
+        event.preventDefault();
+        logEl.scrollTop -= 42;
+        return;
+      }
+
+      if (event.shiftKey && event.key === "ArrowDown") {
+        event.preventDefault();
+        logEl.scrollTop += 42;
+        return;
+      }
+
+      if (event.key === "PageUp") {
+        event.preventDefault();
+        logEl.scrollTop -= logEl.clientHeight * 0.82;
+        return;
+      }
+
+      if (event.key === "PageDown") {
+        event.preventDefault();
+        logEl.scrollTop += logEl.clientHeight * 0.82;
+        return;
+      }
+
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+
+        if (historyIndex > 0) {
+          historyIndex--;
+          cmd.value = history[historyIndex] || "";
+        }
+      }
+
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+
+        if (historyIndex < history.length - 1) {
+          historyIndex++;
+          cmd.value = history[historyIndex] || "";
+        } else {
+          historyIndex = history.length;
+          cmd.value = "";
+        }
+      }
+    });
+
+    window.addEventListener("click", () => cmd.focus());
+
+    setInterval(() => {
+      const uptime = Math.floor((Date.now() - started) / 1000);
+      const links = APPS.reduce((n, app) => n + app.links.length, 0);
+      readout.textContent = `apps:${APPS.length} links:${links} uptime:${uptime}s`;
+    }, 1000);
+
+    renderIndex();
+    bootLog();
+  </script>
+</body>
 </html>
