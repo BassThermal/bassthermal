@@ -230,7 +230,7 @@ async function handleSummary(env) {
   ).bind(minMs).all()).results;
 
   const todayRows = (await env.VISITS_DB.prepare(
-    `SELECT session_id, visitor_hash, country, city, first_seen_ms, last_seen_ms, page_views
+    `SELECT session_id, visitor_hash, country, city, first_seen_ms, last_seen_ms, page_views, heartbeats, device
      FROM visit_sessions WHERE is_bot = 0 AND day_et = ?`
   ).bind(dayEt).all()).results;
 
@@ -271,6 +271,8 @@ async function handleSummary(env) {
       sessions: 0,
       visitors: new Set(),
       pageViews: 0,
+      heartbeats: 0,
+      unknownDeviceSessions: 0,
       tabTimeMs: 0,
       lastSeenMs: 0
     };
@@ -278,6 +280,8 @@ async function handleSummary(env) {
     entry.sessions += 1;
     entry.visitors.add(r.visitor_hash);
     entry.pageViews += r.page_views || 0;
+    entry.heartbeats += r.heartbeats || 0;
+    if ((r.device || "unknown") === "unknown") entry.unknownDeviceSessions += 1;
     entry.tabTimeMs += dur;
     entry.lastSeenMs = Math.max(entry.lastSeenMs, r.last_seen_ms || 0);
     todayCityMap.set(key, entry);
@@ -360,6 +364,8 @@ async function handleSummary(env) {
       sessions: x.sessions,
       visitors: x.visitors.size,
       pageViews: x.pageViews,
+      heartbeats: x.heartbeats,
+      unknownDeviceSessions: x.unknownDeviceSessions,
       tabTimeMs: x.tabTimeMs,
       tabTimeLabel: durationLabel(x.tabTimeMs),
       lastSeenMs: x.lastSeenMs,
