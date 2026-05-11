@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "deploy": "wrangler deploy",
-    "dev": "wrangler dev"
+    "dev": "wrangler dev",
+    "assets:stores": "node tools/harvest-store-assets.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.16.0"
