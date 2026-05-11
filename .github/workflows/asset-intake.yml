@@ -1,0 +1,52 @@
+name: BassThermal Asset Intake
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Import mode"
+        required: true
+        default: "existing"
+        type: choice
+        options:
+          - existing
+          - strict
+      app_slug:
+        description: "Optional single app slug"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  import-assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Harvest store assets
+        run: node tools/harvest-store-assets.mjs
+
+      - name: Show generated asset tree
+        run: |
+          echo "Generated assets:"
+          find public/assets/apps -maxdepth 4 -type f | sort || true
+          echo "Manifest preview:"
+          sed -n '1,120p' public/store-assets.generated.js || true
+
+      - name: Commit harvested assets
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Harvest BassThermal store assets"
+          file_pattern: "public/assets/apps/** public/store-assets.generated.js"
