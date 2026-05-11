@@ -1,39 +1,154 @@
-window.BT_STORE_ASSETS = (() => {
-  'use strict';
-  const svg = (label, stroke) => `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540"><rect x="48" y="48" width="864" height="444" fill="#050505" stroke="${stroke}" stroke-width="18"/><text x="480" y="308" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="168" font-weight="700" fill="${stroke}">${label}</text></svg>`)}`;
-  const dtIcon = 'https://play-lh.googleusercontent.com/txuCsb-AVo50aVIlYS3guP7Gm9tzubyCahQ6QP5Yx7PWYaAwbBchQAfjtTGI99ppK-ulsPZsVC6tQ5wdFbfB%3Dw240-h480';
-  const retroIcon = 'https://play-lh.googleusercontent.com/8t7-FbqdA-I9excKBXe4nlUqmcE9Vp80RTw9Q5oPFxhMwD1k6dewHWZEi-O2612N8EDhHObOySKb3DKcC02KVQ%3Dw240-h480';
-  const copticIcon = 'https://play-lh.googleusercontent.com/_OvyNICX2Fxyv6AYMoTgcug77sOYBMHlJG9yi3ta4uO8amnY4HMfwQKR1pNFi5A5xlI3F5RvtyeQijnpV24vjwI%3Dw240-h480';
-  return {
-    generatedAt: '2026-05-11T13:29:00.000Z',
-    source: 'seeded manifest; behavior lives in /asset-preview.js',
-    apps: {
-      dualticker: { icon:{fallback:dtIcon,android:dtIcon,windows:dtIcon,web:dtIcon}, screenshots:{ android:[
-        'https://play-lh.googleusercontent.com/EFnNjHnnF74xwiJ2Ns1_Rra0vmd-5AeTc7M_TrpH5briADa-JMB_NX2u120vW7XNomgE6DCbJWWnG3h2IQuY9Q%3Dw526-h296',
-        'https://play-lh.googleusercontent.com/I7GhdnM_HIVCmmhmBUDcxQsewyS6Vi-_fFtVg3rqYRzvTM0vPpiP6a-uiBy9bSKgMwQgYH8GpBTJyrIy6zYz%3Dw526-h296'
-      ], windows:[svg('DT', '#58a6ff')], web:[
-        'https://play-lh.googleusercontent.com/EFnNjHnnF74xwiJ2Ns1_Rra0vmd-5AeTc7M_TrpH5briADa-JMB_NX2u120vW7XNomgE6DCbJWWnG3h2IQuY9Q%3Dw526-h296'
-      ] } },
-      retrofy: { icon:{fallback:retroIcon,android:retroIcon,windows:retroIcon,web:null}, screenshots:{ android:[
-        'https://play-lh.googleusercontent.com/n2ASarOu3Etf3HeWuIO7mEFoiK1KI47kxnDTxjeVqh-KVqq3oWjhMd4Ijo_TP6BlfRiIwsTeEaLvK_0YAu8z%3Dw526-h296',
-        'https://play-lh.googleusercontent.com/DkKjhW0g0T_XtK0ew0Y-hDleLsU6AuP_tPCNLSHSi5oZ8gQ6GP0OzOOh2XH8UdPHbFESWR6TtG8ug9OOxuED3Os%3Dw526-h296'
-      ], windows:[svg('RF', '#7ee787')], web:[] } },
-      'coptic-dictionary': { icon:{fallback:copticIcon,android:copticIcon,windows:copticIcon,web:null}, screenshots:{ android:[
-        'https://play-lh.googleusercontent.com/CG2Q4El_lEQlFQRIa2uZe0Jf20QDQASWeWOvkUfGZJyxNF-12JyLNt1JBXrbo0aCukKbD84TG_sehXADI4e15A%3Dw526-h296',
-        'https://play-lh.googleusercontent.com/GXRx3j_2Jxy7EkYLzJci7WnUGxyHJ3l_oWsnxSCJgnYpjfbZAZ3VpAu5UU5O2NJjEgEHl3zZEV8vAEsqd7z6H6w%3Dw526-h296'
-      ], windows:[svg('CD', '#d29922')], web:[] } },
-      'icon-pack-builder': { icon:{fallback:svg('IP','#58a6ff'),windows:svg('IP','#58a6ff'),android:null,web:null}, screenshots:{android:[],windows:[svg('IP','#58a6ff')],web:[]} },
-      'favicon-harvester': { icon:{fallback:svg('FH','#ffa657'),windows:svg('FH','#ffa657'),android:null,web:null}, screenshots:{android:[],windows:[svg('FH','#ffa657')],web:[]} },
-      'isbn-manager': { icon:{fallback:svg('IS','#d2a8ff'),windows:svg('IS','#d2a8ff'),android:null,web:null}, screenshots:{android:[],windows:[svg('IS','#d2a8ff')],web:[]} },
-      'rss-finder': { icon:{fallback:svg('RS','#484f58'),windows:svg('RS','#484f58'),android:null,web:null}, screenshots:{android:[],windows:[],web:[svg('RS','#484f58')]} }
+window.BT_STORE_ASSETS = {
+  "generatedAt": "2026-05-11T16:01:54.715Z",
+  "source": "tools/harvest-store-assets.mjs robust-ms-v2.1",
+  "apps": {
+    "dualticker": {
+      "icon": {
+        "fallback": "/assets/apps/dualticker/android/icon.png",
+        "android": "/assets/apps/dualticker/android/icon.png",
+        "windows": "https://play-lh.googleusercontent.com/txuCsb-AVo50aVIlYS3guP7Gm9tzubyCahQ6QP5Yx7PWYaAwbBchQAfjtTGI99ppK-ulsPZsVC6tQ5wdFbfB%3Dw240-h480",
+        "web": "https://play-lh.googleusercontent.com/txuCsb-AVo50aVIlYS3guP7Gm9tzubyCahQ6QP5Yx7PWYaAwbBchQAfjtTGI99ppK-ulsPZsVC6tQ5wdFbfB%3Dw240-h480"
+      },
+      "screenshots": {
+        "android": [
+          "/assets/apps/dualticker/android/shot-01.png",
+          "/assets/apps/dualticker/android/shot-02.webp",
+          "/assets/apps/dualticker/android/shot-03.webp",
+          "/assets/apps/dualticker/android/shot-04.webp",
+          "/assets/apps/dualticker/android/shot-05.webp",
+          "/assets/apps/dualticker/android/shot-06.webp",
+          "/assets/apps/dualticker/android/shot-07.webp",
+          "/assets/apps/dualticker/android/shot-08.webp",
+          "/assets/apps/dualticker/android/shot-09.webp",
+          "/assets/apps/dualticker/android/shot-10.webp"
+        ],
+        "windows": [
+          "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%2358a6ff%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%2358a6ff%22%3EDT%3C%2Ftext%3E%3C%2Fsvg%3E"
+        ],
+        "web": [
+          "/assets/apps/dualticker/web/shot-01.png"
+        ]
+      }
+    },
+    "retrofy": {
+      "icon": {
+        "fallback": "/assets/apps/retrofy/android/icon.png",
+        "android": "/assets/apps/retrofy/android/icon.png",
+        "windows": "https://play-lh.googleusercontent.com/8t7-FbqdA-I9excKBXe4nlUqmcE9Vp80RTw9Q5oPFxhMwD1k6dewHWZEi-O2612N8EDhHObOySKb3DKcC02KVQ%3Dw240-h480",
+        "web": null
+      },
+      "screenshots": {
+        "android": [
+          "/assets/apps/retrofy/android/shot-01.png",
+          "/assets/apps/retrofy/android/shot-02.webp",
+          "/assets/apps/retrofy/android/shot-03.webp",
+          "/assets/apps/retrofy/android/shot-04.webp",
+          "/assets/apps/retrofy/android/shot-05.webp",
+          "/assets/apps/retrofy/android/shot-06.webp",
+          "/assets/apps/retrofy/android/shot-07.webp",
+          "/assets/apps/retrofy/android/shot-08.webp",
+          "/assets/apps/retrofy/android/shot-09.webp",
+          "/assets/apps/retrofy/android/shot-10.webp"
+        ],
+        "windows": [
+          "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%237ee787%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%237ee787%22%3ERF%3C%2Ftext%3E%3C%2Fsvg%3E"
+        ],
+        "web": []
+      }
+    },
+    "coptic-dictionary": {
+      "icon": {
+        "fallback": "/assets/apps/coptic-dictionary/android/icon.png",
+        "android": "/assets/apps/coptic-dictionary/android/icon.png",
+        "windows": "https://play-lh.googleusercontent.com/_OvyNICX2Fxyv6AYMoTgcug77sOYBMHlJG9yi3ta4uO8amnY4HMfwQKR1pNFi5A5xlI3F5RvtyeQijnpV24vjwI%3Dw240-h480",
+        "web": null
+      },
+      "screenshots": {
+        "android": [
+          "/assets/apps/coptic-dictionary/android/shot-01.png",
+          "/assets/apps/coptic-dictionary/android/shot-02.webp",
+          "/assets/apps/coptic-dictionary/android/shot-03.webp",
+          "/assets/apps/coptic-dictionary/android/shot-04.webp",
+          "/assets/apps/coptic-dictionary/android/shot-05.webp",
+          "/assets/apps/coptic-dictionary/android/shot-06.webp",
+          "/assets/apps/coptic-dictionary/android/shot-07.webp",
+          "/assets/apps/coptic-dictionary/android/shot-08.webp",
+          "/assets/apps/coptic-dictionary/android/shot-09.webp",
+          "/assets/apps/coptic-dictionary/android/shot-10.webp"
+        ],
+        "windows": [
+          "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%23d29922%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%23d29922%22%3ECD%3C%2Ftext%3E%3C%2Fsvg%3E"
+        ],
+        "web": []
+      }
+    },
+    "icon-pack-builder": {
+      "icon": {
+        "fallback": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%2358a6ff%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%2358a6ff%22%3EIP%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "android": null,
+        "windows": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%2358a6ff%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%2358a6ff%22%3EIP%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [
+          "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%2358a6ff%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%2358a6ff%22%3EIP%3C%2Ftext%3E%3C%2Fsvg%3E"
+        ],
+        "web": []
+      }
+    },
+    "favicon-harvester": {
+      "icon": {
+        "fallback": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%23ffa657%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%23ffa657%22%3EFH%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "android": null,
+        "windows": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%23ffa657%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%23ffa657%22%3EFH%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [
+          "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%23ffa657%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%23ffa657%22%3EFH%3C%2Ftext%3E%3C%2Fsvg%3E"
+        ],
+        "web": []
+      }
+    },
+    "isbn-manager": {
+      "icon": {
+        "fallback": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%23d2a8ff%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%23d2a8ff%22%3EIS%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "android": null,
+        "windows": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%23d2a8ff%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%23d2a8ff%22%3EIS%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [
+          "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%23d2a8ff%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%23d2a8ff%22%3EIS%3C%2Ftext%3E%3C%2Fsvg%3E"
+        ],
+        "web": []
+      }
+    },
+    "rss-finder": {
+      "icon": {
+        "fallback": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%23484f58%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%23484f58%22%3ERS%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "android": null,
+        "windows": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%23484f58%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%23484f58%22%3ERS%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [],
+        "web": [
+          "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22540%22%20viewBox%3D%220%200%20960%20540%22%3E%3Crect%20x%3D%2248%22%20y%3D%2248%22%20width%3D%22864%22%20height%3D%22444%22%20fill%3D%22%23050505%22%20stroke%3D%22%23484f58%22%20stroke-width%3D%2218%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22308%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CMenlo%2CConsolas%2Cmonospace%22%20font-size%3D%22168%22%20font-weight%3D%22700%22%20fill%3D%22%23484f58%22%3ERS%3C%2Ftext%3E%3C%2Fsvg%3E"
+        ]
+      }
     }
-  };
-})();
+  }
+};
 
 (() => {
   if (document.querySelector('script[data-bt-asset-preview]')) return;
   const script = document.createElement('script');
-  script.src = '/asset-preview.js?v=stable-v3';
+  script.src = '/asset-preview.js?v=stable-v4';
   script.defer = true;
   script.dataset.btAssetPreview = '1';
   document.head.appendChild(script);
