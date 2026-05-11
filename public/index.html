@@ -668,10 +668,15 @@
         .replaceAll("'", "&#039;");
     }
 
-    function storeAssets() { return (window.BT_STORE_ASSETS && window.BT_STORE_ASSETS.apps) || {}; }
-    function getAppAssets(appOrSlug) { const slug = typeof appOrSlug === "string" ? appOrSlug : appOrSlug && appOrSlug.slug; return slug ? (storeAssets()[slug] || {}) : {}; }
-    function getIconForApp(app, platform) { const assets = getAppAssets(app); const icon = assets.icon || {}; if (platform && icon[platform]) return icon[platform]; return icon.fallback || icon.android || icon.windows || icon.web || ""; }
-    function getScreensForApp(app, platform) { const assets = getAppAssets(app); const screenshots = assets.screenshots || {}; const direct = platform && Array.isArray(screenshots[platform]) ? screenshots[platform].filter(Boolean) : []; if (direct.length) return direct; const merged = [].concat(Array.isArray(screenshots.web) ? screenshots.web : []).concat(Array.isArray(screenshots.windows) ? screenshots.windows : []).concat(Array.isArray(screenshots.android) ? screenshots.android : []).filter(Boolean); return [...new Set(merged)]; }
+    function setPreview(slug, platform = "", options = {}) {
+      if (!window.BT_PREVIEW || !slug) return;
+      if (options.lock) window.BT_PREVIEW.setPreview(slug, platform || "");
+      else window.BT_PREVIEW.setPreview(slug, platform || "");
+    }
+
+    function unlockPreview() {
+      if (window.BT_PREVIEW) window.BT_PREVIEW.unlock();
+    }
 
     function platformClass(platform) {
       if (platform === "web") return "web";
@@ -702,7 +707,7 @@
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
-            <span>${(() => { const icon = getIconForApp(app); const iconHtml = icon ? `<img class="app-icon" src="${esc(icon)}" alt="" loading="lazy" decoding="async" onerror="this.classList.add('is-missing'); this.removeAttribute('src');">` : ""; return `<a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-command="info ${esc(app.slug)}" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}">${iconHtml}<span>${esc(app.name)}</span></a>`; })()}</span>
+            <span><a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-command="info ${esc(app.slug)}" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}"><img class="app-icon is-missing" data-app-icon-slug="${esc(app.slug)}" alt="" loading="lazy" decoding="async"><span>${esc(app.name)}</span></a></span>
             <span class="soft">${esc(app.klass)}</span>
             <span class="${esc(app.statusClass)}">${esc(app.status)}</span>
             <span class="links">${renderLinks(app)}</span>
@@ -838,16 +843,6 @@
     }
 
 
-    const previewState = { locked:false, appSlug:"", platform:"", list:[], index:0, timer:null, globalList:[], restoreTimer:null };
-    function findAppBySlug(slug){ return apps.find((a)=>a.slug===slug)||null; }
-    function allPreviewItems(){ const out=[]; apps.forEach((a)=>{ getScreensForApp(a).forEach((src)=>out.push({src,iconFallback:false})); }); apps.forEach((a)=>{ const icon=getIconForApp(a); if(icon) out.push({src:icon,iconFallback:true});}); return out; }
-    function buildPreviewItems(app, platform){ if(!app) return []; const screens=getScreensForApp(app, platform); if(screens.length) return screens.map((src)=>({src,iconFallback:false})); const icon=getIconForApp(app, platform); return icon?[{src:icon,iconFallback:true}]:[]; }
-    function showPreviewItem(item){ if(!assetPanel||!assetShot) return; if(!item||!item.src){ assetShot.removeAttribute('src'); assetPanel.classList.remove('is-icon-fallback'); return; } assetShot.classList.add('is-fading'); setTimeout(()=>{ assetPanel.classList.toggle('is-icon-fallback', !!item.iconFallback); assetShot.src=item.src; assetShot.classList.remove('is-fading');},120); }
-    function stopPreviewCycle(){ if(previewState.timer) clearInterval(previewState.timer); previewState.timer=null; }
-    function startPreviewCycle(){ if(!assetPanel||!assetShot) return; stopPreviewCycle(); const tick=()=>{ const list=previewState.list.length?previewState.list:previewState.globalList; if(!list.length){showPreviewItem(null);return;} previewState.index=(previewState.index+1)%list.length; showPreviewItem(list[previewState.index]); }; previewState.timer=setInterval(tick,9000); }
-    function setPreview(appSlug, platform, options={}){ if(!assetPanel||!assetShot) return; const app=findAppBySlug(appSlug); let list=buildPreviewItems(app, platform); if(!list.length&&app) list=buildPreviewItems(app,''); if(!list.length) list=previewState.globalList; previewState.appSlug=appSlug||''; previewState.platform=platform||''; previewState.list=list; previewState.index=0; if(options.lock) previewState.locked=true; showPreviewItem(list[0]); startPreviewCycle(); }
-    function unlockPreview(){ previewState.locked=false; previewState.appSlug=''; previewState.platform=''; previewState.list=[]; previewState.index=0; showPreviewItem(previewState.globalList[0]||null); startPreviewCycle(); }
-    function bindPreviewEvents(){ if(!assetPanel||!assetShot) return; previewState.globalList=allPreviewItems(); if(previewState.globalList.length) showPreviewItem(previewState.globalList[0]); assetShot.addEventListener('error',()=>{ assetShot.removeAttribute('src'); if(!previewState.locked) unlockPreview(); }); document.addEventListener('pointerover',(e)=>{ const t=e.target.closest('[data-preview-app]'); if(!t) return; setPreview(t.dataset.previewApp||'', t.dataset.previewPlatform||'', {lock:false}); }); document.addEventListener('focusin',(e)=>{ const t=e.target.closest('[data-preview-app]'); if(!t) return; setPreview(t.dataset.previewApp||'', t.dataset.previewPlatform||'', {lock:false}); }); const restore=()=>{ if(previewState.locked) return; clearTimeout(previewState.restoreTimer); previewState.restoreTimer=setTimeout(()=>{ previewState.list=[]; showPreviewItem(previewState.globalList[0]||null); startPreviewCycle(); },120); }; document.addEventListener('pointerout',restore); document.addEventListener('focusout',restore); document.addEventListener('click',(e)=>{ const t=e.target.closest('[data-preview-app]'); if(t) setPreview(t.dataset.previewApp||'', t.dataset.previewPlatform||'', {lock:true}); }); document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') unlockPreview(); }); assetPanel.addEventListener('click',()=>unlockPreview()); }
 
     function scrollBlockToTop(block) {
       if (!block || !block.isConnected) return;
@@ -1209,7 +1204,6 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
     renderTable();
     updateReadout();
     bootLog();
-    bindPreviewEvents();
     startPreviewCycle();
 
     document.addEventListener("click", async (event) => {

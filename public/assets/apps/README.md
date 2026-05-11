@@ -1,49 +1,36 @@
 # BassThermal manual app assets
 
-The website uses a deterministic manual asset map. Do not run crawlers. Do not commit scraped `.img` files.
+Drop app assets directly into `public/assets/apps/<slug>/` and platform subfolders.
 
-Drop verified images into these folders.
+- No crawlers.
+- No scraped `.img` files.
+- Missing files are allowed.
 
-## Naming
+## Supported platforms
 
-Use these names exactly:
+- `android`
+- `windows`
+- `web`
 
-- `icon.png` at the app root
-- `android/shot-01.png`, `android/shot-02.png`, ...
-- `windows/shot-01.png`, `windows/shot-02.png`, ...
-- `web/shot-01.png`, `web/shot-02.png`, ...
+## Icon naming rules
 
-PNG is the canonical format. Keep screenshots reasonably compressed.
+Icons can be at app root or platform folder, using `png/webp/jpg/jpeg`:
 
-## Folders
+- `/assets/apps/<slug>/icon.png`
+- `/assets/apps/<slug>/icon.webp`
+- `/assets/apps/<slug>/icon.jpg`
+- `/assets/apps/<slug>/icon.jpeg`
+- `/assets/apps/<slug>/<platform>/icon.png`
+- `/assets/apps/<slug>/<platform>/icon.webp`
+- `/assets/apps/<slug>/<platform>/icon.jpg`
+- `/assets/apps/<slug>/<platform>/icon.jpeg`
 
-```txt
-public/assets/apps/
-  dualticker/
-    icon.png
-    android/shot-01.png
-    windows/shot-01.png
-    web/shot-01.png
-  retrofy/
-    icon.png
-    android/shot-01.png
-    windows/shot-01.png
-  coptic-dictionary/
-    icon.png
-    android/shot-01.png
-    windows/shot-01.png
-  icon-pack-builder/
-    icon.png
-    windows/shot-01.png
-  favicon-harvester/
-    icon.png
-    windows/shot-01.png
-  isbn-manager/
-    icon.png
-    windows/shot-01.png
-  rss-finder/
-    icon.png
-    web/shot-01.png
-```
+## Screenshot naming rules
 
-If an expected file is missing, the preview simply skips/falls back. Missing files are allowed.
+Screenshots are scanned in each platform folder for `shot-1` through `shot-20`, both padded and unpadded, and `png/webp/jpg/jpeg`:
+
+- `shot-01.png`, `shot-01.webp`, `shot-01.jpg`, `shot-01.jpeg`
+- `shot-1.png`, `shot-1.webp`, `shot-1.jpg`, `shot-1.jpeg`
+- ... up to `shot-20.*`
+
+You do **not** need exact `shot-01.png` only. `shot-08.webp` works.
