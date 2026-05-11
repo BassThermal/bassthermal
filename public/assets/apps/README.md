@@ -1,10 +1,11 @@
 # BassThermal manual app assets
 
-Drop app assets directly into `public/assets/apps/<slug>/` and platform subfolders.
+Drop icons/screenshots directly into `public/assets/apps/<slug>/`.
 
 - No crawlers.
-- No scraped `.img` files.
-- Missing files are allowed.
+- No Playwright.
+- No app-store scraping.
+- No `.img` placeholder files.
 
 ## Supported platforms
 
@@ -12,25 +13,41 @@ Drop app assets directly into `public/assets/apps/<slug>/` and platform subfolde
 - `windows`
 - `web`
 
-## Icon naming rules
+## Icon rules
 
-Icons can be at app root or platform folder, using `png/webp/jpg/jpeg`:
+Accepted icon formats: `png`, `webp`, `jpg`, `jpeg`.
 
-- `/assets/apps/<slug>/icon.png`
-- `/assets/apps/<slug>/icon.webp`
-- `/assets/apps/<slug>/icon.jpg`
-- `/assets/apps/<slug>/icon.jpeg`
-- `/assets/apps/<slug>/<platform>/icon.png`
-- `/assets/apps/<slug>/<platform>/icon.webp`
-- `/assets/apps/<slug>/<platform>/icon.jpg`
-- `/assets/apps/<slug>/<platform>/icon.jpeg`
+- Root icon (fallback):
+  - `public/assets/apps/<slug>/icon.png`
+  - `public/assets/apps/<slug>/icon.webp`
+  - `public/assets/apps/<slug>/icon.jpg`
+  - `public/assets/apps/<slug>/icon.jpeg`
+- Platform icon:
+  - `public/assets/apps/<slug>/android/icon.png` (or webp/jpg/jpeg)
+  - `public/assets/apps/<slug>/windows/icon.png` (or webp/jpg/jpeg)
+  - `public/assets/apps/<slug>/web/icon.png` (or webp/jpg/jpeg)
 
-## Screenshot naming rules
+## Screenshot rules
 
-Screenshots are scanned in each platform folder for `shot-1` through `shot-20`, both padded and unpadded, and `png/webp/jpg/jpeg`:
+Screenshots are **any** `png/webp/jpg/jpeg` inside platform folders except `icon.*`.
 
-- `shot-01.png`, `shot-01.webp`, `shot-01.jpg`, `shot-01.jpeg`
-- `shot-1.png`, `shot-1.webp`, `shot-1.jpg`, `shot-1.jpeg`
-- ... up to `shot-20.*`
+Examples:
 
-You do **not** need exact `shot-01.png` only. `shot-08.webp` works.
+- `public/assets/apps/<slug>/android/shot-08.webp`
+- `public/assets/apps/<slug>/android/anything-reasonable.png`
+- `public/assets/apps/<slug>/windows/screen-2.jpg`
+
+No exact `shot-01` requirement anymore.
+
+## Manifest build
+
+Manifest is generated from local files only:
+
+- Script: `tools/build-asset-manifest.mjs`
+- Output: `public/store-assets.generated.js`
+
+Build commands:
+
+- `npm run assets:index`
+- `npm run dev` (builds manifest first)
+- `npm run deploy` (builds manifest first)
