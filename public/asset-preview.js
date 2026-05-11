@@ -1,45 +1,53 @@
 (() => {
   'use strict';
 
-  const controllerVersion = 'stable-v5';
-  const order = ['dualticker','retrofy','coptic-dictionary','icon-pack-builder','favicon-harvester','isbn-manager','rss-finder'];
+  const controllerVersion = 'stable-v6-strict';
   const cycleMs = 9000;
-  const state = { mode:'auto', slug:'', platform:'', list:[], index:-1, global:[], globalIndex:-1, timer:0, seq:0 };
+  const state = { mode:'idle', slug:'', platform:'', list:[], index:-1, timer:0, seq:0 };
   const assets = () => (window.BT_STORE_ASSETS && window.BT_STORE_ASSETS.apps) || {};
   const arr = (v) => Array.isArray(v) ? v.filter(Boolean) : [];
   const uniq = (v) => [...new Set((v || []).filter(Boolean))];
   const node = (id) => document.getElementById(id);
 
   function rec(slug) { return assets()[slug] || null; }
-  function isFallbackSvg(src) { return String(src || '').startsWith('data:image/svg+xml'); }
-  function realShots(list) { return uniq(list).filter((src) => !isFallbackSvg(src)); }
+  function isGeneratedSvg(src) { return String(src || '').startsWith('data:image/svg+xml'); }
+  function isUsableShot(src) { return !!src && !isGeneratedSvg(src); }
+  function realOnly(list) { return uniq(list).filter(isUsableShot); }
+
   function icon(slug, platform = '') {
     const i = (rec(slug) && rec(slug).icon) || {};
     return (platform && i[platform]) || i.fallback || i.android || i.windows || i.web || '';
   }
+
   function platformShots(slug, platform = '') {
     const s = (rec(slug) && rec(slug).screenshots) || {};
-    return platform ? realShots(arr(s[platform])) : [];
+    return platform ? realOnly(arr(s[platform])) : [];
   }
+
   function genericShots(slug) {
     const s = (rec(slug) && rec(slug).screenshots) || {};
-    return realShots([...arr(s.android), ...arr(s.web), ...arr(s.windows)]);
+    return realOnly([...arr(s.android), ...arr(s.windows)]);
   }
+
   function items(slug, platform = '') {
-    const exact = platform ? platformShots(slug, platform) : [];
-    const shots = exact.length ? exact : genericShots(slug);
+    const shots = platform ? platformShots(slug, platform) : genericShots(slug);
     if (shots.length) return shots.map((src) => ({ src, icon:false, slug, platform }));
     const fallbackIcon = icon(slug, platform);
     return fallbackIcon ? [{ src:fallbackIcon, icon:true, slug, platform }] : [];
   }
-  function globalItems() {
-    const screenshots = order.flatMap((slug) => genericShots(slug).slice(0, 1).map((src) => ({ src, icon:false, slug, platform:'' })));
-    if (screenshots.length) return screenshots;
-    return order.flatMap((slug) => {
-      const src = icon(slug, '');
-      return src ? [{ src, icon:true, slug, platform:'' }] : [];
-    });
+
+  function clearPanel() {
+    const panel = node('assetPanel');
+    const shot = node('assetShot');
+    if (!panel || !shot) return;
+    panel.dataset.previewMode = 'idle';
+    panel.dataset.previewSlug = '';
+    panel.dataset.previewPlatform = '';
+    panel.classList.remove('is-icon-fallback');
+    shot.removeAttribute('src');
+    shot.classList.remove('is-fading');
   }
+
   function show(item) {
     const panel = node('assetPanel');
     const shot = node('assetShot');
@@ -54,25 +62,24 @@
       panel.classList.toggle('is-icon-fallback', !!item.icon);
       shot.onerror = () => {
         state.list = state.list.filter((x) => x.src !== item.src);
-        state.global = state.global.filter((x) => x.src !== item.src);
-        advance(state.mode === 'auto');
+        if (!state.list.length) {
+          const fallbackIcon = icon(state.slug, state.platform);
+          state.list = fallbackIcon ? [{ src:fallbackIcon, icon:true, slug:state.slug, platform:state.platform }] : [];
+          state.index = -1;
+        }
+        advance();
       };
       shot.src = item.src;
       shot.classList.remove('is-fading');
     }, 70);
   }
-  function advance(useGlobal = false) {
-    if (useGlobal || state.mode === 'auto') {
-      if (!state.global.length) state.global = globalItems();
-      if (!state.global.length) return;
-      state.globalIndex = (state.globalIndex + 1) % state.global.length;
-      show(state.global[state.globalIndex]);
-      return;
-    }
+
+  function advance() {
     if (!state.list.length) return;
     state.index = (state.index + 1) % state.list.length;
     show(state.list[state.index]);
   }
+
   function setPreview(slug, platform = '', mode = 'hover') {
     if (!slug || !rec(slug)) return;
     state.mode = mode;
@@ -80,28 +87,29 @@
     state.platform = platform || '';
     state.list = items(slug, platform);
     state.index = -1;
-    advance(false);
-    restart();
+    clearInterval(state.timer);
+    advance();
+    if (state.list.length > 1) state.timer = setInterval(advance, cycleMs);
   }
+
   function unlock() {
-    state.mode = 'auto';
+    state.mode = 'idle';
     state.slug = '';
     state.platform = '';
     state.list = [];
-    advance(true);
-    restart();
-  }
-  function restart() {
+    state.index = -1;
     clearInterval(state.timer);
-    state.timer = setInterval(() => advance(state.mode === 'auto'), cycleMs);
+    clearPanel();
   }
+
   function targetFrom(event) {
     return event.target && event.target.closest ? event.target.closest('[data-preview-app]') : null;
   }
+
   function bind() {
     const panel = node('assetPanel');
     const table = node('appTable');
-    if (!panel || !table) return;
+    if (!panel || !table || panel.dataset.btPreviewController === controllerVersion) return;
     panel.dataset.btPreviewController = controllerVersion;
     document.querySelectorAll('[data-preview-app][title]').forEach((el) => {
       el.setAttribute('aria-label', el.getAttribute('title') || el.textContent || 'Preview');
@@ -113,10 +121,7 @@
       style.textContent = '@media (max-width:980px){.site-shell{display:block!important;width:100%!important;height:auto!important;overflow:hidden!important}.terminal{width:100%!important;height:calc(100svh - max(17px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)))!important}.asset-panel{display:none!important}}.asset-panel[hidden]{display:none!important}';
       document.head.appendChild(style);
     }
-    state.global = globalItems();
-    panel.hidden = !state.global.length;
-    advance(true);
-    restart();
+    unlock();
 
     document.addEventListener('pointerover', (event) => {
       const t = targetFrom(event);
@@ -133,6 +138,7 @@
     panel.addEventListener('click', unlock);
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') unlock(); });
   }
+
   function boot() {
     const wait = () => {
       if (node('assetPanel') && node('appTable') && node('appTable').children.length) bind();
@@ -140,6 +146,7 @@
     };
     wait();
   }
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
   window.BT_PREVIEW = { setPreview:(slug, platform='') => setPreview(slug, platform, 'locked'), unlock, version: controllerVersion };
 })();
