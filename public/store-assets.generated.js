@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-05-11T21:16:15.781Z",
+  "generatedAt": "2026-05-11T21:55:36.965Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -57,7 +57,7 @@ window.BT_STORE_ASSETS = {
 (() => {
   if (document.querySelector('script[data-bt-asset-preview]')) return;
   const script = document.createElement('script');
-  script.src = '/asset-preview.js?v=manual-index-v1';
+  script.src = '/asset-preview.js?v=manual-index-v2';
   script.defer = true;
   script.dataset.btAssetPreview = '1';
   document.head.appendChild(script);

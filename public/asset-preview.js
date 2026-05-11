@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const controllerVersion = 'manual-index-v1';
+  const controllerVersion = 'manual-index-v2';
   const platforms = ['android', 'windows', 'web'];
   const cycleMs = 9000;
 

@@ -1,11 +1,11 @@
 # BassThermal manual app assets
 
-Drop icons/screenshots directly into `public/assets/apps/<slug>/`.
+Drop image files directly into `public/assets/apps/<slug>/`.
 
 - No crawlers.
 - No Playwright.
 - No app-store scraping.
-- No `.img` placeholder files.
+- Missing assets simply do not display.
 
 ## Supported platforms
 
@@ -29,7 +29,7 @@ Accepted icon formats: `png`, `webp`, `jpg`, `jpeg`.
 
 ## Screenshot rules
 
-Screenshots are **any** `png/webp/jpg/jpeg` inside platform folders except `icon.*`.
+Screenshots are any `png/webp/jpg/jpeg` file inside `android/`, `windows/`, or `web/` except `icon.*`.
 
 Examples:
 
@@ -37,7 +37,7 @@ Examples:
 - `public/assets/apps/<slug>/android/anything-reasonable.png`
 - `public/assets/apps/<slug>/windows/screen-2.jpg`
 
-No exact `shot-01` requirement anymore.
+Exact `shot-01` is no longer required.
 
 ## Manifest build
 
@@ -49,5 +49,5 @@ Manifest is generated from local files only:
 Build commands:
 
 - `npm run assets:index`
-- `npm run dev` (builds manifest first)
-- `npm run deploy` (builds manifest first)
+- `npm run dev` (auto-runs `npm run assets:index` first)
+- `npm run deploy` (auto-runs `npm run assets:index` first)

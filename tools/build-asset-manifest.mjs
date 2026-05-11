@@ -17,9 +17,16 @@ function naturalCompare(a, b) {
   return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
 }
 
+function screenshotCompare(a, b) {
+  const aShot = /^shot[-_ ]?\d+/i.test(a);
+  const bShot = /^shot[-_ ]?\d+/i.test(b);
+  if (aShot !== bShot) return aShot ? -1 : 1;
+  return naturalCompare(a, b);
+}
+
 async function listSubdirs(root) {
   const entries = await fs.readdir(root, { withFileTypes: true });
-  return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort(naturalCompare);
+  return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name) .sort(screenshotCompare);
 }
 
 async function pickIcon(dir) {
@@ -91,7 +98,7 @@ async function buildManifest() {
 
 async function main() {
   const manifest = await buildManifest();
-  const js = `window.BT_STORE_ASSETS = ${JSON.stringify(manifest, null, 2)};\n\n(() => {\n  if (document.querySelector('script[data-bt-asset-preview]')) return;\n  const script = document.createElement('script');\n  script.src = '/asset-preview.js?v=manual-index-v1';\n  script.defer = true;\n  script.dataset.btAssetPreview = '1';\n  document.head.appendChild(script);\n})();\n`;
+  const js = `window.BT_STORE_ASSETS = ${JSON.stringify(manifest, null, 2)};\n\n(() => {\n  if (document.querySelector('script[data-bt-asset-preview]')) return;\n  const script = document.createElement('script');\n  script.src = '/asset-preview.js?v=manual-index-v2';\n  script.defer = true;\n  script.dataset.btAssetPreview = '1';\n  document.head.appendChild(script);\n})();\n`;
   await fs.writeFile(outputFile, js, 'utf8');
   console.log(`Generated ${path.relative(repoRoot, outputFile)}`);
 }
