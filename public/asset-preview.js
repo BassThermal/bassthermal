@@ -1,5 +1,7 @@
 (() => {
   'use strict';
+
+  const controllerVersion = 'stable-v4';
   const order = ['dualticker','retrofy','coptic-dictionary','icon-pack-builder','favicon-harvester','isbn-manager','rss-finder'];
   const cycleMs = 9000;
   const state = { mode:'auto', slug:'', platform:'', list:[], index:-1, global:[], globalIndex:-1, timer:0, seq:0 };
@@ -20,9 +22,9 @@
   }
   function items(slug, platform = '') {
     const shots = shotUrls(slug, platform);
-    if (shots.length) return shots.map((src) => ({ src, icon:false }));
+    if (shots.length) return shots.map((src) => ({ src, icon:false, slug, platform }));
     const fallbackIcon = icon(slug, platform);
-    return fallbackIcon ? [{ src:fallbackIcon, icon:true }] : [];
+    return fallbackIcon ? [{ src:fallbackIcon, icon:true, slug, platform }] : [];
   }
   function globalItems() {
     return order.flatMap((slug) => items(slug, '').slice(0, 1));
@@ -32,6 +34,9 @@
     const shot = node('assetShot');
     if (!panel || !shot || !item || !item.src) return;
     const seq = ++state.seq;
+    panel.dataset.previewMode = state.mode;
+    panel.dataset.previewSlug = item.slug || state.slug || '';
+    panel.dataset.previewPlatform = item.platform || state.platform || '';
     shot.classList.add('is-fading');
     setTimeout(() => {
       if (seq !== state.seq) return;
@@ -43,7 +48,7 @@
       };
       shot.src = item.src;
       shot.classList.remove('is-fading');
-    }, 80);
+    }, 70);
   }
   function advance(useGlobal = false) {
     if (useGlobal || state.mode === 'auto') {
@@ -79,25 +84,41 @@
     clearInterval(state.timer);
     state.timer = setInterval(() => advance(state.mode === 'auto'), cycleMs);
   }
-  function target(event) {
+  function targetFrom(event) {
     return event.target && event.target.closest ? event.target.closest('[data-preview-app]') : null;
   }
   function bind() {
     const panel = node('assetPanel');
     const table = node('appTable');
-    if (!panel || !table || panel.dataset.btPreviewController === 'stable-v3') return;
-    panel.dataset.btPreviewController = 'stable-v3';
-    document.querySelectorAll('[data-preview-app][title]').forEach((el) => { el.setAttribute('aria-label', el.getAttribute('title') || el.textContent || 'Preview'); el.removeAttribute('title'); });
-    const style = document.createElement('style');
-    style.textContent = '@media (max-width:980px){.site-shell{display:block!important;width:100%!important;height:auto!important;overflow:hidden!important}.terminal{width:100%!important;height:calc(100svh - max(17px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)))!important}.asset-panel{display:none!important}}.asset-panel[hidden]{display:none!important}';
-    document.head.appendChild(style);
+    if (!panel || !table) return;
+    panel.dataset.btPreviewController = controllerVersion;
+    document.querySelectorAll('[data-preview-app][title]').forEach((el) => {
+      el.setAttribute('aria-label', el.getAttribute('title') || el.textContent || 'Preview');
+      el.removeAttribute('title');
+    });
+    if (!document.getElementById('bt-preview-guard-css')) {
+      const style = document.createElement('style');
+      style.id = 'bt-preview-guard-css';
+      style.textContent = '@media (max-width:980px){.site-shell{display:block!important;width:100%!important;height:auto!important;overflow:hidden!important}.terminal{width:100%!important;height:calc(100svh - max(17px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)))!important}.asset-panel{display:none!important}}.asset-panel[hidden]{display:none!important}';
+      document.head.appendChild(style);
+    }
     state.global = globalItems();
     panel.hidden = !state.global.length;
     advance(true);
     restart();
-    table.addEventListener('pointerover', (event) => { const t = target(event); if (t && state.mode !== 'locked') setPreview(t.dataset.previewApp, t.dataset.previewPlatform || '', 'hover'); });
-    table.addEventListener('focusin', (event) => { const t = target(event); if (t && state.mode !== 'locked') setPreview(t.dataset.previewApp, t.dataset.previewPlatform || '', 'hover'); });
-    table.addEventListener('click', (event) => { const t = target(event); if (t) setPreview(t.dataset.previewApp, t.dataset.previewPlatform || '', 'locked'); }, true);
+
+    document.addEventListener('pointerover', (event) => {
+      const t = targetFrom(event);
+      if (t && state.mode !== 'locked') setPreview(t.dataset.previewApp, t.dataset.previewPlatform || '', 'hover');
+    }, true);
+    document.addEventListener('focusin', (event) => {
+      const t = targetFrom(event);
+      if (t && state.mode !== 'locked') setPreview(t.dataset.previewApp, t.dataset.previewPlatform || '', 'hover');
+    }, true);
+    document.addEventListener('click', (event) => {
+      const t = targetFrom(event);
+      if (t) setPreview(t.dataset.previewApp, t.dataset.previewPlatform || '', 'locked');
+    }, true);
     panel.addEventListener('click', unlock);
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') unlock(); });
   }
@@ -109,5 +130,5 @@
     wait();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
-  window.BT_PREVIEW = { setPreview:(slug, platform='') => setPreview(slug, platform, 'locked'), unlock };
+  window.BT_PREVIEW = { setPreview:(slug, platform='') => setPreview(slug, platform, 'locked'), unlock, version: controllerVersion };
 })();
