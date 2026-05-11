@@ -2,8 +2,9 @@
   "name": "bassthermal",
   "private": true,
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev"
+    "deploy": "npm run assets:index && wrangler deploy",
+    "dev": "npm run assets:index && wrangler dev",
+    "assets:index": "node tools/build-asset-manifest.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.16.0"
