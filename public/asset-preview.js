@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const controllerVersion = 'stable-v4';
+  const controllerVersion = 'stable-v5';
   const order = ['dualticker','retrofy','coptic-dictionary','icon-pack-builder','favicon-harvester','isbn-manager','rss-finder'];
   const cycleMs = 9000;
   const state = { mode:'auto', slug:'', platform:'', list:[], index:-1, global:[], globalIndex:-1, timer:0, seq:0 };
@@ -11,23 +11,34 @@
   const node = (id) => document.getElementById(id);
 
   function rec(slug) { return assets()[slug] || null; }
+  function isFallbackSvg(src) { return String(src || '').startsWith('data:image/svg+xml'); }
+  function realShots(list) { return uniq(list).filter((src) => !isFallbackSvg(src)); }
   function icon(slug, platform = '') {
     const i = (rec(slug) && rec(slug).icon) || {};
     return (platform && i[platform]) || i.fallback || i.android || i.windows || i.web || '';
   }
-  function shotUrls(slug, platform = '') {
+  function platformShots(slug, platform = '') {
     const s = (rec(slug) && rec(slug).screenshots) || {};
-    if (platform) return uniq(arr(s[platform]));
-    return uniq([...arr(s.web), ...arr(s.android), ...arr(s.windows)]);
+    return platform ? realShots(arr(s[platform])) : [];
+  }
+  function genericShots(slug) {
+    const s = (rec(slug) && rec(slug).screenshots) || {};
+    return realShots([...arr(s.android), ...arr(s.web), ...arr(s.windows)]);
   }
   function items(slug, platform = '') {
-    const shots = shotUrls(slug, platform);
+    const exact = platform ? platformShots(slug, platform) : [];
+    const shots = exact.length ? exact : genericShots(slug);
     if (shots.length) return shots.map((src) => ({ src, icon:false, slug, platform }));
     const fallbackIcon = icon(slug, platform);
     return fallbackIcon ? [{ src:fallbackIcon, icon:true, slug, platform }] : [];
   }
   function globalItems() {
-    return order.flatMap((slug) => items(slug, '').slice(0, 1));
+    const screenshots = order.flatMap((slug) => genericShots(slug).slice(0, 1).map((src) => ({ src, icon:false, slug, platform:'' })));
+    if (screenshots.length) return screenshots;
+    return order.flatMap((slug) => {
+      const src = icon(slug, '');
+      return src ? [{ src, icon:true, slug, platform:'' }] : [];
+    });
   }
   function show(item) {
     const panel = node('assetPanel');
