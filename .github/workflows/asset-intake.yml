@@ -22,7 +22,7 @@ permissions:
 jobs:
   import-assets:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,18 +35,24 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Harvest store assets
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Harvest Google Play and static store assets
         run: node tools/harvest-store-assets.mjs
+
+      - name: Harvest Microsoft Store assets with browser fallback
+        run: node tools/harvest-msstore-browser.mjs
 
       - name: Show generated asset tree
         run: |
           echo "Generated assets:"
           find public/assets/apps -maxdepth 4 -type f | sort || true
           echo "Manifest preview:"
-          sed -n '1,120p' public/store-assets.generated.js || true
+          sed -n '1,160p' public/store-assets.generated.js || true
 
       - name: Commit harvested assets
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Harvest BassThermal store assets"
-          file_pattern: "public/assets/apps/** public/store-assets.generated.js"
+          file_pattern: "public/assets/apps/** public/store-assets.generated.js package-lock.json"
