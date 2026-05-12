@@ -147,11 +147,15 @@
       padding-right: 10px;
     }
 
-    .asset-panel { width:100%;height:100%;max-height:none;aspect-ratio:auto;border:0;border-left:1px solid var(--dead);border-radius:0;background:#020202;display:grid;place-items:center;padding:14px;overflow:hidden;user-select:none;}
+    .asset-panel { position:relative;width:100%;height:100%;max-height:none;aspect-ratio:auto;border:0;border-left:1px solid var(--dead);border-radius:0;background:#020202;display:grid;place-items:center;padding:14px;overflow:hidden;user-select:none;}
+    .asset-stage { position: relative; width: 100%; height: 100%; display: grid; place-items: center; }
+    .asset-stage::after { content:""; position:absolute; left:50%; top:var(--reflection-top,62%); width:var(--reflection-width,70%); height:min(90px,14%); transform:translateX(-50%) scaleY(-1); background-image:var(--preview-reflection-image); background-repeat:no-repeat; background-position:top center; background-size:contain; opacity:0.13; filter:blur(1.2px); mask-image:linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 82%); -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 82%); pointer-events:none;}
     .asset-panel:focus-visible { outline: 1px solid var(--dim); outline-offset: -1px; }
     .asset-shot { display:block;width:auto;height:auto;max-width:96%;max-height:92%;object-fit:contain;object-position:center center;background:transparent;opacity:1; }
     .asset-shot.is-fading { opacity: 0; }
     .asset-panel.is-icon-fallback .asset-shot { width:min(160px,22%);height:auto;max-width:160px;max-height:160px; }
+    .asset-panel.is-icon-fallback .asset-stage::after,
+    .asset-panel[data-preview-mode="idle"] .asset-stage::after { display:none; }
     .asset-panel[data-orientation="landscape"] .asset-shot { max-width:96%; max-height:82%; }
     .asset-panel[data-orientation="portrait"] .asset-shot { max-width:58%; max-height:92%; }
 
@@ -199,7 +203,7 @@
 
     .row {
       display: grid;
-      grid-template-columns: 3.2ch minmax(18ch, 1fr) minmax(7ch, auto) minmax(5.2em, max-content);
+      grid-template-columns: 3.2ch minmax(18ch, 1fr) max-content;
       column-gap: 10px;
       min-height: 22px;
       align-items: baseline;
@@ -215,6 +219,8 @@
     }
 
     .app-title-link { display:inline-flex;align-items:baseline;gap:0;min-width:0; }
+    .app-title-link span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .row > span { min-width: 0; }
     .app-icon { width:1em;height:1em;object-fit:cover;display:inline-block;margin-right:0.55ch;vertical-align:-0.12em;border-radius:2px;background:#050505;flex:0 0 auto; }
     .app-icon.is-missing { display:none; }
 
@@ -241,7 +247,7 @@
       height: 1.35em;
       line-height: 1;
       position: relative;
-      opacity: 0.86;
+      opacity: 0.88;
       text-decoration: none;
       overflow: visible;
     }
@@ -251,32 +257,9 @@
       width: 1.05em;
       height: 1.05em;
       object-fit: contain;
-      opacity: 0.92;
+      opacity: 0.96;
     }
 
-    .surface-text-fallback {
-      display: none;
-      font-size: 0.82em;
-      line-height: 1;
-    }
-
-    .surface-logo[src=""],
-    .surface-logo:not([src]) {
-      display: none;
-    }
-
-    .surface-logo[src=""] + .surface-text-fallback,
-    .surface-logo:not([src]) + .surface-text-fallback {
-      display: inline;
-    }
-
-    .surface-link.is-fallback .surface-logo {
-      display: none;
-    }
-
-    .surface-link.is-fallback .surface-text-fallback {
-      display: inline;
-    }
 
     .surface-link:hover,
     .surface-link:focus-visible {
@@ -463,7 +446,7 @@
 
     @media (max-width: 1180px) {
       .row {
-        grid-template-columns: 3.2ch minmax(18ch, 1fr) minmax(7ch, auto) minmax(5.2em, max-content);
+        grid-template-columns: 3.2ch minmax(18ch, 1fr) max-content;
       }
 
     }
@@ -499,7 +482,7 @@
       }
 
       .row {
-        grid-template-columns: 32px minmax(0, 1fr);
+        grid-template-columns: 32px minmax(0, 1fr) max-content;
         gap: 2px 10px;
         padding: 4px 0;
       }
@@ -508,9 +491,8 @@
         display: none;
       }
 
-      .row > span:nth-child(3),
-      .row > span:nth-child(4) {
-        grid-column: 2;
+      .row > span:nth-child(3) {
+        grid-column: 3;
       }
 
       .visits-compact {
@@ -553,7 +535,9 @@
   </main>
 
     <aside class="asset-panel" id="assetPanel" aria-label="Application screenshot preview" tabindex="0">
-      <img class="asset-shot" id="assetShot" alt="" decoding="async">
+      <div class="asset-stage" id="assetStage">
+        <img class="asset-shot" id="assetShot" alt="" decoding="async">
+      </div>
     </aside>
   </div>
 
@@ -777,23 +761,22 @@
         const platform = link[0];
         const url = link[1];
         const direct = link[2];
-        const meta = platformMeta[platform] || { asset: '', fallback: platform.slice(0, 3), label: platform };
+        const meta = platformMeta[platform] || { asset: '', label: platform };
         const aria = `${app.name} ${meta.label}${direct ? '' : ' publisher hub'}`;
         const star = (!direct && platform === 'android') ? '<span class="surface-hub-star" aria-hidden="true">*</span>' : '';
 
-        return `<a class="surface-link surface-link--${esc(platform)} ${platformClass(platform)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(aria)}" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}" data-platform="${esc(platform)}" data-preview-platform="${esc(platform)}"><img class="surface-logo" src="${esc(meta.asset)}" alt="" decoding="async" loading="lazy" onerror="this.removeAttribute('src');this.closest('.surface-link')?.classList.add('is-fallback');"><span class="surface-text-fallback">${esc(meta.fallback)}</span>${star}</a>`;
+        return `<a class="surface-link surface-link--${esc(platform)} ${platformClass(platform)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(aria)}" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}" data-platform="${esc(platform)}" data-preview-platform="${esc(platform)}"><img class="surface-logo" src="${esc(meta.asset)}" alt="" decoding="async" loading="lazy">${star}</a>`;
       }).join('');
     }
 
     function renderTable() {
       appTable.innerHTML = `
-        <div class="row head" aria-hidden="true"><span>id</span><span>name</span><span>state</span><span>surface</span></div>
-        <div class="row head" aria-hidden="true"><span>--</span><span>--------------------</span><span>--------</span><span>------------------------------</span></div>
+        <div class="row head" aria-hidden="true"><span>id</span><span>name</span><span>surface</span></div>
+        <div class="row head" aria-hidden="true"><span>--</span><span>--------------------</span><span>------------------------------</span></div>
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
             <span><a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-command="info ${esc(app.slug)}" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}"><img class="app-icon is-missing" data-app-icon-slug="${esc(app.slug)}" alt="" loading="lazy" decoding="async"><span>${esc(app.name)}</span></a></span>
-            <span class="${esc(app.statusClass)}">${esc(app.status)}</span>
             <span class="links surface-links">${renderLinks(app)}</span>
           </div>
         `).join("")}
