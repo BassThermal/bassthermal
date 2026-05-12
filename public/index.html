@@ -129,7 +129,7 @@
       width: 100%;
       height: calc(100svh - max(22px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)));
       display: grid;
-      grid-template-columns: minmax(560px, 50vw) minmax(420px, 1fr);
+      grid-template-columns: clamp(500px, 36vw, 660px) minmax(0, 1fr);
       gap: 0;
       align-items: stretch;
       overflow: hidden;
@@ -147,17 +147,18 @@
       padding-right: 10px;
     }
 
-    .asset-panel { position:relative;width:100%;height:100%;max-height:none;aspect-ratio:auto;border:0;border-left:1px solid var(--dead);border-radius:0;background:#020202;display:grid;place-items:center;padding:14px;overflow:hidden;user-select:none;}
-    .asset-stage { position: relative; width: 100%; height: 100%; display: grid; place-items: center; }
-    .asset-stage::after { content:""; position:absolute; left:50%; top:var(--reflection-top,62%); width:var(--reflection-width,70%); height:min(90px,14%); transform:translateX(-50%) scaleY(-1); background-image:var(--preview-reflection-image); background-repeat:no-repeat; background-position:top center; background-size:contain; opacity:0.13; filter:blur(1.2px); mask-image:linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 82%); -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 82%); pointer-events:none;}
+    .asset-panel { position:relative;width:100%;height:100%;max-height:none;aspect-ratio:auto;border:0;border-left:1px solid var(--dead);border-radius:0;background:#020202;display:grid;place-items:center;padding:18px;overflow:hidden;user-select:none;}
+    .asset-stage { position: relative; width: 100%; height: 100%; display: grid; place-items: center; overflow: visible; }
     .asset-panel:focus-visible { outline: 1px solid var(--dim); outline-offset: -1px; }
-    .asset-shot { display:block;width:auto;height:auto;max-width:96%;max-height:92%;object-fit:contain;object-position:center center;background:transparent;opacity:1; }
+    .asset-shot { display:block;width:auto;height:auto;max-width:92%;max-height:74%;object-fit:contain;object-position:center center;background:transparent;opacity:1; z-index:2; }
     .asset-shot.is-fading { opacity: 0; }
-    .asset-panel.is-icon-fallback .asset-shot { width:min(160px,22%);height:auto;max-width:160px;max-height:160px; }
-    .asset-panel.is-icon-fallback .asset-stage::after,
-    .asset-panel[data-preview-mode="idle"] .asset-stage::after { display:none; }
-    .asset-panel[data-orientation="landscape"] .asset-shot { max-width:96%; max-height:82%; }
-    .asset-panel[data-orientation="portrait"] .asset-shot { max-width:58%; max-height:92%; }
+    .asset-panel.is-icon-fallback .asset-shot { width:min(150px,18%);height:auto;max-width:150px;max-height:150px; }
+    .asset-panel[data-orientation="landscape"] .asset-shot { max-width:92%; max-height:74%; }
+    .asset-panel[data-orientation="portrait"] .asset-shot { max-width:min(48%,420px); max-height:82%; }
+    .asset-reflection { position:absolute;left:var(--reflection-left,50%);top:var(--reflection-top,60%);width:var(--reflection-width,0px);height:var(--reflection-height,0px);background-image:var(--preview-reflection-image);background-repeat:no-repeat;background-size:100% auto;background-position:bottom center;transform:scaleY(-1);transform-origin:top center;opacity:0.14;filter:blur(1.1px);mask-image:linear-gradient(to bottom, rgba(0,0,0,0.72), rgba(0,0,0,0.26) 42%, transparent 100%);-webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0.72), rgba(0,0,0,0.26) 42%, transparent 100%);pointer-events:none;z-index:1; }
+    .asset-panel.is-icon-fallback .asset-reflection,
+    .asset-panel[data-preview-mode="idle"] .asset-reflection,
+    .asset-reflection.is-hidden { display:none; }
 
     .topline {
       display: flex;
@@ -203,7 +204,7 @@
 
     .row {
       display: grid;
-      grid-template-columns: 3.2ch minmax(18ch, 1fr) max-content;
+      grid-template-columns: 3.2ch minmax(0, 1fr) max-content;
       column-gap: 10px;
       min-height: 22px;
       align-items: baseline;
@@ -218,7 +219,7 @@
       color: var(--hot);
     }
 
-    .app-title-link { display:inline-flex;align-items:baseline;gap:0;min-width:0; }
+    .app-title-link { display:inline-flex;align-items:baseline;gap:0;min-width:0;max-width:100%; }
     .app-title-link span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .row > span { min-width: 0; }
     .app-icon { width:1em;height:1em;object-fit:cover;display:inline-block;margin-right:0.55ch;vertical-align:-0.12em;border-radius:2px;background:#050505;flex:0 0 auto; }
@@ -247,9 +248,10 @@
       height: 1.35em;
       line-height: 1;
       position: relative;
-      opacity: 0.88;
+      opacity: 0.82;
       text-decoration: none;
       overflow: visible;
+      border-radius: 2px;
     }
 
     .surface-logo {
@@ -264,21 +266,14 @@
     .surface-link:hover,
     .surface-link:focus-visible {
       opacity: 1;
-      color: var(--hot);
       text-decoration: none;
-      outline: 0;
+      outline: 1px solid currentColor;
+      outline-offset: 2px;
     }
 
     .surface-link:hover::after,
     .surface-link:focus-visible::after {
-      content: "";
-      position: absolute;
-      left: 15%;
-      right: 15%;
-      bottom: -0.18em;
-      height: 1px;
-      background: currentColor;
-      opacity: 0.8;
+      content: none;
     }
 
     .surface-hub-star {
@@ -444,6 +439,13 @@
     .visits-link { color: inherit; text-decoration: none; cursor: pointer; }
     .visits-link:hover { color: var(--hot); text-decoration: underline; }
 
+    .site-shell,.terminal,.index,.table,.row,.log { min-width: 0; }
+    .index,.log { overflow-x: hidden; }
+
+    @media (max-width: 1280px) and (min-width: 981px) {
+      .site-shell { grid-template-columns: clamp(460px, 42vw, 560px) minmax(0, 1fr); }
+    }
+
     @media (max-width: 1180px) {
       .row {
         grid-template-columns: 3.2ch minmax(18ch, 1fr) max-content;
@@ -537,6 +539,7 @@
     <aside class="asset-panel" id="assetPanel" aria-label="Application screenshot preview" tabindex="0">
       <div class="asset-stage" id="assetStage">
         <img class="asset-shot" id="assetShot" alt="" decoding="async">
+        <div class="asset-reflection is-hidden" id="assetReflection" aria-hidden="true"></div>
       </div>
     </aside>
   </div>
@@ -772,7 +775,7 @@
     function renderTable() {
       appTable.innerHTML = `
         <div class="row head" aria-hidden="true"><span>id</span><span>name</span><span>surface</span></div>
-        <div class="row head" aria-hidden="true"><span>--</span><span>--------------------</span><span>------------------------------</span></div>
+        <div class="row head" aria-hidden="true"><span>--</span><span>--------------------</span><span>-------</span></div>
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>

@@ -23,6 +23,7 @@
     const panel = node('assetPanel');
     const shot = node('assetShot');
     const stage = node('assetStage');
+    const reflection = node('assetReflection');
     if (!panel || !shot) return;
     panel.dataset.previewMode = 'idle';
     panel.dataset.previewSlug = '';
@@ -32,15 +33,19 @@
     shot.removeAttribute('src');
     if (stage) {
       stage.style.removeProperty('--preview-reflection-image');
+      stage.style.removeProperty('--reflection-left');
+      stage.style.removeProperty('--reflection-height');
       stage.style.removeProperty('--reflection-width');
       stage.style.removeProperty('--reflection-top');
     }
+    if (reflection) reflection.classList.add('is-hidden');
   }
 
   function showCurrent() {
     const panel = node('assetPanel');
     const shot = node('assetShot');
     const stage = node('assetStage');
+    const reflection = node('assetReflection');
     const item = state.list[state.index];
     if (!panel || !shot || !item) return;
 
@@ -53,10 +58,14 @@
     if (stage) {
       if (item.icon) {
         stage.style.removeProperty('--preview-reflection-image');
+        stage.style.removeProperty('--reflection-left');
+        stage.style.removeProperty('--reflection-height');
         stage.style.removeProperty('--reflection-width');
         stage.style.removeProperty('--reflection-top');
+        if (reflection) reflection.classList.add('is-hidden');
       } else {
         stage.style.setProperty('--preview-reflection-image', `url("${item.src}")`);
+        if (reflection) reflection.classList.remove('is-hidden');
       }
     }
   }
@@ -173,8 +182,16 @@
       const rect = shot.getBoundingClientRect();
       const stageRect = stage.getBoundingClientRect();
       if (!rect.width || !rect.height || !stageRect.width || !stageRect.height) return;
+      const reflectedHeight = Math.min(rect.height * 0.5, 160);
+      const left = rect.left - stageRect.left;
+      const top = rect.bottom - stageRect.top + 4;
+      stage.style.setProperty('--reflection-left', `${left}px`);
+      stage.style.setProperty('--reflection-height', `${reflectedHeight}px`);
       stage.style.setProperty('--reflection-width', `${rect.width}px`);
-      stage.style.setProperty('--reflection-top', `${rect.bottom - stageRect.top + 4}px`);
+      stage.style.setProperty('--reflection-top', `${top}px`);
+      stage.style.setProperty('--preview-reflection-image', `url("${shot.currentSrc || shot.src}")`);
+      const reflection = node('assetReflection');
+      if (reflection) reflection.classList.remove('is-hidden');
     });
     shot.addEventListener('error', handleImageError);
     panel.addEventListener('click', unlock);
