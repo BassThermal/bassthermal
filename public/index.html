@@ -148,17 +148,10 @@
     }
 
     .asset-panel { position:relative;width:100%;height:100%;max-height:none;aspect-ratio:auto;border:0;border-left:1px solid var(--dead);border-radius:0;background:#020202;display:grid;place-items:center;padding:10px;overflow:hidden;user-select:none;}
-    .asset-stage { position: relative; width: 100%; height: 100%; display: grid; place-items: center; overflow: visible; }
+    .asset-stage { position:relative;width:100%;height:100%;display:grid;place-items:center;overflow:hidden; }
     .asset-panel:focus-visible { outline: 1px solid var(--dim); outline-offset: -1px; }
-    .asset-shot { display:block;width:auto;height:auto;max-width:calc(100% - 20px);max-height:calc(100% - 20px);object-fit:contain;object-position:center center;background:transparent;opacity:1; z-index:2; }
+    .asset-shot { display:block;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;object-position:center center;background:transparent;opacity:1;z-index:2; }
     .asset-shot.is-fading { opacity: 0; }
-        .asset-panel[data-orientation="landscape"] .asset-shot { max-width:calc(100% - 20px); max-height:calc(100% - 20px); }
-    .asset-panel[data-orientation="portrait"] .asset-shot { max-width:min(72%,620px); max-height:calc(100% - 20px); }
-    @media (max-width: 1280px) and (min-width: 981px) {
-      .asset-panel[data-orientation="portrait"] .asset-shot {
-        max-width:min(82%,560px);
-      }
-    }
     .asset-reflection { display: none !important; }
 
     .topline {
