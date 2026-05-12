@@ -155,7 +155,7 @@
     .asset-panel.is-icon-fallback .asset-shot { width:min(150px,18%);height:auto;max-width:150px;max-height:150px; }
     .asset-panel[data-orientation="landscape"] .asset-shot { max-width:92%; max-height:74%; }
     .asset-panel[data-orientation="portrait"] .asset-shot { max-width:min(48%,420px); max-height:82%; }
-    .asset-reflection { position:absolute;left:var(--reflection-left,50%);top:var(--reflection-top,60%);width:var(--reflection-width,0px);height:var(--reflection-height,0px);background-image:var(--preview-reflection-image);background-repeat:no-repeat;background-size:100% auto;background-position:bottom center;transform:scaleY(-1);transform-origin:top center;opacity:0.14;filter:blur(1.1px);mask-image:linear-gradient(to bottom, rgba(0,0,0,0.72), rgba(0,0,0,0.26) 42%, transparent 100%);-webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0.72), rgba(0,0,0,0.26) 42%, transparent 100%);pointer-events:none;z-index:1; }
+    .asset-reflection { position:absolute;left:var(--reflection-left,50%);top:var(--reflection-top,60%);width:var(--reflection-width,0px);height:var(--reflection-height,0px);background-image:var(--preview-reflection-image);background-repeat:no-repeat;background-size:100% auto;background-position:bottom center;transform:scaleY(-1);transform-origin:top center;opacity:0.11;filter:blur(1.1px);mask-image:linear-gradient(to bottom, rgba(0,0,0,0.72), rgba(0,0,0,0.26) 42%, transparent 100%);-webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0.72), rgba(0,0,0,0.26) 42%, transparent 100%);pointer-events:none;z-index:1; }
     .asset-panel.is-icon-fallback .asset-reflection,
     .asset-panel[data-preview-mode="idle"] .asset-reflection,
     .asset-reflection.is-hidden { display:none; }
@@ -204,10 +204,11 @@
 
     .row {
       display: grid;
-      grid-template-columns: 3.2ch minmax(0, 1fr) max-content;
-      column-gap: 10px;
+      grid-template-columns: 3.2ch minmax(15ch, 1fr) minmax(7ch, 9ch) max-content;
+      column-gap: 9px;
       min-height: 22px;
       align-items: baseline;
+      min-width: 0;
     }
 
     .head {
@@ -222,6 +223,7 @@
     .app-title-link { display:inline-flex;align-items:baseline;gap:0;min-width:0;max-width:100%; }
     .app-title-link span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .row > span { min-width: 0; }
+    .app-type { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .app-icon { width:1em;height:1em;object-fit:cover;display:inline-block;margin-right:0.55ch;vertical-align:-0.12em;border-radius:2px;background:#050505;flex:0 0 auto; }
     .app-icon.is-missing { display:none; }
 
@@ -234,60 +236,106 @@
     .links {
       display: inline-flex;
       align-items: center;
+      justify-content: flex-start;
       flex-wrap: nowrap;
-      gap: 7px;
+      gap: 5px;
       min-width: 0;
       white-space: nowrap;
     }
 
     .surface-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 1.35em;
-      height: 1.35em;
+      display: inline-grid;
+      place-items: center;
+      width: 1.18em;
+      height: 1.18em;
       line-height: 1;
       position: relative;
-      opacity: 0.82;
+      opacity: 0.72;
       text-decoration: none;
       overflow: visible;
-      border-radius: 2px;
+      border-radius: 1px;
+      vertical-align: -0.12em;
     }
 
-    .surface-logo {
+    .surface-logo-mask {
       display: block;
-      width: 1.05em;
-      height: 1.05em;
-      object-fit: contain;
-      opacity: 0.96;
+      width: 1em;
+      height: 1em;
+      background: currentColor;
+      opacity: 0.82;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      -webkit-mask-size: contain;
     }
 
+    .surface-link--web .surface-logo-mask {
+      mask-image: url("/assets/platforms/web.svg");
+      -webkit-mask-image: url("/assets/platforms/web.svg");
+    }
+
+    .surface-link--windows .surface-logo-mask {
+      mask-image: url("/assets/platforms/windows.svg");
+      -webkit-mask-image: url("/assets/platforms/windows.svg");
+    }
+
+    .surface-link--android .surface-logo-mask {
+      mask-image: url("/assets/platforms/android.svg");
+      -webkit-mask-image: url("/assets/platforms/android.svg");
+    }
 
     .surface-link:hover,
     .surface-link:focus-visible {
       opacity: 1;
       text-decoration: none;
-      outline: 1px solid currentColor;
-      outline-offset: 2px;
+      outline: 0;
+    }
+
+    .surface-link::after {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      opacity: 0;
+      pointer-events: none;
+      border-radius: 2px;
+      background:
+        linear-gradient(115deg,
+          transparent 0%,
+          transparent 36%,
+          rgba(255,255,255,0.22) 49%,
+          transparent 62%,
+          transparent 100%);
+      transform: translateX(-35%);
+      transition: opacity 120ms linear, transform 180ms ease-out;
     }
 
     .surface-link:hover::after,
     .surface-link:focus-visible::after {
-      content: none;
+      opacity: 0.55;
+      transform: translateX(18%);
+    }
+
+    .surface-link:hover .surface-logo-mask,
+    .surface-link:focus-visible .surface-logo-mask {
+      opacity: 1;
+      filter: drop-shadow(0 0 5px currentColor);
     }
 
     .surface-hub-star {
       position: absolute;
-      top: -0.42em;
-      right: -0.35em;
-      font-size: 0.72em;
+      top: -0.45em;
+      right: -0.28em;
+      font-size: 0.62em;
       color: var(--android);
       line-height: 1;
+      opacity: 0.85;
     }
 
-    .surface-link--web { color: var(--web); }
-    .surface-link--windows { color: var(--windows); }
-    .surface-link--android { color: var(--android); }
+    .surface-link--web { color: color-mix(in srgb, var(--web) 78%, var(--soft)); }
+    .surface-link--windows { color: color-mix(in srgb, var(--windows) 78%, var(--soft)); }
+    .surface-link--android { color: color-mix(in srgb, var(--android) 76%, var(--soft)); }
 
     .tag {
       white-space: nowrap;
@@ -448,7 +496,7 @@
 
     @media (max-width: 1180px) {
       .row {
-        grid-template-columns: 3.2ch minmax(18ch, 1fr) max-content;
+        grid-template-columns: 3.2ch minmax(14ch, 1fr) minmax(6ch, 8ch) max-content;
       }
 
     }
@@ -484,7 +532,7 @@
       }
 
       .row {
-        grid-template-columns: 32px minmax(0, 1fr) max-content;
+        grid-template-columns: 32px minmax(0, 1fr) minmax(6ch, 8ch) max-content;
         gap: 2px 10px;
         padding: 4px 0;
       }
@@ -738,17 +786,21 @@
       return "dead";
     }
 
-    function displayClass(klass) {
+    function displayType(app) {
       const map = {
-        "signal/interface": "signal",
-        "image/processor": "image",
-        "language/reference": "language",
-        "asset/compiler": "asset",
-        "web/extractor": "web",
-        "inventory/system": "inventory",
-        "feed/discovery": "feed"
+        dualticker: "signal",
+        retrofy: "image",
+        "coptic-dictionary": "ref",
+        "icon-pack-builder": "utility",
+        "favicon-harvester": "utility",
+        "isbn-manager": "inventory",
+        "rss-finder": "feed"
       };
-      return map[klass] || klass;
+      return map[app.slug] || "utility";
+    }
+
+    function displayClass(klass) {
+      return klass;
     }
 
     function renderLinks(app) {
@@ -768,18 +820,19 @@
         const aria = `${app.name} ${meta.label}${direct ? '' : ' publisher hub'}`;
         const star = (!direct && platform === 'android') ? '<span class="surface-hub-star" aria-hidden="true">*</span>' : '';
 
-        return `<a class="surface-link surface-link--${esc(platform)} ${platformClass(platform)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(aria)}" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}" data-platform="${esc(platform)}" data-preview-platform="${esc(platform)}"><img class="surface-logo" src="${esc(meta.asset)}" alt="" decoding="async" loading="lazy">${star}</a>`;
+        return `<a class="surface-link surface-link--${esc(platform)} ${platformClass(platform)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(aria)}" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}" data-platform="${esc(platform)}" data-preview-platform="${esc(platform)}"><span class="surface-logo-mask" aria-hidden="true"></span>${star}</a>`;
       }).join('');
     }
 
     function renderTable() {
       appTable.innerHTML = `
-        <div class="row head" aria-hidden="true"><span>id</span><span>name</span><span>surface</span></div>
-        <div class="row head" aria-hidden="true"><span>--</span><span>--------------------</span><span>-------</span></div>
+        <div class="row head" aria-hidden="true"><span>id</span><span>name</span><span>type</span><span>surface</span></div>
+        <div class="row head" aria-hidden="true"><span>--</span><span>--------------------</span><span>----------</span><span>-------</span></div>
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
             <span><a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-command="info ${esc(app.slug)}" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}"><img class="app-icon is-missing" data-app-icon-slug="${esc(app.slug)}" alt="" loading="lazy" decoding="async"><span>${esc(app.name)}</span></a></span>
+            <span class="soft app-type">${esc(displayType(app))}</span>
             <span class="links surface-links">${renderLinks(app)}</span>
           </div>
         `).join("")}
