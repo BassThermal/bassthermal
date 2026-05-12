@@ -3,7 +3,6 @@
 
   const controllerVersion = 'manual-index-v2';
   const platforms = ['android', 'windows', 'web'];
-  const cycleMs = 9000;
 
   const state = {
     mode: 'idle',
@@ -11,7 +10,7 @@
     platform: '',
     list: [],
     index: -1,
-    timer: 0
+
   };
 
   const node = (id) => document.getElementById(id);
@@ -28,12 +27,8 @@
     panel.dataset.previewSlug = '';
     panel.dataset.previewPlatform = '';
     panel.classList.remove('is-icon-fallback');
+    delete panel.dataset.orientation;
     shot.removeAttribute('src');
-  }
-
-  function stopCycle() {
-    if (state.timer) clearInterval(state.timer);
-    state.timer = 0;
   }
 
   function showCurrent() {
@@ -46,17 +41,10 @@
     panel.dataset.previewSlug = state.slug;
     panel.dataset.previewPlatform = state.platform;
     panel.classList.toggle('is-icon-fallback', !!item.icon);
+    delete panel.dataset.orientation;
     shot.src = item.src;
   }
 
-  function startCycle() {
-    stopCycle();
-    if (state.list.length <= 1) return;
-    state.timer = setInterval(() => {
-      state.index = (state.index + 1) % state.list.length;
-      showCurrent();
-    }, cycleMs);
-  }
 
   function buildPreviewList(slug, platform = '') {
     const app = getManifestApp(slug);
@@ -83,8 +71,6 @@
     state.mode = mode;
     state.slug = slug;
     state.platform = platform;
-    stopCycle();
-
     state.list = buildPreviewList(slug, platform);
     state.index = state.list.length ? 0 : -1;
 
@@ -94,7 +80,6 @@
     }
 
     showCurrent();
-    startCycle();
   }
 
   function unlock() {
@@ -103,7 +88,6 @@
     state.platform = '';
     state.list = [];
     state.index = -1;
-    stopCycle();
     clearPanel();
   }
 
@@ -138,7 +122,6 @@
     }
     if (state.index >= state.list.length) state.index = 0;
     showCurrent();
-    startCycle();
   }
 
   function bind() {
@@ -164,6 +147,12 @@
       if (t) setPreview(t.dataset.previewApp, t.dataset.previewPlatform || '', 'locked');
     }, true);
 
+    shot.addEventListener('load', () => {
+      const panel = node('assetPanel');
+      const shot = node('assetShot');
+      if (!panel || !shot || !shot.naturalWidth || !shot.naturalHeight) return;
+      panel.dataset.orientation = shot.naturalWidth > shot.naturalHeight ? 'landscape' : 'portrait';
+    });
     shot.addEventListener('error', handleImageError);
     panel.addEventListener('click', unlock);
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') unlock(); });
