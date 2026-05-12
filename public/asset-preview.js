@@ -2,7 +2,7 @@
   'use strict';
 
   const controllerVersion = 'manual-index-v2';
-  const platforms = ['android', 'windows', 'web'];
+  const genericPreviewOrder = ['windows', 'web', 'android'];
 
   const state = {
     mode: 'idle',
@@ -52,7 +52,7 @@
     panel.dataset.previewMode = state.mode;
     panel.dataset.previewSlug = state.slug;
     panel.dataset.previewPlatform = state.platform;
-    panel.classList.toggle('is-icon-fallback', !!item.icon);
+    panel.classList.remove('is-icon-fallback');
     delete panel.dataset.orientation;
     shot.src = item.src;
     if (stage) {
@@ -76,19 +76,16 @@
     if (!app) return [];
 
     const shots = app.screenshots || {};
-    const icon = app.icon || {};
-
     if (platform) {
       const scopedShots = Array.isArray(shots[platform]) ? shots[platform] : [];
       if (scopedShots.length) return scopedShots.map((src) => ({ src, icon: false }));
-      const scopedIcon = icon[platform] || icon.fallback || null;
-      return scopedIcon ? [{ src: scopedIcon, icon: true }] : [];
+      return [];
     }
 
-    const ordered = platforms.flatMap((pf) => (Array.isArray(shots[pf]) ? shots[pf] : []));
+    const ordered = genericPreviewOrder.flatMap((pf) => (Array.isArray(shots[pf]) ? shots[pf] : []));
     if (ordered.length) return ordered.map((src) => ({ src, icon: false }));
 
-    return icon.fallback ? [{ src: icon.fallback, icon: true }] : [];
+    return [];
   }
 
   function setPreview(slug, platform = '', mode = 'hover') {
@@ -178,7 +175,7 @@
       const stage = node('assetStage');
       if (!panel || !shot || !shot.naturalWidth || !shot.naturalHeight) return;
       panel.dataset.orientation = shot.naturalWidth > shot.naturalHeight ? 'landscape' : 'portrait';
-      if (!stage || panel.classList.contains('is-icon-fallback')) return;
+      if (!stage) return;
       const rect = shot.getBoundingClientRect();
       const stageRect = stage.getBoundingClientRect();
       if (!rect.width || !rect.height || !stageRect.width || !stageRect.height) return;
