@@ -140,7 +140,7 @@
       height: 100%;
       min-width: 0;
       display: grid;
-      grid-template-rows: auto minmax(132px, 32svh) auto minmax(0, 1fr) auto;
+      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
       gap: 6px;
       overflow: hidden;
       border-right: 1px solid var(--dead);
@@ -187,6 +187,11 @@
       overscroll-behavior: contain;
     }
 
+     .index {
+      overflow: hidden;
+      max-height: none;
+    }
+
     .index::-webkit-scrollbar,
     .log::-webkit-scrollbar {
       width: 0;
@@ -196,13 +201,14 @@
     .table {
       display: grid;
       gap: 0;
-      width: min(100%, 58ch);
+      width: max-content;
+      max-width: 100%;
       justify-content: start;
     }
 
     .row {
       display: grid;
-      grid-template-columns: 3.2ch minmax(16ch, 22ch) 8.5ch max-content;
+      grid-template-columns: 3.2ch minmax(16ch, 22ch) 5.5ch max-content;
       column-gap: 8px;
       min-height: 22px;
       align-items: baseline;
@@ -221,7 +227,7 @@
     .app-title-link { display:inline-flex;align-items:baseline;gap:0;min-width:0;max-width:100%; }
     .app-title-link span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .row > span { min-width: 0; }
-    .app-type { color: var(--soft); opacity: 0.82; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .app-type { color: var(--soft); opacity: 0.82; white-space: nowrap; overflow: visible; text-overflow: clip; }
     .app-icon { width:1em;height:1em;object-fit:cover;display:inline-block;margin-right:0.55ch;vertical-align:-0.12em;border-radius:2px;background:#050505;flex:0 0 auto; }
     .app-icon.is-missing { display:none; }
 
@@ -401,7 +407,7 @@
 
     @media (max-width: 1180px) {
       .row {
-        grid-template-columns: 3.2ch minmax(14ch, 20ch) 7.5ch max-content;
+        grid-template-columns: 3.2ch minmax(14ch, 20ch) 5ch max-content;
       }
 
     }
@@ -424,7 +430,7 @@
 
       .terminal {
         height: calc(100svh - max(17px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)));
-        grid-template-rows: auto minmax(128px, 42svh) auto minmax(0, 1fr) auto;
+        grid-template-rows: auto auto auto minmax(0, 1fr) auto;
         gap: 7px;
       }
 
@@ -696,12 +702,12 @@
         dualticker: "signal",
         retrofy: "image",
         "coptic-dictionary": "ref",
-        "icon-pack-builder": "utility",
-        "favicon-harvester": "utility",
-        "isbn-manager": "inventory",
+        "icon-pack-builder": "util",
+        "favicon-harvester": "util",
+        "isbn-manager": "inv",
         "rss-finder": "feed"
       };
-      return map[app.slug] || "utility";
+      return map[app.slug] || "util";
     }
 
     function displayClass(klass) {
@@ -709,7 +715,7 @@
     }
 
     function renderLinks(app) {
-      if (!app.links.length) return '<span class="tag disabled" aria-disabled="true">pending</span>';
+      if (!app.links.length) return '<span class="tag disabled" aria-disabled="true">--</span>';
 
       const platformMeta = {
         web: { short: 'web', label: 'web' },
@@ -729,7 +735,7 @@
     function renderTable() {
       appTable.innerHTML = `
         <div class="row head" aria-hidden="true"><span>id</span><span>name</span><span>type</span><span>surface</span></div>
-        <div class="row head" aria-hidden="true"><span>--</span><span>--------------------</span><span>----------</span><span>-------</span></div>
+        <div class="row head" aria-hidden="true"><span>--</span><span>------------------</span><span>-----</span><span>-------</span></div>
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
