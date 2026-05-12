@@ -182,7 +182,7 @@
       const rect = shot.getBoundingClientRect();
       const stageRect = stage.getBoundingClientRect();
       if (!rect.width || !rect.height || !stageRect.width || !stageRect.height) return;
-      const reflectedHeight = Math.min(rect.height * 0.5, 160);
+      const reflectedHeight = Math.min(rect.height * 0.42, 110);
       const left = rect.left - stageRect.left;
       const top = rect.bottom - stageRect.top + 4;
       stage.style.setProperty('--reflection-left', `${left}px`);

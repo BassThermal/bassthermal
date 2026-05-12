@@ -150,12 +150,12 @@
     .asset-panel { position:relative;width:100%;height:100%;max-height:none;aspect-ratio:auto;border:0;border-left:1px solid var(--dead);border-radius:0;background:#020202;display:grid;place-items:center;padding:18px;overflow:hidden;user-select:none;}
     .asset-stage { position: relative; width: 100%; height: 100%; display: grid; place-items: center; overflow: visible; }
     .asset-panel:focus-visible { outline: 1px solid var(--dim); outline-offset: -1px; }
-    .asset-shot { display:block;width:auto;height:auto;max-width:94%;max-height:80%;object-fit:contain;object-position:center center;background:transparent;opacity:1; z-index:2; }
+    .asset-shot { display:block;width:auto;height:auto;max-width:94%;max-height:82%;object-fit:contain;object-position:center center;background:transparent;opacity:1; z-index:2; }
     .asset-shot.is-fading { opacity: 0; }
     .asset-panel.is-icon-fallback .asset-shot { width:min(150px,18%);height:auto;max-width:150px;max-height:150px; }
     .asset-panel[data-orientation="landscape"] .asset-shot { max-width:94%; max-height:82%; }
-    .asset-panel[data-orientation="portrait"] .asset-shot { max-width:min(58%,520px); max-height:86%; }
-    .asset-reflection { position:absolute;left:var(--reflection-left,50%);top:var(--reflection-top,60%);width:var(--reflection-width,0px);height:min(var(--reflection-height,0px),120px);background-image:var(--preview-reflection-image);background-repeat:no-repeat;background-size:100% auto;background-position:bottom center;transform:scaleY(-1);transform-origin:top center;opacity:0.09;filter:blur(1px);mask-image:linear-gradient(to bottom, rgba(0,0,0,0.68), rgba(0,0,0,0.2) 32%, transparent 100%);-webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0.68), rgba(0,0,0,0.2) 32%, transparent 100%);pointer-events:none;z-index:1; }
+    .asset-panel[data-orientation="portrait"] .asset-shot { max-width:min(60%,560px); max-height:88%; }
+    .asset-reflection { position:absolute;left:var(--reflection-left,50%);top:var(--reflection-top,60%);width:var(--reflection-width,0px);height:min(var(--reflection-height,0px),110px);background-image:var(--preview-reflection-image);background-repeat:no-repeat;background-size:100% auto;background-position:bottom center;transform:scaleY(-1);transform-origin:top center;opacity:0.09;filter:blur(1px);mask-image:linear-gradient(to bottom, rgba(0,0,0,0.68), rgba(0,0,0,0.16) 24%, transparent 72%);-webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0.68), rgba(0,0,0,0.16) 24%, transparent 72%);pointer-events:none;z-index:1; }
     .asset-panel.is-icon-fallback .asset-reflection,
     .asset-panel[data-preview-mode="idle"] .asset-reflection,
     .asset-reflection.is-hidden { display:none; }
@@ -248,54 +248,28 @@
     .surface-link {
       display: inline-grid;
       place-items: center;
-      width: 1.05em;
-      height: 1.05em;
+      width: 1.08em;
+      height: 1.08em;
       line-height: 1;
       position: relative;
-      opacity: 0.62;
+      opacity: 0.68;
       text-decoration: none;
       overflow: visible;
       border-radius: 1px;
       vertical-align: -0.12em;
     }
 
-    .surface-logo,
-    .surface-logo-mask {
+    .surface-logo {
       display: block;
       width: 0.95em;
       height: 0.95em;
       object-fit: contain;
-    }
-
-    .surface-logo-mask {
-      background: currentColor;
-      opacity: 0.78;
-      mask-repeat: no-repeat;
-      mask-position: center;
-      mask-size: contain;
-      -webkit-mask-repeat: no-repeat;
-      -webkit-mask-position: center;
-      -webkit-mask-size: contain;
-    }
-
-    .surface-link--web .surface-logo-mask {
-      mask-image: url("/assets/platforms/web.svg");
-      -webkit-mask-image: url("/assets/platforms/web.svg");
-    }
-
-    .surface-link--windows .surface-logo-mask {
-      mask-image: url("/assets/platforms/windows.svg");
-      -webkit-mask-image: url("/assets/platforms/windows.svg");
-    }
-
-    .surface-link--android .surface-logo-mask {
-      mask-image: url("/assets/platforms/android.svg");
-      -webkit-mask-image: url("/assets/platforms/android.svg");
+      opacity: 0.82;
     }
 
     .surface-link:hover,
     .surface-link:focus-visible {
-      opacity: 0.95;
+      opacity: 0.96;
       text-decoration: none;
       outline: 0;
     }
@@ -310,9 +284,9 @@
       background:
         linear-gradient(115deg,
           transparent 0%,
-          transparent 38%,
-          rgba(255,255,255,0.18) 49%,
-          transparent 60%,
+          transparent 40%,
+          rgba(255,255,255,0.16) 49%,
+          transparent 58%,
           transparent 100%);
       transform: translateX(-38%);
       transition: opacity 120ms linear, transform 180ms ease-out;
@@ -320,29 +294,19 @@
 
     .surface-link:hover::after,
     .surface-link:focus-visible::after {
-      opacity: 0.45;
-      transform: translateX(18%);
+      opacity: 0.42;
+      transform: translateX(16%);
     }
 
-    .surface-link:hover .surface-logo-mask,
-    .surface-link:focus-visible .surface-logo-mask {
+    .surface-link:hover .surface-logo,
+    .surface-link:focus-visible .surface-logo {
       opacity: 1;
-      filter: drop-shadow(0 0 4px currentColor);
+      filter: drop-shadow(0 0 3px currentColor);
     }
 
-    .surface-hub-star {
-      position: absolute;
-      top: -0.38em;
-      right: -0.25em;
-      font-size: 0.58em;
-      color: var(--android);
-      line-height: 1;
-      opacity: 0.75;
-    }
-
-    .surface-link--web { color: color-mix(in srgb, var(--web) 58%, var(--soft)); }
-    .surface-link--windows { color: color-mix(in srgb, var(--windows) 60%, var(--soft)); }
-    .surface-link--android { color: color-mix(in srgb, var(--android) 58%, var(--soft)); }
+    .surface-link--web { color: color-mix(in srgb, var(--web) 48%, var(--soft)); }
+    .surface-link--windows { color: color-mix(in srgb, var(--windows) 56%, var(--soft)); }
+    .surface-link--android { color: color-mix(in srgb, var(--android) 52%, var(--soft)); }
 
     .tag {
       white-space: nowrap;
@@ -355,11 +319,6 @@
 
     .tag::after {
       content: "]";
-      color: var(--dead);
-    }
-
-    .tag-hub::after {
-      content: "*]";
       color: var(--dead);
     }
 
@@ -825,9 +784,7 @@
         const direct = link[2];
         const meta = platformMeta[platform] || { asset: '', label: platform };
         const aria = `${app.name} ${meta.label}${direct ? '' : ' publisher hub'}`;
-        const star = (!direct && platform === 'android') ? '<span class="surface-hub-star" aria-hidden="true">*</span>' : '';
-
-        return `<a class="surface-link surface-link--${esc(platform)} ${platformClass(platform)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(aria)}" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}" data-platform="${esc(platform)}" data-preview-platform="${esc(platform)}"><span class="surface-logo-mask" aria-hidden="true"></span>${star}</a>`;
+        return `<a class="surface-link surface-link--${esc(platform)} ${platformClass(platform)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(aria)}" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}" data-platform="${esc(platform)}" data-preview-platform="${esc(platform)}"><img class="surface-logo" src="${esc(meta.asset)}" alt="" aria-hidden="true" loading="lazy" decoding="async"></a>`;
       }).join('');
     }
 
