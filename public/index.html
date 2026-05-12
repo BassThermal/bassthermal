@@ -208,7 +208,7 @@
 
     .row {
       display: grid;
-      grid-template-columns: 3.2ch minmax(16ch, 22ch) 5.5ch max-content;
+      grid-template-columns: 3.2ch minmax(17ch, 24ch) 10.5ch max-content;
       column-gap: 8px;
       min-height: 22px;
       align-items: baseline;
@@ -218,6 +218,9 @@
     .head {
       color: var(--dim);
       text-transform: lowercase;
+      border-bottom: 1px solid color-mix(in srgb, var(--dead) 65%, transparent);
+      padding-bottom: 2px;
+      margin-bottom: 5px;
     }
 
     .app-name {
@@ -273,11 +276,10 @@
     }
 
     .separator {
-      color: var(--dead);
-      line-height: 1;
-      white-space: pre;
+      height: 1px;
+      width: min(100%, 58ch);
+      background: color-mix(in srgb, var(--dead) 72%, transparent);
       overflow: hidden;
-      text-overflow: ellipsis;
       user-select: none;
     }
 
@@ -407,7 +409,7 @@
 
     @media (max-width: 1180px) {
       .row {
-        grid-template-columns: 3.2ch minmax(14ch, 20ch) 5ch max-content;
+        grid-template-columns: 3.2ch minmax(15ch, 22ch) 10.5ch max-content;
       }
 
     }
@@ -484,7 +486,7 @@
       <div class="table" id="appTable" role="list"></div>
     </section>
 
-    <div class="separator">──────────────────────────────────────────────────────────────────────────────</div>
+    <div class="separator" aria-hidden="true"></div>
 
     <section class="log" id="log" aria-label="Command log" aria-live="polite"></section>
 
@@ -701,13 +703,13 @@
       const map = {
         dualticker: "signal",
         retrofy: "image",
-        "coptic-dictionary": "ref",
-        "icon-pack-builder": "util",
-        "favicon-harvester": "util",
-        "isbn-manager": "inv",
+        "coptic-dictionary": "reference",
+        "icon-pack-builder": "utility",
+        "favicon-harvester": "utility",
+        "isbn-manager": "inventory",
         "rss-finder": "feed"
       };
-      return map[app.slug] || "util";
+      return map[app.slug] || "utility";
     }
 
     function displayClass(klass) {
@@ -735,7 +737,6 @@
     function renderTable() {
       appTable.innerHTML = `
         <div class="row head" aria-hidden="true"><span>id</span><span>name</span><span>type</span><span>surface</span></div>
-        <div class="row head" aria-hidden="true"><span>--</span><span>------------------</span><span>-----</span><span>-------</span></div>
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
