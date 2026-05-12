@@ -29,6 +29,7 @@
     panel.dataset.previewSlug = '';
     panel.dataset.previewPlatform = '';
     panel.classList.remove('is-icon-fallback');
+    delete panel.dataset.fitAxis;
     delete panel.dataset.orientation;
     shot.removeAttribute('src');
     if (stage) {
@@ -39,6 +40,22 @@
       stage.style.removeProperty('--reflection-top');
     }
     if (reflection) reflection.classList.add('is-hidden');
+  }
+
+  function updateFitAxis() {
+    const panel = node('assetPanel');
+    const shot = node('assetShot');
+    const stage = node('assetStage');
+    if (!panel || !shot || !stage || !shot.naturalWidth || !shot.naturalHeight) return;
+
+    const stageRect = stage.getBoundingClientRect();
+    if (!stageRect.width || !stageRect.height) return;
+
+    const imageRatio = shot.naturalWidth / shot.naturalHeight;
+    const stageRatio = stageRect.width / stageRect.height;
+
+    panel.dataset.orientation = imageRatio >= 1 ? 'landscape' : 'portrait';
+    panel.dataset.fitAxis = imageRatio > stageRatio ? 'width' : 'height';
   }
 
   function showCurrent() {
@@ -53,8 +70,10 @@
     panel.dataset.previewSlug = state.slug;
     panel.dataset.previewPlatform = state.platform;
     panel.classList.remove('is-icon-fallback');
+    delete panel.dataset.fitAxis;
     delete panel.dataset.orientation;
     shot.src = item.src;
+    updateFitAxis();
     if (stage) {
       if (item.icon) {
         stage.style.removeProperty('--preview-reflection-image');
@@ -169,12 +188,21 @@
       if (t) setPreview(t.dataset.previewApp, t.dataset.previewPlatform || '', 'locked');
     }, true);
 
+    let fitAxisRaf = 0;
+    const onResize = () => {
+      if (fitAxisRaf) cancelAnimationFrame(fitAxisRaf);
+      fitAxisRaf = requestAnimationFrame(() => {
+        fitAxisRaf = 0;
+        updateFitAxis();
+      });
+    };
+
     shot.addEventListener('load', () => {
       const panel = node('assetPanel');
       const shot = node('assetShot');
       const stage = node('assetStage');
       if (!panel || !shot || !shot.naturalWidth || !shot.naturalHeight) return;
-      panel.dataset.orientation = shot.naturalWidth > shot.naturalHeight ? 'landscape' : 'portrait';
+      updateFitAxis();
       if (!stage) return;
       const rect = shot.getBoundingClientRect();
       const stageRect = stage.getBoundingClientRect();
@@ -193,6 +221,7 @@
     shot.addEventListener('error', handleImageError);
     panel.addEventListener('click', unlock);
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') unlock(); });
+    window.addEventListener('resize', onResize);
   }
 
   function boot() {
