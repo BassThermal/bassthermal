@@ -1,43 +1,42 @@
 # BassThermal manual app assets
 
-Drop image files directly into `public/assets/apps/<slug>/`.
+Drop screenshots here:
 
-- No crawlers.
-- No Playwright.
-- No app-store scraping.
-- Missing assets simply do not display.
+`public/assets/apps/<slug>/<platform>/`
 
-## Supported platforms
+Platforms:
 
-- `android`
 - `windows`
+- `android`
 - `web`
 
-## Icon rules
+Any valid image in those folders becomes a screenshot:
 
-Accepted icon formats: `png`, `webp`, `jpg`, `jpeg`.
+- `png`
+- `jpg` / `jpeg`
+- `webp`
+- `gif`
+- `avif`
+- weird/no-extension image files may be normalized automatically
 
-- Root icon (fallback):
-  - `public/assets/apps/<slug>/icon.png`
-  - `public/assets/apps/<slug>/icon.webp`
-  - `public/assets/apps/<slug>/icon.jpg`
-  - `public/assets/apps/<slug>/icon.jpeg`
-- Platform icon:
-  - `public/assets/apps/<slug>/android/icon.png` (or webp/jpg/jpeg)
-  - `public/assets/apps/<slug>/windows/icon.png` (or webp/jpg/jpeg)
-  - `public/assets/apps/<slug>/web/icon.png` (or webp/jpg/jpeg)
+Rules:
 
-## Screenshot rules
+- Files named like `icon.*` are treated as icons, not screenshots.
+- `.ico` and `.icns` are ignored for screenshots.
+- Dotfiles and non-image junk are skipped.
 
-Screenshots are any `png/webp/jpg/jpeg` file inside `android/`, `windows/`, or `web/` except `icon.*`.
+Icons:
+
+- `icon.png` / `icon.webp` / `icon.jpg` / `icon.jpeg` at app root or platform folder
+- `.ico` can exist as an icon source signal, but is ignored as screenshot
 
 Examples:
 
-- `public/assets/apps/<slug>/android/shot-08.webp`
-- `public/assets/apps/<slug>/android/anything-reasonable.png`
-- `public/assets/apps/<slug>/windows/screen-2.jpg`
+- `public/assets/apps/icon-pack-builder/windows/shot-01.png`
+- `public/assets/apps/icon-pack-builder/windows/my-export-screen.png`
+- `public/assets/apps/icon-pack-builder/windows/apps.27766.weirdfile`
 
-Exact `shot-01` is no longer required.
+All should work as screenshots if image data is valid.
 
 ## Manifest build
 
@@ -45,9 +44,10 @@ Manifest is generated from local files only:
 
 - Script: `tools/build-asset-manifest.mjs`
 - Output: `public/store-assets.generated.js`
+- Normalized weird-image cache: `public/assets/app-preview-cache/`
 
-Build commands:
+To regenerate:
 
 - `npm run assets:index`
-- `npm run dev` (auto-runs `npm run assets:index` first)
-- `npm run deploy` (auto-runs `npm run assets:index` first)
+
+Deploy/dev already regenerate automatically through package.json scripts.

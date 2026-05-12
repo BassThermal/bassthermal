@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-05-11T21:55:36.965Z",
+  "generatedAt": "2026-05-12T19:42:22.929Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -16,7 +16,8 @@ window.BT_STORE_ASSETS = {
           "/assets/apps/coptic-dictionary/android/shot-10.webp"
         ],
         "windows": [
-          "/assets/apps/coptic-dictionary/windows/shot-01.png"
+          "/assets/apps/coptic-dictionary/windows/shot-01.png",
+          "/assets/app-preview-cache/coptic-dictionary/windows/001.jpg"
         ],
         "web": []
       }
@@ -31,6 +32,22 @@ window.BT_STORE_ASSETS = {
       "screenshots": {
         "android": [],
         "windows": [],
+        "web": []
+      }
+    },
+    "icon-pack-builder": {
+      "icon": {
+        "fallback": null,
+        "android": null,
+        "windows": null,
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [
+          "/assets/apps/icon-pack-builder/windows/shot-1.png",
+          "/assets/apps/icon-pack-builder/windows/shot-2.png"
+        ],
         "web": []
       }
     },
