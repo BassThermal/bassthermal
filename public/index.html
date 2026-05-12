@@ -131,23 +131,29 @@
       display: grid;
       grid-template-columns: minmax(560px, 50vw) minmax(420px, 1fr);
       gap: 0;
+      align-items: stretch;
       overflow: hidden;
     }
 
-    .terminal {
+    main.terminal {
       width: 100%;
       height: 100%;
       min-width: 0;
       display: grid;
-      grid-template-rows: auto minmax(160px, 34svh) auto 1fr auto;
+      grid-template-rows: auto minmax(132px, 32svh) auto minmax(0, 1fr) auto;
+      gap: 6px;
       overflow: hidden;
       border-right: 1px solid var(--dead);
+      padding-right: 10px;
     }
 
-    .asset-panel { width:100%;height:100%;max-height:none;aspect-ratio:auto;border:0;border-left:1px solid var(--dead);border-radius:0;background:#020202;display:flex;align-items:flex-start;justify-content:center;padding:10px;overflow:hidden;user-select:none;}
+    .asset-panel { width:100%;height:100%;max-height:none;aspect-ratio:auto;border:0;border-left:1px solid var(--dead);border-radius:0;background:#020202;display:grid;place-items:center;padding:14px;overflow:hidden;user-select:none;}
     .asset-panel:focus-visible { outline: 1px solid var(--dim); outline-offset: -1px; }
-    .asset-shot { width:100%;height:100%;object-fit:contain;object-position:top center;background:transparent;display:block; }
-    .asset-panel.is-icon-fallback .asset-shot { width:min(160px,22%);height:auto;max-height:160px;margin-top:18px; }
+    .asset-shot { display:block;width:auto;height:auto;max-width:96%;max-height:92%;object-fit:contain;object-position:center center;background:transparent;opacity:1; }
+    .asset-shot.is-fading { opacity: 0; }
+    .asset-panel.is-icon-fallback .asset-shot { width:min(160px,22%);height:auto;max-width:160px;max-height:160px; }
+    .asset-panel[data-orientation="landscape"] .asset-shot { max-width:96%; max-height:82%; }
+    .asset-panel[data-orientation="portrait"] .asset-shot { max-width:58%; max-height:92%; }
 
     .topline {
       display: flex;
@@ -193,9 +199,9 @@
 
     .row {
       display: grid;
-      grid-template-columns: 36px minmax(158px, 1.05fr) minmax(136px, 0.7fr) minmax(82px, 0.35fr) minmax(310px, 1fr);
-      gap: 14px;
-      min-height: 24px;
+      grid-template-columns: 3.2ch minmax(17ch, 1.15fr) minmax(9ch, 0.62fr) 5.5ch minmax(15ch, 0.9fr);
+      column-gap: 9px;
+      min-height: 22px;
       align-items: baseline;
     }
 
@@ -219,7 +225,7 @@
 
     .links {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 7px;
       min-width: 0;
     }
@@ -250,6 +256,7 @@
 
     .separator {
       color: var(--dead);
+      line-height: 1;
       white-space: pre;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -373,9 +380,19 @@
     .visits-link { color: inherit; text-decoration: none; cursor: pointer; }
     .visits-link:hover { color: var(--hot); text-decoration: underline; }
 
+    @media (max-width: 1180px) {
+      .row {
+        grid-template-columns: 3.2ch minmax(18ch, 1.2fr) 6.2ch minmax(14ch, 1fr);
+      }
+
+      .row > span:nth-child(3) {
+        display: none;
+      }
+    }
+
     @media (max-width: 980px) {
       .site-shell { display:block; width:100%; height:auto; overflow:hidden; }
-      .terminal { width:100%; height: calc(100svh - max(17px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom))); border-right:0; }
+      .terminal { width:100%; height: calc(100svh - max(17px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom))); border-right:0; padding-right:0; }
       .asset-panel { display:none !important; }
     }
 
@@ -391,7 +408,7 @@
 
       .terminal {
         height: calc(100svh - max(17px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)));
-        grid-template-rows: auto minmax(128px, 42svh) 1fr auto;
+        grid-template-rows: auto minmax(128px, 42svh) auto minmax(0, 1fr) auto;
         gap: 7px;
       }
 
@@ -445,8 +462,9 @@
 
     <section class="index" id="index" aria-label="Software index">
       <div class="table" id="appTable" role="list"></div>
-      <div class="separator">──────────────────────────────────────────────────────────────────────────────</div>
     </section>
+
+    <div class="separator">──────────────────────────────────────────────────────────────────────────────</div>
 
     <section class="log" id="log" aria-label="Command log" aria-live="polite"></section>
 
@@ -656,6 +674,19 @@
       return "dead";
     }
 
+    function displayClass(klass) {
+      const map = {
+        "signal/interface": "signal",
+        "image/processor": "image",
+        "language/reference": "language",
+        "asset/compiler": "asset",
+        "web/extractor": "web",
+        "inventory/system": "inventory",
+        "feed/discovery": "feed"
+      };
+      return map[klass] || klass;
+    }
+
     function renderLinks(app) {
       if (!app.links.length) return '<span class="tag disabled" aria-disabled="true">pending</span>';
 
@@ -663,10 +694,9 @@
         const platform = link[0];
         const url = link[1];
         const direct = link[2];
-        const title = direct ? `${app.name} ${platform}` : `${app.name} ${platform} publisher hub`;
         const hubClass = direct ? "" : " tag-hub";
 
-        return `<a class="tag ${platformClass(platform)}${hubClass}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="${esc(title)}" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}" data-platform="${esc(platform)}" data-preview-platform="${esc(platform)}">${esc(platform)}</a>`;
+        return `<a class="tag ${platformClass(platform)}${hubClass}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(app.name)} ${esc(platform)}${direct ? "" : " publisher hub"}" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}" data-platform="${esc(platform)}" data-preview-platform="${esc(platform)}">${esc(platform)}</a>`;
       }).join(" ");
     }
 
@@ -678,7 +708,7 @@
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
             <span><a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-command="info ${esc(app.slug)}" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}"><img class="app-icon is-missing" data-app-icon-slug="${esc(app.slug)}" alt="" loading="lazy" decoding="async"><span>${esc(app.name)}</span></a></span>
-            <span class="soft">${esc(app.klass)}</span>
+            <span class="soft">${esc(displayClass(app.klass))}</span>
             <span class="${esc(app.statusClass)}">${esc(app.status)}</span>
             <span class="links">${renderLinks(app)}</span>
           </div>
@@ -719,7 +749,7 @@
       return `
         <div class="line hot">${esc(app.name.toUpperCase())}</div>
         <div class="dossier">
-          <div class="label">class</div><div class="soft">${esc(app.klass)}</div>
+          <div class="label">class</div><div class="soft">${esc(displayClass(app.klass))}</div>
           <div class="label">state</div><div class="${esc(app.statusClass)}">${esc(app.status)}</div>
           <div class="label">surface</div><div class="links">${links}</div>
           <div class="label">record</div><div><a class="tag info" href="/apps/${esc(app.slug)}/">page</a></div>
@@ -748,7 +778,7 @@
       const matches = apps.filter((app) => !filter || app.status === filter);
 
       return matches.map((app) => `
-        <div class="line"><span class="dim">${esc(app.id)}</span>  <a class="hot" href="/apps/${esc(app.slug)}/">${esc(app.name)}</a>  <span class="soft">${esc(app.klass)}</span>  <span class="${esc(app.statusClass)}">${esc(app.status)}</span></div>
+        <div class="line"><span class="dim">${esc(app.id)}</span>  <a class="hot" href="/apps/${esc(app.slug)}/">${esc(app.name)}</a>  <span class="soft">${esc(displayClass(app.klass))}</span>  <span class="${esc(app.statusClass)}">${esc(app.status)}</span></div>
       `).join("") || `<div class="line dim">no matching systems</div>`;
     }
 
