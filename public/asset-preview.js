@@ -22,6 +22,7 @@
   function clearPanel() {
     const panel = node('assetPanel');
     const shot = node('assetShot');
+    const stage = node('assetStage');
     if (!panel || !shot) return;
     panel.dataset.previewMode = 'idle';
     panel.dataset.previewSlug = '';
@@ -29,11 +30,17 @@
     panel.classList.remove('is-icon-fallback');
     delete panel.dataset.orientation;
     shot.removeAttribute('src');
+    if (stage) {
+      stage.style.removeProperty('--preview-reflection-image');
+      stage.style.removeProperty('--reflection-width');
+      stage.style.removeProperty('--reflection-top');
+    }
   }
 
   function showCurrent() {
     const panel = node('assetPanel');
     const shot = node('assetShot');
+    const stage = node('assetStage');
     const item = state.list[state.index];
     if (!panel || !shot || !item) return;
 
@@ -43,6 +50,15 @@
     panel.classList.toggle('is-icon-fallback', !!item.icon);
     delete panel.dataset.orientation;
     shot.src = item.src;
+    if (stage) {
+      if (item.icon) {
+        stage.style.removeProperty('--preview-reflection-image');
+        stage.style.removeProperty('--reflection-width');
+        stage.style.removeProperty('--reflection-top');
+      } else {
+        stage.style.setProperty('--preview-reflection-image', `url("${item.src}")`);
+      }
+    }
   }
 
 
@@ -150,8 +166,15 @@
     shot.addEventListener('load', () => {
       const panel = node('assetPanel');
       const shot = node('assetShot');
+      const stage = node('assetStage');
       if (!panel || !shot || !shot.naturalWidth || !shot.naturalHeight) return;
       panel.dataset.orientation = shot.naturalWidth > shot.naturalHeight ? 'landscape' : 'portrait';
+      if (!stage || panel.classList.contains('is-icon-fallback')) return;
+      const rect = shot.getBoundingClientRect();
+      const stageRect = stage.getBoundingClientRect();
+      if (!rect.width || !rect.height || !stageRect.width || !stageRect.height) return;
+      stage.style.setProperty('--reflection-width', `${rect.width}px`);
+      stage.style.setProperty('--reflection-top', `${rect.bottom - stageRect.top + 4}px`);
     });
     shot.addEventListener('error', handleImageError);
     panel.addEventListener('click', unlock);
