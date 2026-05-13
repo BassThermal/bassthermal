@@ -1,58 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://bassthermal.com/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://bassthermal.com/apps/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://bassthermal.com/apps/dualticker/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bassthermal.com/apps/retrofy/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bassthermal.com/apps/coptic-dictionary/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bassthermal.com/apps/icon-pack-builder/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bassthermal.com/apps/favicon-harvester/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bassthermal.com/apps/isbn-manager/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bassthermal.com/apps/rss-finder/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bassthermal.com/privacy/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://bassthermal.com/support/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.4</priority>
-  </url>
-</urlset>
+<?xml version='1.0' encoding='UTF-8'?><urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'><url><loc>https://bassthermal.com/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/apps/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/apps/dualticker/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/apps/retrofy/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/apps/coptic-dictionary/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/apps/icon-pack-builder/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/apps/favicon-harvester/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/apps/isbn-manager/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/apps/rss-finder/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/privacy/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/privacy/dualticker/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/privacy/retrofy/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/privacy/coptic-dictionary/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/privacy/icon-pack-builder/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/privacy/favicon-harvester/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/privacy/isbn-manager/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/privacy/rss-finder/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/support/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/find-rss-feed-from-website/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/rss-feed-finder-for-windows/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/find-hidden-rss-feeds/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/export-rss-feeds-to-csv/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/rss-crawler-for-research/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/generate-windows-app-icons-from-png/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/create-icon-pack-for-windows-app/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/png-to-ico-icon-pack-builder/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/microsoft-store-app-icon-generator/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/extract-favicons-from-websites/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/bulk-favicon-downloader-windows/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/get-website-icon-from-url/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/isbn-lookup-windows-app/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/isbn-barcode-label-maker/</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://bassthermal.com/tools/book-inventory-manager-windows/</loc><lastmod>2026-05-13</lastmod></url></urlset>
