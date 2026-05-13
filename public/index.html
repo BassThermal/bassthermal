@@ -128,10 +128,7 @@
     .site-shell {
       width: 100%;
       height: calc(100svh - max(22px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)));
-      display: grid;
-      grid-template-columns: clamp(500px, 36vw, 660px) minmax(0, 1fr);
-      gap: 0;
-      align-items: stretch;
+      display: block;
       overflow: hidden;
     }
 
@@ -143,11 +140,10 @@
       grid-template-rows: auto auto auto minmax(0, 1fr) auto;
       gap: 6px;
       overflow: hidden;
-      border-right: 1px solid var(--dead);
-      padding-right: 10px;
+      padding-right: 0;
     }
 
-    .asset-panel { position:relative;width:100%;height:100%;max-height:none;aspect-ratio:auto;border:0;border-left:1px solid var(--dead);border-radius:0;background:#020202;display:grid;place-items:center;padding:10px;overflow:hidden;user-select:none;}
+    .asset-panel { display:none !important; }
     .asset-stage { position:relative;width:100%;height:100%;display:grid;place-items:center;overflow:hidden; }
     .asset-panel:focus-visible { outline: 1px solid var(--dim); outline-offset: -1px; }
     .asset-shot { display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;object-position:center center;background:transparent;opacity:1;z-index:2; }
@@ -198,30 +194,18 @@
       height: 0;
     }
 
-    .table {
+    .table { display: grid; gap: 7px; width: 100%; max-width: 100%; }
+    .head { display:none; }
+    .row { min-width: 0; }
+    .app-row {
       display: grid;
-      gap: 0;
-      width: max-content;
-      max-width: 100%;
-      justify-content: start;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 3.2ch minmax(17ch, 24ch) 10.5ch max-content;
-      column-gap: 8px;
-      min-height: 22px;
-      align-items: baseline;
-      min-width: 0;
-    }
-
-    .head {
-      color: var(--dim);
-      text-transform: lowercase;
+      grid-template-columns: 3.2ch minmax(0, 1fr);
+      gap: 2px 10px;
+      padding: 3px 0;
       border-bottom: 1px solid color-mix(in srgb, var(--dead) 65%, transparent);
-      padding-bottom: 2px;
-      margin-bottom: 5px;
     }
+    .app-main { display:grid; grid-template-columns:minmax(0, 1fr) auto; align-items:baseline; gap:8px; min-width:0; }
+    .app-meta { grid-column:2; color:var(--soft); white-space:normal; overflow-wrap:anywhere; }
 
     .app-name {
       color: var(--hot);
@@ -230,7 +214,7 @@
     .app-title-link { display:inline-flex;align-items:baseline;gap:0;min-width:0;max-width:100%; }
     .app-title-link span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .row > span { min-width: 0; }
-    .app-type { color: var(--soft); opacity: 0.82; white-space: nowrap; overflow: visible; text-overflow: clip; }
+    .app-type { color: var(--soft); opacity: 0.82; white-space: normal; overflow-wrap:anywhere; }
     .app-icon { width:1em;height:1em;object-fit:cover;display:inline-block;margin-right:0.55ch;vertical-align:-0.12em;border-radius:2px;background:#050505;flex:0 0 auto; }
     .app-icon.is-missing { display:none; }
 
@@ -242,10 +226,11 @@
     .links {
       display: inline-flex;
       align-items: baseline;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       gap: 7px;
       min-width: 0;
-      white-space: nowrap;
+      white-space: normal;
+      justify-content: flex-end;
     }
 
     .tag {
@@ -404,17 +389,6 @@
     .site-shell,.terminal,.index,.table,.row,.log { min-width: 0; }
     .index,.log { overflow-x: hidden; }
 
-    @media (max-width: 1280px) and (min-width: 981px) {
-      .site-shell { grid-template-columns: clamp(460px, 42vw, 560px) minmax(0, 1fr); }
-    }
-
-    @media (max-width: 1180px) {
-      .row {
-        grid-template-columns: 3.2ch minmax(15ch, 22ch) 10.5ch max-content;
-      }
-
-    }
-
     @media (max-width: 980px) {
       .site-shell { display:block; width:100%; height:auto; overflow:hidden; }
       .terminal { width:100%; height: calc(100svh - max(17px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom))); border-right:0; padding-right:0; display:grid; grid-template-rows:auto auto auto minmax(0, 1fr) auto; gap:7px; overflow:hidden; }
@@ -451,13 +425,9 @@
         display: none;
       }
 
-      .row {
-        grid-template-columns: 32px minmax(0, 1fr) minmax(8ch, 10ch) max-content;
-        gap: 2px 8px;
-        min-height: 21px;
-        padding: 2px 0;
-        align-items: baseline;
-      }
+      .app-row { grid-template-columns: 32px minmax(0, 1fr); gap: 4px 8px; }
+      .app-main { grid-template-columns: 1fr; gap: 4px; }
+      .links { justify-content: flex-start; }
 
       .table {
         width: 100%;
@@ -482,16 +452,7 @@
       }
     }
 
-    @media (max-width: 380px) {
-      .row {
-        grid-template-columns: 28px minmax(0, 1fr) max-content;
-      }
-
-      .row > span:nth-child(3),
-      .head > span:nth-child(3) {
-        display: none;
-      }
-    }
+    @media (max-width: 380px) { .app-row { grid-template-columns: 28px minmax(0, 1fr); } }
   </style>
 </head>
 
@@ -505,14 +466,13 @@
 
     <section class="index" id="index" aria-label="Software index">
       <div class="table" id="appTable" role="list">
-        <div class="row head" role="listitem"><span>id</span><span>app</span><span>task</span><span>get</span><span>links</span></div>
-        <div class="row app" role="listitem"><span>01</span><span><a class="app-name" href="/apps/dualticker/">DualTicker</a></span><span>headline monitor</span><span>web/windows/android</span><span><a class="tag web" href="https://www.dualticker.com/">web</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens">android</a></span></div>
-        <div class="row app" role="listitem"><span>02</span><span><a class="app-name" href="/apps/retrofy/">RetroFy</a></span><span>retro image converter</span><span>windows/android</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.retrofy">android</a></span></div>
-        <div class="row app" role="listitem"><span>03</span><span><a class="app-name" href="/apps/coptic-dictionary/">Coptic Dictionary</a></span><span>coptic lookup</span><span>windows/android</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary">android</a></span></div>
-        <div class="row app" role="listitem"><span>04</span><span><a class="app-name" href="/apps/icon-pack-builder/">Icon Pack Builder</a></span><span>app icon exporter</span><span>windows</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA">windows</a></span></div>
-        <div class="row app" role="listitem"><span>05</span><span><a class="app-name" href="/apps/favicon-harvester/">Favicon Harvester</a></span><span>favicon extractor</span><span>windows</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA">windows</a></span></div>
-        <div class="row app" role="listitem"><span>06</span><span><a class="app-name" href="/apps/isbn-manager/">ISBN Manager</a></span><span>book inventory</span><span>windows</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA">windows</a></span></div>
-        <div class="row app" role="listitem"><span>07</span><span><a class="app-name" href="/apps/rss-finder/">RSS Finder / RSS Crawler</a></span><span>feed discovery</span><span>details-only</span><span><a class="tag info" href="/apps/rss-finder/">info</a></span></div>
+        <div class="row app-row" role="listitem"><span class="dim">01</span><span class="app-main"><a class="app-name" href="/apps/dualticker/">DualTicker</a><span class="links"><a class="tag info" href="/apps/dualticker/">details</a> <a class="tag web" href="https://www.dualticker.com/">web</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens">and</a></span></span><span class="app-meta">headline monitor · compare live headline streams</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">02</span><span class="app-main"><a class="app-name" href="/apps/retrofy/">RetroFy</a><span class="links"><a class="tag info" href="/apps/retrofy/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.retrofy">and</a></span></span><span class="app-meta">retro image converter · palette + dithering output</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">03</span><span class="app-main"><a class="app-name" href="/apps/coptic-dictionary/">Coptic Dictionary</a><span class="links"><a class="tag info" href="/apps/coptic-dictionary/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary">and</a></span></span><span class="app-meta">coptic lookup · words + transliteration reference</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">04</span><span class="app-main"><a class="app-name" href="/apps/icon-pack-builder/">Icon Pack Builder</a><span class="links"><a class="tag info" href="/apps/icon-pack-builder/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">app icon exporter · build package-ready icon sets</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">05</span><span class="app-main"><a class="app-name" href="/apps/favicon-harvester/">Favicon Harvester</a><span class="links"><a class="tag info" href="/apps/favicon-harvester/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">favicon extractor · capture icon assets from sites</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">06</span><span class="app-main"><a class="app-name" href="/apps/isbn-manager/">ISBN Manager</a><span class="links"><a class="tag info" href="/apps/isbn-manager/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">book inventory · ISBN catalog and management</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">07</span><span class="app-main"><a class="app-name" href="/apps/rss-finder/">RSS Finder / RSS Crawler</a><span class="links"><a class="tag info" href="/apps/rss-finder/">details</a></span></span><span class="app-meta">feed discovery · source inspection workflow</span></div>
       </div>
     </section>
 
@@ -747,7 +707,7 @@
     }
 
     function renderLinks(app) {
-      if (!app.links.length) return '<span class="tag disabled" aria-disabled="true">--</span>';
+      if (!app.links.length) return '';
 
       const platformMeta = {
         web: { short: 'web', label: 'web app' },
@@ -766,13 +726,11 @@
 
     function renderTable() {
       appTable.innerHTML = `
-        <div class="row head" aria-hidden="true"><span>id</span><span>app</span><span>task</span><span>get</span></div>
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
-            <span><a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-command="info ${esc(app.slug)}" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}"><img class="app-icon is-missing" data-app-icon-slug="${esc(app.slug)}" alt="" loading="lazy" decoding="async"><span>${esc(app.name)}</span></a></span>
-            <span class="soft app-type">${esc(displayType(app))}</span>
-            <span class="links surface-links">${renderLinks(app)}</span>
+            <span class="app-main"><a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-command="info ${esc(app.slug)}" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}"><img class="app-icon is-missing" data-app-icon-slug="${esc(app.slug)}" alt="" loading="lazy" decoding="async"><span>${esc(app.name)}</span></a><span class="links surface-links"><a class="tag info" href="/apps/${esc(app.slug)}/">details</a>${renderLinks(app)}</span></span>
+            <span class="soft app-meta">${esc(displayType(app))} · ${esc(app.line)}</span>
           </div>
         `).join("")}
       `;
@@ -831,8 +789,8 @@
       return `
         <div class="line hot">COMMANDS</div>
         <div class="dossier">
-          <div class="label">click app</div><div>details + preview</div>
-          <div class="label">hover app</div><div>preview</div>
+          <div class="label">details</div><div>[details] opens product page</div>
+          <div class="label">stores</div><div>[win]=Microsoft Store · [and]=Google Play · [web]=web app</div>
           <div class="label">info</div><div>info &lt;app&gt; · app details</div>
           <div class="label">open</div><div>open &lt;app&gt; &lt;web|windows|android&gt;</div>
           <div class="label">index</div><div>apps · live · stores · privacy · clear</div>
@@ -861,7 +819,7 @@
     }
 
     function aboutOutput() {
-      return `<div class="line hot">BASSTHERMAL</div><div class="line dim">index ready · click app name or type help</div>`;
+      return `<div class="line hot">BASSTHERMAL</div><div class="line dim">select [details] or store link · type help · owner: /visits</div>`;
     }
 
     function openOutput(parts) {
@@ -1272,7 +1230,7 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       log.innerHTML = `
         <div class="cmd-block boot">
           <div class="line hot">BASSTHERMAL</div>
-          <div class="line dim">click app for details · hover row for preview · [win]=Microsoft Store · type help</div>
+          <div class="line dim">select [details] or store link · type help · owner: /visits</div>
         </div>
       `;
       log.scrollTop = 0;
