@@ -19,6 +19,28 @@
     return window.BT_STORE_ASSETS?.apps?.[slug] || null;
   }
 
+
+  function renderEmptyState() {
+    const stage = node('assetStage');
+    if (!stage) return;
+    let hint = node('assetHint');
+    if (!hint) {
+      hint = document.createElement('div');
+      hint.id = 'assetHint';
+      hint.className = 'line dim';
+      hint.style.textAlign = 'center';
+      hint.style.pointerEvents = 'none';
+      hint.innerHTML = 'preview<br>hover an app with screenshots';
+      stage.appendChild(hint);
+    }
+    hint.hidden = false;
+  }
+
+  function hideEmptyState() {
+    const hint = node('assetHint');
+    if (hint) hint.hidden = true;
+  }
+
   function clearPanel() {
     const panel = node('assetPanel');
     const shot = node('assetShot');
@@ -29,6 +51,7 @@
     panel.dataset.previewSlug = '';
     panel.dataset.previewPlatform = '';
     panel.classList.remove('is-icon-fallback');
+    hideEmptyState();
     delete panel.dataset.fitAxis;
     delete panel.dataset.orientation;
     shot.removeAttribute('src');
@@ -40,6 +63,7 @@
       stage.style.removeProperty('--reflection-top');
     }
     if (reflection) reflection.classList.add('is-hidden');
+    renderEmptyState();
   }
 
   function updateFitAxis() {

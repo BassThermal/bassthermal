@@ -505,14 +505,14 @@
 
     <section class="index" id="index" aria-label="Software index">
       <div class="table" id="appTable" role="list">
-        <div class="row head" role="listitem"><span>id</span><span>name</span><span>type</span><span>surface</span><span>links</span></div>
-        <div class="row app" role="listitem"><span>01</span><span><a class="app-name" href="/apps/dualticker/">DualTicker</a></span><span>signal monitor</span><span>web/windows/android</span><span><a class="tag web" href="https://www.dualticker.com/">web</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens">android</a></span></div>
-        <div class="row app" role="listitem"><span>02</span><span><a class="app-name" href="/apps/retrofy/">RetroFy</a></span><span>image pipeline</span><span>windows/android</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.retrofy">android</a></span></div>
-        <div class="row app" role="listitem"><span>03</span><span><a class="app-name" href="/apps/coptic-dictionary/">Coptic Dictionary</a></span><span>reference</span><span>windows/android</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary">android</a></span></div>
-        <div class="row app" role="listitem"><span>04</span><span><a class="app-name" href="/apps/icon-pack-builder/">Icon Pack Builder</a></span><span>icon tooling</span><span>windows</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA">windows</a></span></div>
+        <div class="row head" role="listitem"><span>id</span><span>app</span><span>task</span><span>get</span><span>links</span></div>
+        <div class="row app" role="listitem"><span>01</span><span><a class="app-name" href="/apps/dualticker/">DualTicker</a></span><span>headline monitor</span><span>web/windows/android</span><span><a class="tag web" href="https://www.dualticker.com/">web</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens">android</a></span></div>
+        <div class="row app" role="listitem"><span>02</span><span><a class="app-name" href="/apps/retrofy/">RetroFy</a></span><span>retro image converter</span><span>windows/android</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.retrofy">android</a></span></div>
+        <div class="row app" role="listitem"><span>03</span><span><a class="app-name" href="/apps/coptic-dictionary/">Coptic Dictionary</a></span><span>coptic lookup</span><span>windows/android</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA">windows</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary">android</a></span></div>
+        <div class="row app" role="listitem"><span>04</span><span><a class="app-name" href="/apps/icon-pack-builder/">Icon Pack Builder</a></span><span>app icon exporter</span><span>windows</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA">windows</a></span></div>
         <div class="row app" role="listitem"><span>05</span><span><a class="app-name" href="/apps/favicon-harvester/">Favicon Harvester</a></span><span>favicon extractor</span><span>windows</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA">windows</a></span></div>
         <div class="row app" role="listitem"><span>06</span><span><a class="app-name" href="/apps/isbn-manager/">ISBN Manager</a></span><span>book inventory</span><span>windows</span><span><a class="tag windows" href="https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA">windows</a></span></div>
-        <div class="row app" role="listitem"><span>07</span><span><a class="app-name" href="/apps/rss-finder/">RSS Finder / RSS Crawler</a></span><span>feed discovery</span><span>web</span><span><a class="tag web" href="/apps/rss-finder/">web</a></span></div>
+        <div class="row app" role="listitem"><span>07</span><span><a class="app-name" href="/apps/rss-finder/">RSS Finder / RSS Crawler</a></span><span>feed discovery</span><span>details-only</span><span><a class="tag info" href="/apps/rss-finder/">info</a></span></div>
       </div>
     </section>
 
@@ -731,13 +731,13 @@
 
     function displayType(app) {
       const map = {
-        dualticker: "signal",
-        retrofy: "image",
-        "coptic-dictionary": "reference",
-        "icon-pack-builder": "utility",
-        "favicon-harvester": "utility",
-        "isbn-manager": "inventory",
-        "rss-finder": "feed"
+        dualticker: "headline monitor",
+        retrofy: "retro image converter",
+        "coptic-dictionary": "coptic lookup",
+        "icon-pack-builder": "app icon exporter",
+        "favicon-harvester": "favicon extractor",
+        "isbn-manager": "book inventory",
+        "rss-finder": "feed discovery"
       };
       return map[app.slug] || "utility";
     }
@@ -750,9 +750,9 @@
       if (!app.links.length) return '<span class="tag disabled" aria-disabled="true">--</span>';
 
       const platformMeta = {
-        web: { short: 'web', label: 'web' },
-        windows: { short: 'win', label: 'windows' },
-        android: { short: 'and', label: 'android' }
+        web: { short: 'web', label: 'web app' },
+        windows: { short: 'win', label: 'Microsoft Store' },
+        android: { short: 'and', label: 'Google Play' }
       };
 
       return app.links.map((link) => {
@@ -766,7 +766,7 @@
 
     function renderTable() {
       appTable.innerHTML = `
-        <div class="row head" aria-hidden="true"><span>id</span><span>name</span><span>type</span><span>surface</span></div>
+        <div class="row head" aria-hidden="true"><span>id</span><span>app</span><span>task</span><span>get</span></div>
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
@@ -805,7 +805,10 @@
     }
 
     function dossier(app) {
-      const links = renderLinks(app);
+      const linkLabel = { web: "web app", windows: "windows store", android: "google play" };
+      const links = app.links.length
+        ? app.links.map(([platform, url]) => `<span class="${esc(platformClass(platform))}">${esc(linkLabel[platform] || platform)}:</span> <a class="tag ${esc(platform)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1" data-preview-app="${esc(app.slug)}" data-preview-platform="${esc(platform)}">${esc(linkLabel[platform] || platform)}</a>`).join(' <span class="dim">·</span> ')
+        : '<span class="dim">details only</span>';
       const caps = app.capabilities.map((item) => `<div class="span line">- ${esc(item)}</div>`).join("");
 
       return `
@@ -813,8 +816,8 @@
         <div class="dossier">
           <div class="label">class</div><div class="soft">${esc(displayClass(app.klass))}</div>
           <div class="label">state</div><div class="${esc(app.statusClass)}">${esc(app.status)}</div>
-          <div class="label">surface</div><div class="links">${links}</div>
-          <div class="label">record</div><div><a class="tag info" href="/apps/${esc(app.slug)}/">page</a></div>
+          <div class="label">get</div><div class="links">${links}</div>
+          <div class="label">details</div><div><a class="tag info" href="/apps/${esc(app.slug)}/">app page</a></div>
           <div class="span line"></div>
           <div class="span line">${esc(app.line)}</div>
           <div class="span line"></div>
@@ -828,10 +831,12 @@
       return `
         <div class="line hot">COMMANDS</div>
         <div class="dossier">
-          <div class="label">info</div><div>info dualticker · info retrofy · info coptic</div>
-          <div class="label">open</div><div>open dualticker web · open retrofy windows</div>
-          <div class="label">index</div><div>apps · live · stores · privacy · about · clear</div>
-          <div class="label">keys</div><div>up/down history · shift+up/down scroll</div>
+          <div class="label">click app</div><div>details + preview</div>
+          <div class="label">hover app</div><div>preview</div>
+          <div class="label">info</div><div>info &lt;app&gt; · app details</div>
+          <div class="label">open</div><div>open &lt;app&gt; &lt;web|windows|android&gt;</div>
+          <div class="label">index</div><div>apps · live · stores · privacy · clear</div>
+          <div class="label">owner</div><div>/visits diagnostics</div>
         </div>
       `;
     }
@@ -1253,11 +1258,21 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       }).catch(() => {});
     }
 
+
+    function initDefaultPreview() {
+      const preferred = ["icon-pack-builder", "coptic-dictionary", "retrofy", "dualticker", "favicon-harvester", "isbn-manager", "rss-finder"];
+      const hasShots = (slug) => {
+        const shots = window.BT_STORE_ASSETS?.apps?.[slug]?.screenshots || {};
+        return ["windows", "web", "android"].some((pf) => Array.isArray(shots[pf]) && shots[pf].length);
+      };
+      const slug = preferred.find(hasShots);
+      if (slug) setPreview(slug, "");
+    }
     function bootLog() {
       log.innerHTML = `
         <div class="cmd-block boot">
           <div class="line hot">BASSTHERMAL</div>
-          <div class="line dim">index ready · <a href="/privacy/">privacy</a> · click app name or type help</div>
+          <div class="line dim">click app for details · hover row for preview · [win]=Microsoft Store · type help</div>
         </div>
       `;
       log.scrollTop = 0;
@@ -1266,6 +1281,7 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
     renderTable();
     updateReadout();
     bootLog();
+    initDefaultPreview();
 
     document.addEventListener("click", async (event) => {
       const trigger = event.target.closest("[data-command]");
@@ -1274,7 +1290,12 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       const text = trigger.getAttribute("data-command");
       if (!text) return;
 
-      event.preventDefault();
+      if (event.defaultPrevented) return;
+      const isModified = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+      const isPrimary = event.button === 0;
+      if (trigger.matches(".app-name[data-command]") && isPrimary && !isModified) event.preventDefault();
+      else if (trigger.matches("a[data-log-open]")) event.preventDefault();
+      else if (trigger.matches("[data-command]") && !trigger.matches("a")) event.preventDefault();
       const normalized = text.trim().toLowerCase().replace(/\s+/g, " ");
       if (normalized.startsWith("info ")) {
         const infoApp = findApp(normalized.slice(5));
