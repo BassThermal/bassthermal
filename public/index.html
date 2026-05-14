@@ -277,11 +277,14 @@
       user-select: none;
     }
 
-    .log { position: relative; min-height: 0; padding: 2px 0 6px; overflow-x: hidden; max-height: min(46svh, 360px); }
-    .terminal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.62); z-index: 20; display:none; }
-    .terminal-overlay { position: fixed; left: max(14px, env(safe-area-inset-left)); right: max(14px, env(safe-area-inset-right)); bottom: calc(42px + max(18px, env(safe-area-inset-bottom))); border: 1px solid var(--dead); background:#000; z-index: 30; padding: 8px 10px; display:none; }
+    .log { position: relative; min-height: 0; padding: 2px 0 6px; overflow-x: hidden; max-height: min(34svh, 280px); overflow-y: auto; }
+    .terminal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.24); z-index: 20; display:none; }
+    .terminal-overlay { position: fixed; left: max(14px, env(safe-area-inset-left)); right: max(14px, env(safe-area-inset-right)); bottom: calc(30px + max(10px, env(safe-area-inset-bottom))); max-height: min(34svh, 280px); border: 1px solid rgba(48,54,61,.72); background: rgba(0,0,0,.96); z-index: 30; padding: 7px 9px; display:none; }
     .terminal-overlay.open,.terminal-backdrop.open { display:block; }
-    .overlay-head { display:flex; justify-content:space-between; margin-bottom:6px; color:var(--soft); }
+    .terminal-overlay .log { max-height: calc(min(34svh, 280px) - 34px); overflow-y: auto; }
+    .terminal-overlay.is-tall { max-height: min(56svh, 460px); }
+    .terminal-overlay.is-tall .log { max-height: calc(min(56svh, 460px) - 34px); }
+    .overlay-head { display:flex; justify-content:space-between; margin-bottom:5px; color:var(--dim); font-size:0.95em; }
 
     .cmd-block {
       padding-bottom: 14px;
@@ -325,18 +328,56 @@
     .inputbar {
       display: flex;
       align-items: center;
-      gap: 8px;
-      background: #000;
-      padding: 6px max(14px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      gap: 6px;
+      min-height: 26px;
+      background: rgba(0,0,0,.82);
+      padding: 2px max(14px, env(safe-area-inset-right)) max(3px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
       position: fixed;
       left: 0; right: 0; bottom: 0;
       z-index: 40;
-      border-top: 1px solid var(--dead);
+      border-top: 1px solid rgba(48,54,61,.32);
+      opacity: .68;
+      transition: opacity 120ms ease, border-color 120ms ease, background 120ms ease;
+    }
+
+    .inputbar:focus-within,
+    .inputbar.is-active {
+      opacity: 1;
+      background: rgba(0,0,0,.94);
+      border-top-color: rgba(139,148,158,.38);
+    }
+
+    #terminalToggle {
+      color: rgba(139,148,158,.45);
+      min-width: 3ch;
+    }
+
+    #terminalToggle:hover,
+    #terminalToggle:focus-visible {
+      color: var(--hot);
     }
 
     .prompt {
-      color: var(--ok);
+      color: rgba(126,231,135,.55);
       white-space: nowrap;
+    }
+
+    .idle-cursor {
+      display: inline-block;
+      width: 1px;
+      height: 1em;
+      background: rgba(126,231,135,.32);
+      animation: cmdBlink 1.4s steps(1, end) infinite;
+    }
+
+    .inputbar:focus-within .idle-cursor,
+    .inputbar.has-text .idle-cursor {
+      display: none;
+    }
+
+    @keyframes cmdBlink {
+      0%, 45% { opacity: .25; }
+      46%, 100% { opacity: 0; }
     }
 
     #cmd {
@@ -344,10 +385,18 @@
       min-width: 0;
       border: 0;
       outline: 0;
-      background: #000;
-      color: var(--fg);
-      caret-color: var(--hot);
+      background: transparent;
+      color: rgba(201,209,217,.68);
+      caret-color: rgba(126,231,135,.75);
       padding: 0;
+    }
+
+    .inputbar:focus-within #cmd {
+      color: var(--fg);
+    }
+
+    .inputbar:focus-within .prompt {
+      color: var(--ok);
     }
 
     .sr-only {
@@ -490,13 +539,14 @@
   </main>
   <div class="terminal-backdrop" id="terminalBackdrop"></div>
   <section class="terminal-overlay" id="terminalOverlay" aria-label="Terminal overlay">
-    <div class="overlay-head"><span>terminal</span><button type="button" id="terminalClose">[x]</button></div>
+    <div class="overlay-head"><span>terminal</span><button type="button" id="terminalClose" aria-label="Close terminal">×</button></div>
     <section class="log" id="log" aria-label="Command log" aria-live="polite"></section>
   </section>
   <form class="inputbar" id="form" autocomplete="off">
     <label class="sr-only" for="cmd">Command</label>
-    <button type="button" id="terminalToggle">[terminal]</button>
+    <button type="button" id="terminalToggle">cmd</button>
     <span class="prompt">bt:~$</span>
+    <span class="idle-cursor" aria-hidden="true"></span>
     <input id="cmd" spellcheck="false" autocapitalize="none" autocomplete="off" inputmode="text" />
   </form>
 
@@ -1130,6 +1180,7 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
     async function runVisitsStaticCommand(text) {
       const normalized = text.trim().toLowerCase().replace(/\s+/g, " ");
       if (!["/visits all", "/visits live", "/visits clicks"].includes(normalized)) return false;
+      terminalOverlay.classList.add("is-tall");
       const block = document.createElement("div");
       block.className = "cmd-block";
       block.innerHTML = commandLine(text) + '<div class="line dim">loading…</div>';
@@ -1188,6 +1239,7 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
     }
 
     function startVisitsMonitor(commandText) {
+      terminalOverlay.classList.add("is-tall");
       stopVisitsMonitor();
       [...log.querySelectorAll(".cmd-block")].forEach((block) => block.classList.add("past"));
       const block = document.createElement("div");
@@ -1258,6 +1310,7 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       log.scrollTop = 0;
     }
     function showTerminalOverlay() {
+      form.classList.add("is-active");
       terminalOverlay.classList.add("open");
       terminalBackdrop.classList.add("open");
       if (!terminalBooted) {
@@ -1266,8 +1319,10 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       }
     }
     function hideTerminalOverlay() {
+      form.classList.remove("is-active");
       terminalOverlay.classList.remove("open");
       terminalBackdrop.classList.remove("open");
+      terminalOverlay.classList.remove("is-tall");
     }
 
     renderTable();
@@ -1276,7 +1331,11 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
     terminalToggle.addEventListener("click", () => { showTerminalOverlay(); cmd.focus({ preventScroll: true }); });
     terminalClose.addEventListener("click", () => { hideTerminalOverlay(); cmd.focus({ preventScroll: true }); });
     terminalBackdrop.addEventListener("click", hideTerminalOverlay);
-    cmd.addEventListener("input", () => { if (cmd.value.trim()) showTerminalOverlay(); });
+    function syncInputState() {
+      form.classList.toggle("has-text", Boolean(cmd.value.trim()));
+    }
+    cmd.addEventListener("input", syncInputState);
+    syncInputState();
 
     document.addEventListener("click", async (event) => {
       const trigger = event.target.closest("[data-command]");
@@ -1301,11 +1360,13 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       } else if (normalized === "/visits") {
         startVisitsMonitor(text);
       } else if (normalized === "/visits off") {
+        terminalOverlay.classList.remove("is-tall");
         stopVisitsMonitor();
         appendCommand(text);
         const lastBlock = log.lastElementChild;
         if (lastBlock) lastBlock.innerHTML = commandLine(text) + "<div class=\"line dim\">visits monitor stopped</div>";
       } else {
+        terminalOverlay.classList.remove("is-tall");
         appendCommand(text);
       }
       showTerminalOverlay();
@@ -1335,15 +1396,18 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       } else if (normalized === "/visits") {
         startVisitsMonitor(text);
       } else if (normalized === "/visits off") {
+        terminalOverlay.classList.remove("is-tall");
         stopVisitsMonitor();
         appendCommand(text);
         const lastBlock = log.lastElementChild;
         if (lastBlock) lastBlock.innerHTML = commandLine(text) + "<div class=\"line dim\">visits monitor stopped</div>";
       } else {
+        terminalOverlay.classList.remove("is-tall");
         appendCommand(text);
       }
       showTerminalOverlay();
       cmd.value = "";
+      syncInputState();
     });
 
     cmd.addEventListener("keydown", (event) => {
@@ -1381,6 +1445,7 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
         if (historyIndex > 0) {
           historyIndex--;
           cmd.value = history[historyIndex] || "";
+          syncInputState();
         }
 
         return;
@@ -1392,10 +1457,12 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
         if (historyIndex < history.length - 1) {
           historyIndex++;
           cmd.value = history[historyIndex] || "";
+          syncInputState();
         } else {
           historyIndex = history.length;
           cmd.value = "";
         }
+        syncInputState();
       }
     });
 
