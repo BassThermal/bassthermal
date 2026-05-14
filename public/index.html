@@ -230,7 +230,15 @@
       gap: 7px;
       min-width: 0;
       white-space: normal;
+    }
+
+    .app-main .links,
+    .surface-links {
       justify-content: flex-end;
+    }
+
+    .dossier .links {
+      justify-content: flex-start;
     }
 
     .tag {
@@ -729,8 +737,8 @@
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
-            <span class="app-main"><a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-command="info ${esc(app.slug)}" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}"><img class="app-icon is-missing" data-app-icon-slug="${esc(app.slug)}" alt="" loading="lazy" decoding="async"><span>${esc(app.name)}</span></a><span class="links surface-links"><a class="tag info" href="/apps/${esc(app.slug)}/">details</a>${renderLinks(app)}</span></span>
-            <span class="soft app-meta">${esc(displayType(app))} · ${esc(app.line)}</span>
+            <span class="app-main"><a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}"><img class="app-icon is-missing" data-app-icon-slug="${esc(app.slug)}" alt="" loading="lazy" decoding="async"><span>${esc(app.name)}</span></a><span class="links surface-links"><a class="tag info" href="/apps/${esc(app.slug)}/">details</a>${renderLinks(app)}</span></span>
+            <span class="soft app-meta">${esc(app.line)}</span>
           </div>
         `).join("")}
       `;
@@ -772,7 +780,7 @@
       return `
         <div class="line hot">${esc(app.name.toUpperCase())}</div>
         <div class="dossier">
-          <div class="label">type</div><div class="soft">${esc(displayClass(app.klass))}</div>
+          <div class="label">type</div><div class="soft">${esc(app.klass)}</div>
           <div class="label">state</div><div class="${esc(app.statusClass)}">${esc(app.status)}</div>
           <div class="label">get</div><div class="links">${links}</div>
           <div class="label">details</div><div><a class="tag info" href="/apps/${esc(app.slug)}/">App page</a></div>
@@ -1249,8 +1257,7 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       if (event.defaultPrevented) return;
       const isModified = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
       const isPrimary = event.button === 0;
-      if (trigger.matches(".app-name[data-command]") && isPrimary && !isModified) event.preventDefault();
-      else if (trigger.matches("a[data-log-open]")) event.preventDefault();
+      if (trigger.matches("a[data-log-open]")) event.preventDefault();
       else if (trigger.matches("[data-command]") && !trigger.matches("a")) event.preventDefault();
       const normalized = text.trim().toLowerCase().replace(/\s+/g, " ");
       if (normalized.startsWith("info ")) {
