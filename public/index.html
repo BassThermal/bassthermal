@@ -83,7 +83,7 @@
       font-family: var(--font);
       font-size: 14px;
       line-height: 1.42;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     body {
@@ -127,9 +127,9 @@
 
     .site-shell {
       width: 100%;
-      height: calc(100svh - max(22px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)));
+      min-height: calc(100svh - max(22px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)));
       display: block;
-      overflow: hidden;
+      padding-bottom: 52px;
     }
 
     main.terminal {
@@ -137,9 +137,9 @@
       height: 100%;
       min-width: 0;
       display: grid;
-      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+      grid-template-rows: auto auto auto;
       gap: 6px;
-      overflow: hidden;
+      overflow: visible;
       padding-right: 0;
     }
 
@@ -184,7 +184,7 @@
     }
 
      .index {
-      overflow: hidden;
+      overflow: visible;
       max-height: none;
     }
 
@@ -277,12 +277,11 @@
       user-select: none;
     }
 
-    .log {
-      position: relative;
-      min-height: 0;
-      padding: 2px 0 6px;
-      overflow-x: hidden;
-    }
+    .log { position: relative; min-height: 0; padding: 2px 0 6px; overflow-x: hidden; max-height: min(46svh, 360px); }
+    .terminal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.62); z-index: 20; display:none; }
+    .terminal-overlay { position: fixed; left: max(14px, env(safe-area-inset-left)); right: max(14px, env(safe-area-inset-right)); bottom: calc(42px + max(18px, env(safe-area-inset-bottom))); border: 1px solid var(--dead); background:#000; z-index: 30; padding: 8px 10px; display:none; }
+    .terminal-overlay.open,.terminal-backdrop.open { display:block; }
+    .overlay-head { display:flex; justify-content:space-between; margin-bottom:6px; color:var(--soft); }
 
     .cmd-block {
       padding-bottom: 14px;
@@ -328,7 +327,11 @@
       align-items: center;
       gap: 8px;
       background: #000;
-      padding-top: 2px;
+      padding: 6px max(14px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 40;
+      border-top: 1px solid var(--dead);
     }
 
     .prompt {
@@ -398,13 +401,13 @@
     .index,.log { overflow-x: hidden; }
 
     @media (max-width: 980px) {
-      .site-shell { display:block; width:100%; height:auto; overflow:hidden; }
-      .terminal { width:100%; height: calc(100svh - max(17px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom))); border-right:0; padding-right:0; display:grid; grid-template-rows:auto auto auto minmax(0, 1fr) auto; gap:7px; overflow:hidden; }
+      .site-shell { display:block; width:100%; height:auto; overflow:visible; padding-bottom: 52px; }
+      .terminal { width:100%; height: auto; border-right:0; padding-right:0; display:grid; grid-template-rows:auto auto auto; gap:7px; overflow:visible; }
       .asset-panel { display:none !important; }
       .index { overflow: visible; max-height: none; }
       .log { min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: none; }
       .separator { width: 100%; }
-      html, body { overflow: hidden; }
+      html, body { overflow-x: hidden; }
       .inputbar { flex: 0 0 auto; }
       #cmd { min-width: 0; }
     }
@@ -468,32 +471,34 @@
   <div class="site-shell">
   <main class="terminal home" aria-label="BassThermal terminal">
     <header class="topline">
-      <div class="brand"><strong>BASSTHERMAL</strong> / software index</div>
+      <div class="brand"><strong>BASSTHERMAL</strong> / apps</div>
       <div class="right" id="readout">loading</div>
     </header>
+    <div class="line soft">Small Windows, Android, and web utilities for asset prep, feed discovery, book inventory, retro image conversion, language reference, and live news monitoring.</div>
 
     <section class="index" id="index" aria-label="Software index">
       <div class="table" id="appTable" role="list">
-        <div class="row app-row" role="listitem"><span class="dim">01</span><span class="app-main"><a class="app-name" href="/apps/dualticker/">DualTicker</a><span class="links"><a class="tag info" href="/apps/dualticker/">details</a> <a class="tag web" href="https://www.dualticker.com/">web</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens">and</a></span></span><span class="app-meta">headline monitor · compare live coverage streams</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">01</span><span class="app-main"><a class="app-name" href="/apps/dualticker/">DualTicker</a><span class="links"><a class="tag web" href="https://www.dualticker.com/">web</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens">and</a></span></span><span class="app-meta">headline monitor · compare live coverage streams</span></div>
         <div class="row app-row" role="listitem"><span class="dim">02</span><span class="app-main"><a class="app-name" href="/apps/retrofy/">RetroFy</a><span class="links"><a class="tag info" href="/apps/retrofy/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.retrofy">and</a></span></span><span class="app-meta">retro image converter · palette + dithering output</span></div>
         <div class="row app-row" role="listitem"><span class="dim">03</span><span class="app-main"><a class="app-name" href="/apps/coptic-dictionary/">Coptic Dictionary</a><span class="links"><a class="tag info" href="/apps/coptic-dictionary/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary">and</a></span></span><span class="app-meta">coptic lookup · meanings, transliteration, saved words</span></div>
         <div class="row app-row" role="listitem"><span class="dim">04</span><span class="app-main"><a class="app-name" href="/apps/icon-pack-builder/">Icon Pack Builder</a><span class="links"><a class="tag info" href="/apps/icon-pack-builder/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">app icon exporter · generate store-ready icon packs</span></div>
         <div class="row app-row" role="listitem"><span class="dim">05</span><span class="app-main"><a class="app-name" href="/apps/favicon-harvester/">Favicon Harvester</a><span class="links"><a class="tag info" href="/apps/favicon-harvester/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">favicon extractor · pull favicons from URLs/domains</span></div>
         <div class="row app-row" role="listitem"><span class="dim">06</span><span class="app-main"><a class="app-name" href="/apps/isbn-manager/">ISBN Manager</a><span class="links"><a class="tag info" href="/apps/isbn-manager/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">book inventory · ISBN lookup, catalog cleanup, barcode labels</span></div>
-        <div class="row app-row" role="listitem"><span class="dim">07</span><span class="app-main"><a class="app-name" href="/apps/rss-finder/">RSS Finder / RSS Crawler</a><span class="links"><a class="tag info" href="/apps/rss-finder/">details</a></span></span><span class="app-meta">feed discovery · find and inspect RSS/Atom feeds</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">07</span><span class="app-main"><a class="app-name" href="/apps/rss-finder/">RSS Finder / RSS Crawler</a><span class="links"></span></span><span class="app-meta">feed discovery · find and inspect RSS/Atom feeds</span></div>
       </div>
     </section>
-
-    <div class="separator" aria-hidden="true"></div>
-
-    <section class="log" id="log" aria-label="Command log" aria-live="polite"></section>
-
-    <form class="inputbar" id="form" autocomplete="off">
-      <label class="sr-only" for="cmd">Command</label>
-      <span class="prompt">bt:~$</span>
-      <input id="cmd" spellcheck="false" autocapitalize="none" autocomplete="off" inputmode="text" />
-    </form>
   </main>
+  <div class="terminal-backdrop" id="terminalBackdrop"></div>
+  <section class="terminal-overlay" id="terminalOverlay" aria-label="Terminal overlay">
+    <div class="overlay-head"><span>terminal</span><button type="button" id="terminalClose">[x]</button></div>
+    <section class="log" id="log" aria-label="Command log" aria-live="polite"></section>
+  </section>
+  <form class="inputbar" id="form" autocomplete="off">
+    <label class="sr-only" for="cmd">Command</label>
+    <button type="button" id="terminalToggle">[terminal]</button>
+    <span class="prompt">bt:~$</span>
+    <input id="cmd" spellcheck="false" autocapitalize="none" autocomplete="off" inputmode="text" />
+  </form>
 
     <aside class="asset-panel" id="assetPanel" aria-label="Application screenshot preview" tabindex="0">
       <div class="asset-stage" id="assetStage">
@@ -665,11 +670,16 @@
     const form = document.getElementById("form");
     const cmd = document.getElementById("cmd");
     const readout = document.getElementById("readout");
+    const terminalOverlay = document.getElementById("terminalOverlay");
+    const terminalBackdrop = document.getElementById("terminalBackdrop");
+    const terminalClose = document.getElementById("terminalClose");
+    const terminalToggle = document.getElementById("terminalToggle");
     const assetPanel = document.getElementById("assetPanel");
     const assetShot = document.getElementById("assetShot");
 
     const history = [];
     let historyIndex = 0;
+    let terminalBooted = false;
 
     function esc(value) {
       return String(value)
@@ -737,7 +747,7 @@
         ${apps.map((app) => `
           <div class="row app-row" role="listitem">
             <span class="dim">${esc(app.id)}</span>
-            <span class="app-main"><a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}"><img class="app-icon is-missing" data-app-icon-slug="${esc(app.slug)}" alt="" loading="lazy" decoding="async"><span>${esc(app.name)}</span></a><span class="links surface-links"><a class="tag info" href="/apps/${esc(app.slug)}/">details</a>${renderLinks(app)}</span></span>
+            <span class="app-main"><a class="app-name app-title-link" href="/apps/${esc(app.slug)}/" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}"><img class="app-icon is-missing" data-app-icon-slug="${esc(app.slug)}" alt="" loading="lazy" decoding="async"><span>${esc(app.name)}</span></a><span class="links surface-links">${renderLinks(app)}</span></span>
             <span class="soft app-meta">${esc(app.line)}</span>
           </div>
         `).join("")}
@@ -795,11 +805,12 @@
       return `
         <div class="line hot">COMMANDS</div>
         <div class="dossier">
-          <div class="label">details</div><div>[details] opens app page</div>
-          <div class="label">stores</div><div>[win]=Microsoft Store · [and]=Google Play · [web]=web app</div>
+          <div class="label">apps</div><div>list apps in terminal</div>
           <div class="label">info</div><div>info &lt;app&gt; shows terminal summary</div>
           <div class="label">open</div><div>open &lt;app&gt; &lt;web|windows|android&gt;</div>
-          <div class="label">index</div><div>apps · live · stores · privacy · clear</div>
+          <div class="label">stores</div><div>store publisher/developer links</div>
+          <div class="label">clear</div><div>clear terminal output</div>
+          <div class="label">close</div><div>close terminal overlay</div>
           <div class="label">owner</div><div>/visits diagnostics</div>
         </div>
       `;
@@ -854,6 +865,7 @@
 
       if (!normalized || normalized === "help" || normalized === "?") return helpOutput();
       if (normalized === "clear" || normalized === "cls") return "__CLEAR__";
+      if (normalized === "close" || normalized === "exit") return "__CLOSE__";
       if (normalized === "about") return aboutOutput();
       if (normalized === "apps" || normalized === "index" || normalized === "ls") return appsOutput();
       if (normalized === "live") return appsOutput("live");
@@ -892,6 +904,10 @@
         unlockPreview();
         stopVisitsMonitor();
         log.innerHTML = "";
+        return;
+      }
+      if (output === "__CLOSE__") {
+        hideTerminalOverlay();
         return;
       }
 
@@ -1235,17 +1251,32 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
     function bootLog() {
       log.innerHTML = `
         <div class="cmd-block boot">
-          <div class="line hot">BASSTHERMAL</div>
-          <div class="line dim">select app details · open store link · type help</div>
+          <div class="line hot">BASSTHERMAL terminal</div>
+          <div class="line dim">type help · /visits diagnostics</div>
         </div>
       `;
       log.scrollTop = 0;
     }
+    function showTerminalOverlay() {
+      terminalOverlay.classList.add("open");
+      terminalBackdrop.classList.add("open");
+      if (!terminalBooted) {
+        bootLog();
+        terminalBooted = true;
+      }
+    }
+    function hideTerminalOverlay() {
+      terminalOverlay.classList.remove("open");
+      terminalBackdrop.classList.remove("open");
+    }
 
     renderTable();
     updateReadout();
-    bootLog();
     initDefaultPreview();
+    terminalToggle.addEventListener("click", () => { showTerminalOverlay(); cmd.focus({ preventScroll: true }); });
+    terminalClose.addEventListener("click", () => { hideTerminalOverlay(); cmd.focus({ preventScroll: true }); });
+    terminalBackdrop.addEventListener("click", hideTerminalOverlay);
+    cmd.addEventListener("input", () => { if (cmd.value.trim()) showTerminalOverlay(); });
 
     document.addEventListener("click", async (event) => {
       const trigger = event.target.closest("[data-command]");
@@ -1277,6 +1308,7 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       } else {
         appendCommand(text);
       }
+      showTerminalOverlay();
 
       if (!trigger.matches("a[data-log-open]")) {
         cmd.focus({ preventScroll: true });
@@ -1310,10 +1342,15 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       } else {
         appendCommand(text);
       }
+      showTerminalOverlay();
       cmd.value = "";
     });
 
     cmd.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        hideTerminalOverlay();
+        return;
+      }
       if (event.shiftKey && event.key === "ArrowUp") {
         event.preventDefault();
         log.scrollTop -= 42;
