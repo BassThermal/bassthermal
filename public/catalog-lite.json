@@ -1,0 +1,395 @@
+{
+  "schema": "BT-CATALOG-1",
+  "version": "2026.05.16.1",
+  "generatedAt": "2026-05-16T20:08:36.372Z",
+  "apps": [
+    {
+      "id": "dualticker",
+      "slug": "dualticker",
+      "name": "DualTicker",
+      "status": "live",
+      "primaryFamily": "SIGNAL_MONITORING",
+      "secondaryFamilies": [
+        "WEB_DEV"
+      ],
+      "discipline": "NEWS_MEDIA",
+      "modes": [
+        "MONITOR"
+      ],
+      "audiences": [
+        "researcher",
+        "creator",
+        "news_watcher",
+        "general_user"
+      ],
+      "workflowStages": [
+        "monitor",
+        "compare",
+        "inspect"
+      ],
+      "outputs": [
+        "live_feed",
+        "comparison_view"
+      ],
+      "tags": [
+        "feeds",
+        "headlines",
+        "monitoring",
+        "web",
+        "windows",
+        "android"
+      ],
+      "platforms": [
+        "web",
+        "windows",
+        "android"
+      ],
+      "line": "headline monitor · compare live coverage streams",
+      "short": "Monitor two live headline streams side by side and compare coverage movement.",
+      "links": {
+        "website": "/apps/dualticker/",
+        "windows": "https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA",
+        "android": "https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens",
+        "web": "https://www.dualticker.com/",
+        "support": "/support/"
+      },
+      "relatedTools": [
+        {
+          "id": "rss-finder",
+          "reason": "Find and inspect feeds that can support live monitoring workflows."
+        }
+      ]
+    },
+    {
+      "id": "retrofy",
+      "slug": "retrofy",
+      "name": "RetroFy",
+      "status": "live",
+      "primaryFamily": "IMAGE_MEDIA",
+      "secondaryFamilies": [
+        "PUBLISHING_ASSETS"
+      ],
+      "discipline": "IMAGE_PROCESSING",
+      "modes": [
+        "CONVERTER",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "creator",
+        "designer",
+        "general_user"
+      ],
+      "workflowStages": [
+        "convert",
+        "inspect",
+        "export"
+      ],
+      "outputs": [
+        "image_file"
+      ],
+      "tags": [
+        "palette",
+        "dithering",
+        "image",
+        "windows",
+        "android"
+      ],
+      "platforms": [
+        "windows",
+        "android"
+      ],
+      "line": "retro image converter · palette + dithering output",
+      "short": "Convert images into retro-style output using palette and dithering controls.",
+      "links": {
+        "website": "/apps/retrofy/",
+        "windows": "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA",
+        "android": "https://play.google.com/store/apps/details?id=com.bassthermal.retrofy",
+        "web": "",
+        "support": "/support/"
+      },
+      "relatedTools": [
+        {
+          "id": "icon-pack-builder",
+          "reason": "Use processed artwork as source material for icon packs."
+        }
+      ]
+    },
+    {
+      "id": "coptic-dictionary",
+      "slug": "coptic-dictionary",
+      "name": "Coptic Dictionary",
+      "status": "live",
+      "primaryFamily": "REFERENCE_STUDY",
+      "secondaryFamilies": [],
+      "discipline": "LANGUAGE",
+      "modes": [
+        "REFERENCE",
+        "EDUCATOR"
+      ],
+      "audiences": [
+        "student",
+        "language_learner",
+        "researcher",
+        "general_user"
+      ],
+      "workflowStages": [
+        "lookup",
+        "study"
+      ],
+      "outputs": [
+        "reference_card"
+      ],
+      "tags": [
+        "language",
+        "dictionary",
+        "saved-words",
+        "windows",
+        "android"
+      ],
+      "platforms": [
+        "windows",
+        "android"
+      ],
+      "line": "coptic lookup · meanings, transliteration, saved words",
+      "short": "Search English and Coptic terms with meanings, transliterations, forms, and saved vocabulary.",
+      "links": {
+        "website": "/apps/coptic-dictionary/",
+        "windows": "https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA",
+        "android": "https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary",
+        "web": "",
+        "support": "/support/"
+      },
+      "relatedTools": []
+    },
+    {
+      "id": "icon-pack-builder",
+      "slug": "icon-pack-builder",
+      "name": "Icon Pack Builder",
+      "status": "live",
+      "primaryFamily": "PUBLISHING_ASSETS",
+      "secondaryFamilies": [
+        "BUILD_PACKAGING"
+      ],
+      "discipline": "APP_PUBLISHING",
+      "modes": [
+        "GENERATOR",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "developer",
+        "publisher",
+        "designer"
+      ],
+      "workflowStages": [
+        "generate",
+        "validate",
+        "export",
+        "publish"
+      ],
+      "outputs": [
+        "icon_pack"
+      ],
+      "tags": [
+        "icon",
+        "store-assets",
+        "windows",
+        "microsoft-store",
+        "app-publishing",
+        "offline"
+      ],
+      "platforms": [
+        "windows"
+      ],
+      "line": "app icon exporter · generate store-ready icon packs",
+      "short": "Generate Windows app icon sizes and package assets from one source image.",
+      "links": {
+        "website": "/apps/icon-pack-builder/",
+        "windows": "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA",
+        "android": "",
+        "web": "",
+        "support": "/support/"
+      },
+      "relatedTools": [
+        {
+          "id": "favicon-harvester",
+          "reason": "Extract website icons and convert them into usable app/source assets."
+        }
+      ]
+    },
+    {
+      "id": "favicon-harvester",
+      "slug": "favicon-harvester",
+      "name": "Favicon Harvester",
+      "status": "live",
+      "primaryFamily": "WEB_DEV",
+      "secondaryFamilies": [
+        "PUBLISHING_ASSETS"
+      ],
+      "discipline": "WEB_FEEDS",
+      "modes": [
+        "EXTRACTOR",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "developer",
+        "designer",
+        "researcher",
+        "publisher"
+      ],
+      "workflowStages": [
+        "capture",
+        "inspect",
+        "export"
+      ],
+      "outputs": [
+        "favicon_assets",
+        "metadata_report"
+      ],
+      "tags": [
+        "favicon",
+        "domain",
+        "url",
+        "batch",
+        "windows"
+      ],
+      "platforms": [
+        "windows"
+      ],
+      "line": "favicon extractor · pull favicons from URLs/domains",
+      "short": "Extract favicon assets from websites, domains, and URL lists.",
+      "links": {
+        "website": "/apps/favicon-harvester/",
+        "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
+        "android": "",
+        "web": "",
+        "support": "/support/"
+      },
+      "relatedTools": [
+        {
+          "id": "icon-pack-builder",
+          "reason": "Turn harvested icons into app or source assets."
+        },
+        {
+          "id": "rss-finder",
+          "reason": "Find feed endpoints from the same domains you inspect."
+        }
+      ]
+    },
+    {
+      "id": "isbn-manager",
+      "slug": "isbn-manager",
+      "name": "ISBN Manager",
+      "status": "live",
+      "primaryFamily": "INVENTORY_OPERATIONS",
+      "secondaryFamilies": [
+        "DOCUMENT_REPORTS"
+      ],
+      "discipline": "BOOK_INVENTORY",
+      "modes": [
+        "INVENTORY_MANAGER",
+        "REFERENCE",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "bookseller",
+        "operator",
+        "publisher",
+        "general_user"
+      ],
+      "workflowStages": [
+        "lookup",
+        "catalog",
+        "label",
+        "export"
+      ],
+      "outputs": [
+        "book_catalog",
+        "barcode_labels",
+        "csv_export"
+      ],
+      "tags": [
+        "isbn",
+        "barcode",
+        "book-inventory",
+        "csv",
+        "windows"
+      ],
+      "platforms": [
+        "windows"
+      ],
+      "line": "book inventory · ISBN lookup, catalog cleanup, barcode labels",
+      "short": "Look up ISBN metadata, clean inventory records, generate barcode labels, and export lists.",
+      "links": {
+        "website": "/apps/isbn-manager/",
+        "windows": "https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA",
+        "android": "",
+        "web": "",
+        "support": "/support/"
+      },
+      "relatedTools": []
+    },
+    {
+      "id": "rss-finder",
+      "slug": "rss-finder",
+      "name": "RSS Finder / RSS Crawler",
+      "status": "shipping",
+      "primaryFamily": "WEB_DEV",
+      "secondaryFamilies": [
+        "SIGNAL_MONITORING"
+      ],
+      "discipline": "WEB_FEEDS",
+      "modes": [
+        "DISCOVERY",
+        "CRAWLER",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "developer",
+        "researcher",
+        "publisher"
+      ],
+      "workflowStages": [
+        "discover",
+        "crawl",
+        "inspect",
+        "validate",
+        "export"
+      ],
+      "outputs": [
+        "feed_urls",
+        "csv_export",
+        "metadata_report"
+      ],
+      "tags": [
+        "rss",
+        "atom",
+        "feeds",
+        "crawler",
+        "feed-validation",
+        "web"
+      ],
+      "platforms": [
+        "web"
+      ],
+      "line": "feed discovery · find and inspect RSS/Atom feeds",
+      "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
+      "links": {
+        "website": "/apps/rss-finder/",
+        "windows": "",
+        "android": "",
+        "web": "https://bassthermal.com/apps/rss-finder/",
+        "support": "/support/"
+      },
+      "relatedTools": [
+        {
+          "id": "dualticker",
+          "reason": "Use discovered feeds inside a live monitoring interface."
+        },
+        {
+          "id": "favicon-harvester",
+          "reason": "Extract site icons for discovered source lists."
+        }
+      ]
+    }
+  ]
+}

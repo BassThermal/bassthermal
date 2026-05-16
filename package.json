@@ -2,9 +2,12 @@
   "name": "bassthermal",
   "private": true,
   "scripts": {
-    "deploy": "npm run assets:index && wrangler deploy",
-    "dev": "npm run assets:index && wrangler dev",
-    "assets:index": "node tools/build-asset-manifest.mjs"
+    "deploy": "npm run build:site && wrangler deploy",
+    "dev": "npm run build:site && wrangler dev",
+    "assets:index": "node tools/build-asset-manifest.mjs",
+    "catalog:build": "node tools/build-catalog.mjs",
+    "catalog:validate": "node tools/build-catalog.mjs --validate-only",
+    "build:site": "npm run assets:index && npm run catalog:build"
   },
   "devDependencies": {
     "wrangler": "^4.16.0"
