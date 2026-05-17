@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-05-17T12:30:59.142Z",
+  "generatedAt": "2026-05-17T13:17:37.819Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
