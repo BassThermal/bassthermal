@@ -39,10 +39,15 @@ Forbidden placements:
 - Fallback order: fresh network → cached catalog → bundled emergency snapshot.
 - Errors fail silently.
 
-## Scoring overview
+## No-random-cards policy
+The widget must never show unrelated app cards just because an app is live/shipping. Recommendations only render when there is a real relationship.
+
 Excludes current app, hidden apps, and apps where `visibility.showInAppOverlay !== true`.
 
-Scoring:
+## Scoring overview
+`MIN_RELATIONSHIP_SCORE = 30`
+
+Relationship score:
 - `+100` current.relatedTools hit
 - `+100` reverse relatedTools hit
 - `+45` same primary family
@@ -54,9 +59,34 @@ Scoring:
 - shared workflow stages `+8` each (cap `+32`)
 - shared outputs `+10` each (cap `+30`)
 - shared tags `+4` each (cap `+32`)
-- status boosts: live `+8`, shipping `+4`
 
-Sort: score desc → live/shipping/lab → name A–Z.
+Status boost (tie-break only): live `+8`, shipping `+4`
+
+Final score = relationshipScore + statusBoost.
+
+Qualification rules:
+- qualify if `current.relatedTools` includes candidate, or candidate `relatedTools` includes current, or `relationshipScore >= 30`
+- status boost alone never qualifies
+- below-threshold candidates are hidden from normal render output
+
+Sort: qualified final score desc → live/shipping/lab → name A–Z.
+
+If no recommendations qualify, render only a quiet fallback:
+- title: `More BassThermal tools`
+- link: `View all apps`
+
+## Debug/explain support
+`window.BTRelated.explain(currentAppId, catalog, options)` returns:
+- `current`
+- `recommendations` (qualified only)
+- `rejected` (includes score, relationshipScore, statusBoost, reason, `rejectedReason: "below-threshold"`)
+
+Debug output in rendered cards includes final score, relationship score, status, and qualification path (`relatedTools` or `threshold`).
+
+## Product rule for lonely apps
+If an app has no meaningful related tools, do not force recommendations. Either:
+- add true `relatedTools` edges once a real product relationship exists, or
+- let the widget fall back to `View all apps`.
 
 ## Versioning
 Apps should pin `related-apps.v1.js`. Future breaking changes must ship in a new versioned filename instead of silently breaking old integrations.

@@ -7,6 +7,7 @@
   var MAX_LIMIT = 6;
   var DEFAULT_LIMIT = 3;
   var STYLE_ID = 'bt-related-style-v1';
+  var MIN_RELATIONSHIP_SCORE = 30;
 
   var EMERGENCY_SNAPSHOT = {
     apps: [
@@ -95,24 +96,71 @@
     return EMERGENCY_SNAPSHOT;
   }
 
-  function pickReason(current, candidate) {
+  function pickReason(current, candidate, qualification, metrics) {
     var rel = asArray(current.relatedTools).find(function (r) { return r.id === candidate.id && r.reason; });
     if (rel) return rel.reason;
     var reverse = asArray(candidate.relatedTools).find(function (r) { return r.id === current.id && r.reason; });
     if (reverse) return reverse.reason;
+    if (qualification !== 'threshold') return '';
     if (candidate.primaryFamily && candidate.primaryFamily === current.primaryFamily) return 'Same tool family.';
-    if (sharedCount(asArray(current.workflowStages), asArray(candidate.workflowStages)) > 0) return 'Shared workflow.';
-    if (sharedCount(asArray(current.outputs), asArray(candidate.outputs)) > 0) return 'Related output.';
-    if (sharedCount(asArray(current.tags), asArray(candidate.tags)) > 0) return 'Related utility.';
-    return '';
+    if (metrics.sharedWorkflow > 0) return 'Shared workflow.';
+    if (metrics.sharedOutputs > 0) return 'Related output.';
+    if (metrics.sharedTags > 0) return 'Related utility.';
+    return 'Related BassThermal tool.';
   }
 
-  function rank(currentAppId, catalog, options) {
+  function evaluateCandidate(current, candidate) {
+    var inRel = asArray(current.relatedTools).find(function (r) { return r.id === candidate.id; });
+    var revRel = asArray(candidate.relatedTools).find(function (r) { return r.id === current.id; });
+    var metrics = {
+      sharedModes: sharedCount(asArray(current.modes), asArray(candidate.modes)),
+      sharedAudiences: sharedCount(asArray(current.audiences), asArray(candidate.audiences)),
+      sharedWorkflow: sharedCount(asArray(current.workflowStages), asArray(candidate.workflowStages)),
+      sharedOutputs: sharedCount(asArray(current.outputs), asArray(candidate.outputs)),
+      sharedTags: sharedCount(asArray(current.tags), asArray(candidate.tags))
+    };
+
+    var relationshipScore = 0;
+    if (inRel) relationshipScore += 100;
+    if (revRel) relationshipScore += 100;
+    if (candidate.primaryFamily === current.primaryFamily) relationshipScore += 45;
+    if (asArray(current.secondaryFamilies).indexOf(candidate.primaryFamily) >= 0) relationshipScore += 25;
+    if (asArray(candidate.secondaryFamilies).indexOf(current.primaryFamily) >= 0) relationshipScore += 25;
+    if (current.discipline && candidate.discipline === current.discipline && candidate.discipline !== 'NONE') relationshipScore += 22;
+    relationshipScore += Math.min(36, metrics.sharedModes * 12);
+    relationshipScore += Math.min(24, metrics.sharedAudiences * 8);
+    relationshipScore += Math.min(32, metrics.sharedWorkflow * 8);
+    relationshipScore += Math.min(30, metrics.sharedOutputs * 10);
+    relationshipScore += Math.min(32, metrics.sharedTags * 4);
+
+    var statusBoost = 0;
+    if (candidate.status === 'live') statusBoost += 8;
+    if (candidate.status === 'shipping') statusBoost += 4;
+
+    var qualifiedByRelated = !!(inRel || revRel);
+    var qualifiedByThreshold = relationshipScore >= MIN_RELATIONSHIP_SCORE;
+    var qualified = qualifiedByRelated || qualifiedByThreshold;
+    var qualification = qualifiedByRelated ? 'relatedTools' : (qualifiedByThreshold ? 'threshold' : '');
+
+    return {
+      app: candidate,
+      score: relationshipScore + statusBoost,
+      relationshipScore: relationshipScore,
+      statusBoost: statusBoost,
+      reason: qualified ? pickReason(current, candidate, qualification, metrics) : '',
+      qualification: qualification,
+      qualified: qualified,
+      rejectedReason: qualified ? '' : 'below-threshold',
+      debug: { current: current.id }
+    };
+  }
+
+  function buildRanking(currentAppId, catalog) {
     var apps = asArray(catalog && catalog.apps);
     var current = apps.find(function (a) { return a.id === currentAppId || a.slug === currentAppId; });
-    if (!current) return [];
+    if (!current) return { current: null, recommendations: [], rejected: [] };
 
-    return apps
+    var evaluated = apps
       .filter(function (candidate) {
         if (!candidate || !candidate.id) return false;
         if (candidate.id === current.id) return false;
@@ -120,33 +168,33 @@
         if (candidate.status === 'hidden') return false;
         return true;
       })
-      .map(function (candidate) {
-        var score = 0;
-        var inRel = asArray(current.relatedTools).find(function (r) { return r.id === candidate.id; });
-        var revRel = asArray(candidate.relatedTools).find(function (r) { return r.id === current.id; });
-        if (inRel) score += 100;
-        if (revRel) score += 100;
-        if (candidate.primaryFamily === current.primaryFamily) score += 45;
-        if (asArray(current.secondaryFamilies).indexOf(candidate.primaryFamily) >= 0) score += 25;
-        if (asArray(candidate.secondaryFamilies).indexOf(current.primaryFamily) >= 0) score += 25;
-        if (current.discipline && candidate.discipline === current.discipline && candidate.discipline !== 'NONE') score += 22;
-        score += Math.min(36, sharedCount(asArray(current.modes), asArray(candidate.modes)) * 12);
-        score += Math.min(24, sharedCount(asArray(current.audiences), asArray(candidate.audiences)) * 8);
-        score += Math.min(32, sharedCount(asArray(current.workflowStages), asArray(candidate.workflowStages)) * 8);
-        score += Math.min(30, sharedCount(asArray(current.outputs), asArray(candidate.outputs)) * 10);
-        score += Math.min(32, sharedCount(asArray(current.tags), asArray(candidate.tags)) * 4);
-        if (candidate.status === 'live') score += 8;
-        if (candidate.status === 'shipping') score += 4;
-        return { app: candidate, score: score, reason: pickReason(current, candidate), debug: { current: current.id } };
-      })
-      .filter(function (entry) { return entry.score > 0; })
+      .map(function (candidate) { return evaluateCandidate(current, candidate); });
+
+    var ranked = evaluated
+      .filter(function (entry) { return entry.qualified; })
       .sort(function (a, b) {
         if (b.score !== a.score) return b.score - a.score;
         var sr = statusRank(a.app.status) - statusRank(b.app.status);
         if (sr !== 0) return sr;
         return String(a.app.name || '').localeCompare(String(b.app.name || ''));
-      })
-      .slice(0, normalizeLimit(options && options.limit));
+      });
+
+    var rejected = evaluated.filter(function (entry) { return !entry.qualified; });
+    return { current: current, recommendations: ranked, rejected: rejected };
+  }
+
+  function rank(currentAppId, catalog, options) {
+    var detail = buildRanking(currentAppId, catalog);
+    return detail.recommendations.slice(0, normalizeLimit(options && options.limit));
+  }
+
+  function explain(currentAppId, catalog, options) {
+    var detail = buildRanking(currentAppId, catalog);
+    return {
+      current: detail.current,
+      recommendations: detail.recommendations.slice(0, normalizeLimit(options && options.limit)),
+      rejected: detail.rejected
+    };
   }
 
   function ensureStyle() {
@@ -178,7 +226,7 @@
       var origin = getScriptOrigin();
 
       if (!ranked.length) {
-        container.innerHTML = '<section class="bt-related"><div class="bt-related-head">' + title + '</div><a class="bt-related-fallback" href="' + cleanLink('/apps/', origin) + '">More BassThermal tools</a></section>';
+        container.innerHTML = '<section class="bt-related"><div class="bt-related-head">' + title + '</div><a class="bt-related-fallback" href="' + cleanLink('/apps/', origin) + '">View all apps</a></section>';
         return;
       }
 
@@ -193,7 +241,7 @@
         html += '<a class="bt-related-name" href="' + appPage + '">' + app.name + '</a>';
         html += '<div class="bt-related-line">' + (app.short || app.line || '') + '</div>';
         if (entry.reason) html += '<div class="bt-related-reason">' + entry.reason + '</div>';
-        if (debug) html += '<div class="bt-related-debug">score: ' + entry.score + ' · status: ' + (app.status || '') + '</div>';
+        if (debug) html += '<div class="bt-related-debug">score: ' + entry.score + ' · relationship: ' + entry.relationshipScore + ' · status: ' + (app.status || '') + (entry.qualification ? ' · qualified: ' + entry.qualification : '') + '</div>';
         html += '<div class="bt-related-actions">';
         if (appPage) html += '<a href="' + appPage + '">App page</a>';
         if (web) html += '<a href="' + web + '">Web</a>';
@@ -211,7 +259,7 @@
     for (var i = 0; i < nodes.length; i += 1) render(nodes[i]);
   }
 
-  window.BTRelated = { renderAll: renderAll, render: render, fetchCatalog: fetchCatalog, rank: rank };
+  window.BTRelated = { renderAll: renderAll, render: render, fetchCatalog: fetchCatalog, rank: rank, explain: explain };
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', renderAll);
   } else {
