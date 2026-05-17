@@ -1,13 +1,17 @@
 {
   "schema": "BT-CATALOG-1",
   "version": "2026.05.16.1",
-  "generatedAt": "2026-05-16T20:08:36.372Z",
+  "generatedAt": "2026-05-17T12:30:59.666Z",
   "apps": [
     {
       "id": "dualticker",
       "slug": "dualticker",
       "name": "DualTicker",
+      "shortName": "DualTicker",
       "status": "live",
+      "visibility": {
+        "showInAppOverlay": true
+      },
       "primaryFamily": "SIGNAL_MONITORING",
       "secondaryFamilies": [
         "WEB_DEV"
@@ -64,7 +68,11 @@
       "id": "retrofy",
       "slug": "retrofy",
       "name": "RetroFy",
+      "shortName": "RetroFy",
       "status": "live",
+      "visibility": {
+        "showInAppOverlay": true
+      },
       "primaryFamily": "IMAGE_MEDIA",
       "secondaryFamilies": [
         "PUBLISHING_ASSETS"
@@ -118,7 +126,11 @@
       "id": "coptic-dictionary",
       "slug": "coptic-dictionary",
       "name": "Coptic Dictionary",
+      "shortName": "Coptic Dictionary",
       "status": "live",
+      "visibility": {
+        "showInAppOverlay": true
+      },
       "primaryFamily": "REFERENCE_STUDY",
       "secondaryFamilies": [],
       "discipline": "LANGUAGE",
@@ -165,7 +177,11 @@
       "id": "icon-pack-builder",
       "slug": "icon-pack-builder",
       "name": "Icon Pack Builder",
+      "shortName": "Icon Pack Builder",
       "status": "live",
+      "visibility": {
+        "showInAppOverlay": true
+      },
       "primaryFamily": "PUBLISHING_ASSETS",
       "secondaryFamilies": [
         "BUILD_PACKAGING"
@@ -220,7 +236,11 @@
       "id": "favicon-harvester",
       "slug": "favicon-harvester",
       "name": "Favicon Harvester",
+      "shortName": "Favicon Harvester",
       "status": "live",
+      "visibility": {
+        "showInAppOverlay": true
+      },
       "primaryFamily": "WEB_DEV",
       "secondaryFamilies": [
         "PUBLISHING_ASSETS"
@@ -279,7 +299,11 @@
       "id": "isbn-manager",
       "slug": "isbn-manager",
       "name": "ISBN Manager",
+      "shortName": "ISBN Manager",
       "status": "live",
+      "visibility": {
+        "showInAppOverlay": true
+      },
       "primaryFamily": "INVENTORY_OPERATIONS",
       "secondaryFamilies": [
         "DOCUMENT_REPORTS"
@@ -332,7 +356,11 @@
       "id": "rss-finder",
       "slug": "rss-finder",
       "name": "RSS Finder / RSS Crawler",
+      "shortName": "RSS Finder",
       "status": "shipping",
+      "visibility": {
+        "showInAppOverlay": true
+      },
       "primaryFamily": "WEB_DEV",
       "secondaryFamilies": [
         "SIGNAL_MONITORING"
