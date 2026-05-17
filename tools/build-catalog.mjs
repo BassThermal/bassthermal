@@ -103,7 +103,7 @@ const liteOut = {
   version,
   generatedAt,
   apps: apps.map((a) => ({
-    id:a.id, slug:a.slug, name:a.name, status:a.status, primaryFamily:a.primaryFamily, secondaryFamilies:a.secondaryFamilies,
+    id:a.id, slug:a.slug, name:a.name, shortName:a.shortName || '', status:a.status, visibility:{ showInAppOverlay:Boolean(a.visibility?.showInAppOverlay) }, primaryFamily:a.primaryFamily, secondaryFamilies:a.secondaryFamilies,
     discipline:a.discipline, modes:a.modes, audiences:a.audiences, workflowStages:a.workflowStages, outputs:a.outputs, tags:a.tags,
     platforms:a.platforms, line:a.line, short:a.short,
     links:{ website:a.links.website, windows:a.links.windows || '', android:a.links.android || '', web:a.links.web || '', support:a.links.support },

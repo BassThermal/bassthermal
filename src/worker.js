@@ -497,9 +497,38 @@ async function handleCitySummary(url, env) {
   });
 }
 
+
+function isPublicRecommenderAsset(pathname) {
+  return pathname === "/catalog-lite.json" || pathname === "/catalog.json" || pathname === "/related-apps.v1.js";
+}
+
+function withPublicCors(headers, pathname) {
+  const out = new Headers(headers);
+  out.set("Access-Control-Allow-Origin", "*");
+  out.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+  out.set("Access-Control-Allow-Headers", "Content-Type");
+  if (pathname === "/related-apps.v1.js") {
+    out.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
+  } else {
+    out.set("Cache-Control", "public, max-age=300, stale-while-revalidate=86400");
+  }
+  return out;
+}
+
+async function handlePublicAsset(request, env, pathname) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: withPublicCors({}, pathname) });
+  }
+  const response = await env.ASSETS.fetch(request);
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers: withPublicCors(response.headers, pathname) });
+}
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    if (isPublicRecommenderAsset(url.pathname) && (request.method === "GET" || request.method === "OPTIONS")) {
+      return handlePublicAsset(request, env, url.pathname);
+    }
 
     if (request.method === "POST" && url.pathname === "/api/visit") {
       return handleVisit(request, env);
