@@ -8,6 +8,9 @@
   var DEFAULT_LIMIT = 3;
   var STYLE_ID = 'bt-related-style-v1';
   var MIN_RELATIONSHIP_SCORE = 30;
+  var FALLBACK_ORIGIN = 'https://bassthermal.com';
+
+  var SCRIPT_ORIGIN = resolveScriptOrigin();
 
   var EMERGENCY_SNAPSHOT = {
     apps: [
@@ -32,16 +35,24 @@
     return Math.min(MAX_LIMIT, parsed);
   }
 
-  function getScriptOrigin() {
+  function resolveScriptOrigin() {
     var script = document.currentScript;
-    if (!script) {
-      var scripts = document.getElementsByTagName('script');
-      script = scripts[scripts.length - 1];
-    }
-    if (script && script.src) {
+    if (script && script.src && script.src.indexOf('related-apps.v1.js') >= 0) {
       try { return new URL(script.src, window.location.href).origin; } catch (_e) {}
     }
-    return 'https://bassthermal.com';
+
+    var scripts = document.getElementsByTagName('script');
+    for (var i = scripts.length - 1; i >= 0; i -= 1) {
+      var src = scripts[i] && scripts[i].src;
+      if (!src || src.indexOf('related-apps.v1.js') < 0) continue;
+      try { return new URL(src, window.location.href).origin; } catch (_e2) {}
+    }
+
+    return FALLBACK_ORIGIN;
+  }
+
+  function getOrigin() {
+    return SCRIPT_ORIGIN;
   }
 
   function inferCurrentAppFromPath() {
@@ -80,8 +91,7 @@
     var cached = getCachedCatalog();
     if (cached && now - cached.ts < CATALOG_TTL_MS) return cached.data;
 
-    var origin = getScriptOrigin();
-    var url = origin.replace(/\/$/, '') + '/catalog-lite.json';
+    var url = SCRIPT_ORIGIN.replace(/\/$/, '') + '/catalog-lite.json';
     try {
       var res = await fetch(url, { method: 'GET', credentials: 'omit' });
       if (!res.ok) throw new Error('catalog fetch failed');
@@ -223,7 +233,7 @@
     fetchCatalog().then(function (catalog) {
       var currentAppId = getCurrentAppId(container, opts);
       var ranked = rank(currentAppId, catalog, { limit: limit });
-      var origin = getScriptOrigin();
+      var origin = SCRIPT_ORIGIN;
 
       if (!ranked.length) {
         container.innerHTML = '<section class="bt-related"><div class="bt-related-head">' + title + '</div><a class="bt-related-fallback" href="' + cleanLink('/apps/', origin) + '">View all apps</a></section>';
@@ -241,7 +251,7 @@
         html += '<a class="bt-related-name" href="' + appPage + '">' + app.name + '</a>';
         html += '<div class="bt-related-line">' + (app.short || app.line || '') + '</div>';
         if (entry.reason) html += '<div class="bt-related-reason">' + entry.reason + '</div>';
-        if (debug) html += '<div class="bt-related-debug">score: ' + entry.score + ' · relationship: ' + entry.relationshipScore + ' · status: ' + (app.status || '') + (entry.qualification ? ' · qualified: ' + entry.qualification : '') + '</div>';
+        if (debug) html += '<div class="bt-related-debug">score: ' + entry.score + ' · relationship: ' + entry.relationshipScore + ' · status: ' + (app.status || '') + (entry.qualification ? ' · qualified: ' + entry.qualification : '') + ' · origin: ' + SCRIPT_ORIGIN + '</div>';
         html += '<div class="bt-related-actions">';
         if (appPage) html += '<a href="' + appPage + '">App page</a>';
         if (web) html += '<a href="' + web + '">Web</a>';
@@ -259,7 +269,7 @@
     for (var i = 0; i < nodes.length; i += 1) render(nodes[i]);
   }
 
-  window.BTRelated = { renderAll: renderAll, render: render, fetchCatalog: fetchCatalog, rank: rank, explain: explain };
+  window.BTRelated = { renderAll: renderAll, render: render, fetchCatalog: fetchCatalog, rank: rank, explain: explain, getOrigin: getOrigin };
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', renderAll);
   } else {

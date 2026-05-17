@@ -29,11 +29,14 @@ Forbidden placements:
 ## Integration notes
 - HTML/WebView: include script and a `data-bt-related` container.
 - Electron: set `window.BT_CURRENT_APP` before calling `window.BTRelated.renderAll()`.
-- Android WebView: same embed model; script fetches catalog from script origin.
+- Android WebView: same embed model; script captures its own origin at load time and fetches from that stable origin.
 - Native fallback: if JS embedding is unavailable, link to `https://bassthermal.com/apps/`.
 
 ## Fetch/cache/fallback
-- Fetch target: `<script-origin>/catalog-lite.json` (default origin fallback: `https://bassthermal.com`).
+- Fetch target: `<stable-script-origin>/catalog-lite.json`.
+- Stable script origin is resolved once at load (`document.currentScript.src` when it is `related-apps.v1.js`, else scanning script tags for `related-apps.v1.js`).
+- If origin cannot be determined, fallback origin is `https://bassthermal.com`.
+- Recommended embed source: `https://bassthermal.com/related-apps.v1.js`, which then resolves catalog fetches to the same BassThermal origin.
 - Cache keys: `bt.catalog-lite.v1` and `bt.catalog-lite.v1.ts`.
 - TTL: 24 hours.
 - Fallback order: fresh network → cached catalog → bundled emergency snapshot.
@@ -81,7 +84,9 @@ If no recommendations qualify, render only a quiet fallback:
 - `recommendations` (qualified only)
 - `rejected` (includes score, relationshipScore, statusBoost, reason, `rejectedReason: "below-threshold"`)
 
-Debug output in rendered cards includes final score, relationship score, status, and qualification path (`relatedTools` or `threshold`).
+Debug output in rendered cards includes final score, relationship score, status, qualification path (`relatedTools` or `threshold`), and resolved origin.
+
+`window.BTRelated.getOrigin()` returns the stable resolved origin used for catalog fetches and relative link resolution.
 
 ## Product rule for lonely apps
 If an app has no meaningful related tools, do not force recommendations. Either:
