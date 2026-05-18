@@ -499,7 +499,7 @@ async function handleCitySummary(url, env) {
 
 
 function isPublicRecommenderAsset(pathname) {
-  return pathname === "/catalog-lite.json" || pathname === "/catalog.json" || pathname === "/related-apps.v1.js";
+  return pathname === "/catalog-lite.json" || pathname === "/catalog.json" || pathname === "/related-apps.v1.js" || pathname === "/bt-tools-feed.v1.json";
 }
 
 function withPublicCors(headers, pathname) {
