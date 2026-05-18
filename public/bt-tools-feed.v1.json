@@ -1,0 +1,273 @@
+{
+  "schema": "BT-TOOLS-FEED-1",
+  "generatedAt": "2026-05-18T16:11:45.497Z",
+  "origin": "https://www.bassthermal.com",
+  "apps": {
+    "dualticker": {
+      "id": "dualticker",
+      "name": "DualTicker",
+      "status": "live",
+      "short": "Monitor two live headline streams side by side and compare coverage movement.",
+      "icon": "https://www.bassthermal.com/assets/apps/dualticker/android/icon.png",
+      "monogram": "DU",
+      "links": {
+        "website": "https://www.bassthermal.com/apps/dualticker/",
+        "windows": "https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA",
+        "android": "https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens",
+        "web": "https://www.dualticker.com/",
+        "support": "https://www.bassthermal.com/support/"
+      },
+      "recommendations": [
+        {
+          "id": "rss-finder",
+          "name": "RSS Finder / RSS Crawler",
+          "status": "shipping",
+          "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
+          "reason": "Find and inspect feeds that can support live monitoring workflows.",
+          "icon": null,
+          "monogram": "RF",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/rss-finder/",
+            "web": "https://bassthermal.com/apps/rss-finder/",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 262,
+          "tier": "explicit"
+        }
+      ],
+      "fallback": {
+        "label": "View all apps",
+        "href": "https://www.bassthermal.com/apps/"
+      }
+    },
+    "retrofy": {
+      "id": "retrofy",
+      "name": "RetroFy",
+      "status": "live",
+      "short": "Convert images into retro-style output using palette and dithering controls.",
+      "icon": "https://www.bassthermal.com/assets/apps/retrofy/android/icon.png",
+      "monogram": "RE",
+      "links": {
+        "website": "https://www.bassthermal.com/apps/retrofy/",
+        "windows": "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA",
+        "android": "https://play.google.com/store/apps/details?id=com.bassthermal.retrofy",
+        "support": "https://www.bassthermal.com/support/"
+      },
+      "recommendations": [
+        {
+          "id": "icon-pack-builder",
+          "name": "Icon Pack Builder",
+          "status": "live",
+          "short": "Generate Windows app icon sizes and package assets from one source image.",
+          "reason": "Use processed artwork as source material for icon packs.",
+          "icon": null,
+          "monogram": "IP",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
+            "windows": "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 145,
+          "tier": "explicit"
+        }
+      ],
+      "fallback": {
+        "label": "View all apps",
+        "href": "https://www.bassthermal.com/apps/"
+      }
+    },
+    "coptic-dictionary": {
+      "id": "coptic-dictionary",
+      "name": "Coptic Dictionary",
+      "status": "live",
+      "short": "Search English and Coptic terms with meanings, transliterations, forms, and saved vocabulary.",
+      "icon": "https://www.bassthermal.com/assets/apps/coptic-dictionary/android/icon.png",
+      "monogram": "CD",
+      "links": {
+        "website": "https://www.bassthermal.com/apps/coptic-dictionary/",
+        "windows": "https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA",
+        "android": "https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary",
+        "support": "https://www.bassthermal.com/support/"
+      },
+      "recommendations": [],
+      "fallback": {
+        "label": "View all apps",
+        "href": "https://www.bassthermal.com/apps/"
+      }
+    },
+    "icon-pack-builder": {
+      "id": "icon-pack-builder",
+      "name": "Icon Pack Builder",
+      "status": "live",
+      "short": "Generate Windows app icon sizes and package assets from one source image.",
+      "icon": null,
+      "monogram": "IP",
+      "links": {
+        "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
+        "windows": "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA",
+        "support": "https://www.bassthermal.com/support/"
+      },
+      "recommendations": [
+        {
+          "id": "favicon-harvester",
+          "name": "Favicon Harvester",
+          "status": "live",
+          "short": "Extract favicon assets from websites, domains, and URL lists.",
+          "reason": "Extract website icons and convert them into usable app/source assets.",
+          "icon": null,
+          "monogram": "FH",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/favicon-harvester/",
+            "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 245,
+          "tier": "explicit"
+        },
+        {
+          "id": "retrofy",
+          "name": "RetroFy",
+          "status": "live",
+          "short": "Convert images into retro-style output using palette and dithering controls.",
+          "reason": "Use processed artwork as source material for icon packs.",
+          "icon": "https://www.bassthermal.com/assets/apps/retrofy/android/icon.png",
+          "monogram": "RE",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/retrofy/",
+            "windows": "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA",
+            "android": "https://play.google.com/store/apps/details?id=com.bassthermal.retrofy",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 145,
+          "tier": "explicit"
+        }
+      ],
+      "fallback": {
+        "label": "View all apps",
+        "href": "https://www.bassthermal.com/apps/"
+      }
+    },
+    "favicon-harvester": {
+      "id": "favicon-harvester",
+      "name": "Favicon Harvester",
+      "status": "live",
+      "short": "Extract favicon assets from websites, domains, and URL lists.",
+      "icon": null,
+      "monogram": "FH",
+      "links": {
+        "website": "https://www.bassthermal.com/apps/favicon-harvester/",
+        "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
+        "support": "https://www.bassthermal.com/support/"
+      },
+      "recommendations": [
+        {
+          "id": "rss-finder",
+          "name": "RSS Finder / RSS Crawler",
+          "status": "shipping",
+          "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
+          "reason": "Find feed endpoints from the same domains you inspect.",
+          "icon": null,
+          "monogram": "RF",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/rss-finder/",
+            "web": "https://bassthermal.com/apps/rss-finder/",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 283,
+          "tier": "explicit"
+        },
+        {
+          "id": "icon-pack-builder",
+          "name": "Icon Pack Builder",
+          "status": "live",
+          "short": "Generate Windows app icon sizes and package assets from one source image.",
+          "reason": "Turn harvested icons into app or source assets.",
+          "icon": null,
+          "monogram": "IP",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
+            "windows": "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 245,
+          "tier": "explicit"
+        }
+      ],
+      "fallback": {
+        "label": "View all apps",
+        "href": "https://www.bassthermal.com/apps/"
+      }
+    },
+    "isbn-manager": {
+      "id": "isbn-manager",
+      "name": "ISBN Manager",
+      "status": "live",
+      "short": "Look up ISBN metadata, clean inventory records, generate barcode labels, and export lists.",
+      "icon": null,
+      "monogram": "IM",
+      "links": {
+        "website": "https://www.bassthermal.com/apps/isbn-manager/",
+        "windows": "https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA",
+        "support": "https://www.bassthermal.com/support/"
+      },
+      "recommendations": [],
+      "fallback": {
+        "label": "View all apps",
+        "href": "https://www.bassthermal.com/apps/"
+      }
+    },
+    "rss-finder": {
+      "id": "rss-finder",
+      "name": "RSS Finder / RSS Crawler",
+      "status": "shipping",
+      "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
+      "icon": null,
+      "monogram": "RF",
+      "links": {
+        "website": "https://www.bassthermal.com/apps/rss-finder/",
+        "web": "https://bassthermal.com/apps/rss-finder/",
+        "support": "https://www.bassthermal.com/support/"
+      },
+      "recommendations": [
+        {
+          "id": "favicon-harvester",
+          "name": "Favicon Harvester",
+          "status": "live",
+          "short": "Extract favicon assets from websites, domains, and URL lists.",
+          "reason": "Extract site icons for discovered source lists.",
+          "icon": null,
+          "monogram": "FH",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/favicon-harvester/",
+            "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 287,
+          "tier": "explicit"
+        },
+        {
+          "id": "dualticker",
+          "name": "DualTicker",
+          "status": "live",
+          "short": "Monitor two live headline streams side by side and compare coverage movement.",
+          "reason": "Use discovered feeds inside a live monitoring interface.",
+          "icon": "https://www.bassthermal.com/assets/apps/dualticker/android/icon.png",
+          "monogram": "DU",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/dualticker/",
+            "windows": "https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA",
+            "android": "https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens",
+            "web": "https://www.dualticker.com/",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 266,
+          "tier": "explicit"
+        }
+      ],
+      "fallback": {
+        "label": "View all apps",
+        "href": "https://www.bassthermal.com/apps/"
+      }
+    }
+  }
+}
