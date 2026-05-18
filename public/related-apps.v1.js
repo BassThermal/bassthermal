@@ -11,6 +11,7 @@
   var FALLBACK_ORIGIN = 'https://bassthermal.com';
 
   var SCRIPT_ORIGIN = resolveScriptOrigin();
+  var CATALOG_ORIGIN = resolveCatalogOrigin();
 
   var EMERGENCY_SNAPSHOT = {
     apps: [
@@ -55,6 +56,14 @@
     return SCRIPT_ORIGIN;
   }
 
+  function resolveCatalogOrigin() {
+    var host = window.location && window.location.hostname;
+    if (host === 'bassthermal.com' || host === 'www.bassthermal.com') {
+      return window.location.origin;
+    }
+    return SCRIPT_ORIGIN || FALLBACK_ORIGIN;
+  }
+
   function inferCurrentAppFromPath() {
     var m = window.location.pathname.match(/^\/apps\/([^/]+)\/?/);
     return m ? m[1] : '';
@@ -91,7 +100,7 @@
     var cached = getCachedCatalog();
     if (cached && now - cached.ts < CATALOG_TTL_MS) return cached.data;
 
-    var url = SCRIPT_ORIGIN.replace(/\/$/, '') + '/catalog-lite.json';
+    var url = CATALOG_ORIGIN.replace(/\/$/, '') + '/catalog-lite.json';
     try {
       var res = await fetch(url, { method: 'GET', credentials: 'omit' });
       if (!res.ok) throw new Error('catalog fetch failed');
@@ -233,7 +242,7 @@
     fetchCatalog().then(function (catalog) {
       var currentAppId = getCurrentAppId(container, opts);
       var ranked = rank(currentAppId, catalog, { limit: limit });
-      var origin = SCRIPT_ORIGIN;
+      var origin = CATALOG_ORIGIN;
 
       if (!ranked.length) {
         container.innerHTML = '<section class="bt-related"><div class="bt-related-head">' + title + '</div><a class="bt-related-fallback" href="' + cleanLink('/apps/', origin) + '">View all apps</a></section>';
@@ -251,7 +260,7 @@
         html += '<a class="bt-related-name" href="' + appPage + '">' + app.name + '</a>';
         html += '<div class="bt-related-line">' + (app.short || app.line || '') + '</div>';
         if (entry.reason) html += '<div class="bt-related-reason">' + entry.reason + '</div>';
-        if (debug) html += '<div class="bt-related-debug">score: ' + entry.score + ' · relationship: ' + entry.relationshipScore + ' · status: ' + (app.status || '') + (entry.qualification ? ' · qualified: ' + entry.qualification : '') + ' · origin: ' + SCRIPT_ORIGIN + '</div>';
+        if (debug) html += '<div class="bt-related-debug">score: ' + entry.score + ' · relationship: ' + entry.relationshipScore + ' · status: ' + (app.status || '') + (entry.qualification ? ' · qualified: ' + entry.qualification : '') + ' · origin: ' + SCRIPT_ORIGIN + ' · catalog: ' + CATALOG_ORIGIN + '</div>';
         html += '<div class="bt-related-actions">';
         if (appPage) html += '<a href="' + appPage + '">App page</a>';
         if (web) html += '<a href="' + web + '">Web</a>';
@@ -269,7 +278,7 @@
     for (var i = 0; i < nodes.length; i += 1) render(nodes[i]);
   }
 
-  window.BTRelated = { renderAll: renderAll, render: render, fetchCatalog: fetchCatalog, rank: rank, explain: explain, getOrigin: getOrigin };
+  window.BTRelated = { renderAll: renderAll, render: render, fetchCatalog: fetchCatalog, rank: rank, explain: explain, getOrigin: getOrigin, getCatalogOrigin: function () { return CATALOG_ORIGIN; } };
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', renderAll);
   } else {
