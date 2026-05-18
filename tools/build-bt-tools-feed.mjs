@@ -99,7 +99,6 @@ function evaluateCandidate(current, candidate) {
 const catalogLite = JSON.parse(fs.readFileSync(path.join(root, 'public/catalog-lite.json'), 'utf8'));
 const storeAssets = loadStoreAssets();
 
-const byId = new Map(catalogLite.apps.map((app) => [app.id, app]));
 const outApps = {};
 
 for (const app of catalogLite.apps) {
@@ -144,5 +143,10 @@ const payload = {
   apps: outApps
 };
 
-fs.writeFileSync(path.join(root, 'public/bt-tools-feed.v1.json'), JSON.stringify(payload, null, 2) + '\n');
-console.log(`bt-tools-feed: public/bt-tools-feed.v1.json (${Object.keys(outApps).length} apps)`);
+const jsonText = JSON.stringify(payload, null, 2) + '\n';
+const jsText = `window.BT_TOOLS_FEED_V1 = ${jsonText};\n` +
+  `window.dispatchEvent(new CustomEvent('bt-tools-feed:v1-ready', { detail: window.BT_TOOLS_FEED_V1 }));\n`;
+
+fs.writeFileSync(path.join(root, 'public/bt-tools-feed.v1.json'), jsonText);
+fs.writeFileSync(path.join(root, 'public/bt-tools-feed.v1.js'), jsText);
+console.log(`bt-tools-feed: public/bt-tools-feed.v1.json + public/bt-tools-feed.v1.js (${Object.keys(outApps).length} apps)`);
