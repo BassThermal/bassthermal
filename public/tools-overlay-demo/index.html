@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="bt-app-id" content="retrofy">
+  <title>BT Tools Overlay Demo</title>
+  <style>body{font-family:ui-monospace,monospace;background:#0f1115;color:#eceff4;padding:20px}label,select,button,input{font:inherit}button{border:1px solid #404653;background:#171b22;color:#eceff4;padding:6px 10px}select,input{border:1px solid #404653;background:#171b22;color:#eceff4;padding:6px}</style>
+</head>
+<body>
+  <h1>BT Tools Overlay Demo</h1>
+  <p>Simulates external-app embedding. Select app id, then open overlay.</p>
+  <p>
+    <label for="app">App:</label>
+    <select id="app">
+      <option value="dualticker">dualticker</option>
+      <option value="retrofy" selected>retrofy</option>
+      <option value="coptic-dictionary">coptic-dictionary</option>
+      <option value="icon-pack-builder">icon-pack-builder</option>
+      <option value="favicon-harvester">favicon-harvester</option>
+      <option value="isbn-manager">isbn-manager</option>
+      <option value="rss-finder">rss-finder</option>
+    </select>
+  </p>
+  <p>
+    <label><input id="debug" type="checkbox"> Debug</label>
+  </p>
+  <p>
+    <button id="open" type="button" data-bt-tools-open>More tools</button>
+  </p>
+
+  <script src="/bt-tools-overlay.v1.js"></script>
+  <script>
+    (function(){
+      var appSel = document.getElementById('app');
+      var debug = document.getElementById('debug');
+      var openBtn = document.getElementById('open');
+      var meta = document.querySelector('meta[name="bt-app-id"]');
+      function sync(){
+        meta.setAttribute('content', appSel.value);
+        openBtn.setAttribute('data-current-app', appSel.value);
+        openBtn.setAttribute('data-bt-tools-debug', debug.checked ? '1' : '0');
+      }
+      appSel.addEventListener('change', sync);
+      debug.addEventListener('change', sync);
+      sync();
+      openBtn.addEventListener('click', function(){
+        window.BTToolsOverlay.open({ currentApp: appSel.value, debug: debug.checked, triggerEl: openBtn });
+      });
+    })();
+  </script>
+</body>
+</html>
