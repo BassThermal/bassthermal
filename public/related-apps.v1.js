@@ -8,7 +8,13 @@
   var DEFAULT_LIMIT = 3;
   var STYLE_ID = 'bt-related-style-v1';
   var MIN_RELATIONSHIP_SCORE = 30;
+  var STRONG_RELATIONSHIP_THRESHOLD = 30;
   var FALLBACK_ORIGIN = 'https://bassthermal.com';
+
+  var GENERIC_AUDIENCES = new Set(['general_user', 'user', 'creator', 'researcher', 'publisher', 'operator', 'student', 'designer', 'developer']);
+  var GENERIC_WORKFLOW = new Set(['inspect', 'export', 'validate', 'lookup', 'study', 'generate', 'convert', 'create', 'collect', 'monitor', 'compare', 'publish']);
+  var GENERIC_TAGS = new Set(['windows', 'android', 'web', 'offline', 'batch', 'csv', 'url']);
+  var GENERIC_OUTPUTS = new Set(['csv_export', 'metadata_report', 'reference_card']);
 
   var SCRIPT_ORIGIN = resolveScriptOrigin();
   var CATALOG_ORIGIN = resolveCatalogOrigin();
@@ -28,6 +34,16 @@
     var n = 0;
     for (var i = 0; i < b.length; i += 1) if (set.has(b[i])) n += 1;
     return n;
+  }
+  function sharedValues(a, b) {
+    if (!a.length || !b.length) return [];
+    var set = new Set(a);
+    var out = [];
+    for (var i = 0; i < b.length; i += 1) if (set.has(b[i])) out.push(b[i]);
+    return out;
+  }
+  function sharedSpecificValues(a, b, genericSet) {
+    return sharedValues(a, b).filter(function (value) { return !genericSet.has(value); });
   }
   function statusRank(status) { return status === 'live' ? 0 : (status === 'shipping' ? 1 : 2); }
   function normalizeLimit(input) {
@@ -120,57 +136,92 @@
     if (rel) return rel.reason;
     var reverse = asArray(candidate.relatedTools).find(function (r) { return r.id === current.id && r.reason; });
     if (reverse) return reverse.reason;
-    if (qualification !== 'threshold') return '';
-    if (candidate.primaryFamily && candidate.primaryFamily === current.primaryFamily) return 'Same tool family.';
-    if (metrics.sharedWorkflow > 0) return 'Shared workflow.';
-    if (metrics.sharedOutputs > 0) return 'Related output.';
-    if (metrics.sharedTags > 0) return 'Related utility.';
+    if (metrics.samePrimaryFamily || metrics.bridgedFamily) return 'Same tool family.';
+    if (metrics.sameDiscipline && (metrics.sharedSpecificOutputs.length || metrics.sharedSpecificTags.length)) return 'Related workflow domain.';
+    if (metrics.sharedSpecificOutputs.length) return 'Related output.';
+    if (metrics.sharedSpecificTags.length) return 'Related utility.';
+    if (qualification && metrics.sharedWorkflow > 0) return 'Shared workflow.';
     return 'Related BassThermal tool.';
   }
 
   function evaluateCandidate(current, candidate) {
     var inRel = asArray(current.relatedTools).find(function (r) { return r.id === candidate.id; });
     var revRel = asArray(candidate.relatedTools).find(function (r) { return r.id === current.id; });
-    var metrics = {
-      sharedModes: sharedCount(asArray(current.modes), asArray(candidate.modes)),
-      sharedAudiences: sharedCount(asArray(current.audiences), asArray(candidate.audiences)),
-      sharedWorkflow: sharedCount(asArray(current.workflowStages), asArray(candidate.workflowStages)),
-      sharedOutputs: sharedCount(asArray(current.outputs), asArray(candidate.outputs)),
-      sharedTags: sharedCount(asArray(current.tags), asArray(candidate.tags))
-    };
 
-    var relationshipScore = 0;
-    if (inRel) relationshipScore += 100;
-    if (revRel) relationshipScore += 100;
-    if (candidate.primaryFamily === current.primaryFamily) relationshipScore += 45;
-    if (asArray(current.secondaryFamilies).indexOf(candidate.primaryFamily) >= 0) relationshipScore += 25;
-    if (asArray(candidate.secondaryFamilies).indexOf(current.primaryFamily) >= 0) relationshipScore += 25;
-    if (current.discipline && candidate.discipline === current.discipline && candidate.discipline !== 'NONE') relationshipScore += 22;
-    relationshipScore += Math.min(36, metrics.sharedModes * 12);
-    relationshipScore += Math.min(24, metrics.sharedAudiences * 8);
-    relationshipScore += Math.min(32, metrics.sharedWorkflow * 8);
-    relationshipScore += Math.min(30, metrics.sharedOutputs * 10);
-    relationshipScore += Math.min(32, metrics.sharedTags * 4);
+    var sharedModes = sharedCount(asArray(current.modes), asArray(candidate.modes));
+    var sharedAudiencesAll = sharedValues(asArray(current.audiences), asArray(candidate.audiences));
+    var sharedWorkflowAll = sharedValues(asArray(current.workflowStages), asArray(candidate.workflowStages));
+    var sharedSpecificOutputs = sharedSpecificValues(asArray(current.outputs), asArray(candidate.outputs), GENERIC_OUTPUTS);
+    var sharedSpecificTags = sharedSpecificValues(asArray(current.tags), asArray(candidate.tags), GENERIC_TAGS);
+    var sharedSpecificAudiences = sharedAudiencesAll.filter(function (value) { return !GENERIC_AUDIENCES.has(value); });
+    var sharedSpecificWorkflow = sharedWorkflowAll.filter(function (value) { return !GENERIC_WORKFLOW.has(value); });
+
+    var samePrimaryFamily = candidate.primaryFamily && candidate.primaryFamily === current.primaryFamily;
+    var bridgedFamily = asArray(current.secondaryFamilies).indexOf(candidate.primaryFamily) >= 0 || asArray(candidate.secondaryFamilies).indexOf(current.primaryFamily) >= 0;
+    var sameDiscipline = current.discipline && candidate.discipline === current.discipline && candidate.discipline !== 'NONE';
+
+    var strongRelationshipScore = 0;
+    if (inRel) strongRelationshipScore += 100;
+    if (revRel) strongRelationshipScore += 100;
+    if (samePrimaryFamily) strongRelationshipScore += 45;
+    if (asArray(current.secondaryFamilies).indexOf(candidate.primaryFamily) >= 0) strongRelationshipScore += 25;
+    if (asArray(candidate.secondaryFamilies).indexOf(current.primaryFamily) >= 0) strongRelationshipScore += 25;
+    if (sameDiscipline) strongRelationshipScore += 22;
+    strongRelationshipScore += Math.min(42, sharedSpecificOutputs.length * 14);
+    strongRelationshipScore += Math.min(40, sharedSpecificTags.length * 8);
+
+    var weakRelationshipScore = 0;
+    weakRelationshipScore += Math.min(24, sharedModes * 12);
+    weakRelationshipScore += Math.min(12, sharedSpecificAudiences.length * 6);
+    weakRelationshipScore += Math.min(12, sharedSpecificWorkflow.length * 4);
 
     var statusBoost = 0;
     if (candidate.status === 'live') statusBoost += 8;
     if (candidate.status === 'shipping') statusBoost += 4;
 
     var qualifiedByRelated = !!(inRel || revRel);
-    var qualifiedByThreshold = relationshipScore >= MIN_RELATIONSHIP_SCORE;
-    var qualified = qualifiedByRelated || qualifiedByThreshold;
-    var qualification = qualifiedByRelated ? 'relatedTools' : (qualifiedByThreshold ? 'threshold' : '');
+    var qualifiedByStrong = strongRelationshipScore >= STRONG_RELATIONSHIP_THRESHOLD;
+    var qualified = qualifiedByRelated || qualifiedByStrong;
+    var qualification = qualifiedByRelated ? 'relatedTools' : (qualifiedByStrong ? 'strong-threshold' : '');
+    var rejectedReason = '';
+    if (!qualified) rejectedReason = weakRelationshipScore > 0 ? 'weak-only' : 'below-threshold';
+
+    var tier = 'domain';
+    if (qualifiedByRelated) tier = 'explicit';
+    else if (samePrimaryFamily || bridgedFamily) tier = 'family';
+    else if (!qualified && weakRelationshipScore > 0 && strongRelationshipScore === 0) tier = 'weak';
+
+    var metrics = {
+      sharedModes: sharedModes,
+      sharedAudiences: sharedAudiencesAll.length,
+      sharedWorkflow: sharedWorkflowAll.length,
+      sharedSpecificOutputs: sharedSpecificOutputs,
+      sharedSpecificTags: sharedSpecificTags,
+      sharedSpecificAudiences: sharedSpecificAudiences,
+      sharedSpecificWorkflow: sharedSpecificWorkflow,
+      sharedGenericWorkflow: sharedWorkflowAll.filter(function (value) { return GENERIC_WORKFLOW.has(value); }),
+      sharedGenericOutputs: sharedValues(asArray(current.outputs), asArray(candidate.outputs)).filter(function (value) { return GENERIC_OUTPUTS.has(value); }),
+      samePrimaryFamily: !!samePrimaryFamily,
+      bridgedFamily: !!bridgedFamily,
+      sameDiscipline: !!sameDiscipline
+    };
+
+    var relationshipScore = strongRelationshipScore + weakRelationshipScore;
+    var score = relationshipScore + statusBoost;
 
     return {
       app: candidate,
-      score: relationshipScore + statusBoost,
+      score: score,
       relationshipScore: relationshipScore,
+      strongRelationshipScore: strongRelationshipScore,
+      weakRelationshipScore: weakRelationshipScore,
       statusBoost: statusBoost,
       reason: qualified ? pickReason(current, candidate, qualification, metrics) : '',
       qualification: qualification,
       qualified: qualified,
-      rejectedReason: qualified ? '' : 'below-threshold',
-      debug: { current: current.id }
+      rejectedReason: rejectedReason,
+      tier: tier,
+      debug: { current: current.id, metrics: metrics }
     };
   }
 
@@ -260,7 +311,7 @@
         html += '<a class="bt-related-name" href="' + appPage + '">' + app.name + '</a>';
         html += '<div class="bt-related-line">' + (app.short || app.line || '') + '</div>';
         if (entry.reason) html += '<div class="bt-related-reason">' + entry.reason + '</div>';
-        if (debug) html += '<div class="bt-related-debug">score: ' + entry.score + ' · relationship: ' + entry.relationshipScore + ' · status: ' + (app.status || '') + (entry.qualification ? ' · qualified: ' + entry.qualification : '') + ' · origin: ' + SCRIPT_ORIGIN + ' · catalog: ' + CATALOG_ORIGIN + '</div>';
+        if (debug) html += '<div class="bt-related-debug">score: ' + entry.score + ' · strong: ' + entry.strongRelationshipScore + ' · weak: ' + entry.weakRelationshipScore + ' · relationship: ' + entry.relationshipScore + ' · status: ' + (app.status || '') + (entry.qualification ? ' · qualified: ' + entry.qualification : '') + ' · tier: ' + (entry.tier || '') + ' · origin: ' + SCRIPT_ORIGIN + ' · catalog: ' + CATALOG_ORIGIN + '</div>';
         html += '<div class="bt-related-actions">';
         if (appPage) html += '<a href="' + appPage + '">App page</a>';
         if (web) html += '<a href="' + web + '">Web</a>';
