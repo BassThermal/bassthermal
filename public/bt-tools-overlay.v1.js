@@ -203,6 +203,12 @@
     diagnostics.recommendationIds = recs.map(function (r) { return r.id; });
     diagnostics.icons = [];
     state.body.innerHTML = recs.map(function (r) {
+      function addLink(links, seen, label, href) {
+        if (!href) return;
+        if (seen[href]) return;
+        seen[href] = true;
+        links.push('<a class="btto-link" href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(label) + '</a>');
+      }
       var iconHtml = '<div class="btto-icon" data-mono="1">' + escapeHtml(monogram(r.name)) + "</div>";
       var iconNote = "monogram";
       if (r.icon) {
@@ -211,11 +217,12 @@
       }
       diagnostics.icons.push({ id: r.id, icon: iconNote });
       var links = [];
-      if (r.links && r.links.appPage) links.push('<a class="btto-link" href="' + escapeHtml(r.links.appPage) + '" target="_blank" rel="noopener noreferrer">App page</a>');
-      if (r.links && r.links.web) links.push('<a class="btto-link" href="' + escapeHtml(r.links.web) + '" target="_blank" rel="noopener noreferrer">Web</a>');
-      if (r.links && r.links.windows) links.push('<a class="btto-link" href="' + escapeHtml(r.links.windows) + '" target="_blank" rel="noopener noreferrer">Windows</a>');
-      if (r.links && r.links.android) links.push('<a class="btto-link" href="' + escapeHtml(r.links.android) + '" target="_blank" rel="noopener noreferrer">Android</a>');
-      return '<article class="btto-card"><div>' + iconHtml + '</div><div><div class="btto-name">' + escapeHtml(r.name) + '</div><div class="btto-status">related</div><div class="btto-short">' + escapeHtml(r.short || "") + '</div><div class="btto-reason">' + escapeHtml(r.reason || "") + '</div><div class="btto-links">' + links.join("") + "</div></div></article>";
+      var linkSeen = {};
+      addLink(links, linkSeen, "App page", r.links && (r.links.appPage || r.links.website));
+      addLink(links, linkSeen, "Web", r.links && r.links.web);
+      addLink(links, linkSeen, "Windows", r.links && r.links.windows);
+      addLink(links, linkSeen, "Android", r.links && r.links.android);
+      return '<article class="btto-card"><div>' + iconHtml + '</div><div><div class="btto-name">' + escapeHtml(r.name) + '</div><div class="btto-status">' + escapeHtml(r.status || r.tier || "related") + '</div><div class="btto-short">' + escapeHtml(r.short || "") + '</div><div class="btto-reason">' + escapeHtml(r.reason || "") + '</div><div class="btto-links">' + links.join("") + "</div></div></article>";
     }).join("");
 
     var imgs = state.body.querySelectorAll("img");
