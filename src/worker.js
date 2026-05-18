@@ -499,7 +499,7 @@ async function handleCitySummary(url, env) {
 
 
 function isPublicRecommenderAsset(pathname) {
-  return pathname === "/catalog-lite.json" || pathname === "/catalog.json" || pathname === "/related-apps.v1.js" || pathname === "/bt-tools-feed.v1.json";
+  return pathname === "/catalog-lite.json" || pathname === "/catalog.json" || pathname === "/related-apps.v1.js" || pathname === "/bt-tools-feed.v1.json" || pathname === "/bt-tools-overlay.v1.js";
 }
 
 function withPublicCors(headers, pathname) {
@@ -507,7 +507,7 @@ function withPublicCors(headers, pathname) {
   out.set("Access-Control-Allow-Origin", "*");
   out.set("Access-Control-Allow-Methods", "GET, OPTIONS");
   out.set("Access-Control-Allow-Headers", "Content-Type");
-  if (pathname === "/related-apps.v1.js") {
+  if (pathname === "/related-apps.v1.js" || pathname === "/bt-tools-overlay.v1.js") {
     out.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
   } else {
     out.set("Cache-Control", "public, max-age=300, stale-while-revalidate=86400");
