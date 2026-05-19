@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
   "version": "2026.05.16.1",
-  "generatedAt": "2026-05-18T16:30:40.164Z",
+  "generatedAt": "2026-05-19T05:36:43.738Z",
   "apps": [
     {
       "id": "dualticker",
@@ -48,8 +48,8 @@
         "windows",
         "android"
       ],
-      "line": "headline monitor · compare live coverage streams",
-      "short": "Monitor two live headline streams side by side and compare coverage movement.",
+      "line": "live headline monitor · coverage movement scanner",
+      "short": "Monitor live headlines, scan coverage movement, and keep a source-aware news board open while you work.",
       "links": {
         "website": "/apps/dualticker/",
         "windows": "https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA",
@@ -60,7 +60,7 @@
       "relatedTools": [
         {
           "id": "rss-finder",
-          "reason": "Find and inspect feeds that can support live monitoring workflows."
+          "reason": "Find feed sources that can support live headline monitoring."
         }
       ]
     },
@@ -106,8 +106,8 @@
         "windows",
         "android"
       ],
-      "line": "retro image converter · palette + dithering output",
-      "short": "Convert images into retro-style output using palette and dithering controls.",
+      "line": "retro image converter · palette and dithering output",
+      "short": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready output.",
       "links": {
         "website": "/apps/retrofy/",
         "windows": "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA",
@@ -118,7 +118,7 @@
       "relatedTools": [
         {
           "id": "icon-pack-builder",
-          "reason": "Use processed artwork as source material for icon packs."
+          "reason": "Use processed artwork as source material for app icons."
         }
       ]
     },
@@ -162,8 +162,8 @@
         "windows",
         "android"
       ],
-      "line": "coptic lookup · meanings, transliteration, saved words",
-      "short": "Search English and Coptic terms with meanings, transliterations, forms, and saved vocabulary.",
+      "line": "coptic lookup · meanings, forms, saved words",
+      "short": "Search Coptic and English terms, review forms and transliterations, and save words for study.",
       "links": {
         "website": "/apps/coptic-dictionary/",
         "windows": "https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA",
@@ -216,8 +216,8 @@
       "platforms": [
         "windows"
       ],
-      "line": "app icon exporter · generate store-ready icon packs",
-      "short": "Generate Windows app icon sizes and package assets from one source image.",
+      "line": "app icon builder · store-ready asset export",
+      "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
       "links": {
         "website": "/apps/icon-pack-builder/",
         "windows": "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA",
@@ -228,7 +228,7 @@
       "relatedTools": [
         {
           "id": "favicon-harvester",
-          "reason": "Extract website icons and convert them into usable app/source assets."
+          "reason": "Extract website icons that can become source assets for icon packs."
         }
       ]
     },
@@ -275,8 +275,8 @@
       "platforms": [
         "windows"
       ],
-      "line": "favicon extractor · pull favicons from URLs/domains",
-      "short": "Extract favicon assets from websites, domains, and URL lists.",
+      "line": "favicon extractor · domain icon asset capture",
+      "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
       "links": {
         "website": "/apps/favicon-harvester/",
         "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
@@ -287,11 +287,11 @@
       "relatedTools": [
         {
           "id": "icon-pack-builder",
-          "reason": "Turn harvested icons into app or source assets."
+          "reason": "Turn harvested site icons into packaged app or project assets."
         },
         {
           "id": "rss-finder",
-          "reason": "Find feed endpoints from the same domains you inspect."
+          "reason": "Inspect the same domains for feed endpoints and site metadata."
         }
       ]
     },
@@ -341,8 +341,8 @@
       "platforms": [
         "windows"
       ],
-      "line": "book inventory · ISBN lookup, catalog cleanup, barcode labels",
-      "short": "Look up ISBN metadata, clean inventory records, generate barcode labels, and export lists.",
+      "line": "book inventory · ISBN lookup and labels",
+      "short": "Look up ISBN metadata, clean book inventory records, generate labels, and export organized lists.",
       "links": {
         "website": "/apps/isbn-manager/",
         "windows": "https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA",
@@ -399,8 +399,8 @@
       "platforms": [
         "web"
       ],
-      "line": "feed discovery · find and inspect RSS/Atom feeds",
-      "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
+      "line": "feed discovery · RSS and Atom inspection",
+      "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
       "links": {
         "website": "/apps/rss-finder/",
         "windows": "",
@@ -411,11 +411,11 @@
       "relatedTools": [
         {
           "id": "dualticker",
-          "reason": "Use discovered feeds inside a live monitoring interface."
+          "reason": "Use discovered feeds in a live headline monitoring workflow."
         },
         {
           "id": "favicon-harvester",
-          "reason": "Extract site icons for discovered source lists."
+          "reason": "Collect site icons from the same domains you inspect for feeds."
         }
       ]
     }
