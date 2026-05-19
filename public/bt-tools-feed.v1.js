@@ -1,6 +1,6 @@
 window.BT_TOOLS_FEED_V1 = {
   "schema": "BT-TOOLS-FEED-1",
-  "generatedAt": "2026-05-19T00:30:56.326Z",
+  "generatedAt": "2026-05-19T04:33:04.781Z",
   "origin": "https://www.bassthermal.com",
   "apps": {
     "dualticker": {
@@ -60,7 +60,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Generate Windows app icon sizes and package assets from one source image.",
           "reason": "Use processed artwork as source material for icon packs.",
-          "icon": "https://www.bassthermal.com/og/icon-pack-builder.png",
+          "icon": "https://www.bassthermal.com/assets/apps/icon-pack-builder/icon.png",
           "monogram": "IP",
           "links": {
             "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
@@ -100,7 +100,7 @@ window.BT_TOOLS_FEED_V1 = {
       "name": "Icon Pack Builder",
       "status": "live",
       "short": "Generate Windows app icon sizes and package assets from one source image.",
-      "icon": "https://www.bassthermal.com/og/icon-pack-builder.png",
+      "icon": "https://www.bassthermal.com/assets/apps/icon-pack-builder/icon.png",
       "monogram": "IP",
       "links": {
         "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
@@ -182,7 +182,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Generate Windows app icon sizes and package assets from one source image.",
           "reason": "Turn harvested icons into app or source assets.",
-          "icon": "https://www.bassthermal.com/og/icon-pack-builder.png",
+          "icon": "https://www.bassthermal.com/assets/apps/icon-pack-builder/icon.png",
           "monogram": "IP",
           "links": {
             "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
@@ -203,7 +203,7 @@ window.BT_TOOLS_FEED_V1 = {
       "name": "ISBN Manager",
       "status": "live",
       "short": "Look up ISBN metadata, clean inventory records, generate barcode labels, and export lists.",
-      "icon": "https://www.bassthermal.com/og/isbn-manager.png",
+      "icon": "https://www.bassthermal.com/assets/apps/isbn-manager/icon.png",
       "monogram": "IM",
       "links": {
         "website": "https://www.bassthermal.com/apps/isbn-manager/",

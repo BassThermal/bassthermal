@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-05-19T00:30:52.174Z",
+  "generatedAt": "2026-05-19T04:33:01.234Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -50,9 +50,9 @@ window.BT_STORE_ASSETS = {
     },
     "icon-pack-builder": {
       "icon": {
-        "fallback": "/og/icon-pack-builder.png",
+        "fallback": "/assets/apps/icon-pack-builder/icon.png",
         "android": null,
-        "windows": null,
+        "windows": "/assets/apps/icon-pack-builder/windows/icon.png",
         "web": null
       },
       "screenshots": {
@@ -66,7 +66,7 @@ window.BT_STORE_ASSETS = {
     },
     "isbn-manager": {
       "icon": {
-        "fallback": "/og/isbn-manager.png",
+        "fallback": "/assets/apps/isbn-manager/icon.png",
         "android": null,
         "windows": null,
         "web": null
