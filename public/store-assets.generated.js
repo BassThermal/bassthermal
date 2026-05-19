@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-05-18T16:30:39.582Z",
+  "generatedAt": "2026-05-19T00:30:52.174Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -35,9 +35,22 @@ window.BT_STORE_ASSETS = {
         "web": []
       }
     },
+    "favicon-harvester": {
+      "icon": {
+        "fallback": "/og/favicon-harvester.png",
+        "android": null,
+        "windows": null,
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [],
+        "web": []
+      }
+    },
     "icon-pack-builder": {
       "icon": {
-        "fallback": null,
+        "fallback": "/og/icon-pack-builder.png",
         "android": null,
         "windows": null,
         "web": null
@@ -48,6 +61,19 @@ window.BT_STORE_ASSETS = {
           "/assets/apps/icon-pack-builder/windows/shot-1.png",
           "/assets/apps/icon-pack-builder/windows/shot-2.png"
         ],
+        "web": []
+      }
+    },
+    "isbn-manager": {
+      "icon": {
+        "fallback": "/og/isbn-manager.png",
+        "android": null,
+        "windows": null,
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [],
         "web": []
       }
     },
@@ -64,6 +90,19 @@ window.BT_STORE_ASSETS = {
           "/assets/apps/retrofy/android/shot-09.webp",
           "/assets/apps/retrofy/android/shot-10.webp"
         ],
+        "windows": [],
+        "web": []
+      }
+    },
+    "rss-finder": {
+      "icon": {
+        "fallback": "/og/rss-finder.png",
+        "android": null,
+        "windows": null,
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
         "windows": [],
         "web": []
       }

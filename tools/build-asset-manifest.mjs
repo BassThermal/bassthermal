@@ -4,15 +4,97 @@ import path from 'node:path';
 const repoRoot = process.cwd();
 const publicRoot = path.join(repoRoot, 'public');
 const appsRoot = path.join(publicRoot, 'assets', 'apps');
+const catalogFile = path.join(repoRoot, 'data', 'bt-catalog.json');
+const assetSourcesFile = path.join(repoRoot, 'data', 'bt-asset-sources.json');
 const previewCacheRoot = path.join(publicRoot, 'assets', 'app-preview-cache');
 const outputFile = path.join(publicRoot, 'store-assets.generated.js');
 const platforms = ['android', 'windows', 'web'];
 const browserImageExts = new Set(['.png', '.webp', '.jpg', '.jpeg', '.gif', '.avif']);
-const iconPriority = ['.png', '.webp', '.jpg', '.jpeg', '.ico'];
+const browserIconExts = new Set(['.png', '.webp', '.jpg', '.jpeg', '.svg']);
+const rasterIconExts = new Set(['.png', '.webp', '.jpg', '.jpeg']);
+const iconPriority = ['.png', '.webp', '.jpg', '.jpeg', '.svg', '.ico'];
 
 function toWebPath(absPath) {
   const rel = path.relative(publicRoot, absPath).split(path.sep).join('/');
   return `/${rel}`;
+}
+
+
+async function pathExists(absPath) {
+  try {
+    const stat = await fs.stat(absPath);
+    return stat.isFile();
+  } catch {
+    return false;
+  }
+}
+
+function normalizeRepoPath(value) {
+  if (typeof value !== 'string' || !value.trim()) return null;
+  if (/^https?:\/\//i.test(value)) return null;
+  const normalized = value.split(/[?#]/, 1)[0];
+  return path.resolve(repoRoot, normalized);
+}
+
+function isUnderDir(child, parent) {
+  const rel = path.relative(parent, child);
+  return rel === '' || (rel && !rel.startsWith('..') && !path.isAbsolute(rel));
+}
+
+async function isSafeSvg(absPath) {
+  let text = '';
+  try {
+    text = await fs.readFile(absPath, 'utf8');
+  } catch {
+    return false;
+  }
+  const lower = text.toLowerCase();
+  if (!lower.includes('<svg')) return false;
+  if (/<script\b/i.test(text)) return false;
+  if (/<foreignobject\b/i.test(text)) return false;
+  if (/\son[a-z]+\s*=/i.test(text)) return false;
+  if (/href\s*=\s*["']\s*javascript:/i.test(text)) return false;
+  if (/\b(?:src|href|xlink:href)\s*=\s*["']\s*data:/i.test(text)) return false;
+  return true;
+}
+
+async function isBrowserSafeIcon(absPath) {
+  const ext = path.extname(absPath).toLowerCase();
+  if (!browserIconExts.has(ext)) return false;
+  if (!(await pathExists(absPath))) return false;
+  if (ext === '.svg') return isSafeSvg(absPath);
+
+  const detectedKind = await detectImageKind(absPath);
+  if (!detectedKind) return false;
+  if (!rasterIconExts.has(`.${detectedKind}`)) return false;
+  if (ext === '.jpg' || ext === '.jpeg') return detectedKind === 'jpg';
+  return ext === `.${detectedKind}`;
+}
+
+async function readJsonIfExists(filePath, fallback) {
+  try {
+    return JSON.parse(await fs.readFile(filePath, 'utf8'));
+  } catch (error) {
+    if (error?.code === 'ENOENT') return fallback;
+    throw error;
+  }
+}
+
+async function listCatalogSlugs() {
+  const catalog = await readJsonIfExists(catalogFile, { apps: [] });
+  return (catalog.apps || [])
+    .map((app) => app.slug || app.id)
+    .filter(Boolean)
+    .sort(naturalCompare);
+}
+
+async function loadAssetSources(warnings) {
+  const sources = await readJsonIfExists(assetSourcesFile, { schema: 'BT-ASSET-SOURCES-1', apps: {} });
+  if (sources.schema !== 'BT-ASSET-SOURCES-1') {
+    warnings.push(`ignored ${path.relative(repoRoot, assetSourcesFile)}: unsupported schema ${sources.schema || '<missing>'}`);
+    return {};
+  }
+  return sources.apps || {};
 }
 
 function naturalCompare(a, b) {
@@ -65,6 +147,37 @@ async function pickIcon(dir) {
     } catch {}
   }
   return null;
+}
+
+
+async function resolveMappedIcon({ slug, sourcePath, warnings }) {
+  const sourceAbsPath = normalizeRepoPath(sourcePath);
+  if (!sourceAbsPath) {
+    warnings.push(`ignored mapped icon for ${slug}: path must be a local repo path`);
+    return null;
+  }
+
+  if (!isUnderDir(sourceAbsPath, repoRoot)) {
+    warnings.push(`ignored mapped icon for ${slug}: path is outside repo`);
+    return null;
+  }
+
+  if (!(await isBrowserSafeIcon(sourceAbsPath))) {
+    warnings.push(`ignored mapped icon for ${slug}: unsupported or unsafe image ${path.relative(repoRoot, sourceAbsPath)}`);
+    return null;
+  }
+
+  if (isUnderDir(sourceAbsPath, publicRoot)) {
+    return toWebPath(sourceAbsPath);
+  }
+
+  const ext = path.extname(sourceAbsPath).toLowerCase();
+  const targetDir = path.join(appsRoot, slug);
+  const targetAbsPath = path.join(targetDir, `icon${ext}`);
+  await fs.mkdir(targetDir, { recursive: true });
+  await fs.copyFile(sourceAbsPath, targetAbsPath);
+  warnings.push(`copied mapped icon for ${slug} to ${path.relative(repoRoot, targetAbsPath)}`);
+  return toWebPath(targetAbsPath);
 }
 
 function isIconName(name) {
@@ -130,9 +243,11 @@ async function buildManifest() {
   await fs.rm(previewCacheRoot, { recursive: true, force: true });
 
   const apps = {};
-  const slugs = await listSubdirs(appsRoot);
   const report = [];
   const warnings = [];
+  const assetSources = await loadAssetSources(warnings);
+  const [assetSlugs, catalogSlugs] = await Promise.all([listSubdirs(appsRoot), listCatalogSlugs()]);
+  const slugs = [...new Set([...catalogSlugs, ...assetSlugs])].sort(naturalCompare);
 
   for (const slug of slugs) {
     const slugDir = path.join(appsRoot, slug);
@@ -158,6 +273,10 @@ async function buildManifest() {
 
     if (!icon.fallback) {
       icon.fallback = icon.android || icon.windows || icon.web || null;
+    }
+
+    if (!icon.fallback && assetSources[slug]?.icon) {
+      icon.fallback = await resolveMappedIcon({ slug, sourcePath: assetSources[slug].icon, warnings });
     }
 
     apps[slug] = { icon, screenshots };
