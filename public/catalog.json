@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
   "version": "2026.05.16.1",
-  "generatedAt": "2026-05-18T16:30:40.164Z",
+  "generatedAt": "2026-05-19T05:36:43.738Z",
   "publisher": {
     "name": "BassThermal",
     "url": "https://bassthermal.com/",
@@ -226,12 +226,12 @@
         "windows",
         "android"
       ],
-      "line": "headline monitor · compare live coverage streams",
-      "short": "Monitor two live headline streams side by side and compare coverage movement.",
+      "line": "live headline monitor · coverage movement scanner",
+      "short": "Monitor live headlines, scan coverage movement, and keep a source-aware news board open while you work.",
       "capabilities": [
-        "Side-by-side source comparison",
-        "Live headline stream monitoring",
-        "Cross-source story movement tracking"
+        "Live headline monitoring",
+        "Source-aware coverage scanning",
+        "Second-screen news board workflow"
       ],
       "links": {
         "website": "/apps/dualticker/",
@@ -243,7 +243,7 @@
       },
       "seo": {
         "title": "DualTicker live headline comparison app for web, Windows, and Android | BassThermal",
-        "description": "Monitor two live headline streams side by side and compare how stories move across sources.",
+        "description": "Monitor live headlines, scan coverage movement across sources, and keep a source-aware news board open on web, Windows, or Android.",
         "canonical": "https://bassthermal.com/apps/dualticker/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "NewsApplication",
@@ -252,7 +252,7 @@
       "relatedTools": [
         {
           "id": "rss-finder",
-          "reason": "Find and inspect feeds that can support live monitoring workflows."
+          "reason": "Find feed sources that can support live headline monitoring."
         }
       ]
     },
@@ -301,12 +301,12 @@
         "windows",
         "android"
       ],
-      "line": "retro image converter · palette + dithering output",
-      "short": "Convert images into retro-style output using palette and dithering controls.",
+      "line": "retro image converter · palette and dithering output",
+      "short": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready output.",
       "capabilities": [
-        "Palette-based conversion",
-        "Dithering style output",
-        "Image export for creative workflows"
+        "Palette-limited image conversion",
+        "Dithering style controls",
+        "Export-ready retro artwork"
       ],
       "links": {
         "website": "/apps/retrofy/",
@@ -318,7 +318,7 @@
       },
       "seo": {
         "title": "RetroFy retro image converter with palette and dithering effects | BassThermal",
-        "description": "Convert images into retro-style palette and dithering effects for pixel art, mockups, and visual experiments.",
+        "description": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready image output.",
         "canonical": "https://bassthermal.com/apps/retrofy/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "MultimediaApplication",
@@ -327,7 +327,7 @@
       "relatedTools": [
         {
           "id": "icon-pack-builder",
-          "reason": "Use processed artwork as source material for icon packs."
+          "reason": "Use processed artwork as source material for app icons."
         }
       ]
     },
@@ -374,11 +374,11 @@
         "windows",
         "android"
       ],
-      "line": "coptic lookup · meanings, transliteration, saved words",
-      "short": "Search English and Coptic terms with meanings, transliterations, forms, and saved vocabulary.",
+      "line": "coptic lookup · meanings, forms, saved words",
+      "short": "Search Coptic and English terms, review forms and transliterations, and save words for study.",
       "capabilities": [
-        "Bidirectional lookup",
-        "Transliteration and form review",
+        "Coptic and English lookup",
+        "Forms and transliteration review",
         "Saved words for study"
       ],
       "links": {
@@ -391,7 +391,7 @@
       },
       "seo": {
         "title": "English to Coptic and Coptic to English dictionary app | BassThermal",
-        "description": "Search English and Coptic terms with meanings, transliterations, forms, and saved vocabulary.",
+        "description": "Search Coptic and English terms, review forms and transliterations, and save vocabulary for study on Windows or Android.",
         "canonical": "https://bassthermal.com/apps/coptic-dictionary/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "EducationalApplication",
@@ -445,12 +445,12 @@
       "platforms": [
         "windows"
       ],
-      "line": "app icon exporter · generate store-ready icon packs",
-      "short": "Generate Windows app icon sizes and package assets from one source image.",
+      "line": "app icon builder · store-ready asset export",
+      "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
       "capabilities": [
-        "Batch icon generation",
-        "Multi-size app icon output",
-        "Store and installer asset prep"
+        "Multi-size icon generation",
+        "Store asset packaging",
+        "Source image to icon pack workflow"
       ],
       "links": {
         "website": "/apps/icon-pack-builder/",
@@ -462,7 +462,7 @@
       },
       "seo": {
         "title": "Windows app icon pack builder for store and installer assets | BassThermal",
-        "description": "Generate Windows app icon sizes and package assets from one source image for app builds and store submissions.",
+        "description": "Generate app icon sizes and store-ready asset packs from one source image for Windows app and store submissions.",
         "canonical": "https://bassthermal.com/apps/icon-pack-builder/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "DeveloperApplication",
@@ -471,7 +471,7 @@
       "relatedTools": [
         {
           "id": "favicon-harvester",
-          "reason": "Extract website icons and convert them into usable app/source assets."
+          "reason": "Extract website icons that can become source assets for icon packs."
         }
       ]
     },
@@ -521,12 +521,12 @@
       "platforms": [
         "windows"
       ],
-      "line": "favicon extractor · pull favicons from URLs/domains",
-      "short": "Extract favicon assets from websites, domains, and URL lists.",
+      "line": "favicon extractor · domain icon asset capture",
+      "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
       "capabilities": [
-        "Domain/icon extraction",
-        "Bulk URL processing",
-        "Local asset export"
+        "URL and domain icon extraction",
+        "Batch favicon collection",
+        "Local icon asset export"
       ],
       "links": {
         "website": "/apps/favicon-harvester/",
@@ -538,7 +538,7 @@
       },
       "seo": {
         "title": "Favicon Harvester bulk favicon extractor for Windows | BassThermal",
-        "description": "Extract favicon assets from websites, domains, and URL lists for research, dashboards, catalogs, and design references.",
+        "description": "Extract favicon and site icon assets from URLs, domains, and batch lists for research, catalogs, and design work.",
         "canonical": "https://bassthermal.com/apps/favicon-harvester/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "DeveloperApplication",
@@ -547,11 +547,11 @@
       "relatedTools": [
         {
           "id": "icon-pack-builder",
-          "reason": "Turn harvested icons into app or source assets."
+          "reason": "Turn harvested site icons into packaged app or project assets."
         },
         {
           "id": "rss-finder",
-          "reason": "Find feed endpoints from the same domains you inspect."
+          "reason": "Inspect the same domains for feed endpoints and site metadata."
         }
       ]
     },
@@ -604,12 +604,12 @@
       "platforms": [
         "windows"
       ],
-      "line": "book inventory · ISBN lookup, catalog cleanup, barcode labels",
-      "short": "Look up ISBN metadata, clean inventory records, generate barcode labels, and export lists.",
+      "line": "book inventory · ISBN lookup and labels",
+      "short": "Look up ISBN metadata, clean book inventory records, generate labels, and export organized lists.",
       "capabilities": [
         "ISBN metadata lookup",
-        "Barcode label generation",
-        "Catalog export"
+        "Book inventory cleanup",
+        "Barcode label and list export"
       ],
       "links": {
         "website": "/apps/isbn-manager/",
@@ -679,12 +679,12 @@
       "platforms": [
         "web"
       ],
-      "line": "feed discovery · find and inspect RSS/Atom feeds",
-      "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
+      "line": "feed discovery · RSS and Atom inspection",
+      "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
       "capabilities": [
-        "Feed endpoint discovery",
+        "RSS and Atom feed discovery",
         "Feed URL inspection",
-        "CSV export for feed lists"
+        "Exportable source lists"
       ],
       "links": {
         "website": "/apps/rss-finder/",
@@ -696,7 +696,7 @@
       },
       "seo": {
         "title": "RSS Feed Finder and Crawler for feed discovery | BassThermal",
-        "description": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
+        "description": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export source lists for monitoring workflows.",
         "canonical": "https://bassthermal.com/apps/rss-finder/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "DeveloperApplication",
@@ -705,11 +705,11 @@
       "relatedTools": [
         {
           "id": "dualticker",
-          "reason": "Use discovered feeds inside a live monitoring interface."
+          "reason": "Use discovered feeds in a live headline monitoring workflow."
         },
         {
           "id": "favicon-harvester",
-          "reason": "Extract site icons for discovered source lists."
+          "reason": "Collect site icons from the same domains you inspect for feeds."
         }
       ]
     }

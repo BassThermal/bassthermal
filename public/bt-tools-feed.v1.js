@@ -1,13 +1,13 @@
 window.BT_TOOLS_FEED_V1 = {
   "schema": "BT-TOOLS-FEED-1",
-  "generatedAt": "2026-05-19T04:33:04.781Z",
+  "generatedAt": "2026-05-19T05:36:44.253Z",
   "origin": "https://www.bassthermal.com",
   "apps": {
     "dualticker": {
       "id": "dualticker",
       "name": "DualTicker",
       "status": "live",
-      "short": "Monitor two live headline streams side by side and compare coverage movement.",
+      "short": "Monitor live headlines, scan coverage movement, and keep a source-aware news board open while you work.",
       "icon": "https://www.bassthermal.com/assets/apps/dualticker/android/icon.png",
       "monogram": "DU",
       "links": {
@@ -22,8 +22,8 @@ window.BT_TOOLS_FEED_V1 = {
           "id": "rss-finder",
           "name": "RSS Finder / RSS Crawler",
           "status": "shipping",
-          "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
-          "reason": "Find and inspect feeds that can support live monitoring workflows.",
+          "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
+          "reason": "Find feed sources that can support live headline monitoring.",
           "icon": "https://www.bassthermal.com/og/rss-finder.png",
           "monogram": "RF",
           "links": {
@@ -44,7 +44,7 @@ window.BT_TOOLS_FEED_V1 = {
       "id": "retrofy",
       "name": "RetroFy",
       "status": "live",
-      "short": "Convert images into retro-style output using palette and dithering controls.",
+      "short": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready output.",
       "icon": "https://www.bassthermal.com/assets/apps/retrofy/android/icon.png",
       "monogram": "RE",
       "links": {
@@ -58,8 +58,8 @@ window.BT_TOOLS_FEED_V1 = {
           "id": "icon-pack-builder",
           "name": "Icon Pack Builder",
           "status": "live",
-          "short": "Generate Windows app icon sizes and package assets from one source image.",
-          "reason": "Use processed artwork as source material for icon packs.",
+          "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
+          "reason": "Use processed artwork as source material for app icons.",
           "icon": "https://www.bassthermal.com/assets/apps/icon-pack-builder/icon.png",
           "monogram": "IP",
           "links": {
@@ -80,7 +80,7 @@ window.BT_TOOLS_FEED_V1 = {
       "id": "coptic-dictionary",
       "name": "Coptic Dictionary",
       "status": "live",
-      "short": "Search English and Coptic terms with meanings, transliterations, forms, and saved vocabulary.",
+      "short": "Search Coptic and English terms, review forms and transliterations, and save words for study.",
       "icon": "https://www.bassthermal.com/assets/apps/coptic-dictionary/android/icon.png",
       "monogram": "CD",
       "links": {
@@ -99,7 +99,7 @@ window.BT_TOOLS_FEED_V1 = {
       "id": "icon-pack-builder",
       "name": "Icon Pack Builder",
       "status": "live",
-      "short": "Generate Windows app icon sizes and package assets from one source image.",
+      "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
       "icon": "https://www.bassthermal.com/assets/apps/icon-pack-builder/icon.png",
       "monogram": "IP",
       "links": {
@@ -112,8 +112,8 @@ window.BT_TOOLS_FEED_V1 = {
           "id": "favicon-harvester",
           "name": "Favicon Harvester",
           "status": "live",
-          "short": "Extract favicon assets from websites, domains, and URL lists.",
-          "reason": "Extract website icons and convert them into usable app/source assets.",
+          "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
+          "reason": "Extract website icons that can become source assets for icon packs.",
           "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
           "monogram": "FH",
           "links": {
@@ -128,8 +128,8 @@ window.BT_TOOLS_FEED_V1 = {
           "id": "retrofy",
           "name": "RetroFy",
           "status": "live",
-          "short": "Convert images into retro-style output using palette and dithering controls.",
-          "reason": "Use processed artwork as source material for icon packs.",
+          "short": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready output.",
+          "reason": "Use processed artwork as source material for app icons.",
           "icon": "https://www.bassthermal.com/assets/apps/retrofy/android/icon.png",
           "monogram": "RE",
           "links": {
@@ -151,7 +151,7 @@ window.BT_TOOLS_FEED_V1 = {
       "id": "favicon-harvester",
       "name": "Favicon Harvester",
       "status": "live",
-      "short": "Extract favicon assets from websites, domains, and URL lists.",
+      "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
       "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
       "monogram": "FH",
       "links": {
@@ -164,8 +164,8 @@ window.BT_TOOLS_FEED_V1 = {
           "id": "rss-finder",
           "name": "RSS Finder / RSS Crawler",
           "status": "shipping",
-          "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
-          "reason": "Find feed endpoints from the same domains you inspect.",
+          "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
+          "reason": "Inspect the same domains for feed endpoints and site metadata.",
           "icon": "https://www.bassthermal.com/og/rss-finder.png",
           "monogram": "RF",
           "links": {
@@ -180,8 +180,8 @@ window.BT_TOOLS_FEED_V1 = {
           "id": "icon-pack-builder",
           "name": "Icon Pack Builder",
           "status": "live",
-          "short": "Generate Windows app icon sizes and package assets from one source image.",
-          "reason": "Turn harvested icons into app or source assets.",
+          "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
+          "reason": "Turn harvested site icons into packaged app or project assets.",
           "icon": "https://www.bassthermal.com/assets/apps/icon-pack-builder/icon.png",
           "monogram": "IP",
           "links": {
@@ -202,7 +202,7 @@ window.BT_TOOLS_FEED_V1 = {
       "id": "isbn-manager",
       "name": "ISBN Manager",
       "status": "live",
-      "short": "Look up ISBN metadata, clean inventory records, generate barcode labels, and export lists.",
+      "short": "Look up ISBN metadata, clean book inventory records, generate labels, and export organized lists.",
       "icon": "https://www.bassthermal.com/assets/apps/isbn-manager/icon.png",
       "monogram": "IM",
       "links": {
@@ -220,7 +220,7 @@ window.BT_TOOLS_FEED_V1 = {
       "id": "rss-finder",
       "name": "RSS Finder / RSS Crawler",
       "status": "shipping",
-      "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
+      "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
       "icon": "https://www.bassthermal.com/og/rss-finder.png",
       "monogram": "RF",
       "links": {
@@ -233,8 +233,8 @@ window.BT_TOOLS_FEED_V1 = {
           "id": "favicon-harvester",
           "name": "Favicon Harvester",
           "status": "live",
-          "short": "Extract favicon assets from websites, domains, and URL lists.",
-          "reason": "Extract site icons for discovered source lists.",
+          "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
+          "reason": "Collect site icons from the same domains you inspect for feeds.",
           "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
           "monogram": "FH",
           "links": {
@@ -249,8 +249,8 @@ window.BT_TOOLS_FEED_V1 = {
           "id": "dualticker",
           "name": "DualTicker",
           "status": "live",
-          "short": "Monitor two live headline streams side by side and compare coverage movement.",
-          "reason": "Use discovered feeds inside a live monitoring interface.",
+          "short": "Monitor live headlines, scan coverage movement, and keep a source-aware news board open while you work.",
+          "reason": "Use discovered feeds in a live headline monitoring workflow.",
           "icon": "https://www.bassthermal.com/assets/apps/dualticker/android/icon.png",
           "monogram": "DU",
           "links": {
