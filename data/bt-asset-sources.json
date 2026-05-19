@@ -1,0 +1,17 @@
+{
+  "schema": "BT-ASSET-SOURCES-1",
+  "apps": {
+    "rss-finder": {
+      "icon": "public/og/rss-finder.png"
+    },
+    "favicon-harvester": {
+      "icon": "public/og/favicon-harvester.png"
+    },
+    "isbn-manager": {
+      "icon": "public/og/isbn-manager.png"
+    },
+    "icon-pack-builder": {
+      "icon": "public/og/icon-pack-builder.png"
+    }
+  }
+}

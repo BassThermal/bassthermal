@@ -1,6 +1,6 @@
 window.BT_TOOLS_FEED_V1 = {
   "schema": "BT-TOOLS-FEED-1",
-  "generatedAt": "2026-05-18T16:30:40.762Z",
+  "generatedAt": "2026-05-19T00:30:56.326Z",
   "origin": "https://www.bassthermal.com",
   "apps": {
     "dualticker": {
@@ -24,7 +24,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "shipping",
           "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
           "reason": "Find and inspect feeds that can support live monitoring workflows.",
-          "icon": null,
+          "icon": "https://www.bassthermal.com/og/rss-finder.png",
           "monogram": "RF",
           "links": {
             "website": "https://www.bassthermal.com/apps/rss-finder/",
@@ -60,7 +60,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Generate Windows app icon sizes and package assets from one source image.",
           "reason": "Use processed artwork as source material for icon packs.",
-          "icon": null,
+          "icon": "https://www.bassthermal.com/og/icon-pack-builder.png",
           "monogram": "IP",
           "links": {
             "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
@@ -100,7 +100,7 @@ window.BT_TOOLS_FEED_V1 = {
       "name": "Icon Pack Builder",
       "status": "live",
       "short": "Generate Windows app icon sizes and package assets from one source image.",
-      "icon": null,
+      "icon": "https://www.bassthermal.com/og/icon-pack-builder.png",
       "monogram": "IP",
       "links": {
         "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
@@ -114,7 +114,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Extract favicon assets from websites, domains, and URL lists.",
           "reason": "Extract website icons and convert them into usable app/source assets.",
-          "icon": null,
+          "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
           "monogram": "FH",
           "links": {
             "website": "https://www.bassthermal.com/apps/favicon-harvester/",
@@ -152,7 +152,7 @@ window.BT_TOOLS_FEED_V1 = {
       "name": "Favicon Harvester",
       "status": "live",
       "short": "Extract favicon assets from websites, domains, and URL lists.",
-      "icon": null,
+      "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
       "monogram": "FH",
       "links": {
         "website": "https://www.bassthermal.com/apps/favicon-harvester/",
@@ -166,7 +166,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "shipping",
           "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
           "reason": "Find feed endpoints from the same domains you inspect.",
-          "icon": null,
+          "icon": "https://www.bassthermal.com/og/rss-finder.png",
           "monogram": "RF",
           "links": {
             "website": "https://www.bassthermal.com/apps/rss-finder/",
@@ -182,7 +182,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Generate Windows app icon sizes and package assets from one source image.",
           "reason": "Turn harvested icons into app or source assets.",
-          "icon": null,
+          "icon": "https://www.bassthermal.com/og/icon-pack-builder.png",
           "monogram": "IP",
           "links": {
             "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
@@ -203,7 +203,7 @@ window.BT_TOOLS_FEED_V1 = {
       "name": "ISBN Manager",
       "status": "live",
       "short": "Look up ISBN metadata, clean inventory records, generate barcode labels, and export lists.",
-      "icon": null,
+      "icon": "https://www.bassthermal.com/og/isbn-manager.png",
       "monogram": "IM",
       "links": {
         "website": "https://www.bassthermal.com/apps/isbn-manager/",
@@ -221,7 +221,7 @@ window.BT_TOOLS_FEED_V1 = {
       "name": "RSS Finder / RSS Crawler",
       "status": "shipping",
       "short": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export feed lists.",
-      "icon": null,
+      "icon": "https://www.bassthermal.com/og/rss-finder.png",
       "monogram": "RF",
       "links": {
         "website": "https://www.bassthermal.com/apps/rss-finder/",
@@ -235,7 +235,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Extract favicon assets from websites, domains, and URL lists.",
           "reason": "Extract site icons for discovered source lists.",
-          "icon": null,
+          "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
           "monogram": "FH",
           "links": {
             "website": "https://www.bassthermal.com/apps/favicon-harvester/",
@@ -270,5 +270,6 @@ window.BT_TOOLS_FEED_V1 = {
       }
     }
   }
-};
+}
+;
 window.dispatchEvent(new CustomEvent('bt-tools-feed:v1-ready', { detail: window.BT_TOOLS_FEED_V1 }));
