@@ -23,6 +23,30 @@ ensure(Array.isArray(intentPages), 'intentPages must be an array');
 const enumKeys = ['families','disciplines','modes','audiences','workflowStages','outputs','tags','statuses'];
 for (const key of enumKeys) ensure(Array.isArray(enums?.[key]), `enums.${key} must be an array`);
 
+
+const publicApps = apps.filter((app) => app.visibility?.showOnWebsite && app.visibility?.showInDirectory);
+const expectedPublicNames = ['DualTicker','RetroFy','Coptic Dictionary','Icon Pack Builder','Favicon Harvester','ISBN Manager','RSS Crawler','DocBatch PDF Converter','Website Image Inventory','CourseLab Beam: Shear & Moment'];
+ensure(publicApps.length === expectedPublicNames.length, `public app count must be ${expectedPublicNames.length}, found ${publicApps.length}`);
+for (const [i, name] of expectedPublicNames.entries()) ensure(publicApps[i]?.name === name, `public app ${i + 1} must be ${name}, found ${publicApps[i]?.name || '<missing>'}`);
+ensure(!publicApps.some((app) => /ring snap|mockcaps/i.test(app.name)), 'Ring Snap or MockCaps must not appear in public directory');
+const homeRanks = publicApps.filter((app) => app.homeRank !== undefined);
+ensure(homeRanks.length <= 4, 'at most four homepage apps are allowed');
+const seenHomeRanks = new Set();
+for (const app of homeRanks) {
+  ensure(Number.isInteger(app.homeRank), `app ${app.id} homeRank must be an integer`);
+  ensure(!seenHomeRanks.has(app.homeRank), `duplicate homeRank: ${app.homeRank}`);
+  seenHomeRanks.add(app.homeRank);
+  ensure(app.visibility?.showOnWebsite && app.visibility?.showInDirectory, `featured app ${app.id} must be public`);
+  ensure(fileExists(`public/apps/${app.slug}/index.html`), `featured app ${app.id} missing detail page`);
+}
+const sortedHomeRanks = [...seenHomeRanks].sort((a,b) => a-b);
+for (let i = 0; i < sortedHomeRanks.length; i++) ensure(sortedHomeRanks[i] === i + 1, `homeRank values must be sequential from 1, found ${sortedHomeRanks.join(',')}`);
+const rssCrawler = apps.find((app) => app.slug === 'rss-finder');
+ensure(rssCrawler?.name === 'RSS Crawler', 'rss-finder public name must be RSS Crawler');
+ensure(rssCrawler?.status === 'live', 'RSS Crawler status must be live');
+ensure(rssCrawler?.platforms?.includes('windows'), 'RSS Crawler must include Windows platform');
+ensure(rssCrawler?.links?.windows === 'https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA', 'RSS Crawler must have the required Windows Store link');
+
 const appIds = new Set();
 const appSlugs = new Set();
 for (const app of apps) {
@@ -88,6 +112,33 @@ ensure(fileExists('public/tools/index.html'), 'public/tools/index.html missing')
 ensure(fileExists('public/apps/index.html'), 'public/apps/index.html missing');
 
 const sitemap = fs.readFileSync(path.join(root, 'public/sitemap.xml'), 'utf8');
+ensure(!/https:\/\/www\.bassthermal\.com/i.test(sitemap), 'sitemap must not contain www canonicals');
+const robots = fs.readFileSync(path.join(root, 'public/robots.txt'), 'utf8');
+ensure(robots.includes('User-agent: *'), 'robots.txt missing User-agent');
+ensure(robots.includes('Allow: /'), 'robots.txt missing Allow: /');
+ensure(robots.includes('Sitemap: https://bassthermal.com/sitemap.xml'), 'robots.txt missing canonical sitemap');
+function parseJsonLdFrom(file) {
+  const html = fs.readFileSync(path.join(root, file), 'utf8');
+  for (const match of html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { JSON.parse(match[1]); } catch (e) { errors.push(`${file} has invalid JSON-LD: ${e.message}`); }
+  }
+  return html;
+}
+for (const file of ['public/index.html','public/apps/index.html', ...publicApps.map((app) => `public/apps/${app.slug}/index.html`)]) {
+  const html = parseJsonLdFrom(file);
+  ensure(!/rel=["']canonical["'][^>]+www\.bassthermal\.com/i.test(html), `${file} canonical must not use www`);
+}
+const appsHtml = fs.readFileSync(path.join(root, 'public/apps/index.html'), 'utf8');
+const directoryEntries = [...appsHtml.matchAll(/data-app-entry/g)].length;
+ensure(directoryEntries === expectedPublicNames.length, `/apps/ must contain ${expectedPublicNames.length} app entries, found ${directoryEntries}`);
+ensure(!/Ring Snap|MockCaps/i.test(appsHtml), 'Ring Snap or MockCaps appear in public directory');
+const appsJsonLdMatch = appsHtml.match(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/i);
+if (appsJsonLdMatch) {
+  const parsed = JSON.parse(appsJsonLdMatch[1]);
+  const positions = (parsed.itemListElement || []).map((item) => item.position);
+  for (let i = 0; i < expectedPublicNames.length; i++) ensure(positions[i] === i + 1, `/apps/ ItemList position ${i + 1} is not sequential`);
+} else errors.push('/apps/ missing JSON-LD');
+
 const requiredPaths = ['/','/apps/','/tools/','/support/','/privacy/'];
 for (const app of apps) { if (app.visibility?.includeInSitemap) requiredPaths.push(`/apps/${app.slug}/`); if (app.links?.privacy) requiredPaths.push(app.links.privacy); }
 for (const p of intentPages) if (p.includeInSitemap) requiredPaths.push(p.path);
