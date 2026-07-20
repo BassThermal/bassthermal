@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
-  "version": "2026.05.16.1",
-  "generatedAt": "2026-05-19T05:36:43.738Z",
+  "version": "2026.07.20.1",
+  "generatedAt": "2026-07-20T16:08:36.174Z",
   "apps": [
     {
       "id": "dualticker",
@@ -418,6 +418,171 @@
           "reason": "Collect site icons from the same domains you inspect for feeds."
         }
       ]
+    },
+    {
+      "id": "docbatch-pdf-converter",
+      "slug": "docbatch-pdf-converter",
+      "name": "DocBatch PDF Converter",
+      "shortName": "DocBatch",
+      "status": "live",
+      "visibility": {
+        "showInAppOverlay": true
+      },
+      "primaryFamily": "DOCUMENT_REPORTS",
+      "secondaryFamilies": [
+        "BUILD_PACKAGING"
+      ],
+      "discipline": "NONE",
+      "modes": [
+        "CONVERTER",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "general_user",
+        "operator",
+        "student"
+      ],
+      "workflowStages": [
+        "convert",
+        "export"
+      ],
+      "outputs": [
+        "pdf_report"
+      ],
+      "tags": [
+        "batch",
+        "pdf",
+        "offline",
+        "local-first",
+        "windows"
+      ],
+      "platforms": [
+        "windows"
+      ],
+      "line": "document converter · batch Word, RTF, ODT, and TXT files to PDF",
+      "short": "Batch-convert DOCX, DOC, RTF, ODT, and TXT files into local PDF output on Windows.",
+      "links": {
+        "website": "/apps/docbatch-pdf-converter/",
+        "windows": "https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA",
+        "android": "",
+        "web": "",
+        "support": "/support/"
+      },
+      "relatedTools": []
+    },
+    {
+      "id": "website-image-inventory",
+      "slug": "website-image-inventory",
+      "name": "Website Image Inventory",
+      "shortName": "Website Image Inventory",
+      "status": "live",
+      "visibility": {
+        "showInAppOverlay": true
+      },
+      "primaryFamily": "WEB_DEV",
+      "secondaryFamilies": [
+        "IMAGE_MEDIA"
+      ],
+      "discipline": "IMAGE_PROCESSING",
+      "modes": [
+        "CRAWLER",
+        "REPORT_GENERATOR",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "developer",
+        "designer",
+        "researcher"
+      ],
+      "workflowStages": [
+        "crawl",
+        "inspect",
+        "catalog",
+        "export"
+      ],
+      "outputs": [
+        "metadata_report",
+        "csv_export"
+      ],
+      "tags": [
+        "image",
+        "url",
+        "crawler",
+        "metadata",
+        "local-first",
+        "windows"
+      ],
+      "platforms": [
+        "windows"
+      ],
+      "line": "web asset inventory · scan sites and organize discovered images",
+      "short": "Scan public websites and create an organized inventory of discovered image assets.",
+      "links": {
+        "website": "/apps/website-image-inventory/",
+        "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
+        "android": "",
+        "web": "",
+        "support": "/support/"
+      },
+      "relatedTools": [
+        {
+          "id": "favicon-harvester",
+          "reason": "Review site icons alongside broader discovered website image assets."
+        }
+      ]
+    },
+    {
+      "id": "courselab-beam",
+      "slug": "courselab-beam",
+      "name": "CourseLab Beam: Shear & Moment",
+      "shortName": "CourseLab Beam",
+      "status": "live",
+      "visibility": {
+        "showInAppOverlay": true
+      },
+      "primaryFamily": "ENGINEERING_AEC",
+      "secondaryFamilies": [
+        "REFERENCE_STUDY"
+      ],
+      "discipline": "STRUCTURAL",
+      "modes": [
+        "CALCULATOR",
+        "VISUALIZER",
+        "EDUCATOR"
+      ],
+      "audiences": [
+        "student",
+        "engineering_learner"
+      ],
+      "workflowStages": [
+        "calculate",
+        "visualize",
+        "study"
+      ],
+      "outputs": [
+        "diagram",
+        "calc_sheet"
+      ],
+      "tags": [
+        "engineering",
+        "structural",
+        "education",
+        "android",
+        "local-first"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "line": "beam calculator · reactions, shear, moment, and calculation steps",
+      "short": "Build determinate beam cases and inspect reactions, shear diagrams, moment diagrams, and calculation steps.",
+      "links": {
+        "website": "/apps/courselab-beam/",
+        "windows": "",
+        "android": "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams",
+        "web": "",
+        "support": "/support/"
+      },
+      "relatedTools": []
     }
   ]
 }

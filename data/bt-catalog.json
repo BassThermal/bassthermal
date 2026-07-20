@@ -1,6 +1,6 @@
 {
   "schema": "BT-CATALOG-1",
-  "version": "2026.05.16.1",
+  "version": "2026.07.20.1",
   "publisher": {
     "name": "BassThermal",
     "url": "https://bassthermal.com/",
@@ -225,7 +225,7 @@
         "windows",
         "android"
       ],
-      "line": "live headline monitor · coverage movement scanner",
+      "line": "live headline monitor \u00b7 coverage movement scanner",
       "short": "Monitor live headlines, scan coverage movement, and keep a source-aware news board open while you work.",
       "capabilities": [
         "Live headline monitoring",
@@ -300,7 +300,7 @@
         "windows",
         "android"
       ],
-      "line": "retro image converter · palette and dithering output",
+      "line": "retro image converter \u00b7 palette and dithering output",
       "short": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready output.",
       "capabilities": [
         "Palette-limited image conversion",
@@ -373,7 +373,7 @@
         "windows",
         "android"
       ],
-      "line": "coptic lookup · meanings, forms, saved words",
+      "line": "coptic lookup \u00b7 meanings, forms, saved words",
       "short": "Search Coptic and English terms, review forms and transliterations, and save words for study.",
       "capabilities": [
         "Coptic and English lookup",
@@ -444,7 +444,7 @@
       "platforms": [
         "windows"
       ],
-      "line": "app icon builder · store-ready asset export",
+      "line": "app icon builder \u00b7 store-ready asset export",
       "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
       "capabilities": [
         "Multi-size icon generation",
@@ -520,7 +520,7 @@
       "platforms": [
         "windows"
       ],
-      "line": "favicon extractor · domain icon asset capture",
+      "line": "favicon extractor \u00b7 domain icon asset capture",
       "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
       "capabilities": [
         "URL and domain icon extraction",
@@ -603,7 +603,7 @@
       "platforms": [
         "windows"
       ],
-      "line": "book inventory · ISBN lookup and labels",
+      "line": "book inventory \u00b7 ISBN lookup and labels",
       "short": "Look up ISBN metadata, clean book inventory records, generate labels, and export organized lists.",
       "capabilities": [
         "ISBN metadata lookup",
@@ -678,7 +678,7 @@
       "platforms": [
         "web"
       ],
-      "line": "feed discovery · RSS and Atom inspection",
+      "line": "feed discovery \u00b7 RSS and Atom inspection",
       "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
       "capabilities": [
         "RSS and Atom feed discovery",
@@ -711,6 +711,226 @@
           "reason": "Collect site icons from the same domains you inspect for feeds."
         }
       ]
+    },
+    {
+      "id": "docbatch-pdf-converter",
+      "slug": "docbatch-pdf-converter",
+      "name": "DocBatch PDF Converter",
+      "shortName": "DocBatch",
+      "status": "live",
+      "visibility": {
+        "showOnWebsite": true,
+        "showInDirectory": true,
+        "showInAppOverlay": true,
+        "includeInSitemap": true
+      },
+      "primaryFamily": "DOCUMENT_REPORTS",
+      "secondaryFamilies": [
+        "BUILD_PACKAGING"
+      ],
+      "discipline": "NONE",
+      "modes": [
+        "CONVERTER",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "general_user",
+        "operator",
+        "student"
+      ],
+      "workflowStages": [
+        "convert",
+        "export"
+      ],
+      "outputs": [
+        "pdf_report"
+      ],
+      "tags": [
+        "batch",
+        "pdf",
+        "offline",
+        "local-first",
+        "windows"
+      ],
+      "platforms": [
+        "windows"
+      ],
+      "line": "document converter \u00b7 batch Word, RTF, ODT, and TXT files to PDF",
+      "short": "Batch-convert DOCX, DOC, RTF, ODT, and TXT files into local PDF output on Windows.",
+      "capabilities": [
+        "Batch document conversion",
+        "DOCX, DOC, RTF, ODT, and TXT input",
+        "Local PDF output",
+        "Output and conflict controls"
+      ],
+      "links": {
+        "website": "/apps/docbatch-pdf-converter/",
+        "windows": "https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA",
+        "android": "",
+        "web": "",
+        "privacy": "/privacy/docbatch-pdf-converter/",
+        "support": "/support/"
+      },
+      "seo": {
+        "title": "DocBatch PDF Converter batch document conversion app for Windows | BassThermal",
+        "description": "Batch-convert DOCX, DOC, RTF, ODT, and TXT files into PDF locally on Windows with configurable output and conflict handling.",
+        "canonical": "https://bassthermal.com/apps/docbatch-pdf-converter/",
+        "schemaType": "SoftwareApplication",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Windows"
+      },
+      "relatedTools": []
+    },
+    {
+      "id": "website-image-inventory",
+      "slug": "website-image-inventory",
+      "name": "Website Image Inventory",
+      "shortName": "Website Image Inventory",
+      "status": "live",
+      "visibility": {
+        "showOnWebsite": true,
+        "showInDirectory": true,
+        "showInAppOverlay": true,
+        "includeInSitemap": true
+      },
+      "primaryFamily": "WEB_DEV",
+      "secondaryFamilies": [
+        "IMAGE_MEDIA"
+      ],
+      "discipline": "IMAGE_PROCESSING",
+      "modes": [
+        "CRAWLER",
+        "REPORT_GENERATOR",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "developer",
+        "designer",
+        "researcher"
+      ],
+      "workflowStages": [
+        "crawl",
+        "inspect",
+        "catalog",
+        "export"
+      ],
+      "outputs": [
+        "metadata_report",
+        "csv_export"
+      ],
+      "tags": [
+        "image",
+        "url",
+        "crawler",
+        "metadata",
+        "local-first",
+        "windows"
+      ],
+      "platforms": [
+        "windows"
+      ],
+      "line": "web asset inventory \u00b7 scan sites and organize discovered images",
+      "short": "Scan public websites and create an organized inventory of discovered image assets.",
+      "capabilities": [
+        "Public website scanning",
+        "Discovered image inventory",
+        "Image metadata review",
+        "Organized export workflow"
+      ],
+      "links": {
+        "website": "/apps/website-image-inventory/",
+        "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
+        "android": "",
+        "web": "",
+        "privacy": "/privacy/website-image-inventory/",
+        "support": "/support/"
+      },
+      "seo": {
+        "title": "Website Image Inventory website image audit tool for Windows | BassThermal",
+        "description": "Scan public websites and create an organized local inventory of discovered image assets, URLs, dimensions, and metadata.",
+        "canonical": "https://bassthermal.com/apps/website-image-inventory/",
+        "schemaType": "SoftwareApplication",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Windows"
+      },
+      "relatedTools": [
+        {
+          "id": "favicon-harvester",
+          "reason": "Review site icons alongside broader discovered website image assets."
+        }
+      ]
+    },
+    {
+      "id": "courselab-beam",
+      "slug": "courselab-beam",
+      "name": "CourseLab Beam: Shear & Moment",
+      "shortName": "CourseLab Beam",
+      "status": "live",
+      "visibility": {
+        "showOnWebsite": true,
+        "showInDirectory": true,
+        "showInAppOverlay": true,
+        "includeInSitemap": true
+      },
+      "primaryFamily": "ENGINEERING_AEC",
+      "secondaryFamilies": [
+        "REFERENCE_STUDY"
+      ],
+      "discipline": "STRUCTURAL",
+      "modes": [
+        "CALCULATOR",
+        "VISUALIZER",
+        "EDUCATOR"
+      ],
+      "audiences": [
+        "student",
+        "engineering_learner"
+      ],
+      "workflowStages": [
+        "calculate",
+        "visualize",
+        "study"
+      ],
+      "outputs": [
+        "diagram",
+        "calc_sheet"
+      ],
+      "tags": [
+        "engineering",
+        "structural",
+        "education",
+        "android",
+        "local-first"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "line": "beam calculator \u00b7 reactions, shear, moment, and calculation steps",
+      "short": "Build determinate beam cases and inspect reactions, shear diagrams, moment diagrams, and calculation steps.",
+      "capabilities": [
+        "Determinate beam modeling",
+        "Point loads, distributed loads, and moments",
+        "Support reactions",
+        "Shear and bending-moment diagrams",
+        "Calculation steps"
+      ],
+      "links": {
+        "website": "/apps/courselab-beam/",
+        "windows": "",
+        "android": "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams",
+        "web": "",
+        "privacy": "/privacy/courselab-beams/",
+        "support": "/support/"
+      },
+      "seo": {
+        "title": "CourseLab Beam shear force and bending moment calculator for Android | BassThermal",
+        "description": "Build determinate beam cases and view support reactions, shear-force diagrams, bending-moment diagrams, and calculation steps on Android.",
+        "canonical": "https://bassthermal.com/apps/courselab-beam/",
+        "schemaType": "SoftwareApplication",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Android"
+      },
+      "relatedTools": []
     }
   ],
   "intentPages": [
