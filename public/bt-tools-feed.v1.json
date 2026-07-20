@@ -1,6 +1,6 @@
 {
   "schema": "BT-TOOLS-FEED-1",
-  "generatedAt": "2026-07-20T16:08:36.759Z",
+  "generatedAt": "2026-07-20T17:25:00.479Z",
   "origin": "https://www.bassthermal.com",
   "apps": {
     "dualticker": {
@@ -20,18 +20,18 @@
       "recommendations": [
         {
           "id": "rss-finder",
-          "name": "RSS Finder / RSS Crawler",
-          "status": "shipping",
-          "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
+          "name": "RSS Crawler",
+          "status": "live",
+          "short": "Crawl websites for RSS and Atom feed URLs, inspect discovered sources, and export organized feed lists on Windows.",
           "reason": "Find feed sources that can support live headline monitoring.",
           "icon": "https://www.bassthermal.com/og/rss-finder.png",
-          "monogram": "RF",
+          "monogram": "RC",
           "links": {
             "website": "https://www.bassthermal.com/apps/rss-finder/",
-            "web": "https://bassthermal.com/apps/rss-finder/",
+            "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
             "support": "https://www.bassthermal.com/support/"
           },
-          "score": 262,
+          "score": 266,
           "tier": "explicit"
         }
       ],
@@ -178,18 +178,18 @@
       "recommendations": [
         {
           "id": "rss-finder",
-          "name": "RSS Finder / RSS Crawler",
-          "status": "shipping",
-          "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
+          "name": "RSS Crawler",
+          "status": "live",
+          "short": "Crawl websites for RSS and Atom feed URLs, inspect discovered sources, and export organized feed lists on Windows.",
           "reason": "Inspect the same domains for feed endpoints and site metadata.",
           "icon": "https://www.bassthermal.com/og/rss-finder.png",
-          "monogram": "RF",
+          "monogram": "RC",
           "links": {
             "website": "https://www.bassthermal.com/apps/rss-finder/",
-            "web": "https://bassthermal.com/apps/rss-finder/",
+            "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
             "support": "https://www.bassthermal.com/support/"
           },
-          "score": 283,
+          "score": 287,
           "tier": "explicit"
         },
         {
@@ -250,14 +250,14 @@
     },
     "rss-finder": {
       "id": "rss-finder",
-      "name": "RSS Finder / RSS Crawler",
-      "status": "shipping",
-      "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
+      "name": "RSS Crawler",
+      "status": "live",
+      "short": "Crawl websites for RSS and Atom feed URLs, inspect discovered sources, and export organized feed lists on Windows.",
       "icon": "https://www.bassthermal.com/og/rss-finder.png",
-      "monogram": "RF",
+      "monogram": "RC",
       "links": {
         "website": "https://www.bassthermal.com/apps/rss-finder/",
-        "web": "https://bassthermal.com/apps/rss-finder/",
+        "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
         "support": "https://www.bassthermal.com/support/"
       },
       "recommendations": [
@@ -366,18 +366,18 @@
         },
         {
           "id": "rss-finder",
-          "name": "RSS Finder / RSS Crawler",
-          "status": "shipping",
-          "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
+          "name": "RSS Crawler",
+          "status": "live",
+          "short": "Crawl websites for RSS and Atom feed URLs, inspect discovered sources, and export organized feed lists on Windows.",
           "reason": "Same tool family.",
           "icon": "https://www.bassthermal.com/og/rss-finder.png",
-          "monogram": "RF",
+          "monogram": "RC",
           "links": {
             "website": "https://www.bassthermal.com/apps/rss-finder/",
-            "web": "https://bassthermal.com/apps/rss-finder/",
+            "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
             "support": "https://www.bassthermal.com/support/"
           },
-          "score": 85,
+          "score": 89,
           "tier": "family"
         },
         {

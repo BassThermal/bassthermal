@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
   "version": "2026.07.20.1",
-  "generatedAt": "2026-07-20T16:08:36.174Z",
+  "generatedAt": "2026-07-20T17:24:59.438Z",
   "publisher": {
     "name": "BassThermal",
     "url": "https://bassthermal.com/",
@@ -627,14 +627,15 @@
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Windows"
       },
-      "relatedTools": []
+      "relatedTools": [],
+      "homeRank": 2
     },
     {
       "id": "rss-finder",
       "slug": "rss-finder",
-      "name": "RSS Finder / RSS Crawler",
-      "shortName": "RSS Finder",
-      "status": "shipping",
+      "name": "RSS Crawler",
+      "shortName": "RSS Crawler",
+      "status": "live",
       "visibility": {
         "showOnWebsite": true,
         "showInDirectory": true,
@@ -674,33 +675,33 @@
         "feeds",
         "crawler",
         "feed-validation",
-        "web"
+        "windows"
       ],
       "platforms": [
-        "web"
+        "windows"
       ],
-      "line": "feed discovery · RSS and Atom inspection",
-      "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
+      "line": "Windows RSS crawler · feed discovery and export",
+      "short": "Crawl websites for RSS and Atom feed URLs, inspect discovered sources, and export organized feed lists on Windows.",
       "capabilities": [
+        "Website feed crawling",
         "RSS and Atom feed discovery",
-        "Feed URL inspection",
-        "Exportable source lists"
+        "Exportable feed source lists"
       ],
       "links": {
         "website": "/apps/rss-finder/",
-        "windows": "",
+        "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
         "android": "",
-        "web": "https://bassthermal.com/apps/rss-finder/",
+        "web": "",
         "privacy": "/privacy/rss-finder/",
         "support": "/support/"
       },
       "seo": {
-        "title": "RSS Feed Finder and Crawler for feed discovery | BassThermal",
-        "description": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export source lists for monitoring workflows.",
+        "title": "RSS Crawler for Windows | BassThermal",
+        "description": "RSS Crawler is a Windows app for finding RSS and Atom feeds from websites, reviewing discovered feed URLs, and exporting organized source lists.",
         "canonical": "https://bassthermal.com/apps/rss-finder/",
         "schemaType": "SoftwareApplication",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "Web"
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Windows"
       },
       "relatedTools": [
         {
@@ -780,7 +781,8 @@
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "Windows"
       },
-      "relatedTools": []
+      "relatedTools": [],
+      "homeRank": 1
     },
     {
       "id": "website-image-inventory",
@@ -859,7 +861,8 @@
           "id": "favicon-harvester",
           "reason": "Review site icons alongside broader discovered website image assets."
         }
-      ]
+      ],
+      "homeRank": 3
     },
     {
       "id": "courselab-beam",
@@ -931,7 +934,8 @@
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "Android"
       },
-      "relatedTools": []
+      "relatedTools": [],
+      "homeRank": 4
     }
   ],
   "intentPages": [

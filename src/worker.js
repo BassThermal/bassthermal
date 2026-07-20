@@ -526,6 +526,11 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    if (url.hostname === "www.bassthermal.com") {
+      url.hostname = "bassthermal.com";
+      return Response.redirect(url.toString(), 308);
+    }
+
     if (isPublicRecommenderAsset(url.pathname) && (request.method === "GET" || request.method === "OPTIONS")) {
       return handlePublicAsset(request, env, url.pathname);
     }
