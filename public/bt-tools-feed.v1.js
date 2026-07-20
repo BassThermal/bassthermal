@@ -1,6 +1,6 @@
 window.BT_TOOLS_FEED_V1 = {
   "schema": "BT-TOOLS-FEED-1",
-  "generatedAt": "2026-05-19T05:36:44.253Z",
+  "generatedAt": "2026-07-20T16:08:36.759Z",
   "origin": "https://www.bassthermal.com",
   "apps": {
     "dualticker": {
@@ -69,6 +69,22 @@ window.BT_TOOLS_FEED_V1 = {
           },
           "score": 145,
           "tier": "explicit"
+        },
+        {
+          "id": "website-image-inventory",
+          "name": "Website Image Inventory",
+          "status": "live",
+          "short": "Scan public websites and create an organized inventory of discovered image assets.",
+          "reason": "Same tool family.",
+          "icon": null,
+          "monogram": "WI",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/website-image-inventory/",
+            "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 75,
+          "tier": "family"
         }
       ],
       "fallback": {
@@ -191,6 +207,22 @@ window.BT_TOOLS_FEED_V1 = {
           },
           "score": 245,
           "tier": "explicit"
+        },
+        {
+          "id": "website-image-inventory",
+          "name": "Website Image Inventory",
+          "status": "live",
+          "short": "Scan public websites and create an organized inventory of discovered image assets.",
+          "reason": "Review site icons alongside broader discovered website image assets.",
+          "icon": null,
+          "monogram": "WI",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/website-image-inventory/",
+            "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 165,
+          "tier": "explicit"
         }
       ],
       "fallback": {
@@ -262,8 +294,128 @@ window.BT_TOOLS_FEED_V1 = {
           },
           "score": 266,
           "tier": "explicit"
+        },
+        {
+          "id": "website-image-inventory",
+          "name": "Website Image Inventory",
+          "status": "live",
+          "short": "Scan public websites and create an organized inventory of discovered image assets.",
+          "reason": "Same tool family.",
+          "icon": null,
+          "monogram": "WI",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/website-image-inventory/",
+            "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 89,
+          "tier": "family"
         }
       ],
+      "fallback": {
+        "label": "View all apps",
+        "href": "https://www.bassthermal.com/apps/"
+      }
+    },
+    "docbatch-pdf-converter": {
+      "id": "docbatch-pdf-converter",
+      "name": "DocBatch PDF Converter",
+      "status": "live",
+      "short": "Batch-convert DOCX, DOC, RTF, ODT, and TXT files into local PDF output on Windows.",
+      "icon": null,
+      "monogram": "DP",
+      "links": {
+        "website": "https://www.bassthermal.com/apps/docbatch-pdf-converter/",
+        "windows": "https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA",
+        "support": "https://www.bassthermal.com/support/"
+      },
+      "recommendations": [],
+      "fallback": {
+        "label": "View all apps",
+        "href": "https://www.bassthermal.com/apps/"
+      }
+    },
+    "website-image-inventory": {
+      "id": "website-image-inventory",
+      "name": "Website Image Inventory",
+      "status": "live",
+      "short": "Scan public websites and create an organized inventory of discovered image assets.",
+      "icon": null,
+      "monogram": "WI",
+      "links": {
+        "website": "https://www.bassthermal.com/apps/website-image-inventory/",
+        "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
+        "support": "https://www.bassthermal.com/support/"
+      },
+      "recommendations": [
+        {
+          "id": "favicon-harvester",
+          "name": "Favicon Harvester",
+          "status": "live",
+          "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
+          "reason": "Review site icons alongside broader discovered website image assets.",
+          "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
+          "monogram": "FH",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/favicon-harvester/",
+            "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 165,
+          "tier": "explicit"
+        },
+        {
+          "id": "rss-finder",
+          "name": "RSS Finder / RSS Crawler",
+          "status": "shipping",
+          "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
+          "reason": "Same tool family.",
+          "icon": "https://www.bassthermal.com/og/rss-finder.png",
+          "monogram": "RF",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/rss-finder/",
+            "web": "https://bassthermal.com/apps/rss-finder/",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 85,
+          "tier": "family"
+        },
+        {
+          "id": "retrofy",
+          "name": "RetroFy",
+          "status": "live",
+          "short": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready output.",
+          "reason": "Same tool family.",
+          "icon": "https://www.bassthermal.com/assets/apps/retrofy/android/icon.png",
+          "monogram": "RE",
+          "links": {
+            "website": "https://www.bassthermal.com/apps/retrofy/",
+            "windows": "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA",
+            "android": "https://play.google.com/store/apps/details?id=com.bassthermal.retrofy",
+            "support": "https://www.bassthermal.com/support/"
+          },
+          "score": 75,
+          "tier": "family"
+        }
+      ],
+      "fallback": {
+        "label": "View all apps",
+        "href": "https://www.bassthermal.com/apps/"
+      }
+    },
+    "courselab-beam": {
+      "id": "courselab-beam",
+      "name": "CourseLab Beam: Shear & Moment",
+      "status": "live",
+      "short": "Build determinate beam cases and inspect reactions, shear diagrams, moment diagrams, and calculation steps.",
+      "icon": null,
+      "monogram": "CB",
+      "links": {
+        "website": "https://www.bassthermal.com/apps/courselab-beam/",
+        "android": "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams",
+        "support": "https://www.bassthermal.com/support/"
+      },
+      "recommendations": [],
       "fallback": {
         "label": "View all apps",
         "href": "https://www.bassthermal.com/apps/"

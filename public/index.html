@@ -4,11 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>BassThermal</title>
-  <meta name="description" content="BassThermal publishes compact Windows, Android, and web utilities for feed discovery, icon assets, book inventory, image conversion, language reference, and headline monitoring." />
+  <meta name="description" content="BassThermal publishes compact Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and headline monitoring." />
   <link rel="canonical" href="https://bassthermal.com/" />
   <meta name="theme-color" content="#000000" />
   <meta property="og:title" content="BassThermal" />
-  <meta property="og:description" content="BassThermal publishes compact Windows, Android, and web utilities for feed discovery, icon assets, book inventory, image conversion, language reference, and headline monitoring." />
+  <meta property="og:description" content="BassThermal publishes compact Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and headline monitoring." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bassthermal.com/" />
   <meta property="og:image" content="https://bassthermal.com/og.png" />
@@ -40,7 +40,10 @@
         { "@type": "ListItem", "position": 4, "name": "Icon Pack Builder", "url": "https://bassthermal.com/apps/icon-pack-builder/" },
         { "@type": "ListItem", "position": 5, "name": "Favicon Harvester", "url": "https://bassthermal.com/apps/favicon-harvester/" },
         { "@type": "ListItem", "position": 6, "name": "ISBN Manager", "url": "https://bassthermal.com/apps/isbn-manager/" },
-        { "@type": "ListItem", "position": 7, "name": "RSS Finder", "url": "https://bassthermal.com/apps/rss-finder/" }
+        { "@type": "ListItem", "position": 7, "name": "RSS Finder", "url": "https://bassthermal.com/apps/rss-finder/" },
+        { "@type": "ListItem", "position": 8, "name": "DocBatch PDF Converter", "url": "https://bassthermal.com/apps/docbatch-pdf-converter/" },
+        { "@type": "ListItem", "position": 9, "name": "Website Image Inventory", "url": "https://bassthermal.com/apps/website-image-inventory/" },
+        { "@type": "ListItem", "position": 10, "name": "CourseLab Beam: Shear & Moment", "url": "https://bassthermal.com/apps/courselab-beam/" }
       ]
     }
   </script>
@@ -523,7 +526,7 @@
       <div class="brand"><strong>BASSTHERMAL</strong> / apps</div>
       <div class="right" id="readout">loading</div>
     </header>
-    <div class="line soft">Small Windows, Android, and web utilities for asset prep, feed discovery, book inventory, retro image conversion, language reference, and live news monitoring.</div>
+    <div class="line soft">Small Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and live news monitoring.</div>
 
     <section class="index" id="index" aria-label="Software index">
       <div class="table" id="appTable" role="list">
@@ -534,6 +537,9 @@
         <div class="row app-row" role="listitem"><span class="dim">05</span><span class="app-main"><a class="app-name" href="/apps/favicon-harvester/">Favicon Harvester</a><span class="links"><a class="tag info" href="/apps/favicon-harvester/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">favicon extractor · pull favicons from URLs/domains</span></div>
         <div class="row app-row" role="listitem"><span class="dim">06</span><span class="app-main"><a class="app-name" href="/apps/isbn-manager/">ISBN Manager</a><span class="links"><a class="tag info" href="/apps/isbn-manager/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">book inventory · ISBN lookup, catalog cleanup, barcode labels</span></div>
         <div class="row app-row" role="listitem"><span class="dim">07</span><span class="app-main"><a class="app-name" href="/apps/rss-finder/">RSS Finder / RSS Crawler</a><span class="links"></span></span><span class="app-meta">feed discovery · find and inspect RSS/Atom feeds</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">08</span><span class="app-main"><a class="app-name" href="/apps/docbatch-pdf-converter/">DocBatch PDF Converter</a><span class="links"><a class="tag info" href="/apps/docbatch-pdf-converter/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">document converter · batch Word, RTF, ODT, and TXT files to PDF</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">09</span><span class="app-main"><a class="app-name" href="/apps/website-image-inventory/">Website Image Inventory</a><span class="links"><a class="tag info" href="/apps/website-image-inventory/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">web asset inventory · scan sites and organize discovered images</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">10</span><span class="app-main"><a class="app-name" href="/apps/courselab-beam/">CourseLab Beam: Shear &amp; Moment</a><span class="links"><a class="tag info" href="/apps/courselab-beam/">details</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams">and</a></span></span><span class="app-meta">beam calculator · reactions, shear, moment, and calculation steps</span></div>
       </div>
     </section>
   </main>
@@ -712,6 +718,48 @@
           "Lab-stage web surface"
         ],
         links: []
+      },
+      {
+        id: "08",
+        slug: "docbatch-pdf-converter",
+        aliases: ["docbatch", "pdf", "document", "converter"],
+        name: "DocBatch PDF Converter",
+        klass: "document/converter",
+        status: "live",
+        statusClass: "ok",
+        platforms: ["windows"],
+        category: "UtilitiesApplication",
+        line: "document converter · batch Word, RTF, ODT, and TXT files to PDF",
+        capabilities: ["Batch document conversion", "DOCX, DOC, RTF, ODT, and TXT input", "Local PDF output", "Output and conflict controls"],
+        links: [["windows", "https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA", true]]
+      },
+      {
+        id: "09",
+        slug: "website-image-inventory",
+        aliases: ["website-images", "image-inventory", "web-images", "inventory"],
+        name: "Website Image Inventory",
+        klass: "web/inventory",
+        status: "live",
+        statusClass: "ok",
+        platforms: ["windows"],
+        category: "DeveloperApplication",
+        line: "web asset inventory · scan sites and organize discovered images",
+        capabilities: ["Public website scanning", "Discovered image inventory", "Image metadata review", "Organized export workflow"],
+        links: [["windows", "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA", true]]
+      },
+      {
+        id: "10",
+        slug: "courselab-beam",
+        aliases: ["courselab", "beam", "shear", "moment"],
+        name: "CourseLab Beam: Shear & Moment",
+        klass: "engineering/calculator",
+        status: "live",
+        statusClass: "ok",
+        platforms: ["android"],
+        category: "EducationalApplication",
+        line: "beam calculator · reactions, shear, moment, and calculation steps",
+        capabilities: ["Determinate beam modeling", "Point loads, distributed loads, and moments", "Support reactions", "Shear and bending-moment diagrams", "Calculation steps"],
+        links: [["android", "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams", true]]
       }
     ];
 
@@ -765,7 +813,10 @@
         "icon-pack-builder": "app icon exporter",
         "favicon-harvester": "favicon extractor",
         "isbn-manager": "book inventory",
-        "rss-finder": "feed discovery"
+        "rss-finder": "feed discovery",
+        "docbatch-pdf-converter": "document converter",
+        "website-image-inventory": "web asset inventory",
+        "courselab-beam": "beam calculator"
       };
       return map[app.slug] || "utility";
     }

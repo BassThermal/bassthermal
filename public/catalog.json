@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
-  "version": "2026.05.16.1",
-  "generatedAt": "2026-05-19T05:36:43.738Z",
+  "version": "2026.07.20.1",
+  "generatedAt": "2026-07-20T16:08:36.174Z",
   "publisher": {
     "name": "BassThermal",
     "url": "https://bassthermal.com/",
@@ -712,6 +712,226 @@
           "reason": "Collect site icons from the same domains you inspect for feeds."
         }
       ]
+    },
+    {
+      "id": "docbatch-pdf-converter",
+      "slug": "docbatch-pdf-converter",
+      "name": "DocBatch PDF Converter",
+      "shortName": "DocBatch",
+      "status": "live",
+      "visibility": {
+        "showOnWebsite": true,
+        "showInDirectory": true,
+        "showInAppOverlay": true,
+        "includeInSitemap": true
+      },
+      "primaryFamily": "DOCUMENT_REPORTS",
+      "secondaryFamilies": [
+        "BUILD_PACKAGING"
+      ],
+      "discipline": "NONE",
+      "modes": [
+        "CONVERTER",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "general_user",
+        "operator",
+        "student"
+      ],
+      "workflowStages": [
+        "convert",
+        "export"
+      ],
+      "outputs": [
+        "pdf_report"
+      ],
+      "tags": [
+        "batch",
+        "pdf",
+        "offline",
+        "local-first",
+        "windows"
+      ],
+      "platforms": [
+        "windows"
+      ],
+      "line": "document converter · batch Word, RTF, ODT, and TXT files to PDF",
+      "short": "Batch-convert DOCX, DOC, RTF, ODT, and TXT files into local PDF output on Windows.",
+      "capabilities": [
+        "Batch document conversion",
+        "DOCX, DOC, RTF, ODT, and TXT input",
+        "Local PDF output",
+        "Output and conflict controls"
+      ],
+      "links": {
+        "website": "/apps/docbatch-pdf-converter/",
+        "windows": "https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA",
+        "android": "",
+        "web": "",
+        "privacy": "/privacy/docbatch-pdf-converter/",
+        "support": "/support/"
+      },
+      "seo": {
+        "title": "DocBatch PDF Converter batch document conversion app for Windows | BassThermal",
+        "description": "Batch-convert DOCX, DOC, RTF, ODT, and TXT files into PDF locally on Windows with configurable output and conflict handling.",
+        "canonical": "https://bassthermal.com/apps/docbatch-pdf-converter/",
+        "schemaType": "SoftwareApplication",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Windows"
+      },
+      "relatedTools": []
+    },
+    {
+      "id": "website-image-inventory",
+      "slug": "website-image-inventory",
+      "name": "Website Image Inventory",
+      "shortName": "Website Image Inventory",
+      "status": "live",
+      "visibility": {
+        "showOnWebsite": true,
+        "showInDirectory": true,
+        "showInAppOverlay": true,
+        "includeInSitemap": true
+      },
+      "primaryFamily": "WEB_DEV",
+      "secondaryFamilies": [
+        "IMAGE_MEDIA"
+      ],
+      "discipline": "IMAGE_PROCESSING",
+      "modes": [
+        "CRAWLER",
+        "REPORT_GENERATOR",
+        "EXPORT_TOOL"
+      ],
+      "audiences": [
+        "developer",
+        "designer",
+        "researcher"
+      ],
+      "workflowStages": [
+        "crawl",
+        "inspect",
+        "catalog",
+        "export"
+      ],
+      "outputs": [
+        "metadata_report",
+        "csv_export"
+      ],
+      "tags": [
+        "image",
+        "url",
+        "crawler",
+        "metadata",
+        "local-first",
+        "windows"
+      ],
+      "platforms": [
+        "windows"
+      ],
+      "line": "web asset inventory · scan sites and organize discovered images",
+      "short": "Scan public websites and create an organized inventory of discovered image assets.",
+      "capabilities": [
+        "Public website scanning",
+        "Discovered image inventory",
+        "Image metadata review",
+        "Organized export workflow"
+      ],
+      "links": {
+        "website": "/apps/website-image-inventory/",
+        "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
+        "android": "",
+        "web": "",
+        "privacy": "/privacy/website-image-inventory/",
+        "support": "/support/"
+      },
+      "seo": {
+        "title": "Website Image Inventory website image audit tool for Windows | BassThermal",
+        "description": "Scan public websites and create an organized local inventory of discovered image assets, URLs, dimensions, and metadata.",
+        "canonical": "https://bassthermal.com/apps/website-image-inventory/",
+        "schemaType": "SoftwareApplication",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Windows"
+      },
+      "relatedTools": [
+        {
+          "id": "favicon-harvester",
+          "reason": "Review site icons alongside broader discovered website image assets."
+        }
+      ]
+    },
+    {
+      "id": "courselab-beam",
+      "slug": "courselab-beam",
+      "name": "CourseLab Beam: Shear & Moment",
+      "shortName": "CourseLab Beam",
+      "status": "live",
+      "visibility": {
+        "showOnWebsite": true,
+        "showInDirectory": true,
+        "showInAppOverlay": true,
+        "includeInSitemap": true
+      },
+      "primaryFamily": "ENGINEERING_AEC",
+      "secondaryFamilies": [
+        "REFERENCE_STUDY"
+      ],
+      "discipline": "STRUCTURAL",
+      "modes": [
+        "CALCULATOR",
+        "VISUALIZER",
+        "EDUCATOR"
+      ],
+      "audiences": [
+        "student",
+        "engineering_learner"
+      ],
+      "workflowStages": [
+        "calculate",
+        "visualize",
+        "study"
+      ],
+      "outputs": [
+        "diagram",
+        "calc_sheet"
+      ],
+      "tags": [
+        "engineering",
+        "structural",
+        "education",
+        "android",
+        "local-first"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "line": "beam calculator · reactions, shear, moment, and calculation steps",
+      "short": "Build determinate beam cases and inspect reactions, shear diagrams, moment diagrams, and calculation steps.",
+      "capabilities": [
+        "Determinate beam modeling",
+        "Point loads, distributed loads, and moments",
+        "Support reactions",
+        "Shear and bending-moment diagrams",
+        "Calculation steps"
+      ],
+      "links": {
+        "website": "/apps/courselab-beam/",
+        "windows": "",
+        "android": "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams",
+        "web": "",
+        "privacy": "/privacy/courselab-beams/",
+        "support": "/support/"
+      },
+      "seo": {
+        "title": "CourseLab Beam shear force and bending moment calculator for Android | BassThermal",
+        "description": "Build determinate beam cases and view support reactions, shear-force diagrams, bending-moment diagrams, and calculation steps on Android.",
+        "canonical": "https://bassthermal.com/apps/courselab-beam/",
+        "schemaType": "SoftwareApplication",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Android"
+      },
+      "relatedTools": []
     }
   ],
   "intentPages": [

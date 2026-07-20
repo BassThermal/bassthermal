@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-05-19T04:33:01.234Z",
+  "generatedAt": "2026-07-20T16:08:35.527Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -19,6 +19,32 @@ window.BT_STORE_ASSETS = {
           "/assets/apps/coptic-dictionary/windows/shot-01.png",
           "/assets/app-preview-cache/coptic-dictionary/windows/001.jpg"
         ],
+        "web": []
+      }
+    },
+    "courselab-beam": {
+      "icon": {
+        "fallback": null,
+        "android": null,
+        "windows": null,
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [],
+        "web": []
+      }
+    },
+    "docbatch-pdf-converter": {
+      "icon": {
+        "fallback": null,
+        "android": null,
+        "windows": null,
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [],
         "web": []
       }
     },
@@ -94,9 +120,35 @@ window.BT_STORE_ASSETS = {
         "web": []
       }
     },
+    "rss-crawler": {
+      "icon": {
+        "fallback": "/assets/apps/rss-crawler/icon.png",
+        "android": null,
+        "windows": null,
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [],
+        "web": []
+      }
+    },
     "rss-finder": {
       "icon": {
         "fallback": "/og/rss-finder.png",
+        "android": null,
+        "windows": null,
+        "web": null
+      },
+      "screenshots": {
+        "android": [],
+        "windows": [],
+        "web": []
+      }
+    },
+    "website-image-inventory": {
+      "icon": {
+        "fallback": null,
         "android": null,
         "windows": null,
         "web": null
