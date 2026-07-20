@@ -7,9 +7,8 @@
     "assets:index": "node tools/build-asset-manifest.mjs",
     "catalog:build": "node tools/build-catalog.mjs",
     "catalog:validate": "node tools/build-catalog.mjs --validate-only",
-    "build:site": "npm run assets:index && npm run catalog:build && npm run site-pages:build && npm run bt-tools-feed:build",
-    "bt-tools-feed:build": "node tools/build-bt-tools-feed.mjs",
-    "site-pages:build": "node tools/build-site-pages.mjs"
+    "build:site": "npm run assets:index && npm run catalog:build && npm run bt-tools-feed:build",
+    "bt-tools-feed:build": "node tools/build-bt-tools-feed.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.16.0"
