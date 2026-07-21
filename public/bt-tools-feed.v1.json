@@ -1,43 +1,43 @@
 {
   "schema": "BT-TOOLS-FEED-1",
-  "generatedAt": "2026-07-20T16:08:36.759Z",
-  "origin": "https://www.bassthermal.com",
+  "generatedAt": "2026-07-21T15:05:00.838Z",
+  "origin": "https://bassthermal.com",
   "apps": {
     "dualticker": {
       "id": "dualticker",
       "name": "DualTicker",
       "status": "live",
       "short": "Monitor live headlines, scan coverage movement, and keep a source-aware news board open while you work.",
-      "icon": "https://www.bassthermal.com/assets/apps/dualticker/android/icon.png",
+      "icon": "https://bassthermal.com/assets/apps/dualticker/android/icon.png",
       "monogram": "DU",
       "links": {
-        "website": "https://www.bassthermal.com/apps/dualticker/",
+        "website": "https://bassthermal.com/apps/dualticker/",
         "windows": "https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA",
         "android": "https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens",
         "web": "https://www.dualticker.com/",
-        "support": "https://www.bassthermal.com/support/"
+        "support": "https://bassthermal.com/support/"
       },
       "recommendations": [
         {
           "id": "rss-finder",
-          "name": "RSS Finder / RSS Crawler",
-          "status": "shipping",
+          "name": "RSS Crawler",
+          "status": "live",
           "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
           "reason": "Find feed sources that can support live headline monitoring.",
-          "icon": "https://www.bassthermal.com/og/rss-finder.png",
-          "monogram": "RF",
+          "icon": "https://bassthermal.com/og/rss-finder.png",
+          "monogram": "RC",
           "links": {
-            "website": "https://www.bassthermal.com/apps/rss-finder/",
-            "web": "https://bassthermal.com/apps/rss-finder/",
-            "support": "https://www.bassthermal.com/support/"
+            "website": "https://bassthermal.com/apps/rss-finder/",
+            "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
+            "support": "https://bassthermal.com/support/"
           },
-          "score": 262,
+          "score": 266,
           "tier": "explicit"
         }
       ],
       "fallback": {
         "label": "View all apps",
-        "href": "https://www.bassthermal.com/apps/"
+        "href": "https://bassthermal.com/"
       }
     },
     "retrofy": {
@@ -45,13 +45,13 @@
       "name": "RetroFy",
       "status": "live",
       "short": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready output.",
-      "icon": "https://www.bassthermal.com/assets/apps/retrofy/android/icon.png",
+      "icon": "https://bassthermal.com/assets/apps/retrofy/android/icon.png",
       "monogram": "RE",
       "links": {
-        "website": "https://www.bassthermal.com/apps/retrofy/",
+        "website": "https://bassthermal.com/apps/retrofy/",
         "windows": "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA",
         "android": "https://play.google.com/store/apps/details?id=com.bassthermal.retrofy",
-        "support": "https://www.bassthermal.com/support/"
+        "support": "https://bassthermal.com/support/"
       },
       "recommendations": [
         {
@@ -60,12 +60,12 @@
           "status": "live",
           "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
           "reason": "Use processed artwork as source material for app icons.",
-          "icon": "https://www.bassthermal.com/assets/apps/icon-pack-builder/icon.png",
+          "icon": "https://bassthermal.com/assets/apps/icon-pack-builder/icon.png",
           "monogram": "IP",
           "links": {
-            "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
+            "website": "https://bassthermal.com/apps/icon-pack-builder/",
             "windows": "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 145,
           "tier": "explicit"
@@ -79,9 +79,9 @@
           "icon": null,
           "monogram": "WI",
           "links": {
-            "website": "https://www.bassthermal.com/apps/website-image-inventory/",
+            "website": "https://bassthermal.com/apps/website-image-inventory/",
             "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 75,
           "tier": "family"
@@ -89,7 +89,7 @@
       ],
       "fallback": {
         "label": "View all apps",
-        "href": "https://www.bassthermal.com/apps/"
+        "href": "https://bassthermal.com/"
       }
     },
     "coptic-dictionary": {
@@ -97,18 +97,18 @@
       "name": "Coptic Dictionary",
       "status": "live",
       "short": "Search Coptic and English terms, review forms and transliterations, and save words for study.",
-      "icon": "https://www.bassthermal.com/assets/apps/coptic-dictionary/android/icon.png",
+      "icon": "https://bassthermal.com/assets/apps/coptic-dictionary/android/icon.png",
       "monogram": "CD",
       "links": {
-        "website": "https://www.bassthermal.com/apps/coptic-dictionary/",
+        "website": "https://bassthermal.com/apps/coptic-dictionary/",
         "windows": "https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA",
         "android": "https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary",
-        "support": "https://www.bassthermal.com/support/"
+        "support": "https://bassthermal.com/support/"
       },
       "recommendations": [],
       "fallback": {
         "label": "View all apps",
-        "href": "https://www.bassthermal.com/apps/"
+        "href": "https://bassthermal.com/"
       }
     },
     "icon-pack-builder": {
@@ -116,12 +116,12 @@
       "name": "Icon Pack Builder",
       "status": "live",
       "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
-      "icon": "https://www.bassthermal.com/assets/apps/icon-pack-builder/icon.png",
+      "icon": "https://bassthermal.com/assets/apps/icon-pack-builder/icon.png",
       "monogram": "IP",
       "links": {
-        "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
+        "website": "https://bassthermal.com/apps/icon-pack-builder/",
         "windows": "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA",
-        "support": "https://www.bassthermal.com/support/"
+        "support": "https://bassthermal.com/support/"
       },
       "recommendations": [
         {
@@ -130,12 +130,12 @@
           "status": "live",
           "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
           "reason": "Extract website icons that can become source assets for icon packs.",
-          "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
+          "icon": "https://bassthermal.com/og/favicon-harvester.png",
           "monogram": "FH",
           "links": {
-            "website": "https://www.bassthermal.com/apps/favicon-harvester/",
+            "website": "https://bassthermal.com/apps/favicon-harvester/",
             "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 245,
           "tier": "explicit"
@@ -146,13 +146,13 @@
           "status": "live",
           "short": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready output.",
           "reason": "Use processed artwork as source material for app icons.",
-          "icon": "https://www.bassthermal.com/assets/apps/retrofy/android/icon.png",
+          "icon": "https://bassthermal.com/assets/apps/retrofy/android/icon.png",
           "monogram": "RE",
           "links": {
-            "website": "https://www.bassthermal.com/apps/retrofy/",
+            "website": "https://bassthermal.com/apps/retrofy/",
             "windows": "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA",
             "android": "https://play.google.com/store/apps/details?id=com.bassthermal.retrofy",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 145,
           "tier": "explicit"
@@ -160,7 +160,7 @@
       ],
       "fallback": {
         "label": "View all apps",
-        "href": "https://www.bassthermal.com/apps/"
+        "href": "https://bassthermal.com/"
       }
     },
     "favicon-harvester": {
@@ -168,28 +168,28 @@
       "name": "Favicon Harvester",
       "status": "live",
       "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
-      "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
+      "icon": "https://bassthermal.com/og/favicon-harvester.png",
       "monogram": "FH",
       "links": {
-        "website": "https://www.bassthermal.com/apps/favicon-harvester/",
+        "website": "https://bassthermal.com/apps/favicon-harvester/",
         "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
-        "support": "https://www.bassthermal.com/support/"
+        "support": "https://bassthermal.com/support/"
       },
       "recommendations": [
         {
           "id": "rss-finder",
-          "name": "RSS Finder / RSS Crawler",
-          "status": "shipping",
+          "name": "RSS Crawler",
+          "status": "live",
           "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
           "reason": "Inspect the same domains for feed endpoints and site metadata.",
-          "icon": "https://www.bassthermal.com/og/rss-finder.png",
-          "monogram": "RF",
+          "icon": "https://bassthermal.com/og/rss-finder.png",
+          "monogram": "RC",
           "links": {
-            "website": "https://www.bassthermal.com/apps/rss-finder/",
-            "web": "https://bassthermal.com/apps/rss-finder/",
-            "support": "https://www.bassthermal.com/support/"
+            "website": "https://bassthermal.com/apps/rss-finder/",
+            "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
+            "support": "https://bassthermal.com/support/"
           },
-          "score": 283,
+          "score": 287,
           "tier": "explicit"
         },
         {
@@ -198,12 +198,12 @@
           "status": "live",
           "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
           "reason": "Turn harvested site icons into packaged app or project assets.",
-          "icon": "https://www.bassthermal.com/assets/apps/icon-pack-builder/icon.png",
+          "icon": "https://bassthermal.com/assets/apps/icon-pack-builder/icon.png",
           "monogram": "IP",
           "links": {
-            "website": "https://www.bassthermal.com/apps/icon-pack-builder/",
+            "website": "https://bassthermal.com/apps/icon-pack-builder/",
             "windows": "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 245,
           "tier": "explicit"
@@ -217,9 +217,9 @@
           "icon": null,
           "monogram": "WI",
           "links": {
-            "website": "https://www.bassthermal.com/apps/website-image-inventory/",
+            "website": "https://bassthermal.com/apps/website-image-inventory/",
             "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 165,
           "tier": "explicit"
@@ -227,7 +227,7 @@
       ],
       "fallback": {
         "label": "View all apps",
-        "href": "https://www.bassthermal.com/apps/"
+        "href": "https://bassthermal.com/"
       }
     },
     "isbn-manager": {
@@ -235,30 +235,30 @@
       "name": "ISBN Manager",
       "status": "live",
       "short": "Look up ISBN metadata, clean book inventory records, generate labels, and export organized lists.",
-      "icon": "https://www.bassthermal.com/assets/apps/isbn-manager/icon.png",
+      "icon": "https://bassthermal.com/assets/apps/isbn-manager/icon.png",
       "monogram": "IM",
       "links": {
-        "website": "https://www.bassthermal.com/apps/isbn-manager/",
+        "website": "https://bassthermal.com/apps/isbn-manager/",
         "windows": "https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA",
-        "support": "https://www.bassthermal.com/support/"
+        "support": "https://bassthermal.com/support/"
       },
       "recommendations": [],
       "fallback": {
         "label": "View all apps",
-        "href": "https://www.bassthermal.com/apps/"
+        "href": "https://bassthermal.com/"
       }
     },
     "rss-finder": {
       "id": "rss-finder",
-      "name": "RSS Finder / RSS Crawler",
-      "status": "shipping",
+      "name": "RSS Crawler",
+      "status": "live",
       "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
-      "icon": "https://www.bassthermal.com/og/rss-finder.png",
-      "monogram": "RF",
+      "icon": "https://bassthermal.com/og/rss-finder.png",
+      "monogram": "RC",
       "links": {
-        "website": "https://www.bassthermal.com/apps/rss-finder/",
-        "web": "https://bassthermal.com/apps/rss-finder/",
-        "support": "https://www.bassthermal.com/support/"
+        "website": "https://bassthermal.com/apps/rss-finder/",
+        "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
+        "support": "https://bassthermal.com/support/"
       },
       "recommendations": [
         {
@@ -267,12 +267,12 @@
           "status": "live",
           "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
           "reason": "Collect site icons from the same domains you inspect for feeds.",
-          "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
+          "icon": "https://bassthermal.com/og/favicon-harvester.png",
           "monogram": "FH",
           "links": {
-            "website": "https://www.bassthermal.com/apps/favicon-harvester/",
+            "website": "https://bassthermal.com/apps/favicon-harvester/",
             "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 287,
           "tier": "explicit"
@@ -283,14 +283,14 @@
           "status": "live",
           "short": "Monitor live headlines, scan coverage movement, and keep a source-aware news board open while you work.",
           "reason": "Use discovered feeds in a live headline monitoring workflow.",
-          "icon": "https://www.bassthermal.com/assets/apps/dualticker/android/icon.png",
+          "icon": "https://bassthermal.com/assets/apps/dualticker/android/icon.png",
           "monogram": "DU",
           "links": {
-            "website": "https://www.bassthermal.com/apps/dualticker/",
+            "website": "https://bassthermal.com/apps/dualticker/",
             "windows": "https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA",
             "android": "https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens",
             "web": "https://www.dualticker.com/",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 266,
           "tier": "explicit"
@@ -304,9 +304,9 @@
           "icon": null,
           "monogram": "WI",
           "links": {
-            "website": "https://www.bassthermal.com/apps/website-image-inventory/",
+            "website": "https://bassthermal.com/apps/website-image-inventory/",
             "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 89,
           "tier": "family"
@@ -314,7 +314,7 @@
       ],
       "fallback": {
         "label": "View all apps",
-        "href": "https://www.bassthermal.com/apps/"
+        "href": "https://bassthermal.com/"
       }
     },
     "docbatch-pdf-converter": {
@@ -325,14 +325,14 @@
       "icon": null,
       "monogram": "DP",
       "links": {
-        "website": "https://www.bassthermal.com/apps/docbatch-pdf-converter/",
+        "website": "https://bassthermal.com/apps/docbatch-pdf-converter/",
         "windows": "https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA",
-        "support": "https://www.bassthermal.com/support/"
+        "support": "https://bassthermal.com/support/"
       },
       "recommendations": [],
       "fallback": {
         "label": "View all apps",
-        "href": "https://www.bassthermal.com/apps/"
+        "href": "https://bassthermal.com/"
       }
     },
     "website-image-inventory": {
@@ -343,9 +343,9 @@
       "icon": null,
       "monogram": "WI",
       "links": {
-        "website": "https://www.bassthermal.com/apps/website-image-inventory/",
+        "website": "https://bassthermal.com/apps/website-image-inventory/",
         "windows": "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
-        "support": "https://www.bassthermal.com/support/"
+        "support": "https://bassthermal.com/support/"
       },
       "recommendations": [
         {
@@ -354,30 +354,30 @@
           "status": "live",
           "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
           "reason": "Review site icons alongside broader discovered website image assets.",
-          "icon": "https://www.bassthermal.com/og/favicon-harvester.png",
+          "icon": "https://bassthermal.com/og/favicon-harvester.png",
           "monogram": "FH",
           "links": {
-            "website": "https://www.bassthermal.com/apps/favicon-harvester/",
+            "website": "https://bassthermal.com/apps/favicon-harvester/",
             "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 165,
           "tier": "explicit"
         },
         {
           "id": "rss-finder",
-          "name": "RSS Finder / RSS Crawler",
-          "status": "shipping",
+          "name": "RSS Crawler",
+          "status": "live",
           "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
           "reason": "Same tool family.",
-          "icon": "https://www.bassthermal.com/og/rss-finder.png",
-          "monogram": "RF",
+          "icon": "https://bassthermal.com/og/rss-finder.png",
+          "monogram": "RC",
           "links": {
-            "website": "https://www.bassthermal.com/apps/rss-finder/",
-            "web": "https://bassthermal.com/apps/rss-finder/",
-            "support": "https://www.bassthermal.com/support/"
+            "website": "https://bassthermal.com/apps/rss-finder/",
+            "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
+            "support": "https://bassthermal.com/support/"
           },
-          "score": 85,
+          "score": 89,
           "tier": "family"
         },
         {
@@ -386,13 +386,13 @@
           "status": "live",
           "short": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready output.",
           "reason": "Same tool family.",
-          "icon": "https://www.bassthermal.com/assets/apps/retrofy/android/icon.png",
+          "icon": "https://bassthermal.com/assets/apps/retrofy/android/icon.png",
           "monogram": "RE",
           "links": {
-            "website": "https://www.bassthermal.com/apps/retrofy/",
+            "website": "https://bassthermal.com/apps/retrofy/",
             "windows": "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA",
             "android": "https://play.google.com/store/apps/details?id=com.bassthermal.retrofy",
-            "support": "https://www.bassthermal.com/support/"
+            "support": "https://bassthermal.com/support/"
           },
           "score": 75,
           "tier": "family"
@@ -400,7 +400,7 @@
       ],
       "fallback": {
         "label": "View all apps",
-        "href": "https://www.bassthermal.com/apps/"
+        "href": "https://bassthermal.com/"
       }
     },
     "courselab-beam": {
@@ -411,14 +411,14 @@
       "icon": null,
       "monogram": "CB",
       "links": {
-        "website": "https://www.bassthermal.com/apps/courselab-beam/",
+        "website": "https://bassthermal.com/apps/courselab-beam/",
         "android": "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams",
-        "support": "https://www.bassthermal.com/support/"
+        "support": "https://bassthermal.com/support/"
       },
       "recommendations": [],
       "fallback": {
         "label": "View all apps",
-        "href": "https://www.bassthermal.com/apps/"
+        "href": "https://bassthermal.com/"
       }
     }
   }

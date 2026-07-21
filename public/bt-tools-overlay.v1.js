@@ -2,7 +2,7 @@
   "use strict";
 
   var FEED_PATH = "/bt-tools-feed.v1.json";
-  var DEFAULT_ORIGIN = "https://www.bassthermal.com";
+  var DEFAULT_ORIGIN = "https://bassthermal.com";
   var FEED_CACHE_KEY = "bt.tools.feed.v1";
   var FEED_CACHE_TS_KEY = "bt.tools.feed.v1.ts";
   var LS_TTL_MS = 6 * 60 * 60 * 1000;
@@ -46,7 +46,7 @@
 
   function getFeedOrigin() {
     var origin = detectScriptOrigin();
-    if (origin === "https://www.bassthermal.com" || origin === "https://bassthermal.com") return origin;
+    if (origin === "https://bassthermal.com" || origin === "https://bassthermal.com") return origin;
     return DEFAULT_ORIGIN;
   }
 
@@ -154,7 +154,7 @@
 
     var root = document.createElement("div");
     root.id = "bt-tools-overlay";
-    root.innerHTML = '<div class="btto-backdrop"></div><section class="btto-panel" role="dialog" aria-modal="true" aria-label="More BassThermal tools"><button class="btto-close" type="button" aria-label="Close">X</button><header class="btto-head"><h2 class="btto-title">More BassThermal tools</h2><p class="btto-sub"></p></header><div class="btto-body"></div><footer class="btto-foot"><a class="btto-foot-link" href="https://www.bassthermal.com/apps/" target="_blank" rel="noopener noreferrer">View all apps</a><button class="btto-btn btto-diag-btn" type="button" style="display:none">Diagnostics</button></footer></section>';
+    root.innerHTML = '<div class="btto-backdrop"></div><section class="btto-panel" role="dialog" aria-modal="true" aria-label="More BassThermal tools"><button class="btto-close" type="button" aria-label="Close">X</button><header class="btto-head"><h2 class="btto-title">More BassThermal tools</h2><p class="btto-sub"></p></header><div class="btto-body"></div><footer class="btto-foot"><a class="btto-foot-link" href="https://bassthermal.com/" target="_blank" rel="noopener noreferrer">View all apps</a><button class="btto-btn btto-diag-btn" type="button" style="display:none">Diagnostics</button></footer></section>';
     document.body.appendChild(root);
 
     var diagWrap = document.createElement("div");

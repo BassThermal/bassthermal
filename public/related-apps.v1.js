@@ -296,7 +296,7 @@
       var origin = CATALOG_ORIGIN;
 
       if (!ranked.length) {
-        container.innerHTML = '<section class="bt-related"><div class="bt-related-head">' + title + '</div><a class="bt-related-fallback" href="' + cleanLink('/apps/', origin) + '">View all apps</a></section>';
+        container.innerHTML = '<section class="bt-related"><div class="bt-related-head">' + title + '</div><a class="bt-related-fallback" href="' + cleanLink('/', origin) + '">View all apps</a></section>';
         return;
       }
 
