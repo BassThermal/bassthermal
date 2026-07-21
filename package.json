@@ -9,7 +9,8 @@
     "catalog:validate": "node tools/build-catalog.mjs --validate-only",
     "build:site": "npm run assets:index && npm run catalog:build && npm run bt-tools-feed:build",
     "bt-tools-feed:build": "node tools/build-bt-tools-feed.mjs",
-    "test:redirects": "node tools/test-redirects.mjs"
+    "test:redirects": "node tools/test-redirects.mjs",
+    "test:product-pages": "node tools/validate-product-pages.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.16.0"
