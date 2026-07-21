@@ -4,15 +4,87 @@ const MAX_SESSION_MS = 12 * 60 * 60 * 1000;
 
 let schemaReady = false;
 
+const VISITS_HEADERS = {
+  "content-type": "application/json; charset=utf-8",
+  "cache-control": "no-store"
+};
+
+const REQUIRED_VISIT_COLUMNS = {
+  visit_sessions: {
+    session_id: "TEXT PRIMARY KEY",
+    visitor_hash: "TEXT NOT NULL DEFAULT ''",
+    first_seen_ms: "INTEGER NOT NULL DEFAULT 0",
+    last_seen_ms: "INTEGER NOT NULL DEFAULT 0",
+    first_seen_iso: "TEXT NOT NULL DEFAULT ''",
+    last_seen_iso: "TEXT NOT NULL DEFAULT ''",
+    day_et: "TEXT NOT NULL DEFAULT ''",
+    path: "TEXT",
+    app_slug: "TEXT",
+    country: "TEXT",
+    region: "TEXT",
+    city: "TEXT",
+    timezone: "TEXT",
+    colo: "TEXT",
+    device: "TEXT",
+    referrer_host: "TEXT",
+    is_bot: "INTEGER NOT NULL DEFAULT 0",
+    page_views: "INTEGER NOT NULL DEFAULT 0",
+    heartbeats: "INTEGER NOT NULL DEFAULT 0",
+    clicks: "INTEGER NOT NULL DEFAULT 0"
+  },
+  visit_events: {
+    id: "INTEGER PRIMARY KEY AUTOINCREMENT",
+    ts_ms: "INTEGER NOT NULL DEFAULT 0",
+    ts_iso: "TEXT NOT NULL DEFAULT ''",
+    day_et: "TEXT NOT NULL DEFAULT ''",
+    type: "TEXT NOT NULL DEFAULT ''",
+    session_id: "TEXT",
+    visitor_hash: "TEXT",
+    path: "TEXT",
+    app_slug: "TEXT",
+    target: "TEXT",
+    country: "TEXT",
+    region: "TEXT",
+    city: "TEXT",
+    timezone: "TEXT",
+    colo: "TEXT",
+    device: "TEXT",
+    referrer_host: "TEXT",
+    is_bot: "INTEGER NOT NULL DEFAULT 0"
+  }
+};
+
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { "content-type": "application/json; charset=utf-8" }
-  });
+  return new Response(JSON.stringify(data), { status, headers: VISITS_HEADERS });
+}
+
+function visitsError(error, stage, status = 500, extra = {}) {
+  return json({ ok: false, error, stage, ...extra, generatedAt: new Date().toISOString() }, status);
+}
+
+function planAdditiveMigrations(table, existingColumns) {
+  const required = REQUIRED_VISIT_COLUMNS[table] || {};
+  const existing = new Set(existingColumns);
+  return Object.entries(required)
+    .filter(([name]) => !existing.has(name))
+    .filter(([name]) => name !== "id" && name !== "session_id")
+    .map(([name, ddl]) => `ALTER TABLE ${table} ADD COLUMN ${name} ${ddl}`);
+}
+
+async function tableColumns(db, table) {
+  const rows = (await db.prepare(`PRAGMA table_info(${table})`).all()).results || [];
+  return rows.map((r) => r.name);
+}
+
+async function migrateTable(db, table) {
+  let cols = await tableColumns(db, table);
+  for (const sql of planAdditiveMigrations(table, cols)) await db.prepare(sql).run();
+  return tableColumns(db, table);
 }
 
 async function ensureSchema(env) {
   if (schemaReady) return;
+  if (!env.VISITS_DB) throw Object.assign(new Error("missing_binding"), { code: "missing_binding", stage: "binding" });
 
   const statements = [
     `CREATE TABLE IF NOT EXISTS visit_sessions (
@@ -69,7 +141,13 @@ async function ensureSchema(env) {
   for (const sql of statements) {
     await env.VISITS_DB.prepare(sql).run();
   }
-
+  const sessionCols = await migrateTable(env.VISITS_DB, "visit_sessions");
+  const eventCols = await migrateTable(env.VISITS_DB, "visit_events");
+  const missingSessions = Object.keys(REQUIRED_VISIT_COLUMNS.visit_sessions).filter((c) => !sessionCols.includes(c));
+  const missingEvents = Object.keys(REQUIRED_VISIT_COLUMNS.visit_events).filter((c) => !eventCols.includes(c));
+  if (missingSessions.length || missingEvents.length) {
+    throw Object.assign(new Error("schema_incomplete"), { code: "schema_incomplete", stage: missingSessions.length ? "visit_sessions_columns" : "visit_events_columns", missing: [...missingSessions, ...missingEvents] });
+  }
   schemaReady = true;
 }
 
@@ -497,6 +575,34 @@ async function handleCitySummary(url, env) {
   });
 }
 
+async function handleVisitsHealth(env) {
+  const checks = [{ name: "worker", ok: true }];
+  const fail = (error, stage, status, extra = {}) => json({ ok: false, worker: true, binding: stage !== "binding", database: false, schema: false, summaryQuery: false, error, stage, checks, ...extra, generatedAt: new Date().toISOString() }, status);
+  if (!env.VISITS_DB) return fail("missing_binding", "binding", 503);
+  checks.push({ name: "binding", ok: true });
+  try { await env.VISITS_DB.prepare("SELECT 1 AS ok").first(); } catch { return fail("database_unavailable", "select_1", 503); }
+  checks.push({ name: "database", ok: true });
+  for (const table of ["visit_sessions", "visit_events"]) {
+    let cols;
+    try { cols = await tableColumns(env.VISITS_DB, table); } catch { return fail("table_check_failed", `${table}_table`, 500); }
+    if (!cols.length) return fail("missing_table", `${table}_table`, 500, { missing: [table] });
+    checks.push({ name: table, ok: true });
+    const missing = Object.keys(REQUIRED_VISIT_COLUMNS[table]).filter((c) => !cols.includes(c));
+    if (missing.length) return fail("schema_incomplete", `${table}_columns`, 500, { missing });
+  }
+  checks.push({ name: "schema", ok: true });
+  try {
+    const dayEt = dayInET(new Date());
+    await env.VISITS_DB.prepare("SELECT COUNT(*) AS sessions FROM visit_sessions WHERE is_bot = 0 AND day_et = ?").bind(dayEt).first();
+  } catch { return fail("summary_query_failed", "summary_query", 500); }
+  checks.push({ name: "summaryQuery", ok: true });
+  return json({ ok: true, worker: true, binding: true, database: true, schema: true, summaryQuery: true, checks, generatedAt: new Date().toISOString() });
+}
+
+async function guarded(handler, stage) {
+  try { return await handler(); }
+  catch (err) { return visitsError(err.code || "worker_error", err.stage || stage, err.status || 500, err.missing ? { missing: err.missing } : {}); }
+}
 
 import { resolveRedirectUrl } from "./redirects.mjs";
 
@@ -536,16 +642,21 @@ export default {
     }
 
     if (request.method === "POST" && url.pathname === "/api/visit") {
-      return handleVisit(request, env);
+      return guarded(() => handleVisit(request, env), "visit");
     }
 
     if (request.method === "GET" && url.pathname === "/api/visits/summary") {
-      return handleSummary(env);
+      return guarded(() => handleSummary(env), "summary");
+    }
+    if (request.method === "GET" && url.pathname === "/api/visits/health") {
+      return guarded(() => handleVisitsHealth(env), "health");
     }
     if (request.method === "GET" && url.pathname === "/api/visits/city") {
-      return handleCitySummary(url, env);
+      return guarded(() => handleCitySummary(url, env), "city");
     }
 
     return env.ASSETS.fetch(request);
   }
 };
+
+export { REQUIRED_VISIT_COLUMNS, planAdditiveMigrations, handleVisitsHealth };
