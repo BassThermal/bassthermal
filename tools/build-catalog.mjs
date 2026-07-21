@@ -12,6 +12,53 @@ const isInternal = (value) => typeof value === 'string' && value.startsWith('/')
 const isBaseCanonical = (u) => typeof u === 'string' && /^https:\/\/bassthermal\.com\/.+/.test(u);
 const ensure = (condition, message) => { if (!condition) errors.push(message); };
 
+
+function homepageApps() {
+  return apps.filter((app) => app.visibility?.showOnWebsite !== false && app.visibility?.showInDirectory !== false);
+}
+
+function homepageRows() {
+  return homepageApps().map((app, index) => {
+    const links = [['web','web'], ['windows','win'], ['android','and']]
+      .filter(([key]) => app.links?.[key])
+      .map(([key, label]) => `<a class="tag ${key}" href="${app.links[key]}">${label}</a>`)
+      .join(' ');
+    return `        <div class="row app-row" role="listitem"><span class="dim">${String(index + 1).padStart(2, '0')}</span><span class="app-main"><a class="app-name" href="/apps/${app.slug}/">${app.name}</a><span class="links">${links}</span></span><span class="app-meta">${app.line}</span></div>`;
+  }).join('\n');
+}
+
+function homepageItems() {
+  return homepageApps().map((app, index) => `        { "@type": "ListItem", "position": ${index + 1}, "name": "${app.name}", "url": "https://bassthermal.com/apps/${app.slug}/" }`).join(',\n');
+}
+
+function homepageJsApps() {
+  const aliases = (app) => app.slug === 'rss-finder' ? ['rss','feed','feeds','crawler'] : (app.slug === 'dualticker' ? ['dt','dual'] : app.slug.split('-'));
+  return JSON.stringify(homepageApps().map((app, index) => ({
+    id:String(index + 1).padStart(2, '0'), slug:app.slug, aliases:aliases(app), name:app.name,
+    klass:String(app.primaryFamily || 'utility').toLowerCase().replaceAll('_','/'), status:app.status, statusClass:app.status === 'live' ? 'ok' : 'violet',
+    platforms:app.platforms, category:app.seo.applicationCategory, line:app.line, capabilities:app.capabilities || [],
+    links:[['web', app.links.web], ['windows', app.links.windows], ['android', app.links.android]].filter(([, url]) => url).map(([key, url]) => [key, url, true])
+  })), null, 6);
+}
+
+function syncHomepage() {
+  const indexPath = path.join(root, 'public/index.html');
+  let html = fs.readFileSync(indexPath, 'utf8');
+  html = html.replace(/("itemListElement": \[\n)(.*?)(\n      \])/s, `$1${homepageItems()}$3`);
+  html = html.replace(/(      <div class="table" id="appTable" role="list">\n)(.*?)(\n      <\/div>)/s, `$1${homepageRows()}$3`);
+  html = html.replace(/    const apps = \[\n.*?\n    \];/s, `    const apps = ${homepageJsApps()};`);
+  if (!validateOnly) fs.writeFileSync(indexPath, html);
+  const check = fs.readFileSync(indexPath, 'utf8');
+  const tableMatch = check.match(/<div class="table" id="appTable" role="list">([\s\S]*?)\n      <\/div>/);
+  ensure(Boolean(tableMatch), 'homepage app table missing');
+  ensure(((tableMatch?.[1] || '').match(/class="row app-row"/g) || []).length === homepageApps().length, 'homepage app row count must match catalog');
+  for (const app of homepageApps()) {
+    ensure(check.includes(`href="/apps/${app.slug}/"`), `homepage missing app link: ${app.slug}`);
+    ensure(check.includes(`"name": "${app.name}"`), `homepage JSON-LD missing app name: ${app.name}`);
+    ensure(check.includes(`name": "${app.name}"`) || check.includes(`name: "${app.name}"`), `homepage JS missing app name: ${app.name}`);
+  }
+}
+
 const catalog = readJson('data/bt-catalog.json');
 const { schema, version, publisher, enums, apps, intentPages } = catalog;
 
@@ -86,11 +133,11 @@ for (const p of intentPages) {
 
 ensure(fileExists('public/tools/index.html'), 'public/tools/index.html missing');
 ensure(fileExists('public/apps/index.html'), 'public/apps/index.html missing');
+syncHomepage();
 
 const sitemap = fs.readFileSync(path.join(root, 'public/sitemap.xml'), 'utf8');
-const requiredPaths = ['/','/apps/','/tools/','/support/','/privacy/'];
-for (const app of apps) { if (app.visibility?.includeInSitemap) requiredPaths.push(`/apps/${app.slug}/`); if (app.links?.privacy) requiredPaths.push(app.links.privacy); }
-for (const p of intentPages) if (p.includeInSitemap) requiredPaths.push(p.path);
+const requiredPaths = ['/','/tools/','/support/','/privacy/'];
+for (const app of apps) if (app.visibility?.includeInSitemap) requiredPaths.push(`/apps/${app.slug}/`);
 for (const route of new Set(requiredPaths)) {
   const abs = `https://bassthermal.com${route}`;
   if (!sitemap.includes(abs)) errors.push(`sitemap missing required URL: ${abs}`);

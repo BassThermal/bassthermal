@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>BassThermal</title>
+  <title>BassThermal Apps | Windows, Android and Web Utilities</title>
   <meta name="description" content="BassThermal publishes compact Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and headline monitoring." />
   <link rel="canonical" href="https://bassthermal.com/" />
   <meta name="theme-color" content="#000000" />
-  <meta property="og:title" content="BassThermal" />
+  <meta property="og:title" content="BassThermal Apps | Windows, Android and Web Utilities" />
   <meta property="og:description" content="BassThermal publishes compact Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and headline monitoring." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bassthermal.com/" />
@@ -29,6 +29,10 @@
   </script>
 
   <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebSite","name":"BassThermal","url":"https://bassthermal.com/"}
+  </script>
+
+  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "ItemList",
@@ -40,7 +44,7 @@
         { "@type": "ListItem", "position": 4, "name": "Icon Pack Builder", "url": "https://bassthermal.com/apps/icon-pack-builder/" },
         { "@type": "ListItem", "position": 5, "name": "Favicon Harvester", "url": "https://bassthermal.com/apps/favicon-harvester/" },
         { "@type": "ListItem", "position": 6, "name": "ISBN Manager", "url": "https://bassthermal.com/apps/isbn-manager/" },
-        { "@type": "ListItem", "position": 7, "name": "RSS Finder", "url": "https://bassthermal.com/apps/rss-finder/" },
+        { "@type": "ListItem", "position": 7, "name": "RSS Crawler", "url": "https://bassthermal.com/apps/rss-finder/" },
         { "@type": "ListItem", "position": 8, "name": "DocBatch PDF Converter", "url": "https://bassthermal.com/apps/docbatch-pdf-converter/" },
         { "@type": "ListItem", "position": 9, "name": "Website Image Inventory", "url": "https://bassthermal.com/apps/website-image-inventory/" },
         { "@type": "ListItem", "position": 10, "name": "CourseLab Beam: Shear & Moment", "url": "https://bassthermal.com/apps/courselab-beam/" }
@@ -158,6 +162,7 @@
     .topline {
       display: flex;
       justify-content: space-between;
+      align-items: baseline;
       gap: 18px;
       color: var(--dim);
       white-space: pre;
@@ -169,6 +174,11 @@
       color: var(--hot);
       font-weight: 700;
     }
+
+    .topnav,
+    .footer { color: var(--soft); }
+
+    .footer { margin-top: 18px; color: var(--dim); }
 
     .right {
       color: var(--dim);
@@ -280,14 +290,13 @@
       user-select: none;
     }
 
-    .log { position: relative; min-height: 0; padding: 2px 0 6px; overflow-x: hidden; max-height: min(34svh, 280px); overflow-y: auto; }
-    .terminal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.24); z-index: 20; display:none; }
-    .terminal-overlay { position: fixed; left: max(14px, env(safe-area-inset-left)); right: max(14px, env(safe-area-inset-right)); bottom: calc(30px + max(10px, env(safe-area-inset-bottom))); max-height: min(34svh, 280px); border: 1px solid rgba(48,54,61,.72); background: rgba(0,0,0,.96); z-index: 30; padding: 7px 9px; display:none; }
-    .terminal-overlay.open,.terminal-backdrop.open { display:block; }
-    .terminal-overlay .log { max-height: calc(min(34svh, 280px) - 34px); overflow-y: auto; }
-    .terminal-overlay.is-tall { max-height: min(56svh, 460px); }
-    .terminal-overlay.is-tall .log { max-height: calc(min(56svh, 460px) - 34px); }
-    .overlay-head { display:flex; justify-content:space-between; margin-bottom:5px; color:var(--dim); font-size:0.95em; }
+    .log { position: relative; min-height: 0; padding: 2px 0 6px; overflow-x: hidden; overflow-y: auto; flex: 1 1 auto; }
+    .terminal-backdrop { display:none !important; }
+    .terminal-overlay { position: fixed; left: calc(50vw - 360px); top: calc(50vh - 210px); width: min(720px, calc(100vw - 28px)); height: min(420px, calc(100vh - 28px)); max-height: calc(100vh - 28px); border: 1px solid rgba(139,148,158,.38); background: rgba(0,0,0,.82); backdrop-filter: blur(8px); z-index: 30; padding: 7px 9px; display:none; resize: both; overflow: hidden; flex-direction: column; box-shadow: 0 14px 42px rgba(0,0,0,.45); }
+    .terminal-overlay.open { display:flex; }
+    .terminal-overlay.is-tall { max-height: calc(100vh - 28px); }
+    .overlay-head { display:flex; justify-content:space-between; margin-bottom:5px; color:var(--dim); font-size:0.95em; cursor: move; user-select: none; flex:0 0 auto; }
+    #terminalClose { cursor:pointer; padding:0 4px; }
 
     .cmd-block {
       padding-bottom: 14px;
@@ -329,19 +338,21 @@
     }
 
     .inputbar {
-      display: flex;
+      display: none;
       align-items: center;
       gap: 6px;
       min-height: 26px;
       background: rgba(0,0,0,.82);
       padding: 2px max(14px, env(safe-area-inset-right)) max(3px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
       position: fixed;
-      left: 0; right: 0; bottom: 0;
+      left: calc(50vw - 351px); bottom: calc(50vh - 201px); width: min(702px, calc(100vw - 46px));
       z-index: 40;
       border-top: 1px solid rgba(48,54,61,.32);
       opacity: .68;
       transition: opacity 120ms ease, border-color 120ms ease, background 120ms ease;
     }
+
+    .inputbar.is-active { display: flex; }
 
     .inputbar:focus-within,
     .inputbar.is-active {
@@ -484,9 +495,13 @@
         display: block;
       }
 
-      .right {
-        display: none;
-      }
+      .topnav { display:block; margin-top:2px; white-space: normal; }
+
+      .right { display: block; text-align: left; margin-top: 2px; }
+
+      .terminal-overlay { left: max(10px, env(safe-area-inset-left)) !important; right: max(10px, env(safe-area-inset-right)); top: auto !important; bottom: max(10px, env(safe-area-inset-bottom)); width: auto !important; height: min(70svh, 520px) !important; max-height: 70svh; resize: none; }
+
+      .inputbar.is-active { left: max(20px, env(safe-area-inset-left)); right: max(20px, env(safe-area-inset-right)); bottom: calc(max(10px, env(safe-area-inset-bottom)) + 8px); width: auto; }
 
       .app-row { grid-template-columns: 32px minmax(0, 1fr); gap: 4px 8px; }
       .app-main { grid-template-columns: 1fr; gap: 4px; }
@@ -523,29 +538,31 @@
   <div class="site-shell">
   <main class="terminal home" aria-label="BassThermal terminal">
     <header class="topline">
-      <div class="brand"><strong>BASSTHERMAL</strong> / apps</div>
-      <div class="right" id="readout">loading</div>
+      <div class="brand"><strong>BASSTHERMAL</strong></div>
+      <nav class="topnav" aria-label="Primary"><a href="/tools/">Tools</a> · <a href="https://apps.microsoft.com/search/publisher?name=BassThermal&hl=en-US&gl=CA">Microsoft Store</a> · <a href="https://play.google.com/store/apps/developer?id=BassThermal">Google Play</a> · <a href="/support/">Support</a></nav>
+      <div class="right" id="readout">10 apps · Windows · Android · Web</div>
     </header>
     <div class="line soft">Small Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and live news monitoring.</div>
 
     <section class="index" id="index" aria-label="Software index">
       <div class="table" id="appTable" role="list">
-        <div class="row app-row" role="listitem"><span class="dim">01</span><span class="app-main"><a class="app-name" href="/apps/dualticker/">DualTicker</a><span class="links"><a class="tag web" href="https://www.dualticker.com/">web</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens">and</a></span></span><span class="app-meta">headline monitor · compare live coverage streams</span></div>
-        <div class="row app-row" role="listitem"><span class="dim">02</span><span class="app-main"><a class="app-name" href="/apps/retrofy/">RetroFy</a><span class="links"><a class="tag info" href="/apps/retrofy/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.retrofy">and</a></span></span><span class="app-meta">retro image converter · palette + dithering output</span></div>
-        <div class="row app-row" role="listitem"><span class="dim">03</span><span class="app-main"><a class="app-name" href="/apps/coptic-dictionary/">Coptic Dictionary</a><span class="links"><a class="tag info" href="/apps/coptic-dictionary/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary">and</a></span></span><span class="app-meta">coptic lookup · meanings, transliteration, saved words</span></div>
-        <div class="row app-row" role="listitem"><span class="dim">04</span><span class="app-main"><a class="app-name" href="/apps/icon-pack-builder/">Icon Pack Builder</a><span class="links"><a class="tag info" href="/apps/icon-pack-builder/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">app icon exporter · generate store-ready icon packs</span></div>
-        <div class="row app-row" role="listitem"><span class="dim">05</span><span class="app-main"><a class="app-name" href="/apps/favicon-harvester/">Favicon Harvester</a><span class="links"><a class="tag info" href="/apps/favicon-harvester/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">favicon extractor · pull favicons from URLs/domains</span></div>
-        <div class="row app-row" role="listitem"><span class="dim">06</span><span class="app-main"><a class="app-name" href="/apps/isbn-manager/">ISBN Manager</a><span class="links"><a class="tag info" href="/apps/isbn-manager/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">book inventory · ISBN lookup, catalog cleanup, barcode labels</span></div>
-        <div class="row app-row" role="listitem"><span class="dim">07</span><span class="app-main"><a class="app-name" href="/apps/rss-finder/">RSS Finder / RSS Crawler</a><span class="links"></span></span><span class="app-meta">feed discovery · find and inspect RSS/Atom feeds</span></div>
-        <div class="row app-row" role="listitem"><span class="dim">08</span><span class="app-main"><a class="app-name" href="/apps/docbatch-pdf-converter/">DocBatch PDF Converter</a><span class="links"><a class="tag info" href="/apps/docbatch-pdf-converter/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">document converter · batch Word, RTF, ODT, and TXT files to PDF</span></div>
-        <div class="row app-row" role="listitem"><span class="dim">09</span><span class="app-main"><a class="app-name" href="/apps/website-image-inventory/">Website Image Inventory</a><span class="links"><a class="tag info" href="/apps/website-image-inventory/">details</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">web asset inventory · scan sites and organize discovered images</span></div>
-        <div class="row app-row" role="listitem"><span class="dim">10</span><span class="app-main"><a class="app-name" href="/apps/courselab-beam/">CourseLab Beam: Shear &amp; Moment</a><span class="links"><a class="tag info" href="/apps/courselab-beam/">details</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams">and</a></span></span><span class="app-meta">beam calculator · reactions, shear, moment, and calculation steps</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">01</span><span class="app-main"><a class="app-name" href="/apps/dualticker/">DualTicker</a><span class="links"><a class="tag web" href="https://www.dualticker.com/">web</a> <a class="tag windows" href="https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens">and</a></span></span><span class="app-meta">live headline monitor · coverage movement scanner</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">02</span><span class="app-main"><a class="app-name" href="/apps/retrofy/">RetroFy</a><span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.retrofy">and</a></span></span><span class="app-meta">retro image converter · palette and dithering output</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">03</span><span class="app-main"><a class="app-name" href="/apps/coptic-dictionary/">Coptic Dictionary</a><span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA">win</a> <a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary">and</a></span></span><span class="app-meta">coptic lookup · meanings, forms, saved words</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">04</span><span class="app-main"><a class="app-name" href="/apps/icon-pack-builder/">Icon Pack Builder</a><span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">app icon builder · store-ready asset export</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">05</span><span class="app-main"><a class="app-name" href="/apps/favicon-harvester/">Favicon Harvester</a><span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">favicon extractor · domain icon asset capture</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">06</span><span class="app-main"><a class="app-name" href="/apps/isbn-manager/">ISBN Manager</a><span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">book inventory · ISBN lookup and labels</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">07</span><span class="app-main"><a class="app-name" href="/apps/rss-finder/">RSS Crawler</a><span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">feed discovery · crawl and inspect RSS/Atom feeds</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">08</span><span class="app-main"><a class="app-name" href="/apps/docbatch-pdf-converter/">DocBatch PDF Converter</a><span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">document converter · batch Word, RTF, ODT, and TXT files to PDF</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">09</span><span class="app-main"><a class="app-name" href="/apps/website-image-inventory/">Website Image Inventory</a><span class="links"><a class="tag windows" href="https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA">win</a></span></span><span class="app-meta">web asset inventory · scan sites and organize discovered images</span></div>
+        <div class="row app-row" role="listitem"><span class="dim">10</span><span class="app-main"><a class="app-name" href="/apps/courselab-beam/">CourseLab Beam: Shear & Moment</a><span class="links"><a class="tag android" href="https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams">and</a></span></span><span class="app-meta">beam calculator · reactions, shear, moment, and calculation steps</span></div>
       </div>
     </section>
   </main>
+  <footer class="footer"><a href="/tools/">Tools</a> · <a href="/privacy/">Privacy</a> · <a href="/support/">Support</a></footer>
   <div class="terminal-backdrop" id="terminalBackdrop"></div>
   <section class="terminal-overlay" id="terminalOverlay" aria-label="Terminal overlay">
-    <div class="overlay-head"><span>terminal</span><button type="button" id="terminalClose" aria-label="Close terminal">×</button></div>
+    <div class="overlay-head" id="terminalTitle"><span>terminal</span><button type="button" id="terminalClose" aria-label="Close terminal">×</button></div>
     <section class="log" id="log" aria-label="Command log" aria-live="polite"></section>
   </section>
   <form class="inputbar" id="form" autocomplete="off">
@@ -571,197 +588,328 @@
 
     const apps = [
       {
-        id: "01",
-        slug: "dualticker",
-        aliases: ["dt", "dual"],
-        name: "DualTicker",
-        klass: "signal/interface",
-        status: "live",
-        statusClass: "ok",
-        platforms: ["web", "windows", "android"],
-        category: "NewsApplication",
-        line: "headline monitor · compare live coverage streams",
-        capabilities: [
-          "Live headline monitoring",
-          "Parallel feed comparison",
-          "Web, Windows, and Android surfaces",
-          "Configurable sources and topics"
-        ],
-        links: [
-          ["web", "https://www.dualticker.com/", true],
-          ["windows", "https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA", true],
-          ["android", "https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens", true]
-        ]
+            "id": "01",
+            "slug": "dualticker",
+            "aliases": [
+                  "dt",
+                  "dual"
+            ],
+            "name": "DualTicker",
+            "klass": "signal/monitoring",
+            "status": "live",
+            "statusClass": "ok",
+            "platforms": [
+                  "web",
+                  "windows",
+                  "android"
+            ],
+            "category": "NewsApplication",
+            "line": "live headline monitor \u00b7 coverage movement scanner",
+            "capabilities": [
+                  "Live headline monitoring",
+                  "Source-aware coverage scanning",
+                  "Second-screen news board workflow"
+            ],
+            "links": [
+                  [
+                        "web",
+                        "https://www.dualticker.com/",
+                        true
+                  ],
+                  [
+                        "windows",
+                        "https://apps.microsoft.com/detail/9p4txws57pld?hl=en-US&gl=CA",
+                        true
+                  ],
+                  [
+                        "android",
+                        "https://play.google.com/store/apps/details?id=com.bassthermal.dualtickerlens",
+                        true
+                  ]
+            ]
       },
       {
-        id: "02",
-        slug: "retrofy",
-        aliases: ["retro", "retrofy"],
-        name: "RetroFy",
-        klass: "image/processor",
-        status: "live",
-        statusClass: "ok",
-        platforms: ["windows", "android"],
-        category: "MultimediaApplication",
-        line: "retro image converter · palette + dithering output",
-        capabilities: [
-          "Retro image conversion",
-          "Palette-limited output",
-          "Dithering workflows",
-          "Export-ready image processing"
-        ],
-        links: [
-          ["windows", "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA", true],
-          ["android", "https://play.google.com/store/apps/details?id=com.bassthermal.retrofy", true]
-        ]
+            "id": "02",
+            "slug": "retrofy",
+            "aliases": [
+                  "retrofy"
+            ],
+            "name": "RetroFy",
+            "klass": "image/media",
+            "status": "live",
+            "statusClass": "ok",
+            "platforms": [
+                  "windows",
+                  "android"
+            ],
+            "category": "MultimediaApplication",
+            "line": "retro image converter \u00b7 palette and dithering output",
+            "capabilities": [
+                  "Palette-limited image conversion",
+                  "Dithering style controls",
+                  "Export-ready retro artwork"
+            ],
+            "links": [
+                  [
+                        "windows",
+                        "https://apps.microsoft.com/detail/9nk0mhg9f29r?hl=en-US&gl=CA",
+                        true
+                  ],
+                  [
+                        "android",
+                        "https://play.google.com/store/apps/details?id=com.bassthermal.retrofy",
+                        true
+                  ]
+            ]
       },
       {
-        id: "03",
-        slug: "coptic-dictionary",
-        aliases: ["coptic", "dictionary"],
-        name: "Coptic Dictionary",
-        klass: "language/reference",
-        status: "live",
-        statusClass: "ok",
-        platforms: ["windows", "android"],
-        category: "EducationalApplication",
-        line: "coptic lookup · meanings, transliteration, saved words",
-        capabilities: [
-          "Coptic word search",
-          "Meanings and transliterations",
-          "Saved vocabulary",
-          "Study and quiz workflow"
-        ],
-        links: [
-          ["windows", "https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA", true],
-          ["android", "https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary", true]
-        ]
+            "id": "03",
+            "slug": "coptic-dictionary",
+            "aliases": [
+                  "coptic",
+                  "dictionary"
+            ],
+            "name": "Coptic Dictionary",
+            "klass": "reference/study",
+            "status": "live",
+            "statusClass": "ok",
+            "platforms": [
+                  "windows",
+                  "android"
+            ],
+            "category": "EducationalApplication",
+            "line": "coptic lookup \u00b7 meanings, forms, saved words",
+            "capabilities": [
+                  "Coptic and English lookup",
+                  "Forms and transliteration review",
+                  "Saved words for study"
+            ],
+            "links": [
+                  [
+                        "windows",
+                        "https://apps.microsoft.com/detail/9nxmkjl625r2?hl=en-US&gl=CA",
+                        true
+                  ],
+                  [
+                        "android",
+                        "https://play.google.com/store/apps/details?id=com.bassthermal.copticdictionary",
+                        true
+                  ]
+            ]
       },
       {
-        id: "04",
-        slug: "icon-pack-builder",
-        aliases: ["icon", "icons", "iconpack", "icon-pack"],
-        name: "Icon Pack Builder",
-        klass: "asset/compiler",
-        status: "live",
-        statusClass: "ok",
-        platforms: ["windows"],
-        category: "DeveloperApplication",
-        line: "app icon exporter · generate store-ready icon packs",
-        capabilities: [
-          "Batch icon generation",
-          "Multi-platform asset output",
-          "Source-image workflow",
-          "Desktop utility surface"
-        ],
-        links: [
-          ["windows", "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA", true]
-        ]
+            "id": "04",
+            "slug": "icon-pack-builder",
+            "aliases": [
+                  "icon",
+                  "pack",
+                  "builder"
+            ],
+            "name": "Icon Pack Builder",
+            "klass": "publishing/assets",
+            "status": "live",
+            "statusClass": "ok",
+            "platforms": [
+                  "windows"
+            ],
+            "category": "DeveloperApplication",
+            "line": "app icon builder \u00b7 store-ready asset export",
+            "capabilities": [
+                  "Multi-size icon generation",
+                  "Store asset packaging",
+                  "Source image to icon pack workflow"
+            ],
+            "links": [
+                  [
+                        "windows",
+                        "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA",
+                        true
+                  ]
+            ]
       },
       {
-        id: "05",
-        slug: "favicon-harvester",
-        aliases: ["favicon", "favicons", "harvester"],
-        name: "Favicon Harvester",
-        klass: "web/extractor",
-        status: "live",
-        statusClass: "ok",
-        platforms: ["windows"],
-        category: "DeveloperApplication",
-        line: "favicon extractor · pull favicons from URLs/domains",
-        capabilities: [
-          "URL and domain input",
-          "Favicon extraction",
-          "Asset collection",
-          "Developer and designer workflow"
-        ],
-        links: [
-          ["windows", "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA", true]
-        ]
+            "id": "05",
+            "slug": "favicon-harvester",
+            "aliases": [
+                  "favicon",
+                  "harvester"
+            ],
+            "name": "Favicon Harvester",
+            "klass": "web/dev",
+            "status": "live",
+            "statusClass": "ok",
+            "platforms": [
+                  "windows"
+            ],
+            "category": "DeveloperApplication",
+            "line": "favicon extractor \u00b7 domain icon asset capture",
+            "capabilities": [
+                  "URL and domain icon extraction",
+                  "Batch favicon collection",
+                  "Local icon asset export"
+            ],
+            "links": [
+                  [
+                        "windows",
+                        "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
+                        true
+                  ]
+            ]
       },
       {
-        id: "06",
-        slug: "isbn-manager",
-        aliases: ["isbn", "books"],
-        name: "ISBN Manager",
-        klass: "inventory/system",
-        status: "live",
-        statusClass: "ok",
-        platforms: ["windows"],
-        category: "BusinessApplication",
-        line: "book inventory · ISBN lookup, catalog cleanup, barcode labels",
-        capabilities: [
-          "ISBN lookup",
-          "Book inventory cataloging",
-          "Barcode label workflow",
-          "Export-ready book data"
-        ],
-        links: [
-          ["windows", "https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA", true]
-        ]
+            "id": "06",
+            "slug": "isbn-manager",
+            "aliases": [
+                  "isbn",
+                  "manager"
+            ],
+            "name": "ISBN Manager",
+            "klass": "inventory/operations",
+            "status": "live",
+            "statusClass": "ok",
+            "platforms": [
+                  "windows"
+            ],
+            "category": "BusinessApplication",
+            "line": "book inventory \u00b7 ISBN lookup and labels",
+            "capabilities": [
+                  "ISBN metadata lookup",
+                  "Book inventory cleanup",
+                  "Barcode label and list export"
+            ],
+            "links": [
+                  [
+                        "windows",
+                        "https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA",
+                        true
+                  ]
+            ]
       },
       {
-        id: "07",
-        slug: "rss-finder",
-        aliases: ["rss", "feed", "feeds"],
-        name: "RSS Finder",
-        klass: "feed/discovery",
-        status: "lab",
-        statusClass: "violet",
-        platforms: ["web"],
-        category: "DeveloperApplication",
-        line: "feed discovery · find and inspect RSS/Atom feeds",
-        capabilities: [
-          "RSS discovery",
-          "Feed inspection",
-          "Source workflow support",
-          "Lab-stage web surface"
-        ],
-        links: []
+            "id": "07",
+            "slug": "rss-finder",
+            "aliases": [
+                  "rss",
+                  "feed",
+                  "feeds",
+                  "crawler"
+            ],
+            "name": "RSS Crawler",
+            "klass": "web/dev",
+            "status": "live",
+            "statusClass": "ok",
+            "platforms": [
+                  "web"
+            ],
+            "category": "DeveloperApplication",
+            "line": "feed discovery \u00b7 RSS and Atom inspection",
+            "capabilities": [
+                  "RSS and Atom feed discovery",
+                  "Feed URL inspection",
+                  "Exportable source lists"
+            ],
+            "links": [
+                  [
+                        "windows",
+                        "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
+                        true
+                  ]
+            ]
       },
       {
-        id: "08",
-        slug: "docbatch-pdf-converter",
-        aliases: ["docbatch", "pdf", "document", "converter"],
-        name: "DocBatch PDF Converter",
-        klass: "document/converter",
-        status: "live",
-        statusClass: "ok",
-        platforms: ["windows"],
-        category: "UtilitiesApplication",
-        line: "document converter · batch Word, RTF, ODT, and TXT files to PDF",
-        capabilities: ["Batch document conversion", "DOCX, DOC, RTF, ODT, and TXT input", "Local PDF output", "Output and conflict controls"],
-        links: [["windows", "https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA", true]]
+            "id": "08",
+            "slug": "docbatch-pdf-converter",
+            "aliases": [
+                  "docbatch",
+                  "pdf",
+                  "converter"
+            ],
+            "name": "DocBatch PDF Converter",
+            "klass": "document/reports",
+            "status": "live",
+            "statusClass": "ok",
+            "platforms": [
+                  "windows"
+            ],
+            "category": "UtilitiesApplication",
+            "line": "document converter \u00b7 batch Word, RTF, ODT, and TXT files to PDF",
+            "capabilities": [
+                  "Batch document conversion",
+                  "DOCX, DOC, RTF, ODT, and TXT input",
+                  "Local PDF output",
+                  "Output and conflict controls"
+            ],
+            "links": [
+                  [
+                        "windows",
+                        "https://apps.microsoft.com/detail/9ntcvbz3jcrt?hl=en-US&gl=CA",
+                        true
+                  ]
+            ]
       },
       {
-        id: "09",
-        slug: "website-image-inventory",
-        aliases: ["website-images", "image-inventory", "web-images", "inventory"],
-        name: "Website Image Inventory",
-        klass: "web/inventory",
-        status: "live",
-        statusClass: "ok",
-        platforms: ["windows"],
-        category: "DeveloperApplication",
-        line: "web asset inventory · scan sites and organize discovered images",
-        capabilities: ["Public website scanning", "Discovered image inventory", "Image metadata review", "Organized export workflow"],
-        links: [["windows", "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA", true]]
+            "id": "09",
+            "slug": "website-image-inventory",
+            "aliases": [
+                  "website",
+                  "image",
+                  "inventory"
+            ],
+            "name": "Website Image Inventory",
+            "klass": "web/dev",
+            "status": "live",
+            "statusClass": "ok",
+            "platforms": [
+                  "windows"
+            ],
+            "category": "DeveloperApplication",
+            "line": "web asset inventory \u00b7 scan sites and organize discovered images",
+            "capabilities": [
+                  "Public website scanning",
+                  "Discovered image inventory",
+                  "Image metadata review",
+                  "Organized export workflow"
+            ],
+            "links": [
+                  [
+                        "windows",
+                        "https://apps.microsoft.com/detail/9pllwst360r9?hl=en-US&gl=CA",
+                        true
+                  ]
+            ]
       },
       {
-        id: "10",
-        slug: "courselab-beam",
-        aliases: ["courselab", "beam", "shear", "moment"],
-        name: "CourseLab Beam: Shear & Moment",
-        klass: "engineering/calculator",
-        status: "live",
-        statusClass: "ok",
-        platforms: ["android"],
-        category: "EducationalApplication",
-        line: "beam calculator · reactions, shear, moment, and calculation steps",
-        capabilities: ["Determinate beam modeling", "Point loads, distributed loads, and moments", "Support reactions", "Shear and bending-moment diagrams", "Calculation steps"],
-        links: [["android", "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams", true]]
+            "id": "10",
+            "slug": "courselab-beam",
+            "aliases": [
+                  "courselab",
+                  "beam"
+            ],
+            "name": "CourseLab Beam: Shear & Moment",
+            "klass": "engineering/aec",
+            "status": "live",
+            "statusClass": "ok",
+            "platforms": [
+                  "android"
+            ],
+            "category": "EducationalApplication",
+            "line": "beam calculator \u00b7 reactions, shear, moment, and calculation steps",
+            "capabilities": [
+                  "Determinate beam modeling",
+                  "Point loads, distributed loads, and moments",
+                  "Support reactions",
+                  "Shear and bending-moment diagrams",
+                  "Calculation steps"
+            ],
+            "links": [
+                  [
+                        "android",
+                        "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams",
+                        true
+                  ]
+            ]
       }
-    ];
+];
 
     const appTable = document.getElementById("appTable");
     const log = document.getElementById("log");
@@ -772,12 +920,14 @@
     const terminalBackdrop = document.getElementById("terminalBackdrop");
     const terminalClose = document.getElementById("terminalClose");
     const terminalToggle = document.getElementById("terminalToggle");
+    const terminalTitle = document.getElementById("terminalTitle");
     const assetPanel = document.getElementById("assetPanel");
     const assetShot = document.getElementById("assetShot");
 
     const history = [];
     let historyIndex = 0;
     let terminalBooted = false;
+    let bttermBuffer = "";
 
     function esc(value) {
       return String(value)
@@ -839,7 +989,7 @@
         const url = link[1];
         const meta = platformMeta[platform] || { short: platform, label: platform };
         const aria = `${app.name} ${meta.label}`;
-        return `<a class="tag ${esc(platform)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(aria)}" data-command="open ${esc(app.slug)} ${esc(platform)}" data-log-open="1" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}" data-platform="${esc(platform)}" data-preview-platform="${esc(platform)}">${esc(meta.short)}</a>`;
+        return `<a class="tag ${esc(platform)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(aria)}" data-app-slug="${esc(app.slug)}" data-preview-app="${esc(app.slug)}" data-platform="${esc(platform)}" data-preview-platform="${esc(platform)}">${esc(meta.short)}</a>`;
       }).join('');
     }
 
@@ -858,7 +1008,7 @@
     function updateReadout() {
       const live = apps.filter((app) => app.status === "live").length;
       const lab = apps.filter((app) => app.status !== "live").length;
-      readout.textContent = `live:${live} lab:${lab}`;
+      readout.textContent = "10 apps · Windows · Android · Web";
     }
 
     function findApp(token) {
@@ -1363,7 +1513,6 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
     function showTerminalOverlay() {
       form.classList.add("is-active");
       terminalOverlay.classList.add("open");
-      terminalBackdrop.classList.add("open");
       if (!terminalBooted) {
         bootLog();
         terminalBooted = true;
@@ -1372,16 +1521,56 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
     function hideTerminalOverlay() {
       form.classList.remove("is-active");
       terminalOverlay.classList.remove("open");
-      terminalBackdrop.classList.remove("open");
       terminalOverlay.classList.remove("is-tall");
     }
 
     renderTable();
     updateReadout();
     initDefaultPreview();
-    terminalToggle.addEventListener("click", () => { showTerminalOverlay(); cmd.focus({ preventScroll: true }); });
-    terminalClose.addEventListener("click", () => { hideTerminalOverlay(); cmd.focus({ preventScroll: true }); });
-    terminalBackdrop.addEventListener("click", hideTerminalOverlay);
+    function focusCommand() { cmd.focus({ preventScroll: true }); }
+    function toggleTerminal() {
+      if (terminalOverlay.classList.contains("open")) hideTerminalOverlay();
+      else { showTerminalOverlay(); focusCommand(); }
+    }
+    terminalToggle.addEventListener("click", () => { showTerminalOverlay(); focusCommand(); });
+    terminalClose.addEventListener("click", (event) => { event.stopPropagation(); hideTerminalOverlay(); });
+
+    function clampTerminal() {
+      if (matchMedia("(max-width: 820px)").matches) return;
+      const rect = terminalOverlay.getBoundingClientRect();
+      const margin = 8;
+      const left = Math.min(Math.max(rect.left, margin), Math.max(margin, innerWidth - rect.width - margin));
+      const top = Math.min(Math.max(rect.top, margin), Math.max(margin, innerHeight - rect.height - margin));
+      terminalOverlay.style.left = `${left}px`;
+      terminalOverlay.style.top = `${top}px`;
+      terminalOverlay.style.right = "auto";
+      form.style.left = `${left + 9}px`;
+      form.style.bottom = `${Math.max(0, innerHeight - top - rect.height + 9)}px`;
+      form.style.width = `${Math.max(120, rect.width - 18)}px`;
+    }
+    terminalTitle.addEventListener("pointerdown", (event) => {
+      if (matchMedia("(max-width: 820px)").matches) return;
+      if (event.button !== 0 || event.target.closest("button,a,input,textarea,select")) return;
+      const start = terminalOverlay.getBoundingClientRect();
+      const dx = event.clientX - start.left;
+      const dy = event.clientY - start.top;
+      terminalTitle.setPointerCapture(event.pointerId);
+      const move = (moveEvent) => {
+        terminalOverlay.style.left = `${moveEvent.clientX - dx}px`;
+        terminalOverlay.style.top = `${moveEvent.clientY - dy}px`;
+        terminalOverlay.style.right = "auto";
+        clampTerminal();
+      };
+      const up = () => {
+        terminalTitle.removeEventListener("pointermove", move);
+        terminalTitle.removeEventListener("pointerup", up);
+        clampTerminal();
+      };
+      terminalTitle.addEventListener("pointermove", move);
+      terminalTitle.addEventListener("pointerup", up);
+    });
+    new ResizeObserver(clampTerminal).observe(terminalOverlay);
+    addEventListener("resize", clampTerminal);
     function syncInputState() {
       form.classList.toggle("has-text", Boolean(cmd.value.trim()));
     }
@@ -1423,7 +1612,7 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       showTerminalOverlay();
 
       if (!trigger.matches("a[data-log-open]")) {
-        cmd.focus({ preventScroll: true });
+        focusCommand();
       }
     });
 
@@ -1517,8 +1706,24 @@ ${data.timeline?.length ? `<div class="line"></div>${section("timeline", (data.t
       }
     });
 
-    window.addEventListener("click", () => {
-      cmd.focus({ preventScroll: true });
+    document.addEventListener("keydown", (event) => {
+      const editable = event.target.closest?.("input,textarea,select,[contenteditable=true]");
+      if (event.ctrlKey && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        toggleTerminal();
+        return;
+      }
+      if (event.key === "Escape" && terminalOverlay.classList.contains("open")) {
+        hideTerminalOverlay();
+        return;
+      }
+      if (editable || event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1) return;
+      bttermBuffer = (bttermBuffer + event.key.toLowerCase()).slice(-6);
+      if (bttermBuffer === "btterm") {
+        showTerminalOverlay();
+        focusCommand();
+        bttermBuffer = "";
+      }
     });
 
     document.addEventListener("click", (event) => {

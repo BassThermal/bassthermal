@@ -3,8 +3,8 @@ import path from 'node:path';
 import vm from 'node:vm';
 
 const root = process.cwd();
-const ORIGIN = 'https://www.bassthermal.com';
-const FALLBACK = { label: 'View all apps', href: `${ORIGIN}/apps/` };
+const ORIGIN = 'https://bassthermal.com';
+const FALLBACK = { label: 'View all apps', href: `${ORIGIN}/` };
 const MIN_STRONG = 30;
 
 const GENERIC_AUDIENCES = new Set(['general_user', 'user', 'creator', 'researcher', 'publisher', 'operator', 'student', 'designer', 'developer']);

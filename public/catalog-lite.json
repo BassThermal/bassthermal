@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
   "version": "2026.07.20.1",
-  "generatedAt": "2026-07-20T16:08:36.174Z",
+  "generatedAt": "2026-07-21T15:05:00.317Z",
   "apps": [
     {
       "id": "dualticker",
@@ -355,9 +355,9 @@
     {
       "id": "rss-finder",
       "slug": "rss-finder",
-      "name": "RSS Finder / RSS Crawler",
-      "shortName": "RSS Finder",
-      "status": "shipping",
+      "name": "RSS Crawler",
+      "shortName": "RSS Crawler",
+      "status": "live",
       "visibility": {
         "showInAppOverlay": true
       },
@@ -397,15 +397,15 @@
         "web"
       ],
       "platforms": [
-        "web"
+        "windows"
       ],
-      "line": "feed discovery · RSS and Atom inspection",
+      "line": "feed discovery · crawl and inspect RSS/Atom feeds",
       "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
       "links": {
         "website": "/apps/rss-finder/",
-        "windows": "",
+        "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
         "android": "",
-        "web": "https://bassthermal.com/apps/rss-finder/",
+        "web": "",
         "support": "/support/"
       },
       "relatedTools": [
