@@ -9,7 +9,7 @@ const errors = [];
 const readJson = (p) => JSON.parse(fs.readFileSync(path.join(root, p), 'utf8'));
 const fileExists = (p) => fs.existsSync(path.join(root, p));
 const isInternal = (value) => typeof value === 'string' && value.startsWith('/');
-const isBaseCanonical = (u) => typeof u === 'string' && /^https:\/\/bassthermal\.com\/.+/.test(u);
+const isBaseCanonical = (u) => typeof u === 'string' && /^https:\/\/bassthermal\.com\/.*/.test(u);
 const ensure = (condition, message) => { if (!condition) errors.push(message); };
 
 
@@ -121,6 +121,7 @@ for (const app of apps) {
   for (const rel of app.relatedTools || []) ensure(appIds.has(rel.id), `app ${app.id} relatedTools id ${rel.id} does not exist`);
 }
 
+ensure(intentPages.length === 0, 'intentPages must be empty after retiring public tools pages');
 const intentSlugs = new Set();
 for (const p of intentPages) {
   ensure(!intentSlugs.has(p.slug), `duplicate intent page slug: ${p.slug}`); intentSlugs.add(p.slug);
@@ -131,16 +132,51 @@ for (const p of intentPages) {
   if (p.includeInSitemap) ensure(fileExists(`public/tools/${p.slug}/index.html`), `missing tool page public/tools/${p.slug}/index.html`);
 }
 
-ensure(fileExists('public/tools/index.html'), 'public/tools/index.html missing');
-ensure(fileExists('public/apps/index.html'), 'public/apps/index.html missing');
 syncHomepage();
 
 const sitemap = fs.readFileSync(path.join(root, 'public/sitemap.xml'), 'utf8');
-const requiredPaths = ['/','/tools/','/support/','/privacy/'];
+const requiredPaths = ['/','/support/','/privacy/'];
 for (const app of apps) if (app.visibility?.includeInSitemap) requiredPaths.push(`/apps/${app.slug}/`);
 for (const route of new Set(requiredPaths)) {
   const abs = `https://bassthermal.com${route}`;
   if (!sitemap.includes(abs)) errors.push(`sitemap missing required URL: ${abs}`);
+}
+
+const legacyRedirectSources = new Set([
+  '/apps','/apps/','/tools','/tools/',
+  '/tools/find-rss-feed-from-website','/tools/find-rss-feed-from-website/',
+  '/tools/rss-feed-finder-for-windows','/tools/rss-feed-finder-for-windows/',
+  '/tools/find-hidden-rss-feeds','/tools/find-hidden-rss-feeds/',
+  '/tools/export-rss-feeds-to-csv','/tools/export-rss-feeds-to-csv/',
+  '/tools/rss-crawler-for-research','/tools/rss-crawler-for-research/',
+  '/tools/generate-windows-app-icons-from-png','/tools/generate-windows-app-icons-from-png/',
+  '/tools/create-icon-pack-for-windows-app','/tools/create-icon-pack-for-windows-app/',
+  '/tools/png-to-ico-icon-pack-builder','/tools/png-to-ico-icon-pack-builder/',
+  '/tools/microsoft-store-app-icon-generator','/tools/microsoft-store-app-icon-generator/',
+  '/tools/extract-favicons-from-websites','/tools/extract-favicons-from-websites/',
+  '/tools/bulk-favicon-downloader-windows','/tools/bulk-favicon-downloader-windows/',
+  '/tools/get-website-icon-from-url','/tools/get-website-icon-from-url/',
+  '/tools/isbn-lookup-windows-app','/tools/isbn-lookup-windows-app/',
+  '/tools/isbn-barcode-label-maker','/tools/isbn-barcode-label-maker/',
+  '/tools/book-inventory-manager-windows','/tools/book-inventory-manager-windows/'
+]);
+const redirectTargets = new Set(['/', '/apps/rss-finder/', '/apps/icon-pack-builder/', '/apps/favicon-harvester/', '/apps/isbn-manager/']);
+for (const target of redirectTargets) ensure(target === '/' || fileExists(`public${target}index.html`), `redirect target missing real page: ${target}`);
+const locs = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
+for (const loc of locs) {
+  ensure(loc.startsWith('https://bassthermal.com/'), `sitemap URL must use apex canonical: ${loc}`);
+  const route = new URL(loc).pathname;
+  ensure(route !== '/apps/', 'sitemap must not include /apps/');
+  ensure(route !== '/tools/', 'sitemap must not include /tools/');
+  ensure(!legacyRedirectSources.has(route), `sitemap must not include legacy redirect source: ${route}`);
+}
+ensure(homepageApps().length === 10, 'homepage catalog must contain exactly ten apps');
+for (const app of homepageApps()) ensure(fileExists(`public/apps/${app.slug}/index.html`), `missing product page: ${app.slug}`);
+const publicHtmlFiles = fs.readdirSync(path.join(root, 'public'), { recursive: true }).filter((f) => f.endsWith('.html'));
+for (const file of publicHtmlFiles) {
+  const body = fs.readFileSync(path.join(root, 'public', file), 'utf8');
+  ensure(!/href=["']\/apps\/?["']/.test(body), `public HTML links to retired /apps/ root: public/${file}`);
+  ensure(!/href=["']\/tools\/?["']/.test(body), `public HTML links to retired /tools/ root: public/${file}`);
 }
 
 const generatedAt = new Date().toISOString();

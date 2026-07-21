@@ -31,7 +31,7 @@ Feed generation preserves PR46-style quality filters:
 ## Fallback behavior
 Every app includes:
 - `fallback.label = "View all apps"`
-- `fallback.href = "https://www.bassthermal.com/apps/"`
+- `fallback.href = "https://bassthermal.com/"`
 
 ## Caching expectations
 The worker serves `/bt-tools-feed.v1.json` with:
