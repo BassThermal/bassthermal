@@ -16,7 +16,7 @@ It is **not** a marketing popup system.
 - `outputs` describe what it produces.
 - `tags` describe specific objects or processes.
 - `relatedTools` are hand-curated next-step links with reasons.
-- `intentPages` represent SEO search-intent landing pages in `/tools/`.
+- `intentPages` is retained for compatibility and should remain an empty array; legacy public `/tools/` intent pages are retired.
 
 `klass` is legacy rough typing and is not the long-term backbone.
 
@@ -52,5 +52,5 @@ Future app overlays should:
 - Keep static crawlable pages.
 - Preserve canonical URLs.
 - Preserve sitemap coverage.
-- Keep `/tools/` pages as intent pages; do not collapse into `/apps/`.
+- Keep useful intent on the relevant `/apps/<slug>/` product pages; do not revive public `/tools/` pages.
 - Do not move important content to client-only rendering.

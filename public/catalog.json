@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
   "version": "2026.07.20.1",
-  "generatedAt": "2026-07-21T15:05:00.317Z",
+  "generatedAt": "2026-07-21T17:47:28.733Z",
   "publisher": {
     "name": "BassThermal",
     "url": "https://bassthermal.com/",
@@ -446,7 +446,7 @@
         "windows"
       ],
       "line": "app icon builder · store-ready asset export",
-      "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
+      "short": "Generate Windows app icons from one source PNG, produce package and Store asset sizes, and export an organized icon pack.",
       "capabilities": [
         "Multi-size icon generation",
         "Store asset packaging",
@@ -461,8 +461,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "Windows app icon pack builder for store and installer assets | BassThermal",
-        "description": "Generate app icon sizes and store-ready asset packs from one source image for Windows app and store submissions.",
+        "title": "Windows App Icon Pack Builder | Store and Installer Assets | BassThermal",
+        "description": "Generate Windows app icons from one source PNG, produce package and Store asset sizes, and export an organized icon pack.",
         "canonical": "https://bassthermal.com/apps/icon-pack-builder/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "DeveloperApplication",
@@ -522,7 +522,7 @@
         "windows"
       ],
       "line": "favicon extractor · domain icon asset capture",
-      "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
+      "short": "Extract favicon assets from website URLs, process URL or domain lists, and organize discovered website icons for research or migrations.",
       "capabilities": [
         "URL and domain icon extraction",
         "Batch favicon collection",
@@ -537,8 +537,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "Favicon Harvester bulk favicon extractor for Windows | BassThermal",
-        "description": "Extract favicon and site icon assets from URLs, domains, and batch lists for research, catalogs, and design work.",
+        "title": "Favicon Harvester for Windows | Bulk Website Icon Collector | BassThermal",
+        "description": "Extract favicon assets from website URLs, process URL or domain lists, and organize discovered website icons for research or migrations.",
         "canonical": "https://bassthermal.com/apps/favicon-harvester/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "DeveloperApplication",
@@ -605,7 +605,7 @@
         "windows"
       ],
       "line": "book inventory · ISBN lookup and labels",
-      "short": "Look up ISBN metadata, clean book inventory records, generate labels, and export organized lists.",
+      "short": "Look up ISBN metadata, clean book inventory records, generate barcode labels, and export organized book catalogs on Windows.",
       "capabilities": [
         "ISBN metadata lookup",
         "Book inventory cleanup",
@@ -620,8 +620,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "ISBN Manager book inventory and barcode label app for Windows | BassThermal",
-        "description": "Look up ISBN metadata, clean book inventory records, generate barcode labels, and export organized book lists.",
+        "title": "ISBN Manager for Windows | Lookup, Inventory and Barcode Labels | BassThermal",
+        "description": "Look up ISBN metadata, clean book inventory records, generate barcode labels, and export organized book catalogs on Windows.",
         "canonical": "https://bassthermal.com/apps/isbn-manager/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "BusinessApplication",
@@ -680,7 +680,7 @@
         "windows"
       ],
       "line": "feed discovery · crawl and inspect RSS/Atom feeds",
-      "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
+      "short": "Find RSS and Atom feeds from websites, inspect hidden feed endpoints, review discovered URLs, and export organized feed lists on Windows.",
       "capabilities": [
         "RSS and Atom feed discovery",
         "Feed URL inspection",
@@ -695,8 +695,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "RSS Crawler for Windows feed discovery | BassThermal",
-        "description": "Find RSS and Atom feeds from websites, inspect discovered feed URLs, and export source lists for monitoring workflows.",
+        "title": "RSS Crawler for Windows | Find, Inspect and Export RSS Feeds | BassThermal",
+        "description": "Find RSS and Atom feeds from websites, inspect hidden feed endpoints, review discovered URLs, and export organized feed lists on Windows.",
         "canonical": "https://bassthermal.com/apps/rss-finder/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "DeveloperApplication",
@@ -934,246 +934,5 @@
       "relatedTools": []
     }
   ],
-  "intentPages": [
-    {
-      "id": "find-rss-feed-from-website",
-      "slug": "find-rss-feed-from-website",
-      "phrase": "find rss feed from website",
-      "primaryApp": "rss-finder",
-      "family": "WEB_DEV",
-      "intent": "Find RSS feed endpoints from a website URL.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/find-rss-feed-from-website/",
-      "path": "/tools/find-rss-feed-from-website/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "find-hidden-rss-feeds",
-        "rss-crawler-for-research"
-      ]
-    },
-    {
-      "id": "rss-feed-finder-for-windows",
-      "slug": "rss-feed-finder-for-windows",
-      "phrase": "rss feed finder for windows",
-      "primaryApp": "rss-finder",
-      "family": "WEB_DEV",
-      "intent": "Discover RSS and Atom feeds for Windows-oriented workflows.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/rss-feed-finder-for-windows/",
-      "path": "/tools/rss-feed-finder-for-windows/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "find-rss-feed-from-website",
-        "export-rss-feeds-to-csv"
-      ]
-    },
-    {
-      "id": "find-hidden-rss-feeds",
-      "slug": "find-hidden-rss-feeds",
-      "phrase": "find hidden rss feeds",
-      "primaryApp": "rss-finder",
-      "family": "WEB_DEV",
-      "intent": "Discover RSS or Atom endpoints not linked prominently on websites.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/find-hidden-rss-feeds/",
-      "path": "/tools/find-hidden-rss-feeds/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "find-rss-feed-from-website",
-        "rss-crawler-for-research"
-      ]
-    },
-    {
-      "id": "export-rss-feeds-to-csv",
-      "slug": "export-rss-feeds-to-csv",
-      "phrase": "export rss feeds to csv",
-      "primaryApp": "rss-finder",
-      "family": "WEB_DEV",
-      "intent": "Export discovered feed URLs into CSV lists.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/export-rss-feeds-to-csv/",
-      "path": "/tools/export-rss-feeds-to-csv/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "find-rss-feed-from-website",
-        "rss-crawler-for-research"
-      ]
-    },
-    {
-      "id": "rss-crawler-for-research",
-      "slug": "rss-crawler-for-research",
-      "phrase": "rss crawler for research",
-      "primaryApp": "rss-finder",
-      "family": "WEB_DEV",
-      "intent": "Crawl websites for feed discovery in research workflows.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/rss-crawler-for-research/",
-      "path": "/tools/rss-crawler-for-research/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "find-hidden-rss-feeds",
-        "export-rss-feeds-to-csv"
-      ]
-    },
-    {
-      "id": "generate-windows-app-icons-from-png",
-      "slug": "generate-windows-app-icons-from-png",
-      "phrase": "generate windows app icons from png",
-      "primaryApp": "icon-pack-builder",
-      "family": "PUBLISHING_ASSETS",
-      "intent": "Generate Windows app icon assets from a PNG source image.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/generate-windows-app-icons-from-png/",
-      "path": "/tools/generate-windows-app-icons-from-png/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "create-icon-pack-for-windows-app",
-        "microsoft-store-app-icon-generator"
-      ]
-    },
-    {
-      "id": "create-icon-pack-for-windows-app",
-      "slug": "create-icon-pack-for-windows-app",
-      "phrase": "create icon pack for windows app",
-      "primaryApp": "icon-pack-builder",
-      "family": "PUBLISHING_ASSETS",
-      "intent": "Create a complete icon pack for Windows app packaging.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/create-icon-pack-for-windows-app/",
-      "path": "/tools/create-icon-pack-for-windows-app/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "generate-windows-app-icons-from-png",
-        "png-to-ico-icon-pack-builder"
-      ]
-    },
-    {
-      "id": "png-to-ico-icon-pack-builder",
-      "slug": "png-to-ico-icon-pack-builder",
-      "phrase": "png to ico icon pack builder",
-      "primaryApp": "icon-pack-builder",
-      "family": "PUBLISHING_ASSETS",
-      "intent": "Convert PNG artwork into ICO and app icon pack outputs.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/png-to-ico-icon-pack-builder/",
-      "path": "/tools/png-to-ico-icon-pack-builder/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "generate-windows-app-icons-from-png",
-        "microsoft-store-app-icon-generator"
-      ]
-    },
-    {
-      "id": "microsoft-store-app-icon-generator",
-      "slug": "microsoft-store-app-icon-generator",
-      "phrase": "microsoft store app icon generator",
-      "primaryApp": "icon-pack-builder",
-      "family": "PUBLISHING_ASSETS",
-      "intent": "Generate Microsoft Store app icon assets from a source image.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/microsoft-store-app-icon-generator/",
-      "path": "/tools/microsoft-store-app-icon-generator/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "create-icon-pack-for-windows-app",
-        "generate-windows-app-icons-from-png"
-      ]
-    },
-    {
-      "id": "extract-favicons-from-websites",
-      "slug": "extract-favicons-from-websites",
-      "phrase": "extract favicons from websites",
-      "primaryApp": "favicon-harvester",
-      "family": "WEB_DEV",
-      "intent": "Extract favicon assets from website URLs.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/extract-favicons-from-websites/",
-      "path": "/tools/extract-favicons-from-websites/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "bulk-favicon-downloader-windows",
-        "get-website-icon-from-url"
-      ]
-    },
-    {
-      "id": "bulk-favicon-downloader-windows",
-      "slug": "bulk-favicon-downloader-windows",
-      "phrase": "bulk favicon downloader windows",
-      "primaryApp": "favicon-harvester",
-      "family": "WEB_DEV",
-      "intent": "Download favicon assets in bulk on Windows.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/bulk-favicon-downloader-windows/",
-      "path": "/tools/bulk-favicon-downloader-windows/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "extract-favicons-from-websites",
-        "get-website-icon-from-url"
-      ]
-    },
-    {
-      "id": "get-website-icon-from-url",
-      "slug": "get-website-icon-from-url",
-      "phrase": "get website icon from url",
-      "primaryApp": "favicon-harvester",
-      "family": "WEB_DEV",
-      "intent": "Get favicon files directly from a website URL.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/get-website-icon-from-url/",
-      "path": "/tools/get-website-icon-from-url/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "extract-favicons-from-websites",
-        "bulk-favicon-downloader-windows"
-      ]
-    },
-    {
-      "id": "isbn-lookup-windows-app",
-      "slug": "isbn-lookup-windows-app",
-      "phrase": "isbn lookup windows app",
-      "primaryApp": "isbn-manager",
-      "family": "INVENTORY_OPERATIONS",
-      "intent": "Look up ISBN metadata in a Windows inventory workflow.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/isbn-lookup-windows-app/",
-      "path": "/tools/isbn-lookup-windows-app/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "isbn-barcode-label-maker",
-        "book-inventory-manager-windows"
-      ]
-    },
-    {
-      "id": "isbn-barcode-label-maker",
-      "slug": "isbn-barcode-label-maker",
-      "phrase": "isbn barcode label maker",
-      "primaryApp": "isbn-manager",
-      "family": "INVENTORY_OPERATIONS",
-      "intent": "Generate barcode labels from ISBN-driven inventory records.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/isbn-barcode-label-maker/",
-      "path": "/tools/isbn-barcode-label-maker/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "isbn-lookup-windows-app",
-        "book-inventory-manager-windows"
-      ]
-    },
-    {
-      "id": "book-inventory-manager-windows",
-      "slug": "book-inventory-manager-windows",
-      "phrase": "book inventory manager windows",
-      "primaryApp": "isbn-manager",
-      "family": "INVENTORY_OPERATIONS",
-      "intent": "Manage and export Windows book inventory from ISBN records.",
-      "status": "live",
-      "canonical": "https://bassthermal.com/tools/book-inventory-manager-windows/",
-      "path": "/tools/book-inventory-manager-windows/",
-      "includeInSitemap": true,
-      "relatedPages": [
-        "isbn-lookup-windows-app",
-        "isbn-barcode-label-maker"
-      ]
-    }
-  ]
+  "intentPages": []
 }

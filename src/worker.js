@@ -498,6 +498,8 @@ async function handleCitySummary(url, env) {
 }
 
 
+import { resolveRedirectUrl } from "./redirects.mjs";
+
 function isPublicRecommenderAsset(pathname) {
   return pathname === "/catalog-lite.json" || pathname === "/catalog.json" || pathname === "/related-apps.v1.js" || pathname === "/bt-tools-feed.v1.json" || pathname === "/bt-tools-overlay.v1.js";
 }
@@ -526,15 +528,8 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    if (url.hostname === "www.bassthermal.com") {
-      url.hostname = "bassthermal.com";
-      return Response.redirect(url.toString(), 308);
-    }
-
-    if ((url.pathname === "/apps" || url.pathname === "/apps/") && (request.method === "GET" || request.method === "HEAD")) {
-      url.pathname = "/";
-      return Response.redirect(url.toString(), 308);
-    }
+    const redirectUrl = resolveRedirectUrl(url, request.method);
+    if (redirectUrl) return Response.redirect(redirectUrl, 308);
 
     if (isPublicRecommenderAsset(url.pathname) && (request.method === "GET" || request.method === "OPTIONS")) {
       return handlePublicAsset(request, env, url.pathname);

@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
   "version": "2026.07.20.1",
-  "generatedAt": "2026-07-21T15:05:00.317Z",
+  "generatedAt": "2026-07-21T17:47:28.733Z",
   "apps": [
     {
       "id": "dualticker",
@@ -217,7 +217,7 @@
         "windows"
       ],
       "line": "app icon builder · store-ready asset export",
-      "short": "Generate app icon sizes and store-ready asset packs from a single source image.",
+      "short": "Generate Windows app icons from one source PNG, produce package and Store asset sizes, and export an organized icon pack.",
       "links": {
         "website": "/apps/icon-pack-builder/",
         "windows": "https://apps.microsoft.com/detail/9mxvt3dfq295?hl=en-US&gl=CA",
@@ -276,7 +276,7 @@
         "windows"
       ],
       "line": "favicon extractor · domain icon asset capture",
-      "short": "Extract favicon and site icon assets from URLs, domains, and batch lists.",
+      "short": "Extract favicon assets from website URLs, process URL or domain lists, and organize discovered website icons for research or migrations.",
       "links": {
         "website": "/apps/favicon-harvester/",
         "windows": "https://apps.microsoft.com/detail/9mxj31fxcq4f?hl=en-US&gl=CA",
@@ -342,7 +342,7 @@
         "windows"
       ],
       "line": "book inventory · ISBN lookup and labels",
-      "short": "Look up ISBN metadata, clean book inventory records, generate labels, and export organized lists.",
+      "short": "Look up ISBN metadata, clean book inventory records, generate barcode labels, and export organized book catalogs on Windows.",
       "links": {
         "website": "/apps/isbn-manager/",
         "windows": "https://apps.microsoft.com/detail/9nr0nblx10fb?hl=en-US&gl=CA",
@@ -400,7 +400,7 @@
         "windows"
       ],
       "line": "feed discovery · crawl and inspect RSS/Atom feeds",
-      "short": "Find RSS and Atom feeds from websites, inspect discovered URLs, and export source lists.",
+      "short": "Find RSS and Atom feeds from websites, inspect hidden feed endpoints, review discovered URLs, and export organized feed lists on Windows.",
       "links": {
         "website": "/apps/rss-finder/",
         "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
