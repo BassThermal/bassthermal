@@ -55,9 +55,32 @@
     root.querySelectorAll?.('.app-icon[data-app-icon-slug]').forEach(hydrateIcon);
   }
 
+  function releaseHiddenTerminalFocus() {
+    const overlay = document.getElementById('terminalOverlay');
+    const command = document.getElementById('cmd');
+    if (!overlay || !command || overlay.classList.contains('open')) return;
+    if (document.activeElement === command) command.blur();
+  }
+
+  function bindTerminalFocusGuard() {
+    const overlay = document.getElementById('terminalOverlay');
+    if (!overlay) return;
+
+    const navigationKeys = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ']);
+    document.addEventListener('keydown', (event) => {
+      if (!navigationKeys.has(event.key)) return;
+      releaseHiddenTerminalFocus();
+    }, true);
+
+    const observer = new MutationObserver(releaseHiddenTerminalFocus);
+    observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+    releaseHiddenTerminalFocus();
+  }
+
   function boot() {
     ensureVisualStyles();
     hydrateAll();
+    bindTerminalFocusGuard();
     const table = document.getElementById('appTable');
     if (!table) return;
     const observer = new MutationObserver((records) => {
