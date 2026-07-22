@@ -1,11 +1,10 @@
 name: Apply CourseLab Windows launch
 
 on:
-  pull_request:
+  push:
     branches:
       - main
     paths:
-      - 'tools/apply-courselab-windows-launch.mjs'
       - '.github/workflows/apply-courselab-windows-launch.yml'
 
 permissions:
@@ -16,10 +15,10 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
-      - name: Check out CourseLab launch branch
+      - name: Check out main
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: main
           fetch-depth: 0
 
       - name: Set up Node
@@ -34,18 +33,33 @@ jobs:
       - name: Apply canonical CourseLab update
         run: node tools/apply-courselab-windows-launch.mjs
 
-      - name: Rebuild site and asset manifest
-        run: npm run build:site
-
-      - name: Run focused validation
+      - name: Rebuild exact generated outputs
         run: |
-          npm run test:product-pages
-          npm run test:app-icons
+          node tools/build-asset-manifest.mjs
+          node tools/append-app-icon-runtime.mjs
+          node tools/build-catalog.mjs
+          node tools/build-bt-tools-feed.mjs
 
-      - name: Commit rebuilt CourseLab launch files
+      - name: Verify real CourseLab output
+        run: |
+          grep -q '9mzx7h0whbcc' data/bt-catalog.json
+          grep -q '9mzx7h0whbcc' public/index.html
+          grep -q '9mzx7h0whbcc' public/apps/courselab-beam/index.html
+          grep -q '/assets/apps/courselab-beam/windows/shot-01.png' public/store-assets.generated.js
+          grep -q '/assets/apps/courselab-beam/windows/shot-06.png' public/store-assets.generated.js
+          grep -q 'Windows, Android' public/apps/courselab-beam/index.html
+          npm run test:product-pages
+          node tools/test-app-icons.mjs
+
+      - name: Remove temporary migration files
+        run: |
+          rm -f tools/apply-courselab-windows-launch.mjs
+          rm -f .github/workflows/apply-courselab-windows-launch.yml
+
+      - name: Commit actual site changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/bt-catalog.json public/index.html public/catalog.json public/catalog-lite.json public/bt-tools-feed.v1.json public/bt-tools-feed.v1.js public/store-assets.generated.js public/apps/courselab-beam/index.html
-          git commit -m "Register CourseLab Beam for Windows and Android"
-          git push origin HEAD:${{ github.head_ref }}
+          git add -A
+          git commit -m "Register CourseLab Beam for Windows and show screenshots"
+          git push origin HEAD:main
