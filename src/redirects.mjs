@@ -29,9 +29,19 @@ function legacyTargetForPath(pathname) {
   return null;
 }
 
+function isApiPath(pathname) {
+  return pathname === "/api" || pathname.startsWith("/api/");
+}
+
 export function resolveRedirectUrl(inputUrl, method = "GET") {
   if (method !== "GET" && method !== "HEAD") return null;
   const url = inputUrl instanceof URL ? new URL(inputUrl.toString()) : new URL(inputUrl);
+
+  // Visits and other API requests must remain same-origin on both hostnames.
+  // Redirecting a browser fetch from www to apex changes origin and can reject
+  // before the API response is available to the terminal.
+  if (isApiPath(url.pathname)) return null;
+
   const targetPath = legacyTargetForPath(url.pathname);
   const canonicalHost = url.hostname === "www.bassthermal.com";
   if (!targetPath && !canonicalHost) return null;

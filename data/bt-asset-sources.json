@@ -1,9 +1,6 @@
 {
   "schema": "BT-ASSET-SOURCES-1",
   "apps": {
-    "rss-finder": {
-      "icon": "public/og/rss-finder.png"
-    },
     "favicon-harvester": {
       "icon": "public/og/favicon-harvester.png"
     },
