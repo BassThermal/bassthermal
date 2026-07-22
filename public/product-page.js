@@ -2,6 +2,15 @@
   let initialized = false;
   let activeViewer = null;
 
+  function ensureMediaStyles() {
+    if (document.querySelector('link[data-product-page-media]')) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/product-page-media.css';
+    link.dataset.productPageMedia = '1';
+    document.head.append(link);
+  }
+
   function closeViewer() {
     if (!activeViewer) return;
     const { root, trigger, onKeydown } = activeViewer;
@@ -122,6 +131,7 @@
   function init() {
     if (initialized) return;
     initialized = true;
+    ensureMediaStyles();
     const body = document.body;
     const slug = body?.dataset?.appSlug || '';
     const header = document.querySelector('.product-header');
