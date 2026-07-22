@@ -24,7 +24,19 @@ jobs:
         with:
           node-version: 22
       - name: Apply migration
-        run: node tools/agent-canonical-rss-docbatch-homepage-cleanup.mjs
+        id: migrate
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node tools/agent-canonical-rss-docbatch-homepage-cleanup.mjs 2>&1 | tee migration.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: migration-log
+          path: migration.log
+      - name: Stop after migration failure
+        if: steps.migrate.outcome != 'success'
+        run: exit 1
       - name: Rebuild generated site data
         run: npm run build:site
       - name: Run regression tests
