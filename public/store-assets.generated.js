@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-07-21T15:04:59.801Z",
+  "generatedAt": "2026-07-21T23:44:16.000Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -120,22 +120,9 @@ window.BT_STORE_ASSETS = {
         "web": []
       }
     },
-    "rss-crawler": {
-      "icon": {
-        "fallback": "/assets/apps/rss-crawler/icon.png",
-        "android": null,
-        "windows": null,
-        "web": null
-      },
-      "screenshots": {
-        "android": [],
-        "windows": [],
-        "web": []
-      }
-    },
     "rss-finder": {
       "icon": {
-        "fallback": "/og/rss-finder.png",
+        "fallback": "/assets/apps/rss-finder/icon.png",
         "android": null,
         "windows": null,
         "web": null
