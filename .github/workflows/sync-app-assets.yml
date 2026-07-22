@@ -1,0 +1,59 @@
+name: Sync app assets
+
+on:
+  push:
+    paths:
+      - 'public/assets/apps/**/*.png'
+      - 'public/assets/apps/**/*.webp'
+      - 'public/assets/apps/**/*.jpg'
+      - 'public/assets/apps/**/*.jpeg'
+      - 'public/assets/apps/**/*.gif'
+      - 'public/assets/apps/**/*.avif'
+      - 'public/assets/apps/**/*.svg'
+      - 'public/assets/apps/**/*.ico'
+      - 'public/assets/apps/**/*.icns'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-app-assets-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate and index app assets
+        run: npm run assets:index
+
+      - name: Verify generated asset manifest
+        run: node tools/test-app-icons.mjs
+
+      - name: Commit refreshed manifest
+        run: |
+          if git diff --quiet -- public/store-assets.generated.js; then
+            echo "Asset manifest already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/store-assets.generated.js
+          git commit -m "Refresh generated app asset manifest"
+          git push

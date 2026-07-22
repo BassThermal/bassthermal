@@ -1,63 +1,41 @@
-# BassThermal manual app assets
+# BassThermal app assets
 
-Use the canonical catalog slug from `data/bt-catalog.json` for every asset folder, even when the public product name changes.
+Use the canonical app slug from `data/bt-catalog.json`.
 
-## Icons
+```text
+public/assets/apps/<app-slug>/
+  icon.png or app.png
+  windows/
+    shot-01.png
+    shot-02.png
+  android/
+    shot-01.png
+  web/
+    shot-01.png
+```
 
-Preferred browser icon:
+## Owner workflow
 
-`public/assets/apps/<slug>/icon.png`
+1. Add, replace, rename, move, or delete images in GitHub.
+2. Keep the app icon directly in the app folder as `icon.*` or `app.*`.
+3. Put screenshots inside `windows`, `android`, or `web`.
+4. Commit the change.
 
-Platform-specific icons, only when needed:
+GitHub then validates the folders and refreshes `public/store-assets.generated.js` automatically. You do not need to run an asset-manifest command locally.
 
-`public/assets/apps/<slug>/<platform>/icon.png`
+If a screenshot is accidentally placed directly in the app folder, the check fails with the exact app and filename to move. It no longer fails silently.
 
-Supported browser icon names include `icon.png`, `icon.webp`, `icon.jpg`, `icon.jpeg`, safe `icon.svg` files, and the equivalent `app.*` names. `.ico` may remain as a source/reference file but is not used as a browser screenshot.
+## Supported assets
 
-## Screenshots
+Browser icons: PNG, WebP, JPG/JPEG, or safe SVG. `.ico` can remain as a source file but is not used as a browser screenshot.
 
-Drop screenshots here:
+Screenshots: PNG, WebP, JPG/JPEG, GIF, or AVIF. Files named `icon.*` or `app.*` are treated as icons, not screenshots.
 
-`public/assets/apps/<slug>/<platform>/`
+Example:
 
-Platforms:
-
-- `windows`
-- `android`
-- `web`
-
-Examples:
-
-- `public/assets/apps/icon-pack-builder/windows/shot-01.png`
-- `public/assets/apps/retrofy/android/shot-02.webp`
-- `public/assets/apps/rss-crawler/windows/shot-01.png`
-
-Any valid PNG, JPG/JPEG, WebP, GIF, or AVIF in a platform folder becomes a screenshot. Weird or extensionless image files may be normalized automatically.
-
-Rules:
-
-- Files named `icon.*` or `app.*` are icons, not screenshots.
-- `.ico` and `.icns` are ignored as screenshots.
-- Dotfiles and non-image junk are skipped.
-- Do not create a second asset folder when a product is renamed publicly.
-
-RSS example:
-
-- Public name: `RSS Crawler`
-- Canonical slug: `rss-crawler`
-- Product route: `/apps/rss-crawler/`
-- Asset root: `public/assets/apps/rss-crawler/`
-
-## Manifest build
-
-The manifest is generated from local files:
-
-- Script: `tools/build-asset-manifest.mjs`
-- Output: `public/store-assets.generated.js`
-- Normalized image cache: `public/assets/app-preview-cache/`
-
-Regenerate manually with:
-
-`npm run assets:index`
-
-Normal development, build, and deploy commands also regenerate the manifest.
+```text
+public/assets/apps/courselab-beam/app.png
+public/assets/apps/courselab-beam/windows/shot-01.png
+public/assets/apps/courselab-beam/windows/shot-02.png
+public/assets/apps/courselab-beam/android/shot-01.webp
+```
