@@ -159,16 +159,22 @@ window.BT_STORE_ASSETS = {
 })();
 
 (() => {
-  if (!document.querySelector('link[data-bt-app-icon-runtime]')) {
+  const styles = [
+    ['/app-icons.css?v=2', 'icons'],
+    ['/home-visual.css?v=2', 'home']
+  ];
+  for (const [href, key] of styles) {
+    const selector = `link[data-bt-app-icon-runtime="${key}"]`;
+    if (document.querySelector(selector)) continue;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/app-icons.css?v=1';
-    link.setAttribute('data-bt-app-icon-runtime', '1');
+    link.href = href;
+    link.setAttribute('data-bt-app-icon-runtime', key);
     document.head.appendChild(link);
   }
   if (!document.querySelector('script[data-bt-app-icon-runtime]')) {
     const script = document.createElement('script');
-    script.src = '/app-icon-hydrator.js?v=1';
+    script.src = '/app-icon-hydrator.js?v=2';
     script.defer = true;
     script.setAttribute('data-bt-app-icon-runtime', '1');
     document.head.appendChild(script);

@@ -3,6 +3,25 @@
 
   const hydrated = new WeakSet();
 
+  function ensureVisualStyles() {
+    const styles = [
+      ['/app-icons.css?v=2', 'icons'],
+      ['/home-visual.css?v=2', 'home']
+    ];
+    if (document.querySelector('.product-page')) {
+      styles.push(['/product-page-v2.css?v=2', 'product']);
+      styles.push(['/product-page-media.css?v=2', 'product-media']);
+    }
+    for (const [href, key] of styles) {
+      if (document.querySelector(`link[data-bt-visual-style="${key}"]`)) continue;
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.dataset.btVisualStyle = key;
+      document.head.appendChild(link);
+    }
+  }
+
   function manifestIcon(slug) {
     const value = window.BT_STORE_ASSETS?.apps?.[slug]?.icon?.fallback;
     return typeof value === 'string' && value ? value : null;
@@ -37,6 +56,7 @@
   }
 
   function boot() {
+    ensureVisualStyles();
     hydrateAll();
     const table = document.getElementById('appTable');
     if (!table) return;
