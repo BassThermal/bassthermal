@@ -46,17 +46,24 @@ function syncHomepage() {
   let html = fs.readFileSync(indexPath, 'utf8');
   html = html.replace(/("itemListElement": \[\n)(.*?)(\n      \])/s, `$1${homepageItems()}$3`);
   html = html.replace(/(      <div class="table" id="appTable" role="list">\n)(.*?)(\n      <\/div>)/s, `$1${homepageRows()}$3`);
-  html = html.replace(/    const apps = \[\n.*?\n    \];/s, `    const apps = ${homepageJsApps()};`);
+  const jsAppsPattern = /(^\s*const apps = )\[[\s\S]*?^\s*\];/m;
+  ensure(jsAppsPattern.test(html), 'homepage JS app array marker missing');
+  html = html.replace(jsAppsPattern, `$1${homepageJsApps()};`);
   if (!validateOnly) fs.writeFileSync(indexPath, html);
   const check = fs.readFileSync(indexPath, 'utf8');
   const tableMatch = check.match(/<div class="table" id="appTable" role="list">([\s\S]*?)\n      <\/div>/);
   ensure(Boolean(tableMatch), 'homepage app table missing');
   ensure(((tableMatch?.[1] || '').match(/class="row app-row"/g) || []).length === homepageApps().length, 'homepage app row count must match catalog');
+  const jsAppsMatch = check.match(/const apps = (\[[\s\S]*?\]);/);
+  ensure(Boolean(jsAppsMatch), 'homepage JS app array missing');
+  const jsAppsSource = jsAppsMatch?.[1] || '';
   for (const app of homepageApps()) {
     ensure(check.includes(`href="/apps/${app.slug}/"`), `homepage missing app link: ${app.slug}`);
     ensure(check.includes(`"name": "${app.name}"`), `homepage JSON-LD missing app name: ${app.name}`);
-    ensure(check.includes(`name": "${app.name}"`) || check.includes(`name: "${app.name}"`), `homepage JS missing app name: ${app.name}`);
+    ensure(jsAppsSource.includes(`"slug": "${app.slug}"`), `homepage JS missing app slug: ${app.slug}`);
+    ensure(jsAppsSource.includes(`"name": "${app.name}"`), `homepage JS missing app name: ${app.name}`);
   }
+  ensure(!jsAppsSource.includes('"slug": "rss-finder"'), 'homepage JS still contains legacy rss-finder slug');
 }
 
 const catalog = readJson('data/bt-catalog.json');
