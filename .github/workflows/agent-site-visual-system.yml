@@ -37,3 +37,4 @@ jobs:
           git add -A
           git commit -m "Refine universal site visual system"
           git push origin HEAD:agent/site-visual-system
+# trigger
