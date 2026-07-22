@@ -13,6 +13,7 @@ const browserImageExts = new Set(['.png', '.webp', '.jpg', '.jpeg', '.gif', '.av
 const browserIconExts = new Set(['.png', '.webp', '.jpg', '.jpeg', '.svg']);
 const rasterIconExts = new Set(['.png', '.webp', '.jpg', '.jpeg']);
 const iconPriority = ['.png', '.webp', '.jpg', '.jpeg', '.svg', '.ico'];
+const iconBasenames = ['icon', 'app'];
 
 function toWebPath(absPath) {
   const rel = path.relative(publicRoot, absPath).split(path.sep).join('/');
@@ -139,12 +140,11 @@ async function detectImageKind(absPath) {
 }
 
 async function pickIcon(dir) {
-  for (const ext of iconPriority) {
-    const candidate = path.join(dir, `icon${ext}`);
-    try {
-      const stat = await fs.stat(candidate);
-      if (stat.isFile()) return candidate;
-    } catch {}
+  for (const basename of iconBasenames) {
+    for (const ext of iconPriority) {
+      const candidate = path.join(dir, `${basename}${ext}`);
+      if (await isBrowserSafeIcon(candidate)) return candidate;
+    }
   }
   return null;
 }
@@ -183,7 +183,7 @@ async function resolveMappedIcon({ slug, sourcePath, warnings }) {
 function isIconName(name) {
   const ext = path.extname(name);
   const base = path.basename(name, ext).toLowerCase();
-  return base === 'icon' || base.startsWith('icon.');
+  return base === 'icon' || base === 'app' || base.startsWith('icon.') || base.startsWith('app.');
 }
 
 async function listPlatformScreenshots({ slug, platform, platformDir, warnings }) {

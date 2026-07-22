@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-07-22T03:40:00.000Z",
+  "generatedAt": "2026-07-22T15:44:53.006Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -37,7 +37,7 @@ window.BT_STORE_ASSETS = {
     },
     "docbatch-pdf-converter": {
       "icon": {
-        "fallback": null,
+        "fallback": "/assets/apps/docbatch-pdf-converter/app.png",
         "android": null,
         "windows": null,
         "web": null
@@ -120,9 +120,9 @@ window.BT_STORE_ASSETS = {
         "web": []
       }
     },
-    "rss-finder": {
+    "rss-crawler": {
       "icon": {
-        "fallback": "/assets/apps/rss-finder/icon.png",
+        "fallback": "/assets/apps/rss-crawler/icon.png",
         "android": null,
         "windows": null,
         "web": null

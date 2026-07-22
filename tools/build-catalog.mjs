@@ -32,7 +32,7 @@ function homepageItems() {
 }
 
 function homepageJsApps() {
-  const aliases = (app) => app.slug === 'rss-finder' ? ['rss','feed','feeds','crawler'] : (app.slug === 'dualticker' ? ['dt','dual'] : app.slug.split('-'));
+  const aliases = (app) => app.slug === 'rss-crawler' ? ['rss','feed','feeds','crawler','rss-finder'] : (app.slug === 'dualticker' ? ['dt','dual'] : app.slug.split('-'));
   return JSON.stringify(homepageApps().map((app, index) => ({
     id:String(index + 1).padStart(2, '0'), slug:app.slug, aliases:aliases(app), name:app.name,
     klass:String(app.primaryFamily || 'utility').toLowerCase().replaceAll('_','/'), status:app.status, statusClass:app.status === 'live' ? 'ok' : 'violet',
@@ -143,7 +143,7 @@ for (const route of new Set(requiredPaths)) {
 }
 
 const legacyRedirectSources = new Set([
-  '/apps','/apps/','/tools','/tools/',
+  '/apps','/apps/','/tools','/tools/','/apps/rss-finder','/apps/rss-finder/','/privacy/rss-finder','/privacy/rss-finder/',
   '/tools/find-rss-feed-from-website','/tools/find-rss-feed-from-website/',
   '/tools/rss-feed-finder-for-windows','/tools/rss-feed-finder-for-windows/',
   '/tools/find-hidden-rss-feeds','/tools/find-hidden-rss-feeds/',
@@ -160,7 +160,7 @@ const legacyRedirectSources = new Set([
   '/tools/isbn-barcode-label-maker','/tools/isbn-barcode-label-maker/',
   '/tools/book-inventory-manager-windows','/tools/book-inventory-manager-windows/'
 ]);
-const redirectTargets = new Set(['/', '/apps/rss-finder/', '/apps/icon-pack-builder/', '/apps/favicon-harvester/', '/apps/isbn-manager/']);
+const redirectTargets = new Set(['/', '/apps/rss-crawler/', '/apps/icon-pack-builder/', '/apps/favicon-harvester/', '/apps/isbn-manager/']);
 for (const target of redirectTargets) ensure(target === '/' || fileExists(`public${target}index.html`), `redirect target missing real page: ${target}`);
 const locs = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
 for (const loc of locs) {

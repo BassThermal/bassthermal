@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { LEGACY_REDIRECTS, resolveRedirectUrl } from '../src/redirects.mjs';
 
 const status = 308;
-const appSlugs = ['dualticker','retrofy','coptic-dictionary','icon-pack-builder','favicon-harvester','isbn-manager','rss-finder','docbatch-pdf-converter','website-image-inventory','courselab-beam'];
+const appSlugs = ['dualticker','retrofy','coptic-dictionary','icon-pack-builder','favicon-harvester','isbn-manager','rss-crawler','docbatch-pdf-converter','website-image-inventory','courselab-beam'];
 
 function expectRedirect(path, target, method = 'GET', host = 'bassthermal.com') {
   const out = resolveRedirectUrl(`https://${host}${path}`, method);
@@ -18,6 +18,10 @@ expectRedirect('/apps', '/');
 expectRedirect('/apps/', '/');
 expectRedirect('/tools', '/');
 expectRedirect('/tools/', '/');
+expectRedirect('/apps/rss-finder', '/apps/rss-crawler/');
+expectRedirect('/apps/rss-finder/', '/apps/rss-crawler/');
+expectRedirect('/privacy/rss-finder', '/privacy/rss-crawler/');
+expectRedirect('/privacy/rss-finder/', '/privacy/rss-crawler/');
 expectRedirect('/apps', '/', 'HEAD');
 expectRedirect('/tools/', '/', 'HEAD');
 
@@ -29,7 +33,7 @@ for (const [source, target] of Object.entries(LEGACY_REDIRECTS)) {
   expectRedirect(`${source}?source=test`, `${target}?source=test`, 'GET', 'www.bassthermal.com');
 }
 
-assert.equal(resolveRedirectUrl('https://www.bassthermal.com/tools/find-hidden-rss-feeds/?source=test'), 'https://bassthermal.com/apps/rss-finder/?source=test');
+assert.equal(resolveRedirectUrl('https://www.bassthermal.com/tools/find-hidden-rss-feeds/?source=test'), 'https://bassthermal.com/apps/rss-crawler/?source=test');
 for (const slug of appSlugs) expectUntouched(`/apps/${slug}/`);
 for (const path of ['/tools/unknown-page/','/tools-extra/','/bt-tools-feed.v1.json','/bt-tools-overlay.v1.js','/style.css']) expectUntouched(path);
 

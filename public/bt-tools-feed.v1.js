@@ -1,6 +1,6 @@
 window.BT_TOOLS_FEED_V1 = {
   "schema": "BT-TOOLS-FEED-1",
-  "generatedAt": "2026-07-21T17:47:29.284Z",
+  "generatedAt": "2026-07-22T15:44:52.424Z",
   "origin": "https://bassthermal.com",
   "apps": {
     "dualticker": {
@@ -19,15 +19,15 @@ window.BT_TOOLS_FEED_V1 = {
       },
       "recommendations": [
         {
-          "id": "rss-finder",
+          "id": "rss-crawler",
           "name": "RSS Crawler",
           "status": "live",
           "short": "Find RSS and Atom feeds from websites, inspect hidden feed endpoints, review discovered URLs, and export organized feed lists on Windows.",
           "reason": "Find feed sources that can support live headline monitoring.",
-          "icon": "https://bassthermal.com/og/rss-finder.png",
+          "icon": "https://bassthermal.com/assets/apps/rss-crawler/icon.png",
           "monogram": "RC",
           "links": {
-            "website": "https://bassthermal.com/apps/rss-finder/",
+            "website": "https://bassthermal.com/apps/rss-crawler/",
             "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
             "support": "https://bassthermal.com/support/"
           },
@@ -76,7 +76,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Scan public websites and create an organized inventory of discovered image assets.",
           "reason": "Same tool family.",
-          "icon": null,
+          "icon": "https://bassthermal.com/assets/apps/website-image-inventory/app.png",
           "monogram": "WI",
           "links": {
             "website": "https://bassthermal.com/apps/website-image-inventory/",
@@ -130,7 +130,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Extract favicon assets from website URLs, process URL or domain lists, and organize discovered website icons for research or migrations.",
           "reason": "Extract website icons that can become source assets for icon packs.",
-          "icon": "https://bassthermal.com/og/favicon-harvester.png",
+          "icon": "https://bassthermal.com/assets/apps/favicon-harvester/app.png",
           "monogram": "FH",
           "links": {
             "website": "https://bassthermal.com/apps/favicon-harvester/",
@@ -168,7 +168,7 @@ window.BT_TOOLS_FEED_V1 = {
       "name": "Favicon Harvester",
       "status": "live",
       "short": "Extract favicon assets from website URLs, process URL or domain lists, and organize discovered website icons for research or migrations.",
-      "icon": "https://bassthermal.com/og/favicon-harvester.png",
+      "icon": "https://bassthermal.com/assets/apps/favicon-harvester/app.png",
       "monogram": "FH",
       "links": {
         "website": "https://bassthermal.com/apps/favicon-harvester/",
@@ -177,15 +177,15 @@ window.BT_TOOLS_FEED_V1 = {
       },
       "recommendations": [
         {
-          "id": "rss-finder",
+          "id": "rss-crawler",
           "name": "RSS Crawler",
           "status": "live",
           "short": "Find RSS and Atom feeds from websites, inspect hidden feed endpoints, review discovered URLs, and export organized feed lists on Windows.",
           "reason": "Inspect the same domains for feed endpoints and site metadata.",
-          "icon": "https://bassthermal.com/og/rss-finder.png",
+          "icon": "https://bassthermal.com/assets/apps/rss-crawler/icon.png",
           "monogram": "RC",
           "links": {
-            "website": "https://bassthermal.com/apps/rss-finder/",
+            "website": "https://bassthermal.com/apps/rss-crawler/",
             "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
             "support": "https://bassthermal.com/support/"
           },
@@ -214,7 +214,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Scan public websites and create an organized inventory of discovered image assets.",
           "reason": "Review site icons alongside broader discovered website image assets.",
-          "icon": null,
+          "icon": "https://bassthermal.com/assets/apps/website-image-inventory/app.png",
           "monogram": "WI",
           "links": {
             "website": "https://bassthermal.com/apps/website-image-inventory/",
@@ -248,15 +248,15 @@ window.BT_TOOLS_FEED_V1 = {
         "href": "https://bassthermal.com/"
       }
     },
-    "rss-finder": {
-      "id": "rss-finder",
+    "rss-crawler": {
+      "id": "rss-crawler",
       "name": "RSS Crawler",
       "status": "live",
       "short": "Find RSS and Atom feeds from websites, inspect hidden feed endpoints, review discovered URLs, and export organized feed lists on Windows.",
-      "icon": "https://bassthermal.com/og/rss-finder.png",
+      "icon": "https://bassthermal.com/assets/apps/rss-crawler/icon.png",
       "monogram": "RC",
       "links": {
-        "website": "https://bassthermal.com/apps/rss-finder/",
+        "website": "https://bassthermal.com/apps/rss-crawler/",
         "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
         "support": "https://bassthermal.com/support/"
       },
@@ -267,7 +267,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Extract favicon assets from website URLs, process URL or domain lists, and organize discovered website icons for research or migrations.",
           "reason": "Collect site icons from the same domains you inspect for feeds.",
-          "icon": "https://bassthermal.com/og/favicon-harvester.png",
+          "icon": "https://bassthermal.com/assets/apps/favicon-harvester/app.png",
           "monogram": "FH",
           "links": {
             "website": "https://bassthermal.com/apps/favicon-harvester/",
@@ -301,7 +301,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Scan public websites and create an organized inventory of discovered image assets.",
           "reason": "Same tool family.",
-          "icon": null,
+          "icon": "https://bassthermal.com/assets/apps/website-image-inventory/app.png",
           "monogram": "WI",
           "links": {
             "website": "https://bassthermal.com/apps/website-image-inventory/",
@@ -322,7 +322,7 @@ window.BT_TOOLS_FEED_V1 = {
       "name": "DocBatch PDF Converter",
       "status": "live",
       "short": "Batch-convert DOCX, DOC, RTF, ODT, and TXT files into local PDF output on Windows.",
-      "icon": null,
+      "icon": "https://bassthermal.com/assets/apps/docbatch-pdf-converter/app.png",
       "monogram": "DP",
       "links": {
         "website": "https://bassthermal.com/apps/docbatch-pdf-converter/",
@@ -340,7 +340,7 @@ window.BT_TOOLS_FEED_V1 = {
       "name": "Website Image Inventory",
       "status": "live",
       "short": "Scan public websites and create an organized inventory of discovered image assets.",
-      "icon": null,
+      "icon": "https://bassthermal.com/assets/apps/website-image-inventory/app.png",
       "monogram": "WI",
       "links": {
         "website": "https://bassthermal.com/apps/website-image-inventory/",
@@ -354,7 +354,7 @@ window.BT_TOOLS_FEED_V1 = {
           "status": "live",
           "short": "Extract favicon assets from website URLs, process URL or domain lists, and organize discovered website icons for research or migrations.",
           "reason": "Review site icons alongside broader discovered website image assets.",
-          "icon": "https://bassthermal.com/og/favicon-harvester.png",
+          "icon": "https://bassthermal.com/assets/apps/favicon-harvester/app.png",
           "monogram": "FH",
           "links": {
             "website": "https://bassthermal.com/apps/favicon-harvester/",
@@ -365,15 +365,15 @@ window.BT_TOOLS_FEED_V1 = {
           "tier": "explicit"
         },
         {
-          "id": "rss-finder",
+          "id": "rss-crawler",
           "name": "RSS Crawler",
           "status": "live",
           "short": "Find RSS and Atom feeds from websites, inspect hidden feed endpoints, review discovered URLs, and export organized feed lists on Windows.",
           "reason": "Same tool family.",
-          "icon": "https://bassthermal.com/og/rss-finder.png",
+          "icon": "https://bassthermal.com/assets/apps/rss-crawler/icon.png",
           "monogram": "RC",
           "links": {
-            "website": "https://bassthermal.com/apps/rss-finder/",
+            "website": "https://bassthermal.com/apps/rss-crawler/",
             "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
             "support": "https://bassthermal.com/support/"
           },
@@ -408,7 +408,7 @@ window.BT_TOOLS_FEED_V1 = {
       "name": "CourseLab Beam: Shear & Moment",
       "status": "live",
       "short": "Build determinate beam cases and inspect reactions, shear diagrams, moment diagrams, and calculation steps.",
-      "icon": null,
+      "icon": "https://bassthermal.com/assets/apps/courselab-beam/app.png",
       "monogram": "CB",
       "links": {
         "website": "https://bassthermal.com/apps/courselab-beam/",
