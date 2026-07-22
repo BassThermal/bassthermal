@@ -3,11 +3,15 @@ name: Sync app assets
 on:
   push:
     paths:
-      - 'public/assets/apps/**'
-      - 'tools/build-asset-manifest.mjs'
-      - 'tools/append-app-icon-runtime.mjs'
-      - 'tools/validate-asset-layout.mjs'
-      - 'package.json'
+      - 'public/assets/apps/**/*.png'
+      - 'public/assets/apps/**/*.webp'
+      - 'public/assets/apps/**/*.jpg'
+      - 'public/assets/apps/**/*.jpeg'
+      - 'public/assets/apps/**/*.gif'
+      - 'public/assets/apps/**/*.avif'
+      - 'public/assets/apps/**/*.svg'
+      - 'public/assets/apps/**/*.ico'
+      - 'public/assets/apps/**/*.icns'
 
 permissions:
   contents: write
