@@ -7,7 +7,7 @@ const pages = [
   ['icon-pack-builder','Icon Pack Builder','public/apps/icon-pack-builder/index.html'],
   ['favicon-harvester','Favicon Harvester','public/apps/favicon-harvester/index.html'],
   ['isbn-manager','ISBN Manager','public/apps/isbn-manager/index.html'],
-  ['rss-finder','RSS Crawler','public/apps/rss-finder/index.html'],
+  ['rss-crawler','RSS Crawler','public/apps/rss-crawler/index.html'],
   ['docbatch-pdf-converter','DocBatch PDF Converter','public/apps/docbatch-pdf-converter/index.html'],
   ['website-image-inventory','Website Image Inventory','public/apps/website-image-inventory/index.html'],
   ['courselab-beam','CourseLab Beam: Shear & Moment','public/apps/courselab-beam/index.html'],

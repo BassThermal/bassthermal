@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
-  "version": "2026.07.20.1",
-  "generatedAt": "2026-07-21T17:47:28.733Z",
+  "version": "2026.07.22.2",
+  "generatedAt": "2026-07-22T15:44:52.285Z",
   "apps": [
     {
       "id": "dualticker",
@@ -59,7 +59,7 @@
       },
       "relatedTools": [
         {
-          "id": "rss-finder",
+          "id": "rss-crawler",
           "reason": "Find feed sources that can support live headline monitoring."
         }
       ]
@@ -290,7 +290,7 @@
           "reason": "Turn harvested site icons into packaged app or project assets."
         },
         {
-          "id": "rss-finder",
+          "id": "rss-crawler",
           "reason": "Inspect the same domains for feed endpoints and site metadata."
         }
       ]
@@ -353,8 +353,8 @@
       "relatedTools": []
     },
     {
-      "id": "rss-finder",
-      "slug": "rss-finder",
+      "id": "rss-crawler",
+      "slug": "rss-crawler",
       "name": "RSS Crawler",
       "shortName": "RSS Crawler",
       "status": "live",
@@ -402,7 +402,7 @@
       "line": "feed discovery · crawl and inspect RSS/Atom feeds",
       "short": "Find RSS and Atom feeds from websites, inspect hidden feed endpoints, review discovered URLs, and export organized feed lists on Windows.",
       "links": {
-        "website": "/apps/rss-finder/",
+        "website": "/apps/rss-crawler/",
         "windows": "https://apps.microsoft.com/detail/9mzqbtsnbv3d?hl=en-US&gl=CA",
         "android": "",
         "web": "",

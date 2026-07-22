@@ -12,7 +12,7 @@ Platform-specific icons, only when needed:
 
 `public/assets/apps/<slug>/<platform>/icon.png`
 
-Supported browser icon names include `icon.png`, `icon.webp`, `icon.jpg`, `icon.jpeg`, and safe `icon.svg` files. `.ico` may remain as a source/reference file but is not used as a browser screenshot.
+Supported browser icon names include `icon.png`, `icon.webp`, `icon.jpg`, `icon.jpeg`, safe `icon.svg` files, and the equivalent `app.*` names. `.ico` may remain as a source/reference file but is not used as a browser screenshot.
 
 ## Screenshots
 
@@ -30,13 +30,13 @@ Examples:
 
 - `public/assets/apps/icon-pack-builder/windows/shot-01.png`
 - `public/assets/apps/retrofy/android/shot-02.webp`
-- `public/assets/apps/rss-finder/windows/shot-01.png`
+- `public/assets/apps/rss-crawler/windows/shot-01.png`
 
 Any valid PNG, JPG/JPEG, WebP, GIF, or AVIF in a platform folder becomes a screenshot. Weird or extensionless image files may be normalized automatically.
 
 Rules:
 
-- Files named `icon.*` are icons, not screenshots.
+- Files named `icon.*` or `app.*` are icons, not screenshots.
 - `.ico` and `.icns` are ignored as screenshots.
 - Dotfiles and non-image junk are skipped.
 - Do not create a second asset folder when a product is renamed publicly.
@@ -44,9 +44,9 @@ Rules:
 RSS example:
 
 - Public name: `RSS Crawler`
-- Canonical slug: `rss-finder`
-- Product route: `/apps/rss-finder/`
-- Asset root: `public/assets/apps/rss-finder/`
+- Canonical slug: `rss-crawler`
+- Product route: `/apps/rss-crawler/`
+- Asset root: `public/assets/apps/rss-crawler/`
 
 ## Manifest build
 
