@@ -1,0 +1,14 @@
+.app-icon {
+  width: 1.15em;
+  height: 1.15em;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+  border-radius: 2px;
+  flex: 0 0 auto;
+  vertical-align: -0.16em;
+}
+
+.app-icon.is-missing {
+  display: none;
+}
