@@ -1,5 +1,21 @@
 # BassThermal manual app assets
 
+Use the canonical catalog slug from `data/bt-catalog.json` for every asset folder, even when the public product name changes.
+
+## Icons
+
+Preferred browser icon:
+
+`public/assets/apps/<slug>/icon.png`
+
+Platform-specific icons, only when needed:
+
+`public/assets/apps/<slug>/<platform>/icon.png`
+
+Supported browser icon names include `icon.png`, `icon.webp`, `icon.jpg`, `icon.jpeg`, and safe `icon.svg` files. `.ico` may remain as a source/reference file but is not used as a browser screenshot.
+
+## Screenshots
+
 Drop screenshots here:
 
 `public/assets/apps/<slug>/<platform>/`
@@ -10,44 +26,38 @@ Platforms:
 - `android`
 - `web`
 
-Any valid image in those folders becomes a screenshot:
-
-- `png`
-- `jpg` / `jpeg`
-- `webp`
-- `gif`
-- `avif`
-- weird/no-extension image files may be normalized automatically
-
-Rules:
-
-- Files named like `icon.*` are treated as icons, not screenshots.
-- `.ico` and `.icns` are ignored for screenshots.
-- Dotfiles and non-image junk are skipped.
-
-Icons:
-
-- `icon.png` / `icon.webp` / `icon.jpg` / `icon.jpeg` at app root or platform folder
-- `.ico` can exist as an icon source signal, but is ignored as screenshot
-
 Examples:
 
 - `public/assets/apps/icon-pack-builder/windows/shot-01.png`
-- `public/assets/apps/icon-pack-builder/windows/my-export-screen.png`
-- `public/assets/apps/icon-pack-builder/windows/apps.27766.weirdfile`
+- `public/assets/apps/retrofy/android/shot-02.webp`
+- `public/assets/apps/rss-finder/windows/shot-01.png`
 
-All should work as screenshots if image data is valid.
+Any valid PNG, JPG/JPEG, WebP, GIF, or AVIF in a platform folder becomes a screenshot. Weird or extensionless image files may be normalized automatically.
+
+Rules:
+
+- Files named `icon.*` are icons, not screenshots.
+- `.ico` and `.icns` are ignored as screenshots.
+- Dotfiles and non-image junk are skipped.
+- Do not create a second asset folder when a product is renamed publicly.
+
+RSS example:
+
+- Public name: `RSS Crawler`
+- Canonical slug: `rss-finder`
+- Product route: `/apps/rss-finder/`
+- Asset root: `public/assets/apps/rss-finder/`
 
 ## Manifest build
 
-Manifest is generated from local files only:
+The manifest is generated from local files:
 
 - Script: `tools/build-asset-manifest.mjs`
 - Output: `public/store-assets.generated.js`
-- Normalized weird-image cache: `public/assets/app-preview-cache/`
+- Normalized image cache: `public/assets/app-preview-cache/`
 
-To regenerate:
+Regenerate manually with:
 
-- `npm run assets:index`
+`npm run assets:index`
 
-Deploy/dev already regenerate automatically through package.json scripts.
+Normal development, build, and deploy commands also regenerate the manifest.
