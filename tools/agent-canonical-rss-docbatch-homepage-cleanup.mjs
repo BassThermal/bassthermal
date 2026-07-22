@@ -47,16 +47,8 @@ console.log('1/10 asset scanner');
 {
   const file = 'tools/build-asset-manifest.mjs';
   let s = await read(file);
-  s = requireReplace(
-    s,
-    /const iconPriority = \[[^\n]+\];/,
-    "$&\nconst iconBasenames = ['icon', 'app'];",
-    'icon basenames'
-  );
-  s = requireReplace(
-    s,
-    /async function pickIcon\(dir\) \{[\s\S]*?\n\}/,
-`async function pickIcon(dir) {
+  s = requireReplace(s, /const iconPriority = \[[^\n]+\];/, "$&\nconst iconBasenames = ['icon', 'app'];", 'icon basenames');
+  s = requireReplace(s, /async function pickIcon\(dir\) \{[\s\S]*?\n\}/, `async function pickIcon(dir) {
   for (const basename of iconBasenames) {
     for (const ext of iconPriority) {
       const candidate = path.join(dir, \`${'${basename}'}${'${ext}'}\`);
@@ -64,19 +56,12 @@ console.log('1/10 asset scanner');
     }
   }
   return null;
-}`,
-    'pickIcon'
-  );
-  s = requireReplace(
-    s,
-    /function isIconName\(name\) \{[\s\S]*?\n\}/,
-`function isIconName(name) {
+}`, 'pickIcon');
+  s = requireReplace(s, /function isIconName\(name\) \{[\s\S]*?\n\}/, `function isIconName(name) {
   const ext = path.extname(name);
   const base = path.basename(name, ext).toLowerCase();
   return base === 'icon' || base === 'app' || base.startsWith('icon.') || base.startsWith('app.');
-}`,
-    'icon screenshot exclusion'
-  );
+}`, 'icon screenshot exclusion');
   await write(file, s);
 }
 await write('data/bt-asset-sources.json', `${JSON.stringify({ schema: 'BT-ASSET-SOURCES-1', apps: {} }, null, 2)}\n`);
@@ -100,7 +85,11 @@ console.log('2/10 catalog identity');
 
 console.log('3/10 canonical files');
 await restoreRssAssets();
-await moveDir('public/apps/rss-finder', 'public/apps/rss-crawler');
+if (await exists('public/apps/rss-finder')) {
+  await moveDir('public/apps/rss-finder', 'public/apps/rss-crawler');
+} else if (!(await exists('public/apps/rss-crawler'))) {
+  throw new Error('RSS product page is missing under both known routes');
+}
 {
   const file = 'public/apps/rss-crawler/index.html';
   let s = await read(file);
@@ -122,12 +111,7 @@ console.log('4/10 redirects');
   const file = 'src/redirects.mjs';
   let s = await read(file);
   s = s.replaceAll('"/apps/rss-finder/"', '"/apps/rss-crawler/"');
-  s = requireReplace(
-    s,
-    '  "/tools/": "/",\n',
-    '  "/tools/": "/",\n  "/apps/rss-finder": "/apps/rss-crawler/",\n  "/apps/rss-finder/": "/apps/rss-crawler/",\n  "/privacy/rss-finder": "/privacy/rss-crawler/",\n  "/privacy/rss-finder/": "/privacy/rss-crawler/",\n',
-    'legacy RSS redirects'
-  );
+  s = requireReplace(s, '  "/tools/": "/",\n', '  "/tools/": "/",\n  "/apps/rss-finder": "/apps/rss-crawler/",\n  "/apps/rss-finder/": "/apps/rss-crawler/",\n  "/privacy/rss-finder": "/privacy/rss-crawler/",\n  "/privacy/rss-finder/": "/privacy/rss-crawler/",\n', 'legacy RSS redirects');
   await write(file, s);
 }
 
@@ -136,30 +120,15 @@ console.log('5/10 validators');
   const file = 'tools/test-redirects.mjs';
   let s = await read(file);
   s = s.replace("'rss-finder'", "'rss-crawler'").replaceAll('/apps/rss-finder/', '/apps/rss-crawler/');
-  s = requireReplace(
-    s,
-    "expectRedirect('/tools/', '/');\n",
-    "expectRedirect('/tools/', '/');\nexpectRedirect('/apps/rss-finder', '/apps/rss-crawler/');\nexpectRedirect('/apps/rss-finder/', '/apps/rss-crawler/');\nexpectRedirect('/privacy/rss-finder', '/privacy/rss-crawler/');\nexpectRedirect('/privacy/rss-finder/', '/privacy/rss-crawler/');\n",
-    'redirect tests'
-  );
+  s = requireReplace(s, "expectRedirect('/tools/', '/');\n", "expectRedirect('/tools/', '/');\nexpectRedirect('/apps/rss-finder', '/apps/rss-crawler/');\nexpectRedirect('/apps/rss-finder/', '/apps/rss-crawler/');\nexpectRedirect('/privacy/rss-finder', '/privacy/rss-crawler/');\nexpectRedirect('/privacy/rss-finder/', '/privacy/rss-crawler/');\n", 'redirect tests');
   await write(file, s);
 }
 {
   const file = 'tools/build-catalog.mjs';
   let s = await read(file);
-  s = requireReplace(
-    s,
-    /const aliases = \(app\) => app\.slug === 'rss-finder' \? \[[^\n]+/,
-    "const aliases = (app) => app.slug === 'rss-crawler' ? ['rss','feed','feeds','crawler','rss-finder'] : (app.slug === 'dualticker' ? ['dt','dual'] : app.slug.split('-'));",
-    'RSS aliases'
-  );
+  s = requireReplace(s, /const aliases = \(app\) => app\.slug === 'rss-finder' \? \[[^\n]+/, "const aliases = (app) => app.slug === 'rss-crawler' ? ['rss','feed','feeds','crawler','rss-finder'] : (app.slug === 'dualticker' ? ['dt','dual'] : app.slug.split('-'));", 'RSS aliases');
   s = s.replaceAll("'/apps/rss-finder/'", "'/apps/rss-crawler/'");
-  s = requireReplace(
-    s,
-    "  '/apps','/apps/','/tools','/tools/',\n",
-    "  '/apps','/apps/','/tools','/tools/','/apps/rss-finder','/apps/rss-finder/','/privacy/rss-finder','/privacy/rss-finder/',\n",
-    'legacy catalog paths'
-  );
+  s = requireReplace(s, "  '/apps','/apps/','/tools','/tools/',\n", "  '/apps','/apps/','/tools','/tools/','/apps/rss-finder','/apps/rss-finder/','/privacy/rss-finder','/privacy/rss-finder/',\n", 'legacy catalog paths');
   await write(file, s);
 }
 {
@@ -172,10 +141,7 @@ console.log('5/10 validators');
   const file = 'tools/test-app-icons.mjs';
   let s = await read(file);
   s = s.replaceAll("['rss-finder', '/assets/apps/rss-finder/icon.png']", "['rss-crawler', '/assets/apps/rss-crawler/icon.png']");
-  s = s.replace(
-    "  ['courselab-beam', '/assets/apps/courselab-beam/app.png']\n",
-    "  ['courselab-beam', '/assets/apps/courselab-beam/app.png'],\n  ['docbatch-pdf-converter', '/assets/apps/docbatch-pdf-converter/app.png']\n"
-  );
+  s = s.replace("  ['courselab-beam', '/assets/apps/courselab-beam/app.png']\n", "  ['courselab-beam', '/assets/apps/courselab-beam/app.png'],\n  ['docbatch-pdf-converter', '/assets/apps/docbatch-pdf-converter/app.png']\n");
   s = s.replace("assert.ok(!manifest.includes('\\\"rss-crawler\\\"'), 'duplicate rss-crawler manifest entry remains');", "assert.ok(!manifest.includes('\\\"rss-finder\\\"'), 'legacy rss-finder manifest entry remains');");
   await write(file, s);
 }
@@ -184,16 +150,8 @@ console.log('6/10 homepage copy');
 {
   const file = 'public/index.html';
   let s = await read(file);
-  s = s.replaceAll(
-    'BassThermal publishes compact Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and headline monitoring.',
-    'BassThermal publishes focused Windows, Android, and web apps for document conversion, web research, engineering study, media tools, book inventory, and other practical workflows.'
-  );
-  s = requireReplace(
-    s,
-    'Small Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and live news monitoring.',
-    'Independent software for practical work, study, and specialist workflows.',
-    'homepage intro'
-  );
+  s = s.replaceAll('BassThermal publishes compact Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and headline monitoring.', 'BassThermal publishes focused Windows, Android, and web apps for document conversion, web research, engineering study, media tools, book inventory, and other practical workflows.');
+  s = requireReplace(s, 'Small Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and live news monitoring.', 'Independent software for practical work, study, and specialist workflows.', 'homepage intro');
   await write(file, s);
 }
 
