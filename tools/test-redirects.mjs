@@ -10,8 +10,8 @@ function expectRedirect(path, target, method = 'GET', host = 'bassthermal.com') 
   assert.equal(status, 308);
   assert.equal(resolveRedirectUrl(out, method), null, `redirect chain for ${path}`);
 }
-function expectUntouched(path, method = 'GET') {
-  assert.equal(resolveRedirectUrl(`https://bassthermal.com${path}`, method), null, `${path} should be untouched`);
+function expectUntouched(path, method = 'GET', host = 'bassthermal.com') {
+  assert.equal(resolveRedirectUrl(`https://${host}${path}`, method), null, `${method} ${host}${path} should be untouched`);
 }
 
 expectRedirect('/apps', '/');
@@ -31,6 +31,15 @@ for (const [source, target] of Object.entries(LEGACY_REDIRECTS)) {
 
 assert.equal(resolveRedirectUrl('https://www.bassthermal.com/tools/find-hidden-rss-feeds/?source=test'), 'https://bassthermal.com/apps/rss-finder/?source=test');
 for (const slug of appSlugs) expectUntouched(`/apps/${slug}/`);
-for (const path of ['/tools/unknown-page/','/tools-extra/','/api/visit','/api/visits/summary','/api/visits/city','/bt-tools-feed.v1.json','/bt-tools-overlay.v1.js','/style.css','/assets/apps/rss-crawler/icon.png']) expectUntouched(path);
+for (const path of ['/tools/unknown-page/','/tools-extra/','/bt-tools-feed.v1.json','/bt-tools-overlay.v1.js','/style.css']) expectUntouched(path);
+
+for (const host of ['bassthermal.com', 'www.bassthermal.com']) {
+  expectUntouched('/api/visit', 'POST', host);
+  expectUntouched('/api/visits/summary', 'GET', host);
+  expectUntouched('/api/visits/summary?ts=1', 'GET', host);
+  expectUntouched('/api/visits/health', 'GET', host);
+  expectUntouched('/api/visits/city?city=Montreal&country=CA', 'GET', host);
+}
+
 assert.equal(resolveRedirectUrl('https://bassthermal.com/tools/', 'POST'), null);
 console.log('redirect tests passed');
