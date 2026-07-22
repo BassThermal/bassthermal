@@ -1,5 +1,6 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const root = process.cwd();
 const p = (...parts) => path.join(root, ...parts);
@@ -22,6 +23,24 @@ async function moveDir(fromRel, toRel) {
   await fs.mkdir(path.dirname(p(toRel)), { recursive: true });
   await fs.cp(p(fromRel), p(toRel), { recursive: true });
   await fs.rm(p(fromRel), { recursive: true, force: true });
+}
+async function restoreRssAssets() {
+  const canonical = 'public/assets/apps/rss-crawler';
+  await fs.rm(p(canonical), { recursive: true, force: true });
+  await fs.mkdir(p(canonical), { recursive: true });
+
+  if (await exists('public/assets/apps/rss-finder')) {
+    await fs.cp(p('public/assets/apps/rss-finder'), p(canonical), { recursive: true });
+    await fs.rm(p('public/assets/apps/rss-finder'), { recursive: true, force: true });
+    return;
+  }
+
+  const historicalIcon = execFileSync(
+    'git',
+    ['show', '4fe062b7a251e80ed16213acea77a6f3005fea79:public/assets/apps/rss-crawler/icon.png'],
+    { cwd: root, encoding: null }
+  );
+  await fs.writeFile(p(canonical, 'icon.png'), historicalIcon);
 }
 
 console.log('1/10 asset scanner');
@@ -80,7 +99,7 @@ console.log('2/10 catalog identity');
 }
 
 console.log('3/10 canonical files');
-await moveDir('public/assets/apps/rss-finder', 'public/assets/apps/rss-crawler');
+await restoreRssAssets();
 await moveDir('public/apps/rss-finder', 'public/apps/rss-crawler');
 {
   const file = 'public/apps/rss-crawler/index.html';
