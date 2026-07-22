@@ -1,6 +1,6 @@
 window.BT_TOOLS_FEED_V1 = {
   "schema": "BT-TOOLS-FEED-1",
-  "generatedAt": "2026-07-22T15:44:52.424Z",
+  "generatedAt": "2026-07-22T16:25:29.207Z",
   "origin": "https://bassthermal.com",
   "apps": {
     "dualticker": {
