@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-07-21T23:44:16.000Z",
+  "generatedAt": "2026-07-22T03:40:00.000Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -24,7 +24,7 @@ window.BT_STORE_ASSETS = {
     },
     "courselab-beam": {
       "icon": {
-        "fallback": null,
+        "fallback": "/assets/apps/courselab-beam/app.png",
         "android": null,
         "windows": null,
         "web": null
@@ -63,7 +63,7 @@ window.BT_STORE_ASSETS = {
     },
     "favicon-harvester": {
       "icon": {
-        "fallback": "/og/favicon-harvester.png",
+        "fallback": "/assets/apps/favicon-harvester/app.png",
         "android": null,
         "windows": null,
         "web": null
@@ -135,7 +135,7 @@ window.BT_STORE_ASSETS = {
     },
     "website-image-inventory": {
       "icon": {
-        "fallback": null,
+        "fallback": "/assets/apps/website-image-inventory/app.png",
         "android": null,
         "windows": null,
         "web": null
@@ -156,4 +156,21 @@ window.BT_STORE_ASSETS = {
   script.defer = true;
   script.dataset.btAssetPreview = '1';
   document.head.appendChild(script);
+})();
+
+(() => {
+  if (!document.querySelector('link[data-bt-app-icon-runtime]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/app-icons.css?v=1';
+    link.setAttribute('data-bt-app-icon-runtime', '1');
+    document.head.appendChild(link);
+  }
+  if (!document.querySelector('script[data-bt-app-icon-runtime]')) {
+    const script = document.createElement('script');
+    script.src = '/app-icon-hydrator.js?v=1';
+    script.defer = true;
+    script.setAttribute('data-bt-app-icon-runtime', '1');
+    document.head.appendChild(script);
+  }
 })();
