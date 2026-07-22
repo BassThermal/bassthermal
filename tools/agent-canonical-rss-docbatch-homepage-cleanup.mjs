@@ -3,241 +3,193 @@ import path from 'node:path';
 
 const root = process.cwd();
 const p = (...parts) => path.join(root, ...parts);
-
-async function exists(file) {
-  try { await fs.access(file); return true; } catch { return false; }
-}
-
-async function read(file) { return fs.readFile(p(file), 'utf8'); }
+const read = (file) => fs.readFile(p(file), 'utf8');
 async function write(file, content) {
   await fs.mkdir(path.dirname(p(file)), { recursive: true });
   await fs.writeFile(p(file), content, 'utf8');
 }
-
-function replaceRequired(source, from, to, label) {
-  if (!source.includes(from)) throw new Error(`missing expected text for ${label}`);
-  return source.replace(from, to);
+async function exists(file) {
+  try { await fs.access(p(file)); return true; } catch { return false; }
 }
-
+function requireReplace(source, matcher, replacement, label) {
+  const next = source.replace(matcher, replacement);
+  if (next === source) throw new Error(`migration could not update ${label}`);
+  return next;
+}
 async function moveDir(fromRel, toRel) {
-  const from = p(fromRel);
-  const to = p(toRel);
-  if (!(await exists(from))) throw new Error(`missing directory: ${fromRel}`);
-  await fs.rm(to, { recursive: true, force: true });
-  await fs.mkdir(path.dirname(to), { recursive: true });
-  await fs.cp(from, to, { recursive: true });
-  await fs.rm(from, { recursive: true, force: true });
+  if (!(await exists(fromRel))) throw new Error(`missing source directory ${fromRel}`);
+  await fs.rm(p(toRel), { recursive: true, force: true });
+  await fs.mkdir(path.dirname(p(toRel)), { recursive: true });
+  await fs.cp(p(fromRel), p(toRel), { recursive: true });
+  await fs.rm(p(fromRel), { recursive: true, force: true });
 }
 
-// 1. Make the asset scanner accept the two names already used in this repo.
+console.log('1/10 asset scanner');
 {
   const file = 'tools/build-asset-manifest.mjs';
-  let source = await read(file);
-  source = replaceRequired(
-    source,
-    "const iconPriority = ['.png', '.webp', '.jpg', '.jpeg', '.svg', '.ico'];",
-    "const iconPriority = ['.png', '.webp', '.jpg', '.jpeg', '.svg', '.ico'];\nconst iconBasenames = ['icon', 'app'];",
-    'icon basenames declaration'
+  let s = await read(file);
+  s = requireReplace(
+    s,
+    /const iconPriority = \[[^\n]+\];/,
+    "$&\nconst iconBasenames = ['icon', 'app'];",
+    'icon basenames'
   );
-  source = replaceRequired(
-    source,
-`async function pickIcon(dir) {
-  for (const ext of iconPriority) {
-    const candidate = path.join(dir, \`icon\${ext}\`);
-    try {
-      const stat = await fs.stat(candidate);
-      if (stat.isFile()) return candidate;
-    } catch {}
-  }
-  return null;
-}`,
+  s = requireReplace(
+    s,
+    /async function pickIcon\(dir\) \{[\s\S]*?\n\}/,
 `async function pickIcon(dir) {
   for (const basename of iconBasenames) {
     for (const ext of iconPriority) {
-      const candidate = path.join(dir, \`\${basename}\${ext}\`);
+      const candidate = path.join(dir, \`${'${basename}'}${'${ext}'}\`);
       if (await isBrowserSafeIcon(candidate)) return candidate;
     }
   }
   return null;
 }`,
-    'pickIcon implementation'
+    'pickIcon'
   );
-  source = replaceRequired(
-    source,
-`function isIconName(name) {
-  const ext = path.extname(name);
-  const base = path.basename(name, ext).toLowerCase();
-  return base === 'icon' || base.startsWith('icon.');
-}`,
+  s = requireReplace(
+    s,
+    /function isIconName\(name\) \{[\s\S]*?\n\}/,
 `function isIconName(name) {
   const ext = path.extname(name);
   const base = path.basename(name, ext).toLowerCase();
   return base === 'icon' || base === 'app' || base.startsWith('icon.') || base.startsWith('app.');
 }`,
-    'screenshot icon exclusion'
+    'icon screenshot exclusion'
   );
-  await write(file, source);
+  await write(file, s);
 }
-
-// Root app assets are now sufficient; remove alternate OG/banner mappings.
 await write('data/bt-asset-sources.json', `${JSON.stringify({ schema: 'BT-ASSET-SOURCES-1', apps: {} }, null, 2)}\n`);
 
-// 2. Canonicalize RSS Crawler across catalog identity and public routes.
+console.log('2/10 catalog identity');
 {
   const file = 'data/bt-catalog.json';
   const catalog = JSON.parse(await read(file));
-  const rss = catalog.apps.find((app) => app.id === 'rss-finder' || app.slug === 'rss-finder' || app.id === 'rss-crawler');
+  const rss = catalog.apps.find((app) => ['rss-finder', 'rss-crawler'].includes(app.id) || ['rss-finder', 'rss-crawler'].includes(app.slug));
   if (!rss) throw new Error('RSS app missing from catalog');
-  rss.id = 'rss-crawler';
-  rss.slug = 'rss-crawler';
-  rss.name = 'RSS Crawler';
-  rss.shortName = 'RSS Crawler';
+  Object.assign(rss, { id: 'rss-crawler', slug: 'rss-crawler', name: 'RSS Crawler', shortName: 'RSS Crawler' });
   rss.links.website = '/apps/rss-crawler/';
   rss.links.privacy = '/privacy/rss-crawler/';
   rss.seo.canonical = 'https://bassthermal.com/apps/rss-crawler/';
   for (const app of catalog.apps) {
-    for (const related of app.relatedTools || []) {
-      if (related.id === 'rss-finder') related.id = 'rss-crawler';
-    }
+    for (const related of app.relatedTools || []) if (related.id === 'rss-finder') related.id = 'rss-crawler';
   }
   catalog.version = '2026.07.22.2';
   await write(file, `${JSON.stringify(catalog, null, 2)}\n`);
 }
 
+console.log('3/10 canonical files');
 await moveDir('public/assets/apps/rss-finder', 'public/assets/apps/rss-crawler');
 await moveDir('public/apps/rss-finder', 'public/apps/rss-crawler');
-
 {
   const file = 'public/apps/rss-crawler/index.html';
-  let html = await read(file);
-  html = html
-    .replaceAll('https://bassthermal.com/apps/rss-finder/', 'https://bassthermal.com/apps/rss-crawler/')
-    .replaceAll('data-app-slug="rss-finder"', 'data-app-slug="rss-crawler"')
-    .replaceAll('/privacy/rss-finder/', '/privacy/rss-crawler/');
-  await write(file, html);
+  let s = await read(file);
+  s = s.replaceAll('https://bassthermal.com/apps/rss-finder/', 'https://bassthermal.com/apps/rss-crawler/')
+       .replaceAll('data-app-slug="rss-finder"', 'data-app-slug="rss-crawler"')
+       .replaceAll('/privacy/rss-finder/', '/privacy/rss-crawler/');
+  await write(file, s);
 }
-
 await fs.rm(p('public/privacy/rss-crawler'), { recursive: true, force: true });
-await fs.mkdir(p('public/privacy/rss-crawler'), { recursive: true });
-await write('public/privacy/rss-crawler/index.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RSS Crawler Privacy | BassThermal</title><link rel="canonical" href="https://bassthermal.com/privacy/rss-crawler/"><link rel="stylesheet" href="/style.css"></head><body><main class="terminal page"><header class="topline"><div class="brand"><strong><a href="/">BASSTHERMAL</a></strong> / privacy / RSS Crawler</div></header><section class="page-main"><div>BassThermal does not sell personal data. RSS Crawler accesses website URLs and feed endpoints only as part of the discovery and inspection actions requested by the user. Store platforms may provide purchase and install analytics. Contact: <a href="mailto:info@bassthermal.com">info@bassthermal.com</a>.</div></section></main></body></html>\n`);
+await write('public/privacy/rss-crawler/index.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RSS Crawler Privacy | BassThermal</title><link rel="canonical" href="https://bassthermal.com/privacy/rss-crawler/"><link rel="stylesheet" href="/style.css"></head><body><main class="terminal page"><header class="topline"><div class="brand"><strong><a href="/">BASSTHERMAL</a></strong> / privacy / RSS Crawler</div></header><section class="page-main"><div>BassThermal does not sell personal data. RSS Crawler accesses website URLs and feed endpoints only as part of discovery and inspection actions requested by the user. Store platforms may provide purchase and install analytics. Contact: <a href="mailto:info@bassthermal.com">info@bassthermal.com</a>.</div></section></main></body></html>\n`);
 await fs.rm(p('public/privacy/rss-finder'), { recursive: true, force: true });
-
 {
   const file = 'public/privacy/index.html';
-  let html = await read(file);
-  html = replaceRequired(html, '/privacy/rss-finder/', '/privacy/rss-crawler/', 'privacy directory RSS link');
-  await write(file, html);
+  await write(file, (await read(file)).replaceAll('/privacy/rss-finder/', '/privacy/rss-crawler/'));
 }
 
-// 3. Redirect all historical RSS URLs to the one canonical destination.
+console.log('4/10 redirects');
 {
   const file = 'src/redirects.mjs';
-  let source = await read(file);
-  source = source.replaceAll('"/apps/rss-finder/"', '"/apps/rss-crawler/"');
-  source = replaceRequired(
-    source,
+  let s = await read(file);
+  s = s.replaceAll('"/apps/rss-finder/"', '"/apps/rss-crawler/"');
+  s = requireReplace(
+    s,
     '  "/tools/": "/",\n',
     '  "/tools/": "/",\n  "/apps/rss-finder": "/apps/rss-crawler/",\n  "/apps/rss-finder/": "/apps/rss-crawler/",\n  "/privacy/rss-finder": "/privacy/rss-crawler/",\n  "/privacy/rss-finder/": "/privacy/rss-crawler/",\n',
     'legacy RSS redirects'
   );
-  await write(file, source);
+  await write(file, s);
 }
 
+console.log('5/10 validators');
 {
   const file = 'tools/test-redirects.mjs';
-  let source = await read(file);
-  source = source
-    .replace("'rss-finder'", "'rss-crawler'")
-    .replaceAll('/apps/rss-finder/', '/apps/rss-crawler/');
-  source = replaceRequired(
-    source,
+  let s = await read(file);
+  s = s.replace("'rss-finder'", "'rss-crawler'").replaceAll('/apps/rss-finder/', '/apps/rss-crawler/');
+  s = requireReplace(
+    s,
     "expectRedirect('/tools/', '/');\n",
     "expectRedirect('/tools/', '/');\nexpectRedirect('/apps/rss-finder', '/apps/rss-crawler/');\nexpectRedirect('/apps/rss-finder/', '/apps/rss-crawler/');\nexpectRedirect('/privacy/rss-finder', '/privacy/rss-crawler/');\nexpectRedirect('/privacy/rss-finder/', '/privacy/rss-crawler/');\n",
-    'redirect compatibility assertions'
+    'redirect tests'
   );
-  await write(file, source);
+  await write(file, s);
 }
-
 {
   const file = 'tools/build-catalog.mjs';
-  let source = await read(file);
-  source = replaceRequired(
-    source,
-    "const aliases = (app) => app.slug === 'rss-finder' ? ['rss','feed','feeds','crawler'] : (app.slug === 'dualticker' ? ['dt','dual'] : app.slug.split('-'));",
+  let s = await read(file);
+  s = requireReplace(
+    s,
+    /const aliases = \(app\) => app\.slug === 'rss-finder' \? \[[^\n]+/,
     "const aliases = (app) => app.slug === 'rss-crawler' ? ['rss','feed','feeds','crawler','rss-finder'] : (app.slug === 'dualticker' ? ['dt','dual'] : app.slug.split('-'));",
-    'RSS terminal aliases'
+    'RSS aliases'
   );
-  source = source.replaceAll("'/apps/rss-finder/'", "'/apps/rss-crawler/'");
-  source = replaceRequired(
-    source,
+  s = s.replaceAll("'/apps/rss-finder/'", "'/apps/rss-crawler/'");
+  s = requireReplace(
+    s,
     "  '/apps','/apps/','/tools','/tools/',\n",
     "  '/apps','/apps/','/tools','/tools/','/apps/rss-finder','/apps/rss-finder/','/privacy/rss-finder','/privacy/rss-finder/',\n",
-    'legacy sitemap validation paths'
+    'legacy catalog paths'
   );
-  await write(file, source);
+  await write(file, s);
 }
-
 {
   const file = 'tools/validate-product-pages.mjs';
-  let source = await read(file);
-  source = replaceRequired(
-    source,
-    "  ['rss-finder','RSS Crawler','public/apps/rss-finder/index.html'],",
-    "  ['rss-crawler','RSS Crawler','public/apps/rss-crawler/index.html'],",
-    'product validator RSS page'
-  );
-  await write(file, source);
+  let s = await read(file);
+  s = s.replace("['rss-finder','RSS Crawler','public/apps/rss-finder/index.html']", "['rss-crawler','RSS Crawler','public/apps/rss-crawler/index.html']");
+  await write(file, s);
 }
-
 {
   const file = 'tools/test-app-icons.mjs';
-  let source = await read(file);
-  source = source.replace("['rss-finder', '/assets/apps/rss-finder/icon.png']", "['rss-crawler', '/assets/apps/rss-crawler/icon.png']");
-  source = replaceRequired(
-    source,
+  let s = await read(file);
+  s = s.replaceAll("['rss-finder', '/assets/apps/rss-finder/icon.png']", "['rss-crawler', '/assets/apps/rss-crawler/icon.png']");
+  s = s.replace(
     "  ['courselab-beam', '/assets/apps/courselab-beam/app.png']\n",
-    "  ['courselab-beam', '/assets/apps/courselab-beam/app.png'],\n  ['docbatch-pdf-converter', '/assets/apps/docbatch-pdf-converter/app.png']\n",
-    'DocBatch icon test'
+    "  ['courselab-beam', '/assets/apps/courselab-beam/app.png'],\n  ['docbatch-pdf-converter', '/assets/apps/docbatch-pdf-converter/app.png']\n"
   );
-  source = source.replace(
-    "assert.ok(!manifest.includes('\\\"rss-crawler\\\"'), 'duplicate rss-crawler manifest entry remains');",
-    "assert.ok(!manifest.includes('\\\"rss-finder\\\"'), 'legacy rss-finder manifest entry remains');"
-  );
-  await write(file, source);
+  s = s.replace("assert.ok(!manifest.includes('\\\"rss-crawler\\\"'), 'duplicate rss-crawler manifest entry remains');", "assert.ok(!manifest.includes('\\\"rss-finder\\\"'), 'legacy rss-finder manifest entry remains');");
+  await write(file, s);
 }
 
-// 4. Keep the visible homepage human; retain useful search context in metadata.
+console.log('6/10 homepage copy');
 {
   const file = 'public/index.html';
-  let html = await read(file);
-  const oldMeta = 'BassThermal publishes compact Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and headline monitoring.';
-  const newMeta = 'BassThermal publishes focused Windows, Android, and web apps for document conversion, web research, engineering study, media tools, book inventory, and other practical workflows.';
-  html = html.replaceAll(oldMeta, newMeta);
-  html = replaceRequired(
-    html,
+  let s = await read(file);
+  s = s.replaceAll(
+    'BassThermal publishes compact Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and headline monitoring.',
+    'BassThermal publishes focused Windows, Android, and web apps for document conversion, web research, engineering study, media tools, book inventory, and other practical workflows.'
+  );
+  s = requireReplace(
+    s,
     'Small Windows, Android, and web utilities for document conversion, website asset inspection, engineering study, app asset prep, feed discovery, book inventory, image conversion, language reference, and live news monitoring.',
     'Independent software for practical work, study, and specialist workflows.',
     'homepage intro'
   );
-  await write(file, html);
+  await write(file, s);
 }
 
+console.log('7/10 sitemap and docs');
 {
   const file = 'public/sitemap.xml';
-  let xml = await read(file);
-  xml = replaceRequired(xml, '/apps/rss-finder/', '/apps/rss-crawler/', 'RSS sitemap URL');
-  await write(file, xml);
+  await write(file, requireReplace(await read(file), '/apps/rss-finder/', '/apps/rss-crawler/', 'RSS sitemap'));
 }
-
 {
   const file = 'public/assets/apps/README.md';
-  let md = await read(file);
-  md = md
-    .replace('Supported browser icon names include `icon.png`, `icon.webp`, `icon.jpg`, `icon.jpeg`, and safe `icon.svg` files.', 'Supported browser icon names include `icon.png`, `icon.webp`, `icon.jpg`, `icon.jpeg`, safe `icon.svg` files, and the equivalent `app.*` names.')
-    .replace('- Files named `icon.*` are icons, not screenshots.', '- Files named `icon.*` or `app.*` are icons, not screenshots.')
-    .replace('public/assets/apps/rss-finder/windows/shot-01.png', 'public/assets/apps/rss-crawler/windows/shot-01.png')
-    .replace('- Canonical slug: `rss-finder`\n- Product route: `/apps/rss-finder/`\n- Asset root: `public/assets/apps/rss-finder/`', '- Canonical slug: `rss-crawler`\n- Product route: `/apps/rss-crawler/`\n- Asset root: `public/assets/apps/rss-crawler/`');
-  await write(file, md);
+  let s = await read(file);
+  s = s.replace('Supported browser icon names include `icon.png`, `icon.webp`, `icon.jpg`, `icon.jpeg`, and safe `icon.svg` files.', 'Supported browser icon names include `icon.png`, `icon.webp`, `icon.jpg`, `icon.jpeg`, safe `icon.svg` files, and the equivalent `app.*` names.')
+       .replace('- Files named `icon.*` are icons, not screenshots.', '- Files named `icon.*` or `app.*` are icons, not screenshots.')
+       .replaceAll('rss-finder', 'rss-crawler');
+  await write(file, s);
 }
 
-console.log('Canonical RSS, DocBatch icon, and homepage cleanup applied.');
+console.log('8/10 migration complete');
