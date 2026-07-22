@@ -2,13 +2,19 @@
   "schema": "BT-ASSET-SOURCES-1",
   "apps": {
     "favicon-harvester": {
-      "icon": "public/og/favicon-harvester.png"
+      "icon": "public/assets/apps/favicon-harvester/app.png"
     },
     "isbn-manager": {
       "icon": "public/og/isbn-manager.png"
     },
     "icon-pack-builder": {
       "icon": "public/og/icon-pack-builder.png"
+    },
+    "website-image-inventory": {
+      "icon": "public/assets/apps/website-image-inventory/app.png"
+    },
+    "courselab-beam": {
+      "icon": "public/assets/apps/courselab-beam/app.png"
     }
   }
 }
