@@ -4,7 +4,7 @@
   "scripts": {
     "deploy": "npm run build:site && wrangler deploy",
     "dev": "npm run build:site && wrangler dev",
-    "assets:index": "node tools/build-asset-manifest.mjs",
+    "assets:index": "node tools/build-asset-manifest.mjs && node tools/append-app-icon-runtime.mjs",
     "catalog:build": "node tools/build-catalog.mjs",
     "catalog:validate": "node tools/build-catalog.mjs --validate-only",
     "build:site": "npm run assets:index && npm run catalog:build && npm run bt-tools-feed:build",
