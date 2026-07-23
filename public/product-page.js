@@ -28,31 +28,101 @@
     trigger?.focus?.();
   }
 
-  function openViewer(src, alt, trigger) {
+  function openViewer(items, startIndex, productName, platform, trigger) {
     closeViewer();
+    if (!Array.isArray(items) || !items.length) return;
+
+    let index = Math.max(0, Math.min(startIndex, items.length - 1));
+    let touchStartX = 0;
+    let touchStartY = 0;
+
     const root = document.createElement('div');
     root.className = 'product-shot-viewer';
     root.setAttribute('role', 'dialog');
     root.setAttribute('aria-modal', 'true');
-    root.setAttribute('aria-label', alt);
+    root.setAttribute('aria-label', `${productName} ${platform} screenshots`);
+
     const frame = document.createElement('div');
     frame.className = 'product-shot-viewer-frame';
+
     const close = document.createElement('button');
     close.type = 'button';
     close.className = 'product-shot-viewer-close';
-    close.setAttribute('aria-label', 'Close screenshot');
+    close.setAttribute('aria-label', 'Close screenshot viewer');
     close.textContent = '×';
+
+    const previous = document.createElement('button');
+    previous.type = 'button';
+    previous.className = 'product-shot-viewer-nav product-shot-viewer-prev';
+    previous.setAttribute('aria-label', 'Previous screenshot');
+    previous.textContent = '‹';
+
+    const next = document.createElement('button');
+    next.type = 'button';
+    next.className = 'product-shot-viewer-nav product-shot-viewer-next';
+    next.setAttribute('aria-label', 'Next screenshot');
+    next.textContent = '›';
+
     const image = document.createElement('img');
-    image.src = src;
-    image.alt = alt;
-    frame.append(close, image);
+    image.decoding = 'async';
+
+    const status = document.createElement('div');
+    status.className = 'product-shot-viewer-status';
+    status.setAttribute('aria-live', 'polite');
+
+    function render() {
+      const src = items[index];
+      const alt = `${productName} ${platform} screenshot ${index + 1} of ${items.length}`;
+      image.src = src;
+      image.alt = alt;
+      status.textContent = `${index + 1} / ${items.length}`;
+      const hasMultiple = items.length > 1;
+      previous.hidden = !hasMultiple;
+      next.hidden = !hasMultiple;
+    }
+
+    function move(direction) {
+      if (items.length < 2) return;
+      index = (index + direction + items.length) % items.length;
+      render();
+    }
+
+    const onKeydown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeViewer();
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        move(-1);
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        move(1);
+      }
+    };
+
+    close.addEventListener('click', closeViewer);
+    previous.addEventListener('click', () => move(-1));
+    next.addEventListener('click', () => move(1));
+    root.addEventListener('click', (event) => { if (event.target === root) closeViewer(); });
+    root.addEventListener('touchstart', (event) => {
+      const touch = event.changedTouches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    }, { passive: true });
+    root.addEventListener('touchend', (event) => {
+      const touch = event.changedTouches[0];
+      const deltaX = touch.clientX - touchStartX;
+      const deltaY = touch.clientY - touchStartY;
+      if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+      move(deltaX < 0 ? 1 : -1);
+    }, { passive: true });
+
+    frame.append(close, previous, image, next, status);
     root.append(frame);
     document.body.append(root);
-    const onKeydown = (event) => { if (event.key === 'Escape') closeViewer(); };
-    close.addEventListener('click', closeViewer);
-    root.addEventListener('click', (event) => { if (event.target === root) closeViewer(); });
     document.addEventListener('keydown', onKeydown);
     activeViewer = { root, trigger, onKeydown };
+    render();
     close.focus();
   }
 
@@ -142,7 +212,7 @@
           button.dataset.orientation = image.naturalHeight > image.naturalWidth * 1.12 ? 'portrait' : 'landscape';
         }, { once: true });
         button.append(image);
-        button.addEventListener('click', () => openViewer(src, alt, button));
+        button.addEventListener('click', () => openViewer(group.items, index, productName, group.platform, button));
         gallery.append(button);
       });
 
