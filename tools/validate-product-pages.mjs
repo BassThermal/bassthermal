@@ -12,6 +12,8 @@ const pages = [
   ['website-image-inventory','Website Image Inventory','public/apps/website-image-inventory/index.html'],
   ['courselab-beam','CourseLab Beam: Shear & Moment','public/apps/courselab-beam/index.html'],
 ];
+const catalog = JSON.parse(fs.readFileSync('data/bt-catalog.json', 'utf8'));
+const catalogBySlug = new Map(catalog.apps.map((app) => [app.slug, app]));
 const requiredClasses = ['product-header','product-icon','product-heading','product-title','product-subtitle','product-platforms','product-section','product-section-title'];
 const voidTags = new Set(['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr']);
 let failed = false;
@@ -38,7 +40,30 @@ for (const [slug,title,file] of pages){
   for (const cls of requiredClasses) if (!new RegExp(`class=["'][^"']*\\b${cls}\\b`).test(html)) fail(file, `missing shared class ${cls}`);
   const expectedCanonical = `https://bassthermal.com/apps/${slug}/`;
   if (!new RegExp(`<link[^>]+rel=["']canonical["'][^>]+href=["']${expectedCanonical.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}["']`).test(html)) fail(file, `canonical must be ${expectedCanonical}`);
-  for (const m of html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) { try { JSON.parse(m[1]); } catch(e) { fail(file, `JSON-LD does not parse: ${e.message}`); } }
+  const jsonLdBlocks = [...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
+  const parsedJsonLd = [];
+  for (const m of jsonLdBlocks) {
+    try { parsedJsonLd.push(JSON.parse(m[1])); }
+    catch(e) { fail(file, `JSON-LD does not parse: ${e.message}`); }
+  }
+  const app = catalogBySlug.get(slug);
+  if (!app) fail(file, `catalog entry missing for ${slug}`);
+  if (app) {
+    const softwareLd = parsedJsonLd.find((item) => item?.['@type'] === 'SoftwareApplication');
+    if (!softwareLd) fail(file, 'SoftwareApplication JSON-LD missing');
+    else {
+      if (softwareLd.operatingSystem !== app.seo.operatingSystem) fail(file, 'JSON-LD operatingSystem does not match catalog');
+      const downloads = Array.isArray(softwareLd.downloadUrl) ? softwareLd.downloadUrl : [softwareLd.downloadUrl].filter(Boolean);
+      for (const platform of app.platforms || []) {
+        const url = app.links?.[platform];
+        if (!url) fail(file, `catalog platform ${platform} has no link`);
+        else {
+          if (!html.includes(`href="${url}"`)) fail(file, `missing ${platform} Store link from catalog`);
+          if (!downloads.includes(url)) fail(file, `JSON-LD downloadUrl missing ${platform} link`);
+        }
+      }
+    }
+  }
   if (html.includes('Screenshots are not attached')) fail(file, 'screenshot placeholder remains');
   if (html.includes('CourseLab Beam: Shear & Moment: shear')) fail(file, 'duplicate CourseLab breadcrumb text remains');
   if (!html.includes('<script src="/store-assets.generated.js"></script>') || !html.includes('<script src="/product-page.js"></script>')) fail(file, 'missing shared product scripts');

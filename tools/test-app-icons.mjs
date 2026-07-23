@@ -16,6 +16,10 @@ for (const [slug, expected] of [
   assert.equal(block[1], expected, `wrong fallback for ${slug}`);
 }
 
+const courseLabWindowsShots = [...manifest.matchAll(/\/assets\/apps\/courselab-beam\/windows\/shot-(\d{2})\.png/g)]
+  .map((match) => match[1]);
+assert.deepEqual(courseLabWindowsShots, ['01', '02', '03', '04', '05', '06'], 'CourseLab Windows screenshots are missing or out of order');
+
 assert.ok(!manifest.includes('"rss-finder"'), 'legacy rss-finder manifest entry remains');
 assert.ok(manifest.includes('data-bt-app-icon-runtime'), 'app icon runtime was not appended');
 assert.ok(runtime.includes("img.classList.add('is-missing')"), 'icons are not hidden before verification');

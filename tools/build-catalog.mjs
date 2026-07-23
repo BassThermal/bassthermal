@@ -17,18 +17,18 @@ function homepageApps() {
   return apps.filter((app) => app.visibility?.showOnWebsite !== false && app.visibility?.showInDirectory !== false);
 }
 
-function homepageRows() {
+function homepageRows(eol = '\n') {
   return homepageApps().map((app, index) => {
     const links = [['web','web'], ['windows','win'], ['android','and']]
       .filter(([key]) => app.links?.[key])
       .map(([key, label]) => `<a class="tag ${key}" href="${app.links[key]}">${label}</a>`)
       .join(' ');
     return `        <div class="row app-row" role="listitem"><span class="dim">${String(index + 1).padStart(2, '0')}</span><span class="app-main"><a class="app-name" href="/apps/${app.slug}/">${app.name}</a><span class="links">${links}</span></span><span class="app-meta">${app.line}</span></div>`;
-  }).join('\n');
+  }).join(eol);
 }
 
-function homepageItems() {
-  return homepageApps().map((app, index) => `        { "@type": "ListItem", "position": ${index + 1}, "name": "${app.name}", "url": "https://bassthermal.com/apps/${app.slug}/" }`).join(',\n');
+function homepageItems(eol = '\n') {
+  return homepageApps().map((app, index) => `        { "@type": "ListItem", "position": ${index + 1}, "name": "${app.name}", "url": "https://bassthermal.com/apps/${app.slug}/" }`).join(`,${eol}`);
 }
 
 function homepageJsApps() {
@@ -44,16 +44,27 @@ function homepageJsApps() {
 function syncHomepage() {
   const indexPath = path.join(root, 'public/index.html');
   let html = fs.readFileSync(indexPath, 'utf8');
-  html = html.replace(/("itemListElement": \[\n)(.*?)(\n      \])/s, `$1${homepageItems()}$3`);
-  html = html.replace(/(      <div class="table" id="appTable" role="list">\n)(.*?)(\n      <\/div>)/s, `$1${homepageRows()}$3`);
+  const eol = html.includes('\r\n') ? '\r\n' : '\n';
+
+  const itemListPattern = /("itemListElement": \[\r?\n)([\s\S]*?)(\r?\n      \])/;
+  ensure(itemListPattern.test(html), 'homepage JSON-LD item list marker missing');
+  html = html.replace(itemListPattern, (_match, start, _body, end) => `${start}${homepageItems(eol)}${end}`);
+
+  const tablePattern = /(      <div class="table" id="appTable" role="list">\r?\n)([\s\S]*?)(\r?\n      <\/div>)/;
+  ensure(tablePattern.test(html), 'homepage app table marker missing');
+  html = html.replace(tablePattern, (_match, start, _body, end) => `${start}${homepageRows(eol)}${end}`);
+
   const jsAppsPattern = /(^\s*const apps = )\[[\s\S]*?^\s*\];/m;
   ensure(jsAppsPattern.test(html), 'homepage JS app array marker missing');
-  html = html.replace(jsAppsPattern, `$1${homepageJsApps()};`);
+  const jsApps = homepageJsApps().replaceAll('\n', eol);
+  html = html.replace(jsAppsPattern, `$1${jsApps};`);
+
   if (!validateOnly) fs.writeFileSync(indexPath, html);
   const check = fs.readFileSync(indexPath, 'utf8');
-  const tableMatch = check.match(/<div class="table" id="appTable" role="list">([\s\S]*?)\n      <\/div>/);
+  const tableMatch = check.match(/<div class="table" id="appTable" role="list">([\s\S]*?)\r?\n      <\/div>/);
   ensure(Boolean(tableMatch), 'homepage app table missing');
-  ensure(((tableMatch?.[1] || '').match(/class="row app-row"/g) || []).length === homepageApps().length, 'homepage app row count must match catalog');
+  const tableSource = tableMatch?.[1] || '';
+  ensure((tableSource.match(/class="row app-row"/g) || []).length === homepageApps().length, 'homepage app row count must match catalog');
   const jsAppsMatch = check.match(/const apps = (\[[\s\S]*?\]);/);
   ensure(Boolean(jsAppsMatch), 'homepage JS app array missing');
   const jsAppsSource = jsAppsMatch?.[1] || '';
@@ -62,6 +73,11 @@ function syncHomepage() {
     ensure(check.includes(`"name": "${app.name}"`), `homepage JSON-LD missing app name: ${app.name}`);
     ensure(jsAppsSource.includes(`"slug": "${app.slug}"`), `homepage JS missing app slug: ${app.slug}`);
     ensure(jsAppsSource.includes(`"name": "${app.name}"`), `homepage JS missing app name: ${app.name}`);
+    for (const [platform, url] of [['web', app.links?.web], ['windows', app.links?.windows], ['android', app.links?.android]]) {
+      if (!url) continue;
+      ensure(tableSource.includes(`href="${url}"`), `homepage static row missing ${platform} link: ${app.slug}`);
+      ensure(jsAppsSource.includes(`"${url}"`), `homepage JS missing ${platform} link: ${app.slug}`);
+    }
   }
   ensure(!jsAppsSource.includes('"slug": "rss-finder"'), 'homepage JS still contains legacy rss-finder slug');
 }

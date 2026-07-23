@@ -1,6 +1,6 @@
 {
   "schema": "BT-CATALOG-1",
-  "version": "2026.07.22.2",
+  "version": "2026.07.22.3",
   "publisher": {
     "name": "BassThermal",
     "url": "https://bassthermal.com/",
@@ -900,9 +900,11 @@
         "structural",
         "education",
         "android",
-        "local-first"
+        "local-first",
+        "windows"
       ],
       "platforms": [
+        "windows",
         "android"
       ],
       "line": "beam calculator · reactions, shear, moment, and calculation steps",
@@ -916,19 +918,19 @@
       ],
       "links": {
         "website": "/apps/courselab-beam/",
-        "windows": "",
+        "windows": "https://apps.microsoft.com/detail/9mzx7h0whbcc",
         "android": "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams",
         "web": "",
         "privacy": "/privacy/courselab-beams/",
         "support": "/support/"
       },
       "seo": {
-        "title": "CourseLab Beam shear force and bending moment calculator for Android | BassThermal",
-        "description": "Build determinate beam cases and view support reactions, shear-force diagrams, bending-moment diagrams, and calculation steps on Android.",
+        "title": "CourseLab Beam shear force and bending moment calculator for Windows and Android | BassThermal",
+        "description": "Build determinate beam cases and view support reactions, shear-force diagrams, bending-moment diagrams, and calculation steps on Windows or Android.",
         "canonical": "https://bassthermal.com/apps/courselab-beam/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "EducationalApplication",
-        "operatingSystem": "Android"
+        "operatingSystem": "Windows, Android"
       },
       "relatedTools": []
     }

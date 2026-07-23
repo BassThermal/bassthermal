@@ -10,7 +10,7 @@ const runtime = `
     ['/home-visual.css?v=2', 'home']
   ];
   for (const [href, key] of styles) {
-    const selector = `link[${marker}="${key}"]`;
+    const selector = 'link[${marker}="' + key + '"]';
     if (document.querySelector(selector)) continue;
     const link = document.createElement('link');
     link.rel = 'stylesheet';

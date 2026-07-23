@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-07-22T16:25:29.773Z",
+  "generatedAt": "2026-07-23T02:18:38.036Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -16,8 +16,7 @@ window.BT_STORE_ASSETS = {
           "/assets/apps/coptic-dictionary/android/shot-10.webp"
         ],
         "windows": [
-          "/assets/apps/coptic-dictionary/windows/shot-01.png",
-          "/assets/app-preview-cache/coptic-dictionary/windows/001.jpg"
+          "/assets/apps/coptic-dictionary/windows/shot-01.png"
         ],
         "web": []
       }
@@ -31,7 +30,14 @@ window.BT_STORE_ASSETS = {
       },
       "screenshots": {
         "android": [],
-        "windows": [],
+        "windows": [
+          "/assets/apps/courselab-beam/windows/shot-01.png",
+          "/assets/apps/courselab-beam/windows/shot-02.png",
+          "/assets/apps/courselab-beam/windows/shot-03.png",
+          "/assets/apps/courselab-beam/windows/shot-04.png",
+          "/assets/apps/courselab-beam/windows/shot-05.png",
+          "/assets/apps/courselab-beam/windows/shot-06.png"
+        ],
         "web": []
       }
     },
@@ -164,7 +170,7 @@ window.BT_STORE_ASSETS = {
     ['/home-visual.css?v=2', 'home']
   ];
   for (const [href, key] of styles) {
-    const selector = `link[data-bt-app-icon-runtime="${key}"]`;
+    const selector = 'link[data-bt-app-icon-runtime="' + key + '"]';
     if (document.querySelector(selector)) continue;
     const link = document.createElement('link');
     link.rel = 'stylesheet';

@@ -1,6 +1,6 @@
 window.BT_TOOLS_FEED_V1 = {
   "schema": "BT-TOOLS-FEED-1",
-  "generatedAt": "2026-07-22T16:25:29.207Z",
+  "generatedAt": "2026-07-23T02:18:37.625Z",
   "origin": "https://bassthermal.com",
   "apps": {
     "dualticker": {
@@ -412,6 +412,7 @@ window.BT_TOOLS_FEED_V1 = {
       "monogram": "CB",
       "links": {
         "website": "https://bassthermal.com/apps/courselab-beam/",
+        "windows": "https://apps.microsoft.com/detail/9mzx7h0whbcc",
         "android": "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams",
         "support": "https://bassthermal.com/support/"
       },

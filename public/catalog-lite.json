@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
-  "version": "2026.07.22.2",
-  "generatedAt": "2026-07-22T16:25:29.056Z",
+  "version": "2026.07.22.3",
+  "generatedAt": "2026-07-23T02:18:37.522Z",
   "apps": [
     {
       "id": "dualticker",
@@ -568,16 +568,18 @@
         "structural",
         "education",
         "android",
-        "local-first"
+        "local-first",
+        "windows"
       ],
       "platforms": [
+        "windows",
         "android"
       ],
       "line": "beam calculator · reactions, shear, moment, and calculation steps",
       "short": "Build determinate beam cases and inspect reactions, shear diagrams, moment diagrams, and calculation steps.",
       "links": {
         "website": "/apps/courselab-beam/",
-        "windows": "",
+        "windows": "https://apps.microsoft.com/detail/9mzx7h0whbcc",
         "android": "https://play.google.com/store/apps/details?id=com.bassthermal.courselabbeams",
         "web": "",
         "support": "/support/"
