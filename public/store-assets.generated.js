@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-07-23T02:31:34.390Z",
+  "generatedAt": "2026-07-23T19:22:36.633Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -76,7 +76,11 @@ window.BT_STORE_ASSETS = {
       },
       "screenshots": {
         "android": [],
-        "windows": [],
+        "windows": [
+          "/assets/apps/favicon-harvester/windows/shot-01.png",
+          "/assets/apps/favicon-harvester/windows/shot-02.png",
+          "/assets/apps/favicon-harvester/windows/shot-03.png"
+        ],
         "web": []
       }
     },
