@@ -11,5 +11,5 @@ main.terminal{height:auto!important;min-height:0}
 .app-title-link{display:grid;grid-template-columns:22px minmax(0,1fr);align-items:center;gap:8px}
 .app-icon{width:20px;height:20px;margin:0;object-fit:contain;vertical-align:middle}
 .app-icon.is-missing{display:block;visibility:hidden}
-.app-meta{padding-left:30px}
-@media(max-width:820px){.topline{grid-template-columns:1fr;gap:2px}.topnav{text-align:left}.app-row{margin:0;padding:8px 4px}.app-meta{padding-left:30px}}
+.app-meta{padding-left:30px;color:color-mix(in srgb,var(--soft) 84%,var(--dim));font-size:12.75px;line-height:1.38;font-weight:400;letter-spacing:0}
+@media(max-width:820px){.topline{grid-template-columns:1fr;gap:2px}.topnav{text-align:left}.app-row{margin:0;padding:8px 4px}.app-meta{padding-left:30px;font-size:12.25px;line-height:1.42}}

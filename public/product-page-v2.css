@@ -7,7 +7,10 @@
 .product-section:not(.product-screenshots),.product-footer{max-width:78ch}
 .product-section-title{margin:0 0 2px;color:var(--bt-section);font-size:12.5px;font-weight:400;line-height:1.4;text-transform:lowercase}
 .product-section>div:not(.product-section-title),.product-section li{line-height:1.55}
+.product-section.faq>div:not(.product-section-title){padding:8px 0}
+.product-section.faq .q{margin-bottom:3px;color:var(--hot);font-weight:650;line-height:1.4}
+.product-section.faq .q+div{color:color-mix(in srgb,var(--fg) 82%,var(--soft));line-height:1.52}
 .product-footer{margin-top:4px;padding-top:12px;border-top:1px solid var(--line);color:var(--dim)}
 .product-footer a{color:var(--soft)}
 .product-section.is-secondary{opacity:.84}
-@media(max-width:860px){.product-header.has-product-icon{grid-template-columns:44px minmax(0,1fr)}.product-icon{width:44px;height:44px}.product-content{gap:20px}}
+@media(max-width:860px){.product-header.has-product-icon{grid-template-columns:44px minmax(0,1fr)}.product-icon{width:44px;height:44px}.product-content{gap:20px}.product-section.faq>div:not(.product-section-title){padding:7px 0}}
