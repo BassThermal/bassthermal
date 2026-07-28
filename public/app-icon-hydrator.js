@@ -22,6 +22,32 @@
     }
   }
 
+  function ensureGuideNavigation() {
+    const topnav = document.querySelector('.topnav');
+    if (topnav && !topnav.querySelector('a[href="/guides/"]')) {
+      const support = topnav.querySelector('a[href="/support/"]');
+      const guide = document.createElement('a');
+      guide.href = '/guides/';
+      guide.textContent = 'Guides';
+      if (support) {
+        topnav.insertBefore(guide, support);
+        topnav.insertBefore(document.createTextNode(' · '), support);
+      } else {
+        if (topnav.childNodes.length) topnav.append(document.createTextNode(' · '));
+        topnav.append(guide);
+      }
+    }
+
+    const footer = document.querySelector('body > .footer');
+    if (footer && !footer.querySelector('a[href="/guides/"]')) {
+      const guide = document.createElement('a');
+      guide.href = '/guides/';
+      guide.textContent = 'Guides';
+      footer.prepend(document.createTextNode(' · '));
+      footer.prepend(guide);
+    }
+  }
+
   function manifestIcon(slug) {
     const value = window.BT_STORE_ASSETS?.apps?.[slug]?.icon?.fallback;
     return typeof value === 'string' && value ? value : null;
@@ -79,6 +105,7 @@
 
   function boot() {
     ensureVisualStyles();
+    ensureGuideNavigation();
     hydrateAll();
     bindTerminalFocusGuard();
     const table = document.getElementById('appTable');
