@@ -27,7 +27,14 @@
     document.head.append(script);
   }
 
-  function makeMicrosoftBadge(details, surface) {
+  function concealFallback(anchor) {
+    if (anchor) anchor.classList.add('store-link-badged');
+  }
+
+  function makeMicrosoftBadge(details, surface, fallbackAnchor) {
+    const wrapper = document.createElement('span');
+    wrapper.className = 'store-badge-item microsoft-store-badge';
+
     const badge = document.createElement('ms-store-badge');
     badge.setAttribute('productid', details.productId);
     badge.setAttribute('cid', `bassthermal-${surface}`);
@@ -36,13 +43,16 @@
     badge.setAttribute('theme', 'auto');
     badge.setAttribute('size', 'large');
     badge.setAttribute('language', 'en-ca');
-    badge.setAttribute('animation', 'on');
-    return badge;
+    badge.setAttribute('animation', 'off');
+    wrapper.append(badge);
+
+    customElements.whenDefined('ms-store-badge').then(() => concealFallback(fallbackAnchor));
+    return wrapper;
   }
 
   function makeGoogleBadge(anchor, surface) {
     const link = document.createElement('a');
-    link.className = 'google-play-badge';
+    link.className = 'store-badge-item google-play-badge';
     link.href = anchor.href;
     link.dataset.storeSurface = surface;
     link.setAttribute('aria-label', `Get ${productName()} on Google Play`);
@@ -52,6 +62,7 @@
     image.alt = 'Get it on Google Play';
     image.loading = 'lazy';
     image.decoding = 'async';
+    image.addEventListener('load', () => concealFallback(anchor), { once: true });
     link.append(image);
     return link;
   }
@@ -67,7 +78,7 @@
     if (microsoftAnchor) {
       const details = microsoftDetails(microsoftAnchor);
       if (details) {
-        row.append(makeMicrosoftBadge(details, surface));
+        row.append(makeMicrosoftBadge(details, surface, microsoftAnchor));
         ensureMicrosoftComponent();
       }
     }
