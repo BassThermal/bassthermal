@@ -31,12 +31,12 @@
 
   function renderGallery(app) {
     const gallery = document.querySelector('[data-guide-gallery]');
-    if (!gallery || gallery.dataset.rendered === '1') return;
+    if (!gallery || gallery.dataset.rendered === '1') return false;
     gallery.dataset.rendered = '1';
+    document.querySelectorAll('[data-guide-shot]').forEach((image) => image.closest('.guide-media')?.remove());
 
     const productName = document.querySelector('.guide-kicker')?.textContent?.replace(/\s+guide$/i, '') || 'App';
     let count = 0;
-
     for (const platform of platformOrder) {
       const shots = app?.screenshots?.[platform];
       if (!Array.isArray(shots) || !shots.length) continue;
@@ -56,8 +56,8 @@
         count += 1;
       }
     }
-
     if (!count) gallery.remove();
+    return true;
   }
 
   function hydrateLegacyShots(app) {
@@ -82,8 +82,7 @@
     const app = appForSlug(document.body?.dataset?.appSlug || '');
     if (!app) return;
     hydratePageIcon(app);
-    renderGallery(app);
-    hydrateLegacyShots(app);
+    if (!renderGallery(app)) hydrateLegacyShots(app);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
