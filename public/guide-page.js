@@ -1,17 +1,30 @@
 (() => {
-  function getApp() {
-    const slug = document.body?.dataset?.appSlug || '';
+  function appForSlug(slug) {
     return slug ? window.BT_STORE_ASSETS?.apps?.[slug] : null;
   }
 
-  function hydrateIcon(app) {
-    const image = document.querySelector('[data-guide-icon]');
-    const header = document.querySelector('.guide-header');
+  function hydratePageIcon(app) {
+    const image = document.querySelector('.guide-page [data-guide-icon]');
+    const header = document.querySelector('.guide-page .guide-header');
     const src = app?.icon?.fallback;
     if (!image || !header || !src) return;
     image.addEventListener('load', () => header.classList.add('has-guide-icon'), { once: true });
     image.addEventListener('error', () => image.removeAttribute('src'), { once: true });
     image.src = src;
+  }
+
+  function hydrateIndexIcons() {
+    document.querySelectorAll('.guide-card[data-app-slug]').forEach((card) => {
+      const image = card.querySelector('[data-guide-icon]');
+      const app = appForSlug(card.dataset.appSlug || '');
+      const src = app?.icon?.fallback;
+      if (!image || !src) {
+        image?.remove();
+        return;
+      }
+      image.addEventListener('error', () => image.remove(), { once: true });
+      image.src = src;
+    });
   }
 
   function hydrateScreenshots(app) {
@@ -32,9 +45,10 @@
   }
 
   function init() {
-    const app = getApp();
+    hydrateIndexIcons();
+    const app = appForSlug(document.body?.dataset?.appSlug || '');
     if (!app) return;
-    hydrateIcon(app);
+    hydratePageIcon(app);
     hydrateScreenshots(app);
   }
 
