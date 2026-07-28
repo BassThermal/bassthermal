@@ -2,12 +2,21 @@
   'use strict';
 
   const hydrated = new WeakSet();
+  const guideLinks = {
+    dualticker: ['/guides/dualticker/compare-live-headline-sources/', 'Compare live headline sources with DualTicker'],
+    retrofy: ['/guides/retrofy/give-a-photo-a-retro-pixel-art-look/', 'Give a photo a retro pixel-art look'],
+    'coptic-dictionary': ['/guides/coptic-dictionary/look-up-and-save-coptic-words/', 'Look up and save Coptic words'],
+    'icon-pack-builder': ['/guides/icon-pack-builder/create-windows-app-icons-from-one-png/', 'Create Windows app icons from one PNG'],
+    'favicon-harvester': ['/guides/favicon-harvester/collect-favicons-from-a-list-of-websites/', 'Collect favicons from a list of websites'],
+    'isbn-manager': ['/guides/isbn-manager/build-a-book-catalog-from-isbns/', 'Build a book catalog from ISBNs'],
+    'rss-crawler': ['/guides/rss-crawler/find-and-export-rss-feeds/', 'Find and export RSS feeds from websites'],
+    'docbatch-pdf-converter': ['/guides/docbatch-pdf-converter/convert-a-folder-of-documents-to-pdf/', 'Convert a folder of documents to PDF'],
+    'website-image-inventory': ['/guides/website-image-inventory/audit-images-used-on-a-website/', 'Audit images used on a website'],
+    'courselab-beam': ['/guides/courselab-beam/build-and-review-a-beam-case/', 'Build and review a beam case']
+  };
 
   function ensureVisualStyles() {
-    const styles = [
-      ['/app-icons.css?v=2', 'icons'],
-      ['/home-visual.css?v=2', 'home']
-    ];
+    const styles = [['/app-icons.css?v=2', 'icons'], ['/home-visual.css?v=2', 'home']];
     if (document.querySelector('.product-page')) {
       styles.push(['/product-page-v2.css?v=2', 'product']);
       styles.push(['/product-page-media.css?v=2', 'product-media']);
@@ -37,7 +46,6 @@
         topnav.append(guide);
       }
     }
-
     const footer = document.querySelector('body > .footer');
     if (footer && !footer.querySelector('a[href="/guides/"]')) {
       const guide = document.createElement('a');
@@ -48,6 +56,18 @@
     }
   }
 
+  function ensureProductGuideLink() {
+    const slug = document.body?.dataset?.appSlug || '';
+    const target = guideLinks[slug];
+    if (!target) return;
+    const sections = [...document.querySelectorAll('.product-section')];
+    const section = sections.find((item) => item.querySelector('.product-section-title')?.textContent?.trim().toLowerCase() === 'guides' || item.querySelector('.product-section-title')?.textContent?.trim().toLowerCase() === 'guide');
+    const anchor = section?.querySelector('a');
+    if (!anchor) return;
+    anchor.href = target[0];
+    anchor.textContent = target[1];
+  }
+
   function manifestIcon(slug) {
     const value = window.BT_STORE_ASSETS?.apps?.[slug]?.icon?.fallback;
     return typeof value === 'string' && value ? value : null;
@@ -56,24 +76,14 @@
   function hydrateIcon(img) {
     if (!img || hydrated.has(img)) return;
     hydrated.add(img);
-
-    const slug = img.dataset.appIconSlug || '';
-    const src = manifestIcon(slug);
+    const src = manifestIcon(img.dataset.appIconSlug || '');
     img.classList.add('is-missing');
     img.removeAttribute('src');
-
     if (!src) return;
-
     const probe = new Image();
     probe.decoding = 'async';
-    probe.onload = () => {
-      img.src = src;
-      img.classList.remove('is-missing');
-    };
-    probe.onerror = () => {
-      img.removeAttribute('src');
-      img.classList.add('is-missing');
-    };
+    probe.onload = () => { img.src = src; img.classList.remove('is-missing'); };
+    probe.onerror = () => { img.removeAttribute('src'); img.classList.add('is-missing'); };
     probe.src = src;
   }
 
@@ -91,13 +101,11 @@
   function bindTerminalFocusGuard() {
     const overlay = document.getElementById('terminalOverlay');
     if (!overlay) return;
-
     const navigationKeys = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ']);
     document.addEventListener('keydown', (event) => {
       if (!navigationKeys.has(event.key)) return;
       releaseHiddenTerminalFocus();
     }, true);
-
     const observer = new MutationObserver(releaseHiddenTerminalFocus);
     observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
     releaseHiddenTerminalFocus();
@@ -106,25 +114,21 @@
   function boot() {
     ensureVisualStyles();
     ensureGuideNavigation();
+    ensureProductGuideLink();
     hydrateAll();
     bindTerminalFocusGuard();
     const table = document.getElementById('appTable');
     if (!table) return;
     const observer = new MutationObserver((records) => {
-      for (const record of records) {
-        for (const node of record.addedNodes) {
-          if (node.nodeType !== 1) continue;
-          if (node.matches?.('.app-icon[data-app-icon-slug]')) hydrateIcon(node);
-          hydrateAll(node);
-        }
+      for (const record of records) for (const node of record.addedNodes) {
+        if (node.nodeType !== 1) continue;
+        if (node.matches?.('.app-icon[data-app-icon-slug]')) hydrateIcon(node);
+        hydrateAll(node);
       }
     });
     observer.observe(table, { childList: true, subtree: true });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot, { once: true });
-  } else {
-    boot();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
 })();
