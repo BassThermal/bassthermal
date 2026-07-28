@@ -31,6 +31,16 @@
     }
   }
 
+  function ensureStoreBadgeRuntime() {
+    if (!document.querySelector('.product-page, .guide-page')) return;
+    if (document.querySelector('script[data-bt-ms-store-badges]')) return;
+    const script = document.createElement('script');
+    script.src = '/microsoft-store-badge.js';
+    script.defer = true;
+    script.dataset.btMsStoreBadges = '1';
+    document.head.appendChild(script);
+  }
+
   function ensureGuideNavigation() {
     const topnav = document.querySelector('.topnav');
     if (topnav && !topnav.querySelector('a[href="/guides/"]')) {
@@ -113,6 +123,7 @@
 
   function boot() {
     ensureVisualStyles();
+    ensureStoreBadgeRuntime();
     ensureGuideNavigation();
     ensureProductGuideLink();
     hydrateAll();
