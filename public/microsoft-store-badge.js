@@ -1,9 +1,10 @@
 (() => {
   'use strict';
 
-  const COMPONENT_SRC = 'https://get.microsoft.com/badge/ms-store-badge.bundled.js';
+  const MICROSOFT_COMPONENT_SRC = 'https://get.microsoft.com/badge/ms-store-badge.bundled.js';
+  const GOOGLE_BADGE_SRC = 'https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png';
 
-  function storeDetails(anchor) {
+  function microsoftDetails(anchor) {
     if (!anchor) return null;
     const match = anchor.href.match(/apps\.microsoft\.com\/detail\/([^/?#]+)/i);
     if (!match) return null;
@@ -17,16 +18,16 @@
       || 'BassThermal app';
   }
 
-  function ensureComponent() {
-    if (document.querySelector(`script[src="${COMPONENT_SRC}"]`)) return;
+  function ensureMicrosoftComponent() {
+    if (document.querySelector(`script[src="${MICROSOFT_COMPONENT_SRC}"]`)) return;
     const script = document.createElement('script');
     script.type = 'module';
-    script.src = COMPONENT_SRC;
+    script.src = MICROSOFT_COMPONENT_SRC;
     script.dataset.msStoreBadgeComponent = '1';
     document.head.append(script);
   }
 
-  function makeBadge(details, surface) {
+  function makeMicrosoftBadge(details, surface) {
     const badge = document.createElement('ms-store-badge');
     badge.setAttribute('productid', details.productId);
     badge.setAttribute('cid', `bassthermal-${surface}`);
@@ -39,47 +40,79 @@
     return badge;
   }
 
-  function mountProductBadge() {
-    const heading = document.querySelector('.product-heading');
-    if (!heading || heading.querySelector('[data-ms-store-badge]')) return false;
-    const anchor = heading.querySelector('a.windows[href*="apps.microsoft.com/detail/"]');
-    const details = storeDetails(anchor);
-    if (!details) return false;
-    const slot = document.createElement('div');
-    slot.className = 'ms-store-badge-slot ms-store-badge-product';
-    slot.dataset.msStoreBadge = 'product';
-    slot.append(makeBadge(details, 'product'));
-    heading.append(slot);
+  function makeGoogleBadge(anchor, surface) {
+    const link = document.createElement('a');
+    link.className = 'google-play-badge';
+    link.href = anchor.href;
+    link.dataset.storeSurface = surface;
+    link.setAttribute('aria-label', `Get ${productName()} on Google Play`);
+
+    const image = document.createElement('img');
+    image.src = GOOGLE_BADGE_SRC;
+    image.alt = 'Get it on Google Play';
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    link.append(image);
+    return link;
+  }
+
+  function mountBadges(surface, root, microsoftAnchor, googleAnchor) {
+    if (!root || root.querySelector('[data-store-badges]')) return false;
+    if (!microsoftAnchor && !googleAnchor) return false;
+
+    const row = document.createElement('div');
+    row.className = `store-badge-row store-badge-${surface}`;
+    row.dataset.storeBadges = surface;
+
+    if (microsoftAnchor) {
+      const details = microsoftDetails(microsoftAnchor);
+      if (details) {
+        row.append(makeMicrosoftBadge(details, surface));
+        ensureMicrosoftComponent();
+      }
+    }
+
+    if (googleAnchor) row.append(makeGoogleBadge(googleAnchor, surface));
+    if (!row.childNodes.length) return false;
+
+    root.append(row);
     return true;
   }
 
-  function mountGuideBadge() {
+  function mountProductBadges() {
+    const heading = document.querySelector('.product-heading');
+    if (!heading) return false;
+    return mountBadges(
+      'product',
+      heading,
+      heading.querySelector('a.windows[href*="apps.microsoft.com/detail/"]'),
+      heading.querySelector('a.android[href*="play.google.com/store/apps/details"]')
+    );
+  }
+
+  function mountGuideBadges() {
     const cta = document.querySelector('.guide-cta');
-    if (!cta || cta.querySelector('[data-ms-store-badge]')) return false;
-    const anchor = cta.querySelector('a.windows[href*="apps.microsoft.com/detail/"]');
-    const details = storeDetails(anchor);
-    if (!details) return false;
-    const slot = document.createElement('div');
-    slot.className = 'ms-store-badge-slot ms-store-badge-guide';
-    slot.dataset.msStoreBadge = 'guide';
-    slot.append(makeBadge(details, 'guide'));
-    cta.append(slot);
-    return true;
+    if (!cta) return false;
+    return mountBadges(
+      'guide',
+      cta,
+      cta.querySelector('a.windows[href*="apps.microsoft.com/detail/"]'),
+      cta.querySelector('a.android[href*="play.google.com/store/apps/details"]')
+    );
   }
 
   function ensureStyles() {
-    if (document.querySelector('link[data-ms-store-badge-style]')) return;
+    if (document.querySelector('link[data-store-badge-style]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = '/microsoft-store-badge.css';
-    link.dataset.msStoreBadgeStyle = '1';
+    link.dataset.storeBadgeStyle = '1';
     document.head.append(link);
   }
 
   function init() {
     ensureStyles();
-    const mounted = mountProductBadge() || mountGuideBadge();
-    if (mounted) ensureComponent();
+    mountProductBadges() || mountGuideBadges();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
