@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-07-23T19:22:36.633Z",
+  "generatedAt": "2026-07-28T18:16:15.182Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -126,7 +126,13 @@ window.BT_STORE_ASSETS = {
           "/assets/apps/retrofy/android/shot-09.webp",
           "/assets/apps/retrofy/android/shot-10.webp"
         ],
-        "windows": [],
+        "windows": [
+          "/assets/apps/retrofy/windows/shot-01.png",
+          "/assets/apps/retrofy/windows/shot-02.png",
+          "/assets/apps/retrofy/windows/shot-03.png",
+          "/assets/apps/retrofy/windows/shot-04.png",
+          "/assets/apps/retrofy/windows/shot-05.png"
+        ],
         "web": []
       }
     },
