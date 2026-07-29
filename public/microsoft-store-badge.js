@@ -34,7 +34,6 @@
   function makeMicrosoftBadge(details, surface, fallbackAnchor) {
     const wrapper = document.createElement('span');
     wrapper.className = 'store-badge-item microsoft-store-badge';
-
     const badge = document.createElement('ms-store-badge');
     badge.setAttribute('productid', details.productId);
     badge.setAttribute('cid', `bassthermal-${surface}`);
@@ -45,7 +44,6 @@
     badge.setAttribute('language', 'en-ca');
     badge.setAttribute('animation', 'off');
     wrapper.append(badge);
-
     customElements.whenDefined('ms-store-badge').then(() => concealFallback(fallbackAnchor));
     return wrapper;
   }
@@ -56,7 +54,6 @@
     link.href = anchor.href;
     link.dataset.storeSurface = surface;
     link.setAttribute('aria-label', `Get ${productName()} on Google Play`);
-
     const image = document.createElement('img');
     image.src = GOOGLE_BADGE_SRC;
     image.alt = 'Get it on Google Play';
@@ -70,11 +67,9 @@
   function mountBadges(surface, root, microsoftAnchor, googleAnchor) {
     if (!root || root.querySelector('[data-store-badges]')) return false;
     if (!microsoftAnchor && !googleAnchor) return false;
-
     const row = document.createElement('div');
     row.className = `store-badge-row store-badge-${surface}`;
     row.dataset.storeBadges = surface;
-
     if (microsoftAnchor) {
       const details = microsoftDetails(microsoftAnchor);
       if (details) {
@@ -82,10 +77,8 @@
         ensureMicrosoftComponent();
       }
     }
-
     if (googleAnchor) row.append(makeGoogleBadge(googleAnchor, surface));
     if (!row.childNodes.length) return false;
-
     root.append(row);
     return true;
   }
@@ -116,7 +109,7 @@
     if (document.querySelector('link[data-store-badge-style]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/microsoft-store-badge.css';
+    link.href = '/microsoft-store-badge.css?v=4';
     link.dataset.storeBadgeStyle = '1';
     document.head.append(link);
   }
