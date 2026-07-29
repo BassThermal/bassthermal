@@ -15,7 +15,10 @@
 .guide-body p{margin:0;line-height:1.72}
 .guide-body ul,.guide-body ol{margin:0;padding-left:22px;display:grid;gap:8px;line-height:1.65}
 .guide-lead{font-size:16.5px;color:color-mix(in srgb,var(--fg) 95%,var(--soft));line-height:1.74}
-.guide-gallery{display:grid;gap:21px}
+.guide-gallery{display:grid;gap:9px;width:min(980px,calc(100vw - 40px));max-width:calc(100vw - 40px)}
+.guide-screenshot-explorer{width:100%;max-width:none}
+.guide-screenshot-explorer .product-section-title{margin:0;color:var(--bt-section,#7b8592);font-size:12.5px;font-weight:500;line-height:1.4;text-transform:lowercase;letter-spacing:.02em}
+.guide-media-caption{color:var(--soft);font-size:12px;line-height:1.5}
 .guide-media{margin:3px 0 0;display:grid;gap:8px}
 .guide-media img{display:block;width:100%;height:auto;max-height:680px;object-fit:contain;object-position:top center;background:#040404;border:1px solid var(--line);transition:border-color 130ms cubic-bezier(.2,.75,.25,1),filter 130ms cubic-bezier(.2,.75,.25,1)}
 .guide-media img:hover{border-color:color-mix(in srgb,var(--soft) 68%,var(--line));filter:brightness(1.015)}
@@ -50,6 +53,7 @@
   .guide-lead{font-size:15px}
   .guide-body{max-width:100%;gap:22px;font-size:14px}
   .guide-body h2{font-size:18px}
+  .guide-gallery{width:100%;max-width:100%}
   .guide-card{grid-template-columns:48px minmax(0,1fr);padding:15px;min-height:0}
   .guide-card-icon{width:48px;height:48px}
   .guide-card-title{font-size:14.5px}

@@ -16,10 +16,10 @@
   };
 
   function ensureVisualStyles() {
-    const styles = [['/app-icons.css?v=2', 'icons'], ['/home-visual.css?v=3', 'home']];
+    const styles = [['/app-icons.css?v=2', 'icons'], ['/home-visual.css?v=4', 'home']];
     if (document.querySelector('.product-page')) {
-      styles.push(['/product-page-v2.css?v=3', 'product']);
-      styles.push(['/product-page-media.css?v=3', 'product-media']);
+      styles.push(['/product-page-v2.css?v=4', 'product']);
+      styles.push(['/product-page-media.css?v=4', 'product-media']);
     }
     for (const [href, key] of styles) {
       if (document.querySelector(`link[data-bt-visual-style="${key}"]`)) continue;
@@ -35,13 +35,14 @@
     if (!document.querySelector('.product-page, .guide-page')) return;
     if (document.querySelector('script[data-bt-ms-store-badges]')) return;
     const script = document.createElement('script');
-    script.src = '/microsoft-store-badge.js?v=3';
+    script.src = '/microsoft-store-badge.js?v=4';
     script.defer = true;
     script.dataset.btMsStoreBadges = '1';
     document.head.appendChild(script);
   }
 
   function ensureGuideNavigation() {
+    document.getElementById('readout')?.remove();
     const topnav = document.querySelector('.topnav');
     if (topnav && !topnav.querySelector('a[href="/guides/"]')) {
       const support = topnav.querySelector('a[href="/support/"]');

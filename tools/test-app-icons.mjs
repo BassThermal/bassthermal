@@ -22,7 +22,8 @@ assert.deepEqual(courseLabWindowsShots, ['01', '02', '03', '04', '05', '06'], 'C
 
 assert.ok(!manifest.includes('"rss-finder"'), 'legacy rss-finder manifest entry remains');
 assert.ok(manifest.includes('data-bt-app-icon-runtime'), 'app icon runtime was not appended');
-assert.ok(runtime.includes("img.classList.add('is-missing')"), 'icons are not hidden before verification');
+assert.ok(runtime.includes("classList.add('is-missing')"), 'icons are not hidden before verification');
+assert.ok(runtime.includes("classList.remove('is-missing')"), 'verified icons are not revealed');
 assert.ok(runtime.includes('probe.onload'), 'icon load is not verified');
 assert.ok(runtime.includes('probe.onerror'), 'icon failure is not handled');
 
