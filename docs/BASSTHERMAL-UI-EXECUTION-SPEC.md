@@ -1,233 +1,123 @@
 # Bassthermal UI Execution Specification
 
-Status: approved direction, implementation in progress
+Status: Composition V2 implementation contract
 
-## 1. Approved direction
+## Direction
 
-Bassthermal keeps its existing identity: black background, monospace typography, compact information density, square geometry, thin borders, restrained platform colour, and direct product language.
+Bassthermal keeps its black, monospace, compact instrument identity. The approved direction is Calm Premium with Tight Instrument discipline:
 
-The chosen direction is **Calm Premium** with elements of **Tight Instrument**:
+- homepage remains one strong software list, not a card dashboard;
+- product identity, Store actions, overview, workflow, and screenshots form one deliberate opening composition;
+- one platform-aware screenshot explorer replaces stacked platform canvases;
+- all Windows, Android, and web screenshots remain available;
+- portrait and landscape media receive different geometry;
+- Guides remains a calm library and articles remain content-first;
+- motion explains state changes and focus, never decoration;
+- mobile rearranges content instead of shrinking toward unreadable type.
 
-- homepage remains a strong app list rather than a generic card dashboard;
-- Guides remains a calm library;
-- product pages gain a stronger product header and coherent install actions;
-- screenshots gain a lightweight canvas with arrows, thumbnails, swipe, and the existing fullscreen viewer;
-- article pages remain content-first and readable;
-- mobile rearranges content instead of shrinking it into unreadable desktop proportions.
+## Non-negotiable rules
 
-This is a refinement, not a rebrand or framework migration.
-
-## 2. Non-negotiable rules
-
-1. Do not add a UI framework, carousel dependency, or animation library.
-2. Do not duplicate Store URLs, screenshot lists, app facts, or platform metadata.
+1. No UI framework, carousel, gesture package, or animation dependency.
+2. No duplicated Store URLs, screenshot arrays, app facts, or guide routes.
 3. Continue reading icons and screenshots from `BT_STORE_ASSETS`.
-4. Missing screenshots must remove the media surface cleanly.
-5. New screenshots added to the normal asset folders must populate automatically after the existing manifest build.
-6. Windows, Android, and web screenshots remain distinct groups.
-7. Existing normal Store anchors remain in HTML for crawlability and failure fallback.
-8. No autoplay, rotating hero, hidden screenshot cap, or “show more” mechanism.
-9. No app-specific CSS unless a genuine content defect cannot be solved by the shared system.
-10. No giant marketing hero, gradients, rounded SaaS cards, decorative dashboards, or fake social proof.
+4. Missing media removes itself cleanly.
+5. New assets continue populating through the existing manifest build.
+6. One screenshot platform is visible at a time, but every valid asset remains accessible.
+7. No autoplay, arbitrary cap, or show-more mechanism.
+8. Static Store and guide anchors remain crawlable fallback truth.
+9. No app-specific CSS or separate mobile markup.
+10. No giant hero, gradients, rounded SaaS cards, fake proof, or animated background effects.
+11. No core product text becomes JavaScript-only or hidden behind controls.
 
-## 3. Existing systems to preserve
+## Product composition
 
-### Product media
+Enhanced product pages use three areas:
 
-`public/product-page.js` already:
+```text
+identity  media
+summary   media
+```
 
-- loads the product icon from the generated asset manifest;
-- groups screenshots by platform;
-- provides a fullscreen viewer;
-- supports keyboard navigation;
-- supports touch swiping in the fullscreen viewer.
+Mobile becomes:
 
-The new screenshot canvas extends this implementation. It does not replace the viewer or asset pipeline.
+```text
+identity
+media
+summary
+```
 
-### Guides
+Identity contains the existing product header intact. Summary moves the existing overview and workflow sections by normalized heading text. Use cases, guide, audience, FAQ, and footer remain below in their existing order. Products without screenshots collapse to a confident text-only composition. Without JavaScript, the original static page remains useful.
 
-`public/guide-page.js` already loads icons and every available screenshot from the same manifest. Guide content remains independent of screenshot filenames or counts.
+## Screenshot explorer
 
-### Store actions
+- One explorer for all platforms.
+- Real platform buttons with `aria-pressed`.
+- Platform order remains Windows, Android, web.
+- Each platform remembers its selected image.
+- One active image with arrows, `current / total`, full-size action, keyboard arrows, and touch swipe.
+- All active-platform images appear in a native horizontally scrolling thumbnail rail.
+- Inactive platform thumbnail DOM is not created until selected.
+- Active image decodes before replacement and uses a monotonic selection token.
+- Previous and next images preload after the active image resolves.
+- Failed items are removed; empty platforms disappear; an empty explorer removes itself.
+- One image hides arrows, count, and thumbnail rail.
+- The existing fullscreen viewer remains and returns focus on close.
 
-`public/microsoft-store-badge.js` derives Microsoft and Google actions from the real anchors already in product and guide HTML. The fallback anchors remain present and are concealed only after the matching badge mounts.
+## Media geometry
 
-## 4. Component contracts
+Landscape media uses the available column and a practical maximum height. Portrait media uses a deliberately narrow, taller stage capped around phone-like width. A portrait screenshot must never float inside a full-width landscape frame. Mobile has no universal large minimum height and no horizontal overflow.
 
-### Homepage
+## Motion
 
-- Keep one app catalogue.
-- Preserve fast scanning and compact rows.
-- Increase confidence through type, icon scale, spacing, and contrast rather than cards.
-- Desktop keeps names, descriptions, and platform links easy to compare.
-- Mobile gives descriptions and links sufficient room and uses natural page scrolling.
-- No filters, categories, or promotional hero.
+Use approximately 110ms fast, 160ms normal, and 200ms slow transitions with `cubic-bezier(.2,.75,.25,1)`.
 
-### Product header
+Approved motion: screenshot opacity, platform state, thumbnail border/brightness, homepage row response, Guides card response, Store badge 1px lift, and focus-visible treatment.
 
-Order:
+Forbidden: autoplay, entrance animation, staggered load, infinite loops, bouncing controls, particles, 3D transforms, scroll-jacking, and large background movement. All motion disables under `prefers-reduced-motion`.
 
-1. breadcrumb;
-2. icon and product title;
-3. concise subtitle;
-4. web platform link when applicable;
-5. Store badge row;
-6. content.
+## Homepage
 
-The icon, title, subtitle, and Store actions must read as one product identity block.
+- Preserve the generated single app catalogue and terminal functionality.
+- Increase icon presence, app-name hierarchy, row rhythm, and description readability.
+- Keep platform links aligned and natural page scrolling.
+- Mobile retains approximately 13.5–14px base type and rearranges rows instead of shrinking.
+- Static output must contain `Microsoft Store · Google Play · Guides · Support` and `Privacy · Guides · Support`.
+- `tools/build-homepage-chrome.mjs` owns deterministic navigation, footer, and icon markup after catalog generation.
 
-### Store actions
+## Guides
 
-- Microsoft and Google badges remain side by side when both exist.
-- The pair scales within the available width without wrapping under normal supported phone widths.
-- Visible branded rectangles should feel balanced; raw image dimensions do not need to be identical.
-- Hover and focus motion remains restrained.
-- Web remains a text action.
+The library remains two columns on useful desktop widths and one column on mobile. Improve title, metadata, description, border, icon, hover, and focus hierarchy only. Guide screenshots remain inline and automatic. Do not add search, categories, sorting, reading-time labels, author cards, newsletters, or a sticky table of contents.
 
-### Product screenshot canvas
+## SEO, reliability, and accessibility
 
-For every platform with screenshots:
+- Static `h1`, descriptions, overview, workflow, guide links, Store links, canonical metadata, and structured data remain unchanged.
+- Screenshot controls affect supplemental media only.
+- Interactive controls are buttons or anchors.
+- Platform buttons use `aria-pressed`; thumbnails use `aria-current`; status uses `aria-live`.
+- Swipe is supplemental.
+- Focus-visible treatment is required.
+- No third-party runtime dependency is added.
 
-- show one active screenshot in a dedicated canvas;
-- show previous and next controls when more than one item exists;
-- show `current / total` status;
-- show all screenshots as a thumbnail strip;
-- clicking a thumbnail changes the active item;
-- clicking the active item opens the existing fullscreen viewer at that item;
-- keyboard left/right works when the canvas is focused;
-- horizontal touch swipe changes the active item;
-- orientation is respected without manual metadata;
-- one screenshot produces a clean canvas without inactive controls;
-- no screenshots produce no screenshots section.
+## Validation
 
-### Guides library
+Run:
 
-- Two columns at useful desktop widths, one column on mobile.
-- Strong but restrained card borders.
-- Visitor-facing introduction.
-- App icon, article title, app name, and concise description remain.
-- No planned states, search, filters, or categories.
+```text
+npm ci
+npm run build:site
+npm run catalog:validate
+npm run home:validate
+npm run test:product-pages
+npm run test:site-composition
+npm run test:app-icons
+npm run test:redirects
+npm run test:terminal-visits
+node --check public/product-page.js
+node --check public/microsoft-store-badge.js
+```
 
-### Guide articles
+Review homepage, Guides, RetroFy Windows and Android, DualTicker, a Windows-only product, a no-screenshot product, and guide pages at 1440×900, 1920×1080, 360×800, 390×844, 430×932, and phone desktop-site mode.
 
-- Comfortable reading width and stronger hierarchy.
-- Screenshot media remains automatic.
-- Product CTA stays compact.
-- Related links remain minimal.
-- No sticky table of contents in this pass.
+## Definition of done
 
-## 5. Design rhythm
-
-Shared spacing intent:
-
-- 4px: tightly related details;
-- 8px: title/subtitle and labels;
-- 12px: controls and compact groups;
-- 18px: related blocks;
-- 24px: normal sections;
-- 32px: major transitions.
-
-Typography must remain readable on mobile. Responsive layout changes should not rely on reducing the global root size toward 11px.
-
-## 6. File map
-
-### Shared foundation
-
-- `public/style.css`
-- homepage embedded styles in `public/index.html`
-
-### Product experience
-
-- `public/product-page-v2.css`
-- `public/product-page-media.css`
-- `public/product-page.js`
-- `public/microsoft-store-badge.css`
-
-### Guides
-
-- `public/guide-page.css`
-- `public/guides/index.html`
-
-### Explicitly out of scope
-
-- catalog data and generated catalog outputs;
-- Store URLs and package identifiers;
-- sitemap generation;
-- Worker routing;
-- visit telemetry;
-- app repositories;
-- screenshot folder conventions;
-- guide facts and app claims.
-
-## 7. Implementation batches
-
-### Batch 1 — foundation and content surfaces
-
-- product header hierarchy;
-- Guides library refinement;
-- article reading rhythm;
-- Store-action balance;
-- public-facing Guides introduction.
-
-### Batch 2 — screenshot canvas
-
-- extend existing product media renderer;
-- active canvas, arrows, status, thumbnails, keyboard, and touch;
-- retain fullscreen viewer;
-- validate zero, one, and many screenshots.
-
-### Batch 3 — homepage refinement
-
-- preserve single-list structure;
-- strengthen scale, spacing, navigation, and vertical mobile behavior;
-- avoid forced viewport fitting.
-
-### Batch 4 — rendered review and correction
-
-Review at:
-
-- 1440 × 900;
-- 1920 × 1080;
-- 360 × 800;
-- 390 × 844;
-- 430 × 932;
-- phone browser desktop-site mode.
-
-Representative pages:
-
-- homepage;
-- Guides library;
-- RetroFy product page;
-- DualTicker product page;
-- Windows-only product;
-- product with no screenshots;
-- guide with screenshots;
-- guide without screenshots.
-
-## 8. Slop and danger register
-
-Reject any implementation that:
-
-- adds a dependency for the gallery;
-- requires manual screenshot arrays in page HTML;
-- creates separate mobile markup;
-- removes crawlable Store anchors;
-- autoplays screenshots;
-- hides arbitrary assets;
-- creates one-off visual rules per app;
-- solves mobile by globally shrinking typography;
-- turns product pages into Store-listing clones;
-- adds decorative interface with no user purpose;
-- changes catalog, routing, analytics, or app facts during the visual pass.
-
-## 9. Definition of done
-
-- Bassthermal still looks unmistakably like Bassthermal.
-- Homepage remains a compact, confident catalogue.
-- Product identity and install actions form one coherent header.
-- Screenshot browsing is intentional, automatic, keyboard-accessible, and touch-friendly.
-- Guides feels like a calm library.
-- Articles remain highly readable.
-- No horizontal overflow at supported mobile widths.
-- Missing media and external badge failures degrade cleanly.
-- Existing build, catalog, product-page, redirect, terminal, and icon checks remain passing.
+The PR is complete only when the homepage, product composition, media explorer, Store actions, Guides, desktop, mobile, and deterministic build guards are all included. No visual surface is deliberately postponed.

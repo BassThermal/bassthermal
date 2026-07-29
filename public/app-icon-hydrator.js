@@ -16,10 +16,10 @@
   };
 
   function ensureVisualStyles() {
-    const styles = [['/app-icons.css?v=2', 'icons'], ['/home-visual.css?v=2', 'home']];
+    const styles = [['/app-icons.css?v=2', 'icons'], ['/home-visual.css?v=3', 'home']];
     if (document.querySelector('.product-page')) {
-      styles.push(['/product-page-v2.css?v=2', 'product']);
-      styles.push(['/product-page-media.css?v=2', 'product-media']);
+      styles.push(['/product-page-v2.css?v=3', 'product']);
+      styles.push(['/product-page-media.css?v=3', 'product-media']);
     }
     for (const [href, key] of styles) {
       if (document.querySelector(`link[data-bt-visual-style="${key}"]`)) continue;
@@ -35,7 +35,7 @@
     if (!document.querySelector('.product-page, .guide-page')) return;
     if (document.querySelector('script[data-bt-ms-store-badges]')) return;
     const script = document.createElement('script');
-    script.src = '/microsoft-store-badge.js';
+    script.src = '/microsoft-store-badge.js?v=3';
     script.defer = true;
     script.dataset.btMsStoreBadges = '1';
     document.head.appendChild(script);
@@ -71,7 +71,10 @@
     const target = guideLinks[slug];
     if (!target) return;
     const sections = [...document.querySelectorAll('.product-section')];
-    const section = sections.find((item) => item.querySelector('.product-section-title')?.textContent?.trim().toLowerCase() === 'guides' || item.querySelector('.product-section-title')?.textContent?.trim().toLowerCase() === 'guide');
+    const section = sections.find((item) => {
+      const title = item.querySelector('.product-section-title')?.textContent?.trim().toLowerCase();
+      return title === 'guides' || title === 'guide';
+    });
     const anchor = section?.querySelector('a');
     if (!anchor) return;
     anchor.href = target[0];
@@ -83,17 +86,17 @@
     return typeof value === 'string' && value ? value : null;
   }
 
-  function hydrateIcon(img) {
-    if (!img || hydrated.has(img)) return;
-    hydrated.add(img);
-    const src = manifestIcon(img.dataset.appIconSlug || '');
-    img.classList.add('is-missing');
-    img.removeAttribute('src');
+  function hydrateIcon(image) {
+    if (!image || hydrated.has(image)) return;
+    hydrated.add(image);
+    const src = manifestIcon(image.dataset.appIconSlug || '');
+    image.classList.add('is-missing');
+    image.removeAttribute('src');
     if (!src) return;
     const probe = new Image();
     probe.decoding = 'async';
-    probe.onload = () => { img.src = src; img.classList.remove('is-missing'); };
-    probe.onerror = () => { img.removeAttribute('src'); img.classList.add('is-missing'); };
+    probe.onload = () => { image.src = src; image.classList.remove('is-missing'); };
+    probe.onerror = () => { image.removeAttribute('src'); image.classList.add('is-missing'); };
     probe.src = src;
   }
 
@@ -113,8 +116,7 @@
     if (!overlay) return;
     const navigationKeys = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ']);
     document.addEventListener('keydown', (event) => {
-      if (!navigationKeys.has(event.key)) return;
-      releaseHiddenTerminalFocus();
+      if (navigationKeys.has(event.key)) releaseHiddenTerminalFocus();
     }, true);
     const observer = new MutationObserver(releaseHiddenTerminalFocus);
     observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });

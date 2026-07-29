@@ -7,7 +7,7 @@ const runtime = `
 (() => {
   const styles = [
     ['/app-icons.css?v=2', 'icons'],
-    ['/home-visual.css?v=2', 'home']
+    ['/home-visual.css?v=3', 'home']
   ];
   for (const [href, key] of styles) {
     const selector = 'link[${marker}="' + key + '"]';
@@ -20,7 +20,7 @@ const runtime = `
   }
   if (!document.querySelector('script[${marker}]')) {
     const script = document.createElement('script');
-    script.src = '/app-icon-hydrator.js?v=2';
+    script.src = '/app-icon-hydrator.js?v=3';
     script.defer = true;
     script.setAttribute('${marker}', '1');
     document.head.appendChild(script);
@@ -29,12 +29,11 @@ const runtime = `
 `;
 
 let source = await fs.readFile(file, 'utf8');
-if (!source.includes(marker)) {
-  source = `${source.trimEnd()}\n${runtime}`;
-} else {
-  source = source
-    .replaceAll('/app-icons.css?v=1', '/app-icons.css?v=2')
-    .replaceAll('/home-visual.css?v=1', '/home-visual.css?v=2')
-    .replaceAll('/app-icon-hydrator.js?v=1', '/app-icon-hydrator.js?v=2');
-}
+if (!source.includes(marker)) source = `${source.trimEnd()}\n${runtime}`;
+else source = source
+  .replaceAll('/app-icons.css?v=1', '/app-icons.css?v=2')
+  .replaceAll('/home-visual.css?v=1', '/home-visual.css?v=3')
+  .replaceAll('/home-visual.css?v=2', '/home-visual.css?v=3')
+  .replaceAll('/app-icon-hydrator.js?v=1', '/app-icon-hydrator.js?v=3')
+  .replaceAll('/app-icon-hydrator.js?v=2', '/app-icon-hydrator.js?v=3');
 await fs.writeFile(file, source, 'utf8');
