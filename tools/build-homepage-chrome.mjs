@@ -15,9 +15,10 @@ function addIcons(source) {
 function transform(source) {
   const navPattern = /<nav class="topnav" aria-label="Primary">[\s\S]*?<\/nav>/;
   const footerPattern = /<footer class="footer">[\s\S]*?<\/footer>/;
+  const readoutPattern = /\s*<div class="right" id="readout">[\s\S]*?<\/div>/;
   if (!navPattern.test(source)) throw new Error('homepage primary navigation marker missing');
   if (!footerPattern.test(source)) throw new Error('homepage footer marker missing');
-  return addIcons(source.replace(navPattern, TOPNAV).replace(footerPattern, FOOTER));
+  return addIcons(source.replace(navPattern, TOPNAV).replace(footerPattern, FOOTER).replace(readoutPattern, ''));
 }
 
 function validate(source) {
@@ -25,6 +26,7 @@ function validate(source) {
   if ((source.match(/href="\/guides\/"/g) || []).length < 2) errors.push('homepage requires Guides links in top navigation and footer');
   if (!source.includes(TOPNAV)) errors.push('homepage top navigation is not canonical');
   if (!source.includes(FOOTER)) errors.push('homepage footer is not canonical');
+  if (source.includes('id="readout"') || source.includes('10 apps · Windows · Android · Web')) errors.push('homepage status readout must not exist');
   const rows = source.match(/class="row app-row"/g) || [];
   const icons = source.match(/data-app-icon-slug=/g) || [];
   if (rows.length !== icons.length) errors.push(`homepage icon count ${icons.length} must match app row count ${rows.length}`);
