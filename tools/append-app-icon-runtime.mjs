@@ -20,7 +20,7 @@ const runtime = `
   }
   if (!document.querySelector('script[${marker}]')) {
     const script = document.createElement('script');
-    script.src = '/app-icon-hydrator.js?v=4';
+    script.src = '/app-icon-hydrator.js?v=5';
     script.defer = true;
     script.setAttribute('${marker}', '1');
     document.head.appendChild(script);
@@ -35,7 +35,8 @@ else source = source
   .replaceAll('/home-visual.css?v=1', '/home-visual.css?v=4')
   .replaceAll('/home-visual.css?v=2', '/home-visual.css?v=4')
   .replaceAll('/home-visual.css?v=3', '/home-visual.css?v=4')
-  .replaceAll('/app-icon-hydrator.js?v=1', '/app-icon-hydrator.js?v=4')
-  .replaceAll('/app-icon-hydrator.js?v=2', '/app-icon-hydrator.js?v=4')
-  .replaceAll('/app-icon-hydrator.js?v=3', '/app-icon-hydrator.js?v=4');
+  .replaceAll('/app-icon-hydrator.js?v=1', '/app-icon-hydrator.js?v=5')
+  .replaceAll('/app-icon-hydrator.js?v=2', '/app-icon-hydrator.js?v=5')
+  .replaceAll('/app-icon-hydrator.js?v=3', '/app-icon-hydrator.js?v=5')
+  .replaceAll('/app-icon-hydrator.js?v=4', '/app-icon-hydrator.js?v=5');
 await fs.writeFile(file, source, 'utf8');

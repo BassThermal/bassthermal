@@ -84,13 +84,13 @@
   }
 
   function mountProductBadges() {
-    const heading = document.querySelector('.product-heading');
-    if (!heading) return false;
+    const actions = document.querySelector('.product-install-actions');
+    if (!actions) return false;
     return mountBadges(
       'product',
-      heading,
-      heading.querySelector('a.windows[href*="apps.microsoft.com/detail/"]'),
-      heading.querySelector('a.android[href*="play.google.com/store/apps/details"]')
+      actions,
+      actions.querySelector('a.windows[href*="apps.microsoft.com/detail/"]'),
+      actions.querySelector('a.android[href*="play.google.com/store/apps/details"]')
     );
   }
 
@@ -109,14 +109,20 @@
     if (document.querySelector('link[data-store-badge-style]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/microsoft-store-badge.css?v=4';
+    link.href = '/microsoft-store-badge.css?v=5';
     link.dataset.storeBadgeStyle = '1';
     document.head.append(link);
   }
 
   function init() {
     ensureStyles();
-    mountProductBadges() || mountGuideBadges();
+    if (mountGuideBadges()) return;
+    if (mountProductBadges()) return;
+
+    const retry = () => {
+      if (mountProductBadges()) document.removeEventListener('bt:product-install-ready', retry);
+    };
+    document.addEventListener('bt:product-install-ready', retry);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });

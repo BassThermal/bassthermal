@@ -4,7 +4,7 @@
   let initialized = false;
 
   function ensureStyles() {
-    for (const [href, key] of [['/product-page-v2.css?v=4', 'product-page-v2'], ['/product-page-media.css?v=4', 'product-page-media']]) {
+    for (const [href, key] of [['/product-page-v2.css?v=5', 'product-page-v2'], ['/product-page-media.css?v=4', 'product-page-media']]) {
       if (document.querySelector(`link[data-product-style="${key}"]`)) continue;
       const link = document.createElement('link');
       link.rel = 'stylesheet';
@@ -42,6 +42,46 @@
     image.src = src;
   }
 
+  function removeGenericInstallFaq(content) {
+    const faq = [...content.querySelectorAll(':scope > .product-section.faq')][0];
+    if (!faq) return;
+    for (const item of faq.querySelectorAll(':scope > div:not(.product-section-title)')) {
+      const question = item.querySelector(':scope > .q')?.textContent?.trim().toLowerCase() || '';
+      if (question === 'where do i install it?' || question === 'where can i install it?') item.remove();
+    }
+    if (!faq.querySelector(':scope > div:not(.product-section-title)')) faq.remove();
+  }
+
+  function createInstallSection(content, header) {
+    const platforms = header.querySelector('.product-platforms');
+    if (!platforms?.querySelector('a[href]')) return null;
+
+    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'this app';
+    const section = document.createElement('section');
+    section.className = 'product-section product-install-section';
+    section.dataset.productInstall = '1';
+
+    const heading = document.createElement('h2');
+    heading.className = 'product-section-title';
+    heading.textContent = 'install';
+
+    const body = document.createElement('div');
+    body.className = 'product-install-body';
+    const title = document.createElement('div');
+    title.className = 'product-install-title';
+    title.textContent = `Get ${productName}`;
+    const actions = document.createElement('div');
+    actions.className = 'product-install-actions';
+    actions.append(platforms);
+    body.append(title, actions);
+    section.append(heading, body);
+
+    const faq = [...content.querySelectorAll(':scope > .product-section.faq')][0];
+    const footer = content.querySelector(':scope > .product-footer');
+    content.insertBefore(section, faq || footer || null);
+    return section;
+  }
+
   function normalizeSections() {
     const content = document.querySelector('.product-content');
     if (!content) return null;
@@ -72,6 +112,7 @@
       footer.append(allApps);
       section.replaceWith(footer);
     }
+    removeGenericInstallFaq(content);
     return content;
   }
 
@@ -123,7 +164,11 @@
     const header = document.querySelector('.product-header');
     const app = slug ? window.BT_STORE_ASSETS?.apps?.[slug] : null;
     if (!content || !header || !app) return;
+
+    createInstallSection(content, header);
     renderIcon(app, header);
+    document.dispatchEvent(new CustomEvent('bt:product-install-ready'));
+
     try {
       const runtime = await ensureExplorerRuntime();
       composeProduct(content, header, app, runtime);
