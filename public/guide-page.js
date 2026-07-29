@@ -1,9 +1,33 @@
 (() => {
-  const platformOrder = ['windows', 'android', 'web'];
-  const platformNames = { windows: 'Windows', android: 'Android', web: 'Web' };
+  'use strict';
 
   function appForSlug(slug) {
     return slug ? window.BT_STORE_ASSETS?.apps?.[slug] : null;
+  }
+
+  function ensureMediaStyles() {
+    if (document.querySelector('link[data-guide-media-style]')) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/product-page-media.css?v=4';
+    link.dataset.guideMediaStyle = '1';
+    document.head.append(link);
+  }
+
+  function ensureExplorerRuntime() {
+    if (window.BTScreenshotExplorer) return Promise.resolve(window.BTScreenshotExplorer);
+    return new Promise((resolve, reject) => {
+      let script = document.querySelector('script[data-bt-screenshot-explorer]');
+      if (!script) {
+        script = document.createElement('script');
+        script.src = '/screenshot-explorer.js?v=1';
+        script.defer = true;
+        script.dataset.btScreenshotExplorer = '1';
+        document.head.append(script);
+      }
+      script.addEventListener('load', () => window.BTScreenshotExplorer ? resolve(window.BTScreenshotExplorer) : reject(new Error('Screenshot explorer unavailable')), { once: true });
+      script.addEventListener('error', reject, { once: true });
+    });
   }
 
   function hydratePageIcon(app) {
@@ -29,60 +53,48 @@
     });
   }
 
-  function renderGallery(app) {
+  function renderGallery(app, runtime) {
     const gallery = document.querySelector('[data-guide-gallery]');
     if (!gallery || gallery.dataset.rendered === '1') return false;
     gallery.dataset.rendered = '1';
     document.querySelectorAll('[data-guide-shot]').forEach((image) => image.closest('.guide-media')?.remove());
 
-    const productName = document.querySelector('.guide-kicker')?.textContent?.replace(/\s+guide$/i, '') || 'App';
-    let count = 0;
-    for (const platform of platformOrder) {
-      const shots = app?.screenshots?.[platform];
-      if (!Array.isArray(shots) || !shots.length) continue;
-      for (const [index, src] of shots.entries()) {
-        if (typeof src !== 'string' || !src) continue;
-        const figure = document.createElement('figure');
-        figure.className = 'guide-media';
-        const image = document.createElement('img');
-        image.src = src;
-        image.alt = `${productName} ${platformNames[platform]} interface screenshot ${index + 1}`;
-        image.loading = count === 0 ? 'eager' : 'lazy';
-        image.decoding = 'async';
-        const caption = document.createElement('figcaption');
-        caption.textContent = `${productName} on ${platformNames[platform]}.`;
-        figure.append(image, caption);
-        gallery.append(figure);
-        count += 1;
-      }
+    const groups = runtime.groupsFor(app);
+    if (!groups.length) {
+      gallery.remove();
+      return false;
     }
-    if (!count) gallery.remove();
+
+    const productName = document.querySelector('.guide-kicker')?.textContent?.replace(/\s+guide$/i, '') || 'App';
+    const caption = document.createElement('p');
+    caption.className = 'guide-media-caption';
+    const explorer = runtime.build({
+      groups,
+      productName,
+      className: 'guide-screenshot-explorer',
+      onEmpty: () => gallery.remove(),
+      onChange: ({ platformLabel, index, total }) => {
+        caption.textContent = `${productName} on ${platformLabel} · screenshot ${index + 1} of ${total}.`;
+      }
+    });
+    gallery.replaceChildren(explorer, caption);
     return true;
   }
 
-  function hydrateLegacyShots(app) {
-    document.querySelectorAll('[data-guide-shot]').forEach((image) => {
-      const platform = image.dataset.platform || 'windows';
-      const index = Number(image.dataset.guideShot || 0);
-      const shots = app?.screenshots?.[platform];
-      const src = Array.isArray(shots) ? shots[index] : null;
-      const figure = image.closest('.guide-media');
-      if (!src) {
-        figure?.remove();
-        return;
-      }
-      image.src = src;
-      image.loading = image.dataset.eager === 'true' ? 'eager' : 'lazy';
-      image.decoding = 'async';
-    });
-  }
-
-  function init() {
+  async function init() {
     hydrateIndexIcons();
     const app = appForSlug(document.body?.dataset?.appSlug || '');
     if (!app) return;
     hydratePageIcon(app);
-    if (!renderGallery(app)) hydrateLegacyShots(app);
+    const gallery = document.querySelector('[data-guide-gallery]');
+    if (!gallery) return;
+    ensureMediaStyles();
+    try {
+      const runtime = await ensureExplorerRuntime();
+      renderGallery(app, runtime);
+    } catch {
+      gallery.remove();
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
