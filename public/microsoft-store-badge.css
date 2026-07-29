@@ -1,1 +1,43 @@
-.store-badge-row{--ms-badge-h:50px;--play-badge-h:44px;display:flex;align-items:center;flex-wrap:nowrap;gap:7px;min-height:var(--ms-badge-h);max-width:100%;overflow:hidden}.store-badge-product{margin-top:10px}.store-badge-guide{margin-top:5px}.store-badge-item{display:inline-flex;flex:0 1 auto;align-items:center;justify-content:center;min-width:0;line-height:0;transform:translateY(0);transition:transform .14s ease,filter .14s ease}.store-badge-item:hover,.store-badge-item:focus-visible{transform:translateY(-1px);filter:brightness(1.04) drop-shadow(0 4px 8px rgba(0,0,0,.28))}.store-badge-item:focus-visible{outline:2px solid var(--info);outline-offset:3px}.store-badge-row ms-store-badge:not(:defined){display:none}.microsoft-store-badge ms-store-badge{display:block}.microsoft-store-badge ms-store-badge::part(img){display:block;width:auto;height:var(--ms-badge-h);max-width:none}.google-play-badge img{display:block;width:auto;height:var(--play-badge-h);max-width:none}.store-link-badged{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:700px){.store-badge-row{--ms-badge-h:clamp(39px,11.2vw,44px);--play-badge-h:clamp(35px,10vw,39px);gap:6px}.store-badge-item{max-width:calc(50% - 3px)}.microsoft-store-badge ms-store-badge::part(img),.google-play-badge img{max-width:100%;object-fit:contain}}@media(prefers-reduced-motion:reduce){.store-badge-item{transition:none}.store-badge-item:hover,.store-badge-item:focus-visible{transform:none}}
+.store-badge-row{
+  --ms-badge-h:52px;
+  --play-badge-h:46px;
+  display:flex;
+  align-items:center;
+  flex-wrap:nowrap;
+  gap:7px;
+  min-height:var(--ms-badge-h);
+  max-width:100%;
+  overflow:visible
+}
+.store-badge-product{margin-top:11px}
+.store-badge-guide{margin-top:6px}
+.store-badge-item{
+  display:inline-flex;
+  flex:0 1 auto;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  line-height:0;
+  transform:translateY(0);
+  transition:transform var(--bt-motion-fast,110ms) var(--bt-ease-instrument,cubic-bezier(.2,.75,.25,1)),filter var(--bt-motion-fast,110ms) var(--bt-ease-instrument,cubic-bezier(.2,.75,.25,1))
+}
+.store-badge-item:hover,
+.store-badge-item:focus-visible{
+  transform:translateY(-1px);
+  filter:brightness(1.045) drop-shadow(0 4px 8px rgba(0,0,0,.26))
+}
+.store-badge-item:focus-visible{outline:2px solid var(--info);outline-offset:3px}
+.store-badge-row ms-store-badge:not(:defined){display:none}
+.microsoft-store-badge ms-store-badge{display:block}
+.microsoft-store-badge ms-store-badge::part(img){display:block;width:auto;height:var(--ms-badge-h);max-width:none}
+.google-play-badge img{display:block;width:auto;height:var(--play-badge-h);max-width:none}
+.store-link-badged{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@media(max-width:700px){
+  .store-badge-row{--ms-badge-h:clamp(40px,11.4vw,46px);--play-badge-h:clamp(35.5px,10.15vw,40.5px);gap:6px}
+  .store-badge-item{max-width:calc(50% - 3px)}
+  .microsoft-store-badge ms-store-badge::part(img),.google-play-badge img{max-width:100%;object-fit:contain}
+}
+@media(prefers-reduced-motion:reduce){
+  .store-badge-item{transition:none}
+  .store-badge-item:hover,.store-badge-item:focus-visible{transform:none}
+}
