@@ -72,9 +72,8 @@
 
     function render() {
       const src = items[index];
-      const alt = `${productName} ${platform} screenshot ${index + 1} of ${items.length}`;
       image.src = src;
-      image.alt = alt;
+      image.alt = `${productName} ${platform} screenshot ${index + 1} of ${items.length}`;
       status.textContent = `${index + 1} / ${items.length}`;
       const hasMultiple = items.length > 1;
       previous.hidden = !hasMultiple;
@@ -169,10 +168,124 @@
     }
   }
 
+  function orientationFor(image) {
+    return image.naturalHeight > image.naturalWidth * 1.12 ? 'portrait' : 'landscape';
+  }
+
+  function buildCanvas(items, productName, platform) {
+    let index = 0;
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    const canvas = document.createElement('div');
+    canvas.className = 'product-shot-canvas';
+
+    const stage = document.createElement('div');
+    stage.className = 'product-shot-stage';
+
+    const stageButton = document.createElement('button');
+    stageButton.type = 'button';
+    stageButton.className = 'product-shot-stage-button';
+
+    const image = document.createElement('img');
+    image.decoding = 'async';
+    image.loading = 'eager';
+
+    const previous = document.createElement('button');
+    previous.type = 'button';
+    previous.className = 'product-shot-canvas-nav product-shot-canvas-prev';
+    previous.setAttribute('aria-label', `Previous ${platform} screenshot`);
+    previous.textContent = '‹';
+
+    const next = document.createElement('button');
+    next.type = 'button';
+    next.className = 'product-shot-canvas-nav product-shot-canvas-next';
+    next.setAttribute('aria-label', `Next ${platform} screenshot`);
+    next.textContent = '›';
+
+    const status = document.createElement('div');
+    status.className = 'product-shot-canvas-status';
+    status.setAttribute('aria-live', 'polite');
+
+    const thumbs = document.createElement('div');
+    thumbs.className = 'product-shot-thumbs';
+    thumbs.setAttribute('aria-label', `${productName} ${platform} screenshot thumbnails`);
+
+    const thumbButtons = items.map((src, thumbIndex) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'product-shot-thumb';
+      button.setAttribute('aria-label', `Show ${productName} ${platform} screenshot ${thumbIndex + 1}`);
+      const thumb = document.createElement('img');
+      thumb.src = src;
+      thumb.alt = '';
+      thumb.loading = 'lazy';
+      thumb.decoding = 'async';
+      thumb.addEventListener('load', () => { button.dataset.orientation = orientationFor(thumb); }, { once: true });
+      button.append(thumb);
+      button.addEventListener('click', () => select(thumbIndex, true));
+      thumbs.append(button);
+      return button;
+    });
+
+    function select(nextIndex, userInitiated = false) {
+      index = (nextIndex + items.length) % items.length;
+      image.src = items[index];
+      image.alt = `${productName} ${platform} screenshot ${index + 1} of ${items.length}`;
+      stageButton.setAttribute('aria-label', `Open ${image.alt}`);
+      status.textContent = `${index + 1} / ${items.length}`;
+      thumbButtons.forEach((button, buttonIndex) => button.setAttribute('aria-current', buttonIndex === index ? 'true' : 'false'));
+      if (userInitiated) thumbButtons[index]?.scrollIntoView?.({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    }
+
+    function move(direction) {
+      if (items.length < 2) return;
+      select(index + direction, true);
+    }
+
+    image.addEventListener('load', () => { stage.dataset.orientation = orientationFor(image); });
+    stageButton.addEventListener('click', () => openViewer(items, index, productName, platform, stageButton));
+    stageButton.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        move(-1);
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        move(1);
+      }
+    });
+    previous.addEventListener('click', () => move(-1));
+    next.addEventListener('click', () => move(1));
+    stage.addEventListener('touchstart', (event) => {
+      const touch = event.changedTouches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    }, { passive: true });
+    stage.addEventListener('touchend', (event) => {
+      const touch = event.changedTouches[0];
+      const deltaX = touch.clientX - touchStartX;
+      const deltaY = touch.clientY - touchStartY;
+      if (Math.abs(deltaX) < 42 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+      move(deltaX < 0 ? 1 : -1);
+    }, { passive: true });
+
+    const hasMultiple = items.length > 1;
+    previous.hidden = !hasMultiple;
+    next.hidden = !hasMultiple;
+    status.hidden = !hasMultiple;
+    if (!hasMultiple) thumbs.hidden = true;
+
+    stageButton.append(image);
+    stage.append(stageButton, previous, next, status);
+    canvas.append(stage, thumbs);
+    select(0);
+    return canvas;
+  }
+
   function renderScreenshots(app) {
     const screenshots = app?.screenshots || {};
     const groups = platformOrder
-      .map((platform) => ({ platform, items: Array.isArray(screenshots[platform]) ? screenshots[platform] : [] }))
+      .map((platform) => ({ platform, items: Array.isArray(screenshots[platform]) ? screenshots[platform].filter((src) => typeof src === 'string' && src) : [] }))
       .filter((group) => group.items.length);
     if (!groups.length) return;
 
@@ -194,29 +307,7 @@
       const groupTitle = document.createElement('h3');
       groupTitle.className = 'product-shot-group-title';
       groupTitle.textContent = platformNames[group.platform] || group.platform;
-      const gallery = document.createElement('div');
-      gallery.className = 'product-shot-grid';
-
-      group.items.forEach((src, index) => {
-        const alt = `${productName} ${group.platform} screenshot ${index + 1}`;
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'product-shot';
-        button.setAttribute('aria-label', `Open ${alt}`);
-        const image = document.createElement('img');
-        image.src = src;
-        image.alt = alt;
-        image.loading = 'lazy';
-        image.decoding = 'async';
-        image.addEventListener('load', () => {
-          button.dataset.orientation = image.naturalHeight > image.naturalWidth * 1.12 ? 'portrait' : 'landscape';
-        }, { once: true });
-        button.append(image);
-        button.addEventListener('click', () => openViewer(group.items, index, productName, group.platform, button));
-        gallery.append(button);
-      });
-
-      wrapper.append(groupTitle, gallery);
+      wrapper.append(groupTitle, buildCanvas(group.items, productName, platformNames[group.platform] || group.platform));
       platforms.append(wrapper);
     });
 
