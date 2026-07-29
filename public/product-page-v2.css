@@ -20,7 +20,7 @@
 .product-breadcrumb{font-size:12.5px;color:var(--dim)}
 .product-title{font-size:clamp(29px,2.5vw,34px);line-height:1.07;letter-spacing:-.018em}
 .product-subtitle{max-width:62ch;margin-top:8px;font-size:15px;line-height:1.56;color:color-mix(in srgb,var(--fg) 72%,var(--soft))}
-.product-platforms{margin-top:8px}
+.product-platforms{margin:0}
 .product-content{width:100%;max-width:76ch;gap:28px;padding-top:30px}
 .product-content-secondary{align-self:start}
 .product-section{gap:7px}
@@ -43,6 +43,13 @@
 .product-guide-link:hover::after,.product-guide-link:focus-visible::after{color:var(--info);transform:translateX(1px)}
 .product-guide-link:focus-visible{outline:2px solid var(--info);outline-offset:3px}
 
+.product-install-section{padding:18px 0 20px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.product-install-body{display:grid;gap:11px}
+.product-install-title{color:var(--hot);font-size:16px;font-weight:700;line-height:1.4}
+.product-install-actions{display:grid;gap:8px;min-width:0}
+.product-install-actions .product-platforms{display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+.product-install-actions .store-badge-row{margin-top:0}
+
 @media(max-width:960px){
   .product-stage,.product-stage.has-no-summary{grid-template-columns:minmax(0,1fr);grid-template-areas:"identity" "media" "summary";gap:24px;max-width:100%}
   .product-stage.is-text-only,.product-stage.is-text-only.has-no-summary{grid-template-areas:"identity" "summary";max-width:82ch}
@@ -62,6 +69,8 @@
   .product-content{gap:25px;padding-top:26px}
   .product-section.faq>div:not(.product-section-title){padding:8px 0}
   .product-guide-link{padding:12px 13px;gap:10px}
+  .product-install-section{padding:16px 0 18px}
+  .product-install-title{font-size:15px}
 }
 
 @media(max-width:430px){
