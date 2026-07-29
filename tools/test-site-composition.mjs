@@ -24,7 +24,12 @@ expect(productJs.includes('removeItem(group, index)'), 'media failure removal ex
 expect(!productJs.includes('product-shot-group'), 'stacked platform canvases removed');
 expect(productCss.includes('grid-template-areas:'), 'product stage uses named grid areas');
 expect(productCss.includes('"identity media"'), 'desktop identity/media composition exists');
-expect(mediaCss.includes('[data-orientation="portrait"]'), 'portrait media geometry exists');
+expect(mediaCss.includes('[data-orientation="portrait"]'), 'portrait media fitting exists');
+expect(mediaCss.includes('height:clamp(420px,34vw,560px)'), 'desktop screenshot viewport has stable responsive height');
+expect(mediaCss.includes('height:clamp(300px,88vw,420px)'), 'mobile screenshot viewport has stable responsive height');
+expect(!mediaCss.includes('aspect-ratio:var(--shot-ratio)'), 'active image ratio cannot resize the outer screenshot viewport');
+expect(!mediaCss.includes('.product-shot-stage[data-orientation="portrait"]{\n  justify-self:center;'), 'portrait mode does not resize the outer screenshot stage');
+expect(mediaCss.includes('.product-shot-stage[data-orientation="portrait"] .product-shot-stage-button'), 'portrait media fits inside the stable viewport');
 expect(mediaCss.includes('scroll-snap-type:x proximity'), 'thumbnail rail uses native scroll snapping');
 expect(mediaCss.includes('prefers-reduced-motion'), 'media reduced-motion contract exists');
 expect(homeCss.includes('font-size:13.75px!important'), 'mobile homepage retains readable type');
