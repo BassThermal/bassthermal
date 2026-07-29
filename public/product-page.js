@@ -228,20 +228,19 @@
       return button;
     });
 
-    function select(nextIndex, focusThumb = false) {
+    function select(nextIndex, userInitiated = false) {
       index = (nextIndex + items.length) % items.length;
       image.src = items[index];
       image.alt = `${productName} ${platform} screenshot ${index + 1} of ${items.length}`;
       stageButton.setAttribute('aria-label', `Open ${image.alt}`);
       status.textContent = `${index + 1} / ${items.length}`;
       thumbButtons.forEach((button, buttonIndex) => button.setAttribute('aria-current', buttonIndex === index ? 'true' : 'false'));
-      thumbButtons[index]?.scrollIntoView?.({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
-      if (focusThumb) stageButton.focus();
+      if (userInitiated) thumbButtons[index]?.scrollIntoView?.({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
     }
 
     function move(direction) {
       if (items.length < 2) return;
-      select(index + direction);
+      select(index + direction, true);
     }
 
     image.addEventListener('load', () => { stage.dataset.orientation = orientationFor(image); });
