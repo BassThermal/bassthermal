@@ -18,7 +18,7 @@
   function ensureVisualStyles() {
     const styles = [['/app-icons.css?v=2', 'icons'], ['/home-visual.css?v=4', 'home']];
     if (document.querySelector('.product-page')) {
-      styles.push(['/product-page-v2.css?v=4', 'product']);
+      styles.push(['/product-page-v2.css?v=5', 'product']);
       styles.push(['/product-page-media.css?v=4', 'product-media']);
     }
     for (const [href, key] of styles) {
@@ -35,7 +35,7 @@
     if (!document.querySelector('.product-page, .guide-page')) return;
     if (document.querySelector('script[data-bt-ms-store-badges]')) return;
     const script = document.createElement('script');
-    script.src = '/microsoft-store-badge.js?v=4';
+    script.src = '/microsoft-store-badge.js?v=5';
     script.defer = true;
     script.dataset.btMsStoreBadges = '1';
     document.head.appendChild(script);
