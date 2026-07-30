@@ -35,8 +35,15 @@ for (const name of ['DualTicker', 'RetroFy', 'Coptic Dictionary', 'Icon Pack Bui
 ensure(homepage.includes('href="/guides/">Guides</a>'), 'homepage missing Guides navigation');
 ensure(homepage.includes('href="/support/">Support</a>'), 'homepage missing Support navigation');
 ensure(homepage.includes('href="/about/">About</a>'), 'homepage footer missing About');
-ensure(homepage.includes('/visits-terminal-v2.js?v=2'), 'homepage missing Visits v2 adapter');
+ensure(homepage.includes('/visits-terminal.js?v=3'), 'homepage missing direct Visits renderer');
+ensure(homepage.includes('/visits-terminal.css?v=3'), 'homepage missing direct Visits renderer styles');
+ensure(!homepage.includes('/visits-terminal-v2.js'), 'homepage still loads legacy Visits adapter');
 ensure(!homepage.includes('Independent software for practical work, study, and specialist workflows.'), 'homepage slogan remains');
+
+const renderer = await fetchText('/visits-terminal.js?v=3');
+for (const label of ['NOW', 'TODAY', 'activePeople', 'visitorsToday', 'visibleTodayLabel']) ensure(renderer.text.includes(label), `direct Visits renderer missing ${label}`);
+ensure(!renderer.text.includes('nativeFetch'), 'direct Visits renderer still intercepts fetch');
+ensure(!renderer.text.includes('signalReasons'), 'direct Visits renderer exposes old signal heuristics');
 
 const about = (await fetchText('/about/')).text;
 ensure(!about.includes('/releases/'), 'About still links to Releases');
@@ -75,4 +82,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log(`public deployment and Visits v2 verified at ${base}${expectedBuild ? ` for ${expectedBuild}` : ''}`);
+console.log(`public deployment and direct Visits renderer verified at ${base}${expectedBuild ? ` for ${expectedBuild}` : ''}`);
