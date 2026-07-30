@@ -1,0 +1,5 @@
+BassThermal production deployment marker
+created: 2026-07-30T17:54:00Z
+source-main: f6c11664aaa97bda8288fecd6acaf733b025b620
+includes: PR #90 site truth and Visits v2
+purpose: observable production deployment trigger
