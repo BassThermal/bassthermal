@@ -2,6 +2,9 @@ name = "bassthermal"
 compatibility_date = "2026-05-06"
 main = "src/worker-v2.js"
 
+[build]
+command = "npm run build:site"
+
 [assets]
 directory = "./public"
 binding = "ASSETS"
