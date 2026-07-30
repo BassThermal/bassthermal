@@ -9,7 +9,9 @@ const exists = (file) => fs.existsSync(path.join(root, file));
 
 assert.equal(read('wrangler.toml').includes('main = "src/worker-v2.js"'), true);
 assert.equal(exists('public/site-visits.js'), true);
-assert.equal(exists('public/visits-terminal-v2.js'), true);
+assert.equal(exists('public/visits-terminal.js'), true);
+assert.equal(exists('public/visits-terminal.css'), true);
+assert.equal(exists('public/visits-terminal-v2.js'), false);
 assert.equal(exists('migrations/0002_visits_reporting.sql'), true);
 assert.equal(exists('public/terms/index.html'), false);
 assert.equal(exists('public/releases/index.html'), false);
@@ -33,6 +35,11 @@ for (const file of htmlFiles) {
   assert.doesNotMatch(html, /href=["']\/releases\//);
   if (!html.includes('terminal home')) assert.match(html, /\/site-visits\.js\?v=2/);
 }
+
+const homepage = read('public/index.html');
+assert.match(homepage, /\/visits-terminal\.js\?v=3/);
+assert.match(homepage, /\/visits-terminal\.css\?v=3/);
+assert.doesNotMatch(homepage, /visits-terminal-v2/);
 
 const about = read('public/about/index.html');
 assert.doesNotMatch(about, /View releases|public releases|\/releases\//i);
