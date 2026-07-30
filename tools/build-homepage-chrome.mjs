@@ -4,8 +4,9 @@ import path from 'node:path';
 const root = process.cwd();
 const validateOnly = process.argv.includes('--validate-only');
 const indexPath = path.join(root, 'public', 'index.html');
-const TOPNAV = '<nav class="topnav" aria-label="Primary"><a href="https://apps.microsoft.com/search/publisher?name=BassThermal&hl=en-US&gl=CA">Microsoft Store</a> · <a href="https://play.google.com/store/apps/developer?id=BassThermal">Google Play</a> · <a href="/guides/">Guides</a> · <a href="/support/">Support</a></nav>';
-const FOOTER = '<footer class="footer"><a href="/privacy/">Privacy</a> · <a href="/guides/">Guides</a> · <a href="/support/">Support</a></footer>';
+const TOPNAV = '<nav class="topnav" aria-label="Primary"><a href="/guides/">Guides</a> · <a href="/support/">Support</a></nav>';
+const FOOTER = '<footer class="footer"><a href="/about/">About</a> · <a href="/privacy/">Privacy</a> · <a href="/security/">Security</a></footer>';
+const VISITS_ADAPTER = '<script src="/visits-terminal-v2.js?v=2" defer data-bt-runtime="visits-terminal-v2"></script>';
 
 function addIcons(source) {
   return source.replace(/<a class="app-name" href="\/apps\/([^/]+)\/">([^<]+)<\/a>/g,
@@ -18,15 +19,18 @@ function transform(source) {
   const readoutPattern = /\s*<div class="right" id="readout">[\s\S]*?<\/div>/;
   if (!navPattern.test(source)) throw new Error('homepage primary navigation marker missing');
   if (!footerPattern.test(source)) throw new Error('homepage footer marker missing');
-  return addIcons(source.replace(navPattern, TOPNAV).replace(footerPattern, FOOTER).replace(readoutPattern, ''));
+  let output = addIcons(source.replace(navPattern, TOPNAV).replace(footerPattern, FOOTER).replace(readoutPattern, ''));
+  if (!output.includes('/visits-terminal-v2.js')) output = output.replace(/<\/head>/i, `  ${VISITS_ADAPTER}\n</head>`);
+  return output;
 }
 
 function validate(source) {
   const errors = [];
-  if ((source.match(/href="\/guides\/"/g) || []).length < 2) errors.push('homepage requires Guides links in top navigation and footer');
   if (!source.includes(TOPNAV)) errors.push('homepage top navigation is not canonical');
   if (!source.includes(FOOTER)) errors.push('homepage footer is not canonical');
+  if (!source.includes('/visits-terminal-v2.js?v=2')) errors.push('homepage Visits v2 adapter missing');
   if (source.includes('id="readout"') || source.includes('10 apps · Windows · Android · Web')) errors.push('homepage status readout must not exist');
+  if (source.includes('href="/terms/"') || source.includes('href="/releases/"')) errors.push('homepage contains retired utility route');
   const rows = source.match(/class="row app-row"/g) || [];
   const icons = source.match(/data-app-icon-slug=/g) || [];
   if (rows.length !== icons.length) errors.push(`homepage icon count ${icons.length} must match app row count ${rows.length}`);
@@ -35,7 +39,7 @@ function validate(source) {
     process.exitCode = 1;
     return false;
   }
-  console.log(`PASS  Homepage chrome and ${icons.length} app icons`);
+  console.log(`PASS  Homepage chrome, Visits v2 adapter, and ${icons.length} app icons`);
   return true;
 }
 
