@@ -4,7 +4,7 @@ window.BT_PUBLISHER_DATA = Object.freeze({
     name: "BassThermal",
     location: "Canada",
     contact: "info@bassthermal.com",
-    securityContact: "security@bassthermal.com"
+    securityContact: "info@bassthermal.com"
   },
   products: {
     dualticker: { name: "DualTicker", platforms: ["web", "windows", "android"], processing: "Public feeds and publisher websites", product: "/apps/dualticker/", guide: "/guides/dualticker/compare-live-headline-sources/", currentRelease: { version: "1.3.15", date: "2026-07-29", platforms: ["windows"], summary: "Improved bookmark continuity and window behaviour." } },
