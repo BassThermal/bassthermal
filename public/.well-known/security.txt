@@ -1,4 +1,4 @@
-Contact: mailto:security@bassthermal.com
+Contact: mailto:info@bassthermal.com?subject=Security%20report
 Canonical: https://bassthermal.com/.well-known/security.txt
 Policy: https://bassthermal.com/security/
 Preferred-Languages: en, fr
