@@ -39,18 +39,12 @@ for (const app of publicApps) {
   ensure(Boolean(facts?.processing), `processing truth missing for ${app.id}`);
   ensure(Boolean(guideRoutes[app.id]), `guide route missing for ${app.id}`);
   ensure(exists(`public${guideRoutes[app.id]}index.html`), `guide page missing for ${app.id}`);
-  if (facts?.currentRelease) {
-    ensure(Boolean(facts.currentRelease.version), `release version missing for ${app.id}`);
-    ensure(/^\d{4}-\d{2}-\d{2}$/.test(facts.currentRelease.date || ''), `release date invalid for ${app.id}`);
-    ensure(Boolean(facts.currentRelease.summary), `release summary missing for ${app.id}`);
-    for (const platform of facts.currentRelease.platforms || []) ensure(app.platforms.includes(platform), `release platform ${platform} is not catalogued for ${app.id}`);
-  }
 }
 for (const id of publisherIds) ensure(catalogIds.has(id), `publisher facts contain non-public product ${id}`);
 
 const buildToken = process.env.CF_PAGES_COMMIT_SHA
   ? `2026.07.30+${process.env.CF_PAGES_COMMIT_SHA.slice(0, 12)}`
-  : '2026.07.30.publisher-surface-upgrade';
+  : '2026.07.30.contextual-navigation';
 const generated = {
   build: buildToken,
   publisher: publisher.publisher,
@@ -61,8 +55,7 @@ const generated = {
       platforms: app.platforms,
       processing: facts.processing,
       product: app.links.website,
-      guide: guideRoutes[app.id],
-      ...(facts.currentRelease ? { currentRelease: facts.currentRelease } : {})
+      guide: guideRoutes[app.id]
     }];
   }))
 };
@@ -81,8 +74,12 @@ function walkHtml(directory) {
 
 function normalizeHomepage(html) {
   if (!html.includes('terminal home')) return html;
+  const header = '<header class="topline"><div class="brand"><strong><a href="/">BASSTHERMAL</a></strong></div><nav class="topnav" aria-label="Primary"><a href="/guides/">Guides</a> · <a href="/support/">Support</a></nav><div class="right"><a href="https://apps.microsoft.com/search/publisher?name=BassThermal&hl=en-US&gl=CA">Microsoft Store</a> · <a href="https://play.google.com/store/apps/developer?id=BassThermal">Google Play</a></div></header>';
+  const footer = '<footer class="footer"><a href="/about/">About</a> · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a> · <a href="/security/">Security</a></footer>';
   return html
+    .replace(/<header class="topline">[\s\S]*?<\/header>/i, header)
     .replace(/\s*<div class="line soft">Independent software for practical work, study, and specialist workflows\.<\/div>\s*/i, '\n')
+    .replace(/<footer class="footer">[\s\S]*?<\/footer>/i, footer)
     .replace(/(<a class="tag web"[^>]*>)(?:web|Web)(<\/a>)/g, '$1Web$2')
     .replace(/(<a class="tag windows"[^>]*>)(?:win|windows|Windows)(<\/a>)/g, '$1Windows$2')
     .replace(/(<a class="tag android"[^>]*>)(?:and|android|Android)(<\/a>)/g, '$1Android$2');
@@ -90,15 +87,18 @@ function normalizeHomepage(html) {
 
 function injectPublisherRuntime(html) {
   const meta = `<meta name="bt-site-build" content="${buildToken}">`;
-  const css = '<link rel="stylesheet" href="/publisher-shell.css?v=1" data-bt-visual-style="publisher-shell">';
-  const dataScript = '<script src="/publisher-data.generated.js?v=1" defer data-bt-runtime="publisher-data"></script>';
-  const shellScript = '<script src="/publisher-shell.js?v=1" defer data-bt-runtime="publisher-shell"></script>';
+  const css = '<link rel="stylesheet" href="/publisher-shell.css?v=2" data-bt-visual-style="publisher-context">';
+  const dataScript = '<script src="/publisher-data.generated.js?v=2" defer data-bt-runtime="publisher-data"></script>';
+  const contextScript = '<script src="/publisher-shell.js?v=2" defer data-bt-runtime="publisher-context"></script>';
   let next = normalizeHomepage(html);
   if (/meta name=["']bt-site-build["']/.test(next)) next = next.replace(/<meta name=["']bt-site-build["'][^>]*>/, meta);
   else next = next.replace(/<\/head>/i, `  ${meta}\n</head>`);
   if (!next.includes('/publisher-shell.css')) next = next.replace(/<\/head>/i, `  ${css}\n</head>`);
+  else next = next.replace(/\/publisher-shell\.css\?v=1/g, '/publisher-shell.css?v=2');
   if (!next.includes('/publisher-data.generated.js')) next = next.replace(/<\/head>/i, `  ${dataScript}\n</head>`);
-  if (!next.includes('/publisher-shell.js')) next = next.replace(/<\/head>/i, `  ${shellScript}\n</head>`);
+  else next = next.replace(/\/publisher-data\.generated\.js\?v=1/g, '/publisher-data.generated.js?v=2');
+  if (!next.includes('/publisher-shell.js')) next = next.replace(/<\/head>/i, `  ${contextScript}\n</head>`);
+  else next = next.replace(/\/publisher-shell\.js\?v=1/g, '/publisher-shell.js?v=2');
   return next;
 }
 
@@ -108,10 +108,11 @@ for (const absolute of walkHtml(path.join(root, 'public'))) {
   if (!validateOnly && next !== current) fs.writeFileSync(absolute, next);
 }
 
-for (const route of ['/about/', '/releases/', '/support/', '/security/', '/terms/', '/privacy/']) {
+for (const route of ['/about/', '/support/', '/security/', '/terms/', '/privacy/']) {
   ensure(exists(`public${route}index.html`), `publisher route missing: ${route}`);
 }
-ensure(exists('public/releases/feed.xml'), 'release RSS feed missing');
+ensure(!exists('public/releases/index.html'), 'public Releases page must remain absent');
+ensure(!exists('public/releases/feed.xml'), 'public release feed must remain absent');
 ensure(exists('public/.well-known/security.txt'), 'security.txt missing');
 
 const privacy = read('public/privacy/index.html');
@@ -119,38 +120,31 @@ for (const app of publicApps) ensure(privacy.includes(app.name.replace('&', '&am
 ensure(!privacy.includes('Ring Snap'), 'retired Ring Snap remains in privacy directory');
 ensure(!privacy.includes('RSS Finder'), 'legacy RSS Finder name remains in privacy directory');
 
-const releasesPage = read('public/releases/index.html');
-for (const app of publicApps) {
-  const release = publisher.products[app.id].currentRelease;
-  if (!release) continue;
-  ensure(releasesPage.includes(`${app.name} ${release.version}`), `releases page missing ${app.id} ${release.version}`);
-}
-
 const sitemap = read('public/sitemap.xml');
-for (const route of ['/about/', '/releases/', '/support/', '/security/', '/terms/', '/privacy/']) {
-  ensure(sitemap.includes(`https://bassthermal.com${route}`), `sitemap missing ${route}`);
-}
+for (const route of ['/about/', '/support/', '/security/', '/terms/', '/privacy/']) ensure(sitemap.includes(`https://bassthermal.com${route}`), `sitemap missing ${route}`);
+ensure(!sitemap.includes('https://bassthermal.com/releases/'), 'sitemap still exposes Releases');
 
-const shell = read('public/publisher-shell.js');
-ensure(shell.includes('Skip to content'), 'publisher shell missing skip link');
-ensure(shell.includes("'/releases/'"), 'publisher shell missing releases navigation');
-ensure(shell.includes('bt-product-facts'), 'publisher shell missing product facts');
-const shellCss = read('public/publisher-shell.css');
-ensure(shellCss.includes('.bt-site-header'), 'publisher shell header styles missing');
-ensure(shellCss.includes('@media(max-width:860px)'), 'publisher shell mobile styles missing');
+const context = read('public/publisher-shell.js');
+ensure(context.includes('Skip to content'), 'context runtime missing skip link');
+ensure(!context.includes('bt-site-header'), 'context runtime must not create a global header');
+ensure(!context.includes('bt-product-facts'), 'context runtime must not create product facts');
+ensure(!context.includes('addHomeSupplement'), 'context runtime must not create homepage panels');
 
-const forbidden = ['10 apps · Windows · Android · Web', 'RSS Finder / RSS Crawler'];
-for (const value of forbidden) {
-  for (const file of ['public/index.html', 'public/privacy/index.html', 'public/releases/index.html']) ensure(!read(file).includes(value), `forbidden public text remains in ${file}: ${value}`);
-}
 const homepage = read('public/index.html');
-ensure(!homepage.includes('Independent software for practical work, study, and specialist workflows.'), 'homepage slogan line remains');
+for (const value of ['10 apps · Windows · Android · Web', 'Independent software for practical work, study, and specialist workflows.', '>Releases<']) ensure(!homepage.includes(value), `homepage contains forbidden text: ${value}`);
+ensure(homepage.includes('href="/guides/">Guides</a>'), 'homepage missing Guides navigation');
+ensure(homepage.includes('href="/support/">Support</a>'), 'homepage missing Support navigation');
+ensure(homepage.includes('href="/about/">About</a>'), 'homepage footer missing About');
 ensure(homepage.includes('>Windows</a>'), 'homepage does not contain full Windows platform label');
 ensure(homepage.includes('>Android</a>'), 'homepage does not contain full Android platform label');
+
+const guides = read('public/guides/index.html');
+ensure(!guides.includes('practical workflows'), 'Guides kicker remains');
+ensure(!guides.includes('bt-site-header'), 'Guides contains duplicate global header');
 
 if (errors.length) {
   console.error(`publisher surface validation failed (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log(`publisher surfaces ${validateOnly ? 'validated' : 'generated'} for ${publicApps.length} products`);
+console.log(`contextual publisher surfaces ${validateOnly ? 'validated' : 'generated'} for ${publicApps.length} products`);
