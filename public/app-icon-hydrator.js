@@ -5,30 +5,57 @@
   const guideLinks = {
     dualticker: ['/guides/dualticker/compare-live-headline-sources/', 'Compare live headline sources with DualTicker'],
     retrofy: ['/guides/retrofy/give-a-photo-a-retro-pixel-art-look/', 'Give a photo a retro pixel-art look'],
-    'coptic-dictionary': ['/guides/coptic-dictionary/look-up-and-save-coptic-words/', 'Look up and save Coptic words'],
+    'coptic-dictionary': ['/guides/coptic-dictionary/look-up-and-save-coptic-words/', 'Search and study Coptic words'],
     'icon-pack-builder': ['/guides/icon-pack-builder/create-windows-app-icons-from-one-png/', 'Create Windows app icons from one PNG'],
     'favicon-harvester': ['/guides/favicon-harvester/collect-favicons-from-a-list-of-websites/', 'Collect favicons from a list of websites'],
     'isbn-manager': ['/guides/isbn-manager/build-a-book-catalog-from-isbns/', 'Build a book catalog from ISBNs'],
-    'rss-crawler': ['/guides/rss-crawler/find-and-export-rss-feeds/', 'Find and export RSS feeds from websites'],
-    'docbatch-pdf-converter': ['/guides/docbatch-pdf-converter/convert-a-folder-of-documents-to-pdf/', 'Convert a folder of documents to PDF'],
-    'website-image-inventory': ['/guides/website-image-inventory/audit-images-used-on-a-website/', 'Audit images used on a website'],
-    'courselab-beam': ['/guides/courselab-beam/build-and-review-a-beam-case/', 'Build and review a beam case']
+    'rss-crawler': ['/guides/rss-crawler/find-and-export-rss-feeds/', 'Find hidden RSS and Atom feeds'],
+    'docbatch-pdf-converter': ['/guides/docbatch-pdf-converter/convert-a-folder-of-documents-to-pdf/', 'Batch convert documents to PDF'],
+    'website-image-inventory': ['/guides/website-image-inventory/audit-images-used-on-a-website/', 'Create a website image inventory'],
+    'courselab-beam': ['/guides/courselab-beam/build-and-review-a-beam-case/', 'Understand shear and moment diagrams']
   };
 
+  function appendStyle(href, key) {
+    if (document.querySelector(`link[data-bt-visual-style="${key}"]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.dataset.btVisualStyle = key;
+    document.head.appendChild(link);
+  }
+
   function ensureVisualStyles() {
-    const styles = [['/app-icons.css?v=2', 'icons'], ['/home-visual.css?v=4', 'home']];
+    appendStyle('/app-icons.css?v=2', 'icons');
+    appendStyle('/home-visual.css?v=4', 'home');
+    appendStyle('/publisher-shell.css?v=1', 'publisher-shell');
     if (document.querySelector('.product-page')) {
-      styles.push(['/product-page-v2.css?v=5', 'product']);
-      styles.push(['/product-page-media.css?v=4', 'product-media']);
+      appendStyle('/product-page-v2.css?v=5', 'product');
+      appendStyle('/product-page-media.css?v=4', 'product-media');
     }
-    for (const [href, key] of styles) {
-      if (document.querySelector(`link[data-bt-visual-style="${key}"]`)) continue;
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      link.dataset.btVisualStyle = key;
-      document.head.appendChild(link);
+  }
+
+  function appendScript(src, key, onload) {
+    const existing = document.querySelector(`script[data-bt-runtime="${key}"]`);
+    if (existing) {
+      if (onload) existing.addEventListener('load', onload, { once: true });
+      return existing;
     }
+    const script = document.createElement('script');
+    script.src = src;
+    script.defer = true;
+    script.dataset.btRuntime = key;
+    if (onload) script.addEventListener('load', onload, { once: true });
+    document.head.appendChild(script);
+    return script;
+  }
+
+  function ensurePublisherShell() {
+    const loadShell = () => {
+      if (document.documentElement.dataset.btPublisherShell === '1') return;
+      appendScript('/publisher-shell.js?v=1', 'publisher-shell');
+    };
+    if (window.BT_PUBLISHER_DATA) loadShell();
+    else appendScript('/publisher-data.generated.js?v=1', 'publisher-data', loadShell);
   }
 
   function ensureStoreBadgeRuntime() {
@@ -41,8 +68,20 @@
     document.head.appendChild(script);
   }
 
-  function ensureGuideNavigation() {
+  function normalizeHomepageLanguage() {
+    const home = document.querySelector('.terminal.home');
+    if (!home) return;
     document.getElementById('readout')?.remove();
+    [...home.children].find((node) => node.matches?.('.line.soft'))?.remove();
+    for (const anchor of home.querySelectorAll('#appTable .tag')) {
+      if (anchor.classList.contains('windows')) anchor.textContent = 'Windows';
+      else if (anchor.classList.contains('android')) anchor.textContent = 'Android';
+      else if (anchor.classList.contains('web')) anchor.textContent = 'Web';
+    }
+  }
+
+  function ensureGuideNavigation() {
+    normalizeHomepageLanguage();
     const topnav = document.querySelector('.topnav');
     if (topnav && !topnav.querySelector('a[href="/guides/"]')) {
       const support = topnav.querySelector('a[href="/support/"]');
@@ -56,14 +95,6 @@
         if (topnav.childNodes.length) topnav.append(document.createTextNode(' · '));
         topnav.append(guide);
       }
-    }
-    const footer = document.querySelector('body > .footer');
-    if (footer && !footer.querySelector('a[href="/guides/"]')) {
-      const guide = document.createElement('a');
-      guide.href = '/guides/';
-      guide.textContent = 'Guides';
-      footer.prepend(document.createTextNode(' · '));
-      footer.prepend(guide);
     }
   }
 
@@ -126,6 +157,7 @@
 
   function boot() {
     ensureVisualStyles();
+    ensurePublisherShell();
     ensureStoreBadgeRuntime();
     ensureGuideNavigation();
     ensureProductGuideLink();

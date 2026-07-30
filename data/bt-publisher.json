@@ -1,0 +1,53 @@
+{
+  "schema": "BT-PUBLISHER-1",
+  "publisher": {
+    "name": "BassThermal",
+    "location": "Canada",
+    "contact": "info@bassthermal.com",
+    "securityContact": "info@bassthermal.com"
+  },
+  "products": {
+    "dualticker": {
+      "processing": "Public feeds and publisher websites",
+      "currentRelease": {
+        "version": "1.3.15",
+        "date": "2026-07-29",
+        "platforms": ["windows"],
+        "summary": "Improved bookmark continuity and window behaviour."
+      }
+    },
+    "retrofy": {
+      "processing": "Images are processed on the device"
+    },
+    "coptic-dictionary": {
+      "processing": "Dictionary search and saved study data are handled on the device"
+    },
+    "icon-pack-builder": {
+      "processing": "Icon generation and export are performed on the device"
+    },
+    "favicon-harvester": {
+      "processing": "Local workspace with requests to public websites"
+    },
+    "isbn-manager": {
+      "processing": "Local catalog with online metadata lookup"
+    },
+    "rss-crawler": {
+      "processing": "Local workspace with requests to public websites"
+    },
+    "docbatch-pdf-converter": {
+      "processing": "Document conversion is performed on the Windows device"
+    },
+    "website-image-inventory": {
+      "processing": "Local workspace with requests to public websites"
+    },
+    "courselab-beam": {
+      "processing": "Beam calculations are performed on the device",
+      "currentRelease": {
+        "version": "0.3.5",
+        "date": "2026-07-22",
+        "platforms": ["windows", "android"],
+        "summary": "Expanded Windows availability and verified beam-diagram behaviour."
+      }
+    }
+  }
+}
