@@ -79,12 +79,21 @@ function walkHtml(directory) {
   return files;
 }
 
+function normalizeHomepage(html) {
+  if (!html.includes('terminal home')) return html;
+  return html
+    .replace(/\s*<div class="line soft">Independent software for practical work, study, and specialist workflows\.<\/div>\s*/i, '\n')
+    .replace(/(<a class="tag web"[^>]*>)(?:web|Web)(<\/a>)/g, '$1Web$2')
+    .replace(/(<a class="tag windows"[^>]*>)(?:win|windows|Windows)(<\/a>)/g, '$1Windows$2')
+    .replace(/(<a class="tag android"[^>]*>)(?:and|android|Android)(<\/a>)/g, '$1Android$2');
+}
+
 function injectPublisherRuntime(html) {
   const meta = `<meta name="bt-site-build" content="${buildToken}">`;
   const css = '<link rel="stylesheet" href="/publisher-shell.css?v=1" data-bt-visual-style="publisher-shell">';
   const dataScript = '<script src="/publisher-data.generated.js?v=1" defer data-bt-runtime="publisher-data"></script>';
   const shellScript = '<script src="/publisher-shell.js?v=1" defer data-bt-runtime="publisher-shell"></script>';
-  let next = html;
+  let next = normalizeHomepage(html);
   if (/meta name=["']bt-site-build["']/.test(next)) next = next.replace(/<meta name=["']bt-site-build["'][^>]*>/, meta);
   else next = next.replace(/<\/head>/i, `  ${meta}\n</head>`);
   if (!next.includes('/publisher-shell.css')) next = next.replace(/<\/head>/i, `  ${css}\n</head>`);
@@ -134,6 +143,10 @@ const forbidden = ['10 apps · Windows · Android · Web', 'RSS Finder / RSS Cra
 for (const value of forbidden) {
   for (const file of ['public/index.html', 'public/privacy/index.html', 'public/releases/index.html']) ensure(!read(file).includes(value), `forbidden public text remains in ${file}: ${value}`);
 }
+const homepage = read('public/index.html');
+ensure(!homepage.includes('Independent software for practical work, study, and specialist workflows.'), 'homepage slogan line remains');
+ensure(homepage.includes('>Windows</a>'), 'homepage does not contain full Windows platform label');
+ensure(homepage.includes('>Android</a>'), 'homepage does not contain full Android platform label');
 
 if (errors.length) {
   console.error(`publisher surface validation failed (${errors.length})`);
