@@ -1,0 +1,5 @@
+Contact: mailto:security@bassthermal.com
+Canonical: https://bassthermal.com/.well-known/security.txt
+Policy: https://bassthermal.com/security/
+Preferred-Languages: en, fr
+Expires: 2027-07-30T23:59:59Z
