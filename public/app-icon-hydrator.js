@@ -27,7 +27,7 @@
   function ensureVisualStyles() {
     appendStyle('/app-icons.css?v=2', 'icons');
     appendStyle('/home-visual.css?v=4', 'home');
-    appendStyle('/publisher-shell.css?v=1', 'publisher-shell');
+    appendStyle('/publisher-shell.css?v=2', 'publisher-context');
     if (document.querySelector('.product-page')) {
       appendStyle('/product-page-v2.css?v=5', 'product');
       appendStyle('/product-page-media.css?v=4', 'product-media');
@@ -49,13 +49,13 @@
     return script;
   }
 
-  function ensurePublisherShell() {
-    const loadShell = () => {
-      if (document.documentElement.dataset.btPublisherShell === '1') return;
-      appendScript('/publisher-shell.js?v=1', 'publisher-shell');
+  function ensurePublisherContext() {
+    const loadContext = () => {
+      if (document.documentElement.dataset.btPublisherContext === '1') return;
+      appendScript('/publisher-shell.js?v=2', 'publisher-context');
     };
-    if (window.BT_PUBLISHER_DATA) loadShell();
-    else appendScript('/publisher-data.generated.js?v=1', 'publisher-data', loadShell);
+    if (window.BT_PUBLISHER_DATA) loadContext();
+    else appendScript('/publisher-data.generated.js?v=2', 'publisher-data', loadContext);
   }
 
   function ensureStoreBadgeRuntime() {
@@ -80,30 +80,11 @@
     }
   }
 
-  function ensureGuideNavigation() {
-    normalizeHomepageLanguage();
-    const topnav = document.querySelector('.topnav');
-    if (topnav && !topnav.querySelector('a[href="/guides/"]')) {
-      const support = topnav.querySelector('a[href="/support/"]');
-      const guide = document.createElement('a');
-      guide.href = '/guides/';
-      guide.textContent = 'Guides';
-      if (support) {
-        topnav.insertBefore(guide, support);
-        topnav.insertBefore(document.createTextNode(' · '), support);
-      } else {
-        if (topnav.childNodes.length) topnav.append(document.createTextNode(' · '));
-        topnav.append(guide);
-      }
-    }
-  }
-
   function ensureProductGuideLink() {
     const slug = document.body?.dataset?.appSlug || '';
     const target = guideLinks[slug];
     if (!target) return;
-    const sections = [...document.querySelectorAll('.product-section')];
-    const section = sections.find((item) => {
+    const section = [...document.querySelectorAll('.product-section')].find((item) => {
       const title = item.querySelector('.product-section-title')?.textContent?.trim().toLowerCase();
       return title === 'guides' || title === 'guide';
     });
@@ -157,9 +138,9 @@
 
   function boot() {
     ensureVisualStyles();
-    ensurePublisherShell();
+    ensurePublisherContext();
     ensureStoreBadgeRuntime();
-    ensureGuideNavigation();
+    normalizeHomepageLanguage();
     ensureProductGuideLink();
     hydrateAll();
     bindTerminalFocusGuard();
