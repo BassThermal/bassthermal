@@ -15,6 +15,7 @@
     "test:redirects": "node tools/test-redirects.mjs",
     "test:product-pages": "node tools/validate-product-pages.mjs",
     "test:site-composition": "npm run home:validate && node tools/test-site-composition.mjs",
+    "test:guide-content": "node tools/test-guide-content.mjs",
     "test:terminal-visits": "node tools/test-terminal-visits.mjs",
     "test:app-icons": "npm run assets:index && node tools/test-app-icons.mjs"
   },
