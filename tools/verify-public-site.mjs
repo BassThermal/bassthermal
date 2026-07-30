@@ -41,7 +41,7 @@ const sitemap = (await fetchText('/sitemap.xml')).text;
 for (const route of canonicalRoutes) ensure(sitemap.includes(`${base}${route}`), `sitemap missing ${route}`);
 
 const security = await fetchText('/.well-known/security.txt');
-ensure(security.text.includes('mailto:security@bassthermal.com'), 'security.txt missing security contact');
+ensure(security.text.includes('mailto:info@bassthermal.com'), 'security.txt missing verified security contact');
 ensure(security.text.includes(`${base}/security/`), 'security.txt missing policy URL');
 
 const feed = await fetchText('/releases/feed.xml');
