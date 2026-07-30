@@ -68,8 +68,20 @@
     document.head.appendChild(script);
   }
 
-  function ensureGuideNavigation() {
+  function normalizeHomepageLanguage() {
+    const home = document.querySelector('.terminal.home');
+    if (!home) return;
     document.getElementById('readout')?.remove();
+    [...home.children].find((node) => node.matches?.('.line.soft'))?.remove();
+    for (const anchor of home.querySelectorAll('#appTable .tag')) {
+      if (anchor.classList.contains('windows')) anchor.textContent = 'Windows';
+      else if (anchor.classList.contains('android')) anchor.textContent = 'Android';
+      else if (anchor.classList.contains('web')) anchor.textContent = 'Web';
+    }
+  }
+
+  function ensureGuideNavigation() {
+    normalizeHomepageLanguage();
     const topnav = document.querySelector('.topnav');
     if (topnav && !topnav.querySelector('a[href="/guides/"]')) {
       const support = topnav.querySelector('a[href="/support/"]');
