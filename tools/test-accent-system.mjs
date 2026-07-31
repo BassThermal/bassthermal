@@ -39,6 +39,15 @@ for (const selector of [
   assert.ok(css.includes(selector), `missing visual contract: ${selector}`);
 }
 
+const guideIndexBlock = css.match(/\/\* Guide index:[\s\S]*?\/\* Guide articles:/)?.[0] || '';
+assert.match(guideIndexBlock, /radial-gradient\(ellipse at center/);
+assert.match(guideIndexBlock, /guide-card-icon[^}]*transition:transform/);
+assert.match(guideIndexBlock, /scale\(1\.02\)/);
+assert.match(guideIndexBlock, /guide-card-desc/);
+assert.doesNotMatch(guideIndexBlock, /content:"→"/);
+assert.doesNotMatch(guideIndexBlock, /width:2px/);
+assert.doesNotMatch(guideIndexBlock, /scaleY\(/);
+
 assert.match(css, /@media\(prefers-reduced-motion:reduce\)/);
 assert.match(css, /animation:none!important/);
 assert.doesNotMatch(css, /transition:[^;}]*(?:width|height|left|right|top|bottom)/i, 'layout properties must not animate');
@@ -53,7 +62,7 @@ assert.match(runtime, /data-app-slug/);
 assert.doesNotMatch(runtime, /mousemove|pointermove|WebGL|canvas|getContext\(|setInterval\(/i);
 
 for (const source of [assets, builder, injector, publisher]) {
-  assert.match(source, /\/bt-accent-system\.css\?v=1/);
+  assert.match(source, /\/bt-accent-system\.css\?v=2/);
   assert.match(source, /\/bt-accent-system\.js\?v=1/);
 }
 assert.match(injector, /--validate-only/);
