@@ -5,7 +5,9 @@ const css = fs.readFileSync('public/bt-accent-system.css', 'utf8');
 const runtime = fs.readFileSync('public/bt-accent-system.js', 'utf8');
 const assets = fs.readFileSync('public/store-assets.generated.js', 'utf8');
 const builder = fs.readFileSync('tools/append-app-icon-runtime.mjs', 'utf8');
+const injector = fs.readFileSync('tools/inject-accent-runtime.mjs', 'utf8');
 const publisher = fs.readFileSync('public/publisher-shell.js', 'utf8');
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 const slugs = [
   'dualticker',
@@ -50,12 +52,18 @@ assert.match(runtime, /MutationObserver/);
 assert.match(runtime, /data-app-slug/);
 assert.doesNotMatch(runtime, /mousemove|pointermove|WebGL|canvas|getContext\(|setInterval\(/i);
 
-for (const source of [assets, builder, publisher]) {
+for (const source of [assets, builder, injector, publisher]) {
   assert.match(source, /\/bt-accent-system\.css\?v=1/);
   assert.match(source, /\/bt-accent-system\.js\?v=1/);
 }
+assert.match(injector, /--validate-only/);
+assert.match(injector, /replace\(\/<\\\/head>\/i/);
 assert.match(assets, /\/home-visual\.css\?v=4/);
 assert.match(assets, /\/app-icon-hydrator\.js\?v=6/);
 assert.match(builder, /\/app-icon-hydrator\.js\?v=6/);
+assert.equal(pkg.scripts['accents:build'], 'node tools/inject-accent-runtime.mjs');
+assert.equal(pkg.scripts['accents:validate'], 'node tools/inject-accent-runtime.mjs --validate-only');
+assert.match(pkg.scripts['build:site'], /accents:build/);
+assert.match(pkg.scripts['test:publisher'], /accents:build[\s\S]*accents:validate/);
 
 console.log('BassThermal visual accent system contract passed');
