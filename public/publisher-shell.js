@@ -5,7 +5,7 @@
     if (!document.querySelector('link[data-bt-accent-style]')) {
       const style = document.createElement('link');
       style.rel = 'stylesheet';
-      style.href = '/bt-accent-system.css?v=1';
+      style.href = '/bt-accent-system.css?v=2';
       style.dataset.btAccentStyle = '1';
       document.head.appendChild(style);
     }
