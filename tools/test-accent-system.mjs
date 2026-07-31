@@ -41,7 +41,8 @@ assert.match(css, /@media\(prefers-reduced-motion:reduce\)/);
 assert.match(css, /animation:none!important/);
 assert.doesNotMatch(css, /transition:[^;}]*(?:width|height|left|right|top|bottom)/i, 'layout properties must not animate');
 assert.doesNotMatch(css, /backdrop-filter|filter:\s*blur|perspective|rotate[XYZ]?\(/i, 'accent system must avoid expensive or theatrical effects');
-assert.doesNotMatch(css, /animation:[^;}]*infinite(?![^{}]*bt-live-breathe)/i, 'only the live status may animate continuously');
+assert.equal((css.match(/\binfinite\b/g) || []).length, 1, 'only one continuous animation is permitted');
+assert.match(css, /\.bt-visits-live\{[^}]*animation:bt-live-breathe[^}]*infinite/);
 
 assert.match(runtime, /requestAnimationFrame\(update\)/);
 assert.match(runtime, /addEventListener\('scroll', schedule, \{ passive: true \}\)/);
