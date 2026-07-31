@@ -4,7 +4,7 @@ import path from 'node:path';
 const root = process.cwd();
 const publicRoot = path.join(root, 'public');
 const validateOnly = process.argv.includes('--validate-only');
-const style = '<link rel="stylesheet" href="/bt-accent-system.css?v=1" data-bt-accent-style="1">';
+const style = '<link rel="stylesheet" href="/bt-accent-system.css?v=2" data-bt-accent-style="1">';
 const runtime = '<script src="/bt-accent-system.js?v=1" defer data-bt-accent-runtime="1"></script>';
 const errors = [];
 
@@ -20,9 +20,9 @@ function walk(directory) {
 
 function inject(source) {
   let next = source
-    .replace(/\/bt-accent-system\.css\?v=\d+/g, '/bt-accent-system.css?v=1')
+    .replace(/\/bt-accent-system\.css\?v=\d+/g, '/bt-accent-system.css?v=2')
     .replace(/\/bt-accent-system\.js\?v=\d+/g, '/bt-accent-system.js?v=1');
-  if (!next.includes('/bt-accent-system.css?v=1')) {
+  if (!next.includes('/bt-accent-system.css?v=2')) {
     next = next.replace(/<\/head>/i, `  ${style}\n</head>`);
   }
   if (!next.includes('/bt-accent-system.js?v=1')) {
@@ -36,7 +36,7 @@ for (const absolute of files) {
   const relative = path.relative(root, absolute).replaceAll('\\', '/');
   const current = fs.readFileSync(absolute, 'utf8');
   const next = inject(current);
-  if (!next.includes('/bt-accent-system.css?v=1')) errors.push(`${relative} missing accent stylesheet`);
+  if (!next.includes('/bt-accent-system.css?v=2')) errors.push(`${relative} missing accent stylesheet`);
   if (!next.includes('/bt-accent-system.js?v=1')) errors.push(`${relative} missing accent runtime`);
   if (!validateOnly && next !== current) fs.writeFileSync(absolute, next, 'utf8');
 }
