@@ -25,7 +25,7 @@
     "test:product-pages": "node tools/validate-product-pages.mjs",
     "test:site-composition": "npm run home:validate && node tools/test-site-composition.mjs",
     "test:guide-content": "node tools/test-guide-content.mjs",
-    "test:publisher": "npm run home:build && npm run publisher:build && node --check public/publisher-shell.js && node --check public/site-visits.js && node --check public/visits-terminal.js && node --check public/bt-accent-system.js && node --check src/worker-v2.js && node --check tools/build-publisher-surfaces.mjs && node --check tools/inject-accent-runtime.mjs && node --check tools/verify-public-site.mjs && npm run publisher:validate && npm run accents:validate",
+    "test:publisher": "npm run home:build && npm run publisher:build && npm run accents:build && node --check public/publisher-shell.js && node --check public/site-visits.js && node --check public/visits-terminal.js && node --check public/bt-accent-system.js && node --check src/worker-v2.js && node --check tools/build-publisher-surfaces.mjs && node --check tools/inject-accent-runtime.mjs && node --check tools/verify-public-site.mjs && npm run publisher:validate && npm run accents:validate",
     "test:site-truth-visits": "node tools/test-site-truth-visits-v2.mjs",
     "test:visits-renderer": "node tools/test-visits-direct-renderer.mjs",
     "test:accents": "node tools/test-accent-system.mjs",
