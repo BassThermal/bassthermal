@@ -26,8 +26,9 @@
     "test:publisher": "npm run home:build && npm run publisher:build && node --check public/publisher-shell.js && node --check public/site-visits.js && node --check public/visits-terminal.js && node --check src/worker-v2.js && node --check tools/build-publisher-surfaces.mjs && node --check tools/verify-public-site.mjs && npm run publisher:validate",
     "test:site-truth-visits": "node tools/test-site-truth-visits-v2.mjs",
     "test:visits-renderer": "node tools/test-visits-direct-renderer.mjs",
+    "test:accents": "node tools/test-accent-system.mjs",
     "test:install-scripts": "node tools/test-install-script-policy.mjs",
-    "test:all": "npm run test:redirects && npm run test:product-pages && npm run test:site-composition && npm run test:guide-content && npm run test:publisher && npm run test:site-truth-visits && npm run test:visits-renderer && npm run test:install-scripts && npm run test:terminal-visits && npm run test:app-icons",
+    "test:all": "npm run test:redirects && npm run test:product-pages && npm run test:site-composition && npm run test:guide-content && npm run test:publisher && npm run test:site-truth-visits && npm run test:visits-renderer && npm run test:accents && npm run test:install-scripts && npm run test:terminal-visits && npm run test:app-icons",
     "test:terminal-visits": "node tools/test-terminal-visits.mjs",
     "test:app-icons": "npm run assets:index && node tools/test-app-icons.mjs",
     "verify:public": "node tools/verify-public-site.mjs"
