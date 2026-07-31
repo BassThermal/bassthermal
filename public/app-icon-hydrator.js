@@ -2,18 +2,6 @@
   'use strict';
 
   const hydrated = new WeakSet();
-  const guideLinks = {
-    dualticker: ['/guides/dualticker/compare-live-headline-sources/', 'Compare live headline sources with DualTicker'],
-    retrofy: ['/guides/retrofy/give-a-photo-a-retro-pixel-art-look/', 'Give a photo a retro pixel-art look'],
-    'coptic-dictionary': ['/guides/coptic-dictionary/look-up-and-save-coptic-words/', 'Search and study Coptic words'],
-    'icon-pack-builder': ['/guides/icon-pack-builder/create-windows-app-icons-from-one-png/', 'Create Windows app icons from one PNG'],
-    'favicon-harvester': ['/guides/favicon-harvester/collect-favicons-from-a-list-of-websites/', 'Collect favicons from a list of websites'],
-    'isbn-manager': ['/guides/isbn-manager/build-a-book-catalog-from-isbns/', 'Build a book catalog from ISBNs'],
-    'rss-crawler': ['/guides/rss-crawler/find-and-export-rss-feeds/', 'Find hidden RSS and Atom feeds'],
-    'docbatch-pdf-converter': ['/guides/docbatch-pdf-converter/convert-a-folder-of-documents-to-pdf/', 'Batch convert documents to PDF'],
-    'website-image-inventory': ['/guides/website-image-inventory/audit-images-used-on-a-website/', 'Create a website image inventory'],
-    'courselab-beam': ['/guides/courselab-beam/build-and-review-a-beam-case/', 'Understand shear and moment diagrams']
-  };
 
   function appendStyle(href, key) {
     if (document.querySelector(`link[data-bt-visual-style="${key}"]`)) return;
@@ -58,7 +46,7 @@
   function ensurePublisherContext() {
     const loadContext = () => {
       if (document.documentElement.dataset.btPublisherContext === '1') return;
-      appendScript('/publisher-shell.js?v=2', 'publisher-context');
+      appendScript('/publisher-shell.js?v=4', 'publisher-context');
     };
     if (window.BT_PUBLISHER_DATA) loadContext();
     else appendScript('/publisher-data.generated.js?v=2', 'publisher-data', loadContext);
@@ -72,44 +60,6 @@
     script.defer = true;
     script.dataset.btMsStoreBadges = '1';
     document.head.appendChild(script);
-  }
-
-  function normalizeHomepageLanguage() {
-    const home = document.querySelector('.terminal.home');
-    if (!home) return;
-
-    const nav = home.querySelector('.topnav');
-    if (nav) {
-      nav.innerHTML = '<a href="/guides/">Guides</a> · <a href="/support/">Support</a>';
-    }
-
-    const footer = document.querySelector('.site-shell > .footer');
-    if (footer) {
-      footer.innerHTML = '<a href="/about/">About</a> · <a href="/privacy/">Privacy</a> · <a href="/security/">Security</a>';
-    }
-
-    document.getElementById('readout')?.remove();
-    [...home.children].find((node) => node.matches?.('.line.soft'))?.remove();
-
-    for (const anchor of home.querySelectorAll('#appTable .tag')) {
-      if (anchor.classList.contains('windows')) anchor.textContent = 'Windows';
-      else if (anchor.classList.contains('android')) anchor.textContent = 'Android';
-      else if (anchor.classList.contains('web')) anchor.textContent = 'Web';
-    }
-  }
-
-  function ensureProductGuideLink() {
-    const slug = document.body?.dataset?.appSlug || '';
-    const target = guideLinks[slug];
-    if (!target) return;
-    const section = [...document.querySelectorAll('.product-section')].find((item) => {
-      const title = item.querySelector('.product-section-title')?.textContent?.trim().toLowerCase();
-      return title === 'guides' || title === 'guide';
-    });
-    const anchor = section?.querySelector('a');
-    if (!anchor) return;
-    anchor.href = target[0];
-    anchor.textContent = target[1];
   }
 
   function manifestIcon(slug) {
@@ -165,8 +115,6 @@
     ensureVisitsRuntime();
     ensurePublisherContext();
     ensureStoreBadgeRuntime();
-    normalizeHomepageLanguage();
-    ensureProductGuideLink();
     hydrateAll();
     bindTerminalFocusGuard();
 

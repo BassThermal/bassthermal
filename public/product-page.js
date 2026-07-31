@@ -10,7 +10,7 @@
       link.rel = 'stylesheet';
       link.href = href;
       link.dataset.productStyle = key;
-      document.head.append(link);
+      document.head.appendChild(link);
     }
   }
 
@@ -23,7 +23,7 @@
         script.src = '/screenshot-explorer.js?v=1';
         script.defer = true;
         script.dataset.btScreenshotExplorer = '1';
-        document.head.append(script);
+        document.head.appendChild(script);
       }
       script.addEventListener('load', () => window.BTScreenshotExplorer ? resolve(window.BTScreenshotExplorer) : reject(new Error('Screenshot explorer unavailable')), { once: true });
       script.addEventListener('error', reject, { once: true });
@@ -47,7 +47,7 @@
     if (!faq) return;
     for (const item of faq.querySelectorAll(':scope > div:not(.product-section-title)')) {
       const question = item.querySelector(':scope > .q')?.textContent?.trim().toLowerCase() || '';
-      if (question === 'where do i install it?' || question === 'where can i install it?') item.remove();
+      if (question === 'where do i install it?' || question === 'where can i install it?' || question === 'where is it installed?') item.remove();
     }
     if (!faq.querySelector(':scope > div:not(.product-section-title)')) faq.remove();
   }
@@ -94,7 +94,6 @@
     }
     for (const section of content.querySelectorAll('.product-section')) {
       const title = section.querySelector(':scope > .product-section-title')?.textContent?.trim().toLowerCase();
-      if (title === 'who for') section.classList.add('is-secondary');
       if (title === 'guide' || title === 'guides') {
         section.classList.add('is-guide-action');
         const anchor = section.querySelector('a[href]');
@@ -116,9 +115,10 @@
     return content;
   }
 
-  function sectionByTitle(content, expected) {
+  function sectionByTitles(content, expected) {
+    const titles = new Set(expected.map((value) => value.toLowerCase()));
     return [...content.querySelectorAll(':scope > .product-section')].find((section) =>
-      section.querySelector(':scope > .product-section-title')?.textContent?.trim().toLowerCase() === expected
+      titles.has(section.querySelector(':scope > .product-section-title')?.textContent?.trim().toLowerCase())
     ) || null;
   }
 
@@ -133,8 +133,8 @@
 
     const summary = document.createElement('div');
     summary.className = 'product-stage-summary';
-    for (const title of ['overview', 'workflow']) {
-      const section = sectionByTitle(content, title);
+    for (const aliases of [['what it does', 'overview'], ['how it works', 'workflow']]) {
+      const section = sectionByTitles(content, aliases);
       if (section) summary.append(section);
     }
     if (summary.childElementCount) stage.append(summary);

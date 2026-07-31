@@ -4,6 +4,7 @@ import path from 'node:path';
 const root = process.cwd();
 const validateOnly = process.argv.includes('--validate-only');
 const indexPath = path.join(root, 'public', 'index.html');
+const content = JSON.parse(fs.readFileSync(path.join(root, 'data', 'bt-site-content.json'), 'utf8'));
 const TOPNAV = '<nav class="topnav" aria-label="Primary"><a href="/guides/">Guides</a> · <a href="/support/">Support</a></nav>';
 const FOOTER = '<footer class="footer"><a href="/about/">About</a> · <a href="/privacy/">Privacy</a> · <a href="/security/">Security</a></footer>';
 const VISITS_STYLE = '<link rel="stylesheet" href="/visits-terminal.css?v=3" data-bt-visual-style="visits-terminal">';
@@ -31,11 +32,16 @@ function validate(source) {
   const errors = [];
   if (!source.includes(TOPNAV)) errors.push('homepage top navigation is not canonical');
   if (!source.includes(FOOTER)) errors.push('homepage footer is not canonical');
+  if (!source.includes(content.homepage.intro)) errors.push('homepage factual introduction is missing');
+  if (!source.includes('<div class="line dim home-section-label">apps</div>')) errors.push('homepage apps section label is missing');
+  if (content.homepage.intro.toLowerCase().includes('canada')) errors.push('homepage introduction must not mention Canada');
   if (!source.includes('/visits-terminal.css?v=3')) errors.push('homepage Visits renderer styles missing');
   if (!source.includes('/visits-terminal.js?v=3')) errors.push('homepage direct Visits renderer missing');
   if (source.includes('/visits-terminal-v2.js')) errors.push('legacy Visits adapter remains');
   if (source.includes('id="readout"') || source.includes('10 apps · Windows · Android · Web')) errors.push('homepage status readout must not exist');
+  if (source.includes('Independent software for practical work, study, and specialist workflows.')) errors.push('retired homepage sentence remains');
   if (source.includes('href="/terms/"') || source.includes('href="/releases/"')) errors.push('homepage contains retired utility route');
+  if (/>win<|>and<|>web</.test(source)) errors.push('homepage contains abbreviated platform labels');
   const rows = source.match(/class="row app-row"/g) || [];
   const icons = source.match(/data-app-icon-slug=/g) || [];
   if (rows.length !== icons.length) errors.push(`homepage icon count ${icons.length} must match app row count ${rows.length}`);
@@ -44,7 +50,7 @@ function validate(source) {
     process.exitCode = 1;
     return false;
   }
-  console.log(`PASS  Homepage chrome, direct Visits renderer, and ${icons.length} app icons`);
+  console.log(`PASS  Homepage identity, navigation, direct Visits renderer, and ${icons.length} app icons`);
   return true;
 }
 
