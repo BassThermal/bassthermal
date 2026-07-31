@@ -62,8 +62,11 @@
     const parts = path.split('/').filter(Boolean);
     if (parts[0] === 'apps') crumbs.push({ name: 'Apps', item: 'https://bassthermal.com/' });
     if (parts[0] === 'guides') crumbs.push({ name: 'Guides', item: 'https://bassthermal.com/guides/' });
+    if (parts[0] === 'privacy') crumbs.push({ name: 'Privacy', item: 'https://bassthermal.com/privacy/' });
     const heading = document.querySelector('h1')?.textContent?.trim();
-    if (heading) crumbs.push({ name: heading, item: `https://bassthermal.com${path}` });
+    if (heading && !crumbs.some((crumb) => crumb.name.toLowerCase() === heading.toLowerCase())) {
+      crumbs.push({ name: heading, item: `https://bassthermal.com${path}` });
+    }
     if (crumbs.length < 2) return;
     const script = document.createElement('script');
     script.type = 'application/ld+json';
@@ -85,7 +88,6 @@
     if (path !== '/about/') footer.append(document.createTextNode(' · '), link('/about/', 'about'));
     if (path !== '/support/') footer.append(document.createTextNode(' · '), link('/support/', 'support'));
     if (path !== '/privacy/') footer.append(document.createTextNode(' · '), link('/privacy/', 'privacy'));
-    if (path !== '/terms/') footer.append(document.createTextNode(' · '), link('/terms/', 'terms'));
     if (path !== '/security/') footer.append(document.createTextNode(' · '), link('/security/', 'security'));
     main.append(footer);
   }
