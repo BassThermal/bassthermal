@@ -52,7 +52,7 @@ body[data-app-slug] .product-install-section::after{content:"";position:absolute
 /* Guide index: the homepage thermal language, calibrated for denser editorial rows. */
 .guide-index .guide-card[data-app-slug]{position:relative;isolation:isolate;overflow:hidden;transition:background-color var(--bt-accent-motion-fast) var(--bt-accent-ease)}
 .guide-index .guide-card[data-app-slug]::before{content:"";position:absolute;z-index:-1;left:-62px;top:50%;width:220px;height:116px;transform:translateY(-50%);background:radial-gradient(ellipse at center,rgba(var(--bt-accent-rgb),.072),rgba(var(--bt-accent-rgb),0) 70%);opacity:0;pointer-events:none;transition:opacity var(--bt-accent-motion-normal) var(--bt-accent-ease)}
-.guide-index .guide-card[data-app-slug]>*{position:relative;z-index:1}
+.guide-index .guide-card[data-app-slug]>*{z-index:1}
 .guide-index .guide-card[data-app-slug]:hover,.guide-index .guide-card[data-app-slug]:focus-within{background-color:rgba(255,255,255,.022)}
 .guide-index .guide-card[data-app-slug]:hover::before,.guide-index .guide-card[data-app-slug]:focus-within::before{opacity:1}
 .guide-index .guide-card[data-app-slug] .guide-card-icon{box-shadow:0 0 0 1px transparent,0 0 0 rgba(var(--bt-accent-rgb),0);transition:transform var(--bt-accent-motion-fast) var(--bt-accent-ease),filter var(--bt-accent-motion-fast) var(--bt-accent-ease),box-shadow var(--bt-accent-motion-normal) var(--bt-accent-ease)}
