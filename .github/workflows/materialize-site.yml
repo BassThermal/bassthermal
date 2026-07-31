@@ -1,0 +1,36 @@
+name: Materialize site output
+
+on:
+  push:
+    branches:
+      - agent/remove-homepage-readout
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/remove-homepage-readout
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:site
+      - name: Commit generated public output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public data/bt-catalog.json
+          if git diff --cached --quiet; then
+            echo "Generated output already materialized."
+          else
+            git commit -m "Materialize generated public site [skip ci]"
+            git push origin HEAD:agent/remove-homepage-readout
+          fi
