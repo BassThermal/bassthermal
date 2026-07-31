@@ -8,7 +8,7 @@ const runtime = `
   const styles = [
     ['/app-icons.css?v=2', 'icons'],
     ['/home-visual.css?v=4', 'home'],
-    ['/bt-accent-system.css?v=1', 'accent']
+    ['/bt-accent-system.css?v=2', 'accent']
   ];
   for (const [href, key] of styles) {
     const selector = 'link[${marker}="' + key + '"]';
@@ -43,14 +43,15 @@ else source = source
   .replaceAll('/home-visual.css?v=1', '/home-visual.css?v=4')
   .replaceAll('/home-visual.css?v=2', '/home-visual.css?v=4')
   .replaceAll('/home-visual.css?v=3', '/home-visual.css?v=4')
+  .replaceAll('/bt-accent-system.css?v=1', '/bt-accent-system.css?v=2')
   .replaceAll('/app-icon-hydrator.js?v=1', '/app-icon-hydrator.js?v=6')
   .replaceAll('/app-icon-hydrator.js?v=2', '/app-icon-hydrator.js?v=6')
   .replaceAll('/app-icon-hydrator.js?v=3', '/app-icon-hydrator.js?v=6')
   .replaceAll('/app-icon-hydrator.js?v=4', '/app-icon-hydrator.js?v=6')
   .replaceAll('/app-icon-hydrator.js?v=5', '/app-icon-hydrator.js?v=6');
 
-if (!source.includes('/bt-accent-system.css?v=1')) {
-  source = source.replace("    ['/home-visual.css?v=4', 'home']", "    ['/home-visual.css?v=4', 'home'],\n    ['/bt-accent-system.css?v=1', 'accent']");
+if (!source.includes('/bt-accent-system.css?v=2')) {
+  source = source.replace("    ['/home-visual.css?v=4', 'home']", "    ['/home-visual.css?v=4', 'home'],\n    ['/bt-accent-system.css?v=2', 'accent']");
 }
 if (!source.includes('data-bt-accent-runtime')) {
   source = source.replace(/\n\}\)\(\);\s*$/, `\n  if (!document.querySelector('script[data-bt-accent-runtime]')) {\n    const script = document.createElement('script');\n    script.src = '/bt-accent-system.js?v=1';\n    script.defer = true;\n    script.setAttribute('data-bt-accent-runtime', '1');\n    document.head.appendChild(script);\n  }\n})();\n`);
