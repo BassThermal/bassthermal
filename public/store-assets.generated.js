@@ -175,24 +175,33 @@ window.BT_STORE_ASSETS = {
 })();
 
 (() => {
+  const marker = 'data-bt-app-icon-runtime';
   const styles = [
     ['/app-icons.css?v=2', 'icons'],
-    ['/home-visual.css?v=2', 'home']
+    ['/home-visual.css?v=4', 'home'],
+    ['/bt-accent-system.css?v=1', 'accent']
   ];
   for (const [href, key] of styles) {
-    const selector = 'link[data-bt-app-icon-runtime="' + key + '"]';
+    const selector = `link[${marker}="${key}"]`;
     if (document.querySelector(selector)) continue;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = href;
-    link.setAttribute('data-bt-app-icon-runtime', key);
+    link.setAttribute(marker, key);
     document.head.appendChild(link);
   }
   if (!document.querySelector('script[data-bt-app-icon-runtime]')) {
     const script = document.createElement('script');
-    script.src = '/app-icon-hydrator.js?v=2';
+    script.src = '/app-icon-hydrator.js?v=6';
     script.defer = true;
     script.setAttribute('data-bt-app-icon-runtime', '1');
+    document.head.appendChild(script);
+  }
+  if (!document.querySelector('script[data-bt-accent-runtime]')) {
+    const script = document.createElement('script');
+    script.src = '/bt-accent-system.js?v=1';
+    script.defer = true;
+    script.setAttribute('data-bt-accent-runtime', '1');
     document.head.appendChild(script);
   }
 })();
