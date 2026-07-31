@@ -1,6 +1,25 @@
 (() => {
   'use strict';
 
+  function ensureAccentSystem() {
+    if (!document.querySelector('link[data-bt-accent-style]')) {
+      const style = document.createElement('link');
+      style.rel = 'stylesheet';
+      style.href = '/bt-accent-system.css?v=1';
+      style.dataset.btAccentStyle = '1';
+      document.head.appendChild(style);
+    }
+    if (!document.querySelector('script[data-bt-accent-runtime]')) {
+      const script = document.createElement('script');
+      script.src = '/bt-accent-system.js?v=1';
+      script.defer = true;
+      script.dataset.btAccentRuntime = '1';
+      document.head.appendChild(script);
+    }
+  }
+
+  ensureAccentSystem();
+
   const data = window.BT_PUBLISHER_DATA;
   if (!data || document.documentElement.dataset.btPublisherContext === '1') return;
   document.documentElement.dataset.btPublisherContext = '1';
