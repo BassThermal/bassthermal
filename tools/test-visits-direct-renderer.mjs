@@ -17,6 +17,20 @@ for (const field of ['activePeople','activeSessions','visitorsToday','sessionsTo
   assert.match(renderer, new RegExp(field));
 }
 
+const summarySource = renderer.slice(
+  renderer.indexOf('function renderSummary'),
+  renderer.indexOf('function renderNow')
+);
+assert.match(summarySource, /bt-visits-summary-lines/);
+assert.match(summarySource, /compactActive\(data\)/);
+assert.match(summarySource, /compactCities\(data\)/);
+assert.match(summarySource, /compactClick\(data\)/);
+assert.doesNotMatch(summarySource, /activeRows\(data\)|cityRows\(data\)|CLICKS TODAY/);
+assert.match(renderer, /slice\(0, limit\)/);
+assert.match(renderer, /\+\$\{remaining\} more/);
+assert.match(renderer, /data-command="\/visits today"/);
+assert.match(renderer, /top click/);
+
 assert.match(renderer, /event\.stopImmediatePropagation\(\)/);
 assert.match(renderer, /addEventListener\('submit',[\s\S]*true\)/);
 assert.match(renderer, /addEventListener\('click',[\s\S]*true\)/);
@@ -27,10 +41,20 @@ assert.match(renderer, /MutationObserver/);
 assert.doesNotMatch(renderer, /\bsig\b|signalReasons|suspect/);
 assert.doesNotMatch(renderer, /nativeFetch|window\.fetch\s*=/);
 
+for (const selector of [
+  'bt-visits-overview',
+  'bt-visits-summary-lines',
+  'bt-visits-compact-group',
+  'bt-visits-active-compact',
+  'bt-visits-city-compact',
+  'bt-visits-more'
+]) {
+  assert.match(css, new RegExp(selector));
+}
 assert.match(css, /bt-visits-city-table/);
-assert.match(css, /@media\(max-width:520px\)/);
-assert.match(hydrator, /visits-terminal\.js\?v=4/);
-assert.match(hydrator, /visits-terminal\.css\?v=4/);
+assert.match(css, /@media \(max-width: 520px\)/);
+assert.match(hydrator, /visits-terminal\.js\?v=5/);
+assert.match(hydrator, /visits-terminal\.css\?v=5/);
 assert.match(hydrator, /href="\/guides\/"/);
 assert.match(hydrator, /href="\/about\/"/);
 
@@ -39,4 +63,4 @@ assert.equal(pkg.scripts.deploy, 'wrangler deploy');
 assert.equal(pkg.scripts.dev, 'wrangler dev');
 assert.doesNotMatch(pkg.scripts['build:site'], /visits:finalize/);
 
-console.log('committed Visits renderer and static deployment contract passed');
+console.log('compact Visits overview and static deployment contract passed');
