@@ -179,7 +179,7 @@ window.BT_STORE_ASSETS = {
   const styles = [
     ['/app-icons.css?v=2', 'icons'],
     ['/home-visual.css?v=4', 'home'],
-    ['/bt-accent-system.css?v=1', 'accent']
+    ['/bt-accent-system.css?v=2', 'accent']
   ];
   for (const [href, key] of styles) {
     const selector = `link[${marker}="${key}"]`;
