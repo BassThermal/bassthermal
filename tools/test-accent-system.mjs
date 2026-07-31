@@ -44,6 +44,8 @@ assert.match(guideIndexBlock, /radial-gradient\(ellipse at center/);
 assert.match(guideIndexBlock, /guide-card-icon[^}]*transition:transform/);
 assert.match(guideIndexBlock, /scale\(1\.02\)/);
 assert.match(guideIndexBlock, /guide-card-desc/);
+assert.match(guideIndexBlock, />\*\{z-index:1\}/);
+assert.doesNotMatch(guideIndexBlock, />\*\{position:relative/);
 assert.doesNotMatch(guideIndexBlock, /content:"→"/);
 assert.doesNotMatch(guideIndexBlock, /width:2px/);
 assert.doesNotMatch(guideIndexBlock, /scaleY\(/);
