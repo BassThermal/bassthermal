@@ -9,6 +9,7 @@
   if (!home || !log || !form || !input || !overlay) return;
 
   const REFRESH_MS = 15000;
+  const ACTIVE_WINDOW_SECONDS = 90;
   const state = {
     active: false,
     timer: null,
@@ -78,6 +79,24 @@
         });
   };
 
+  const cityLabel = (row) =>
+    `${safe(row?.city, 'Unknown')} ${safe(row?.country, '')}`.trim();
+
+  const actionLabel = (row) => {
+    const labels = {
+      install_windows: 'Microsoft Store',
+      install_android: 'Google Play',
+      store_hub_windows: 'Microsoft Store hub',
+      store_hub_android: 'Google Play hub',
+      open_web_app: 'web app',
+      product_open: 'product page',
+      guide_open: 'guide',
+      external_open: 'external link'
+    };
+    const action = labels[row?.action] || safe(row?.action, 'external_open').replaceAll('_', ' ');
+    return row?.appSlug ? `${row.appSlug} · ${action}` : action;
+  };
+
   function showTerminal() {
     overlay.classList.add('open', 'is-tall');
     form.classList.add('is-active');
@@ -97,6 +116,7 @@
     const block = document.createElement('div');
     block.className = 'cmd-block bt-visits-command';
     block.innerHTML = commandLine(command);
+
     const body = document.createElement('div');
     body.className = 'bt-visits-body';
     body.innerHTML = '<div class="line dim">loading visits…</div>';
@@ -133,11 +153,11 @@
 
   function activeRows(data) {
     const rows = Array.isArray(data?.activeSessions) ? data.activeSessions : [];
-    if (!rows.length) return empty('nobody active in the last 90 seconds');
+    if (!rows.length) return empty(`nobody active in the last ${ACTIVE_WINDOW_SECONDS} seconds`);
     return `<div class="bt-visits-table bt-visits-active-table">
       <div class="bt-visits-row bt-visits-head-row"><span>city</span><span>device</span><span>page</span><span>age</span></div>
       ${rows.map((row) => `<div class="bt-visits-row">
-        <span>${esc(`${safe(row.city, 'Unknown')} ${safe(row.country, '')}`.trim())}</span>
+        <span>${esc(cityLabel(row))}</span>
         <span>${esc(safe(row.device))}</span>
         <span class="bt-visits-path" title="${esc(safe(row.path, '/'))}">${esc(safe(row.path, '/'))}</span>
         <span class="bt-visits-num">${esc(safe(row.ageLabel, '0s'))}</span>
@@ -151,7 +171,7 @@
     return `<div class="bt-visits-table bt-visits-city-table">
       <div class="bt-visits-row bt-visits-head-row"><span>city</span><span>people</span><span>sessions</span><span>views</span><span>time</span><span>last</span></div>
       ${rows.map((row) => `<a class="bt-visits-row bt-visits-city-link" href="#" data-bt-city="${esc(row.city)}" data-bt-country="${esc(row.country)}">
-        <span>${esc(`${safe(row.city, 'Unknown')} ${safe(row.country, '')}`.trim())}</span>
+        <span>${esc(cityLabel(row))}</span>
         <span class="bt-visits-num">${esc(safe(row.visitors, 0))}</span>
         <span class="bt-visits-num">${esc(safe(row.sessions, 0))}</span>
         <span class="bt-visits-num">${esc(safe(row.pageViews, 0))}</span>
@@ -161,36 +181,64 @@
     </div>`;
   }
 
-  function clickRows(data, limit = 6) {
-    const rows = Array.isArray(data?.clicksToday) ? data.clicksToday.slice(0, limit) : [];
+  function compactActive(data, limit = 2) {
+    const rows = Array.isArray(data?.activeSessions) ? data.activeSessions.slice(0, limit) : [];
+    if (!rows.length) return `<div class="bt-visits-compact-line"><span class="bt-visits-key">active</span><span class="bt-visits-muted">none</span></div>`;
+    return `<div class="bt-visits-compact-group">
+      <div class="bt-visits-compact-label">active</div>
+      ${rows.map((row) => `<div class="bt-visits-compact-row bt-visits-active-compact">
+        <span>${esc(cityLabel(row))}</span>
+        <span class="bt-visits-muted">${esc(safe(row.device))}</span>
+        <span class="bt-visits-path" title="${esc(safe(row.path, '/'))}">${esc(safe(row.path, '/'))}</span>
+        <span class="bt-visits-num">${esc(safe(row.ageLabel, '0s'))}</span>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  function compactCities(data, limit = 3) {
+    const rows = Array.isArray(data?.citiesToday) ? data.citiesToday : [];
     if (!rows.length) return '';
-    return `${sectionTitle('CLICKS TODAY')}<div class="bt-visits-list">${rows.map((row) => {
-      const action = safe(row.action, 'external_open').replaceAll('_', ' ');
-      const label = row.appSlug ? `${row.appSlug} · ${action}` : action;
-      return `<div class="bt-visits-list-row"><span>${esc(label)}</span><strong>${esc(safe(row.clicks, 0))}</strong></div>`;
-    }).join('')}</div>`;
+    const shown = rows.slice(0, limit);
+    const remaining = Math.max(0, rows.length - shown.length);
+    return `<div class="bt-visits-compact-group">
+      <div class="bt-visits-compact-label">top cities <span>people · sessions · views · time</span></div>
+      ${shown.map((row) => `<a class="bt-visits-compact-row bt-visits-city-compact" href="#" data-bt-city="${esc(row.city)}" data-bt-country="${esc(row.country)}">
+        <span>${esc(cityLabel(row))}</span>
+        <span class="bt-visits-num">${esc(safe(row.visitors, 0))}</span>
+        <span class="bt-visits-num">${esc(safe(row.sessions, 0))}</span>
+        <span class="bt-visits-num">${esc(safe(row.pageViews, 0))}</span>
+        <span class="bt-visits-num">${esc(safe(row.visibleLabel ?? row.tabTimeLabel, '0s'))}</span>
+      </a>`).join('')}
+      ${remaining ? `<button type="button" class="bt-visits-more" data-command="/visits today">+${remaining} more ${remaining === 1 ? 'city' : 'cities'} · /visits today</button>` : ''}
+    </div>`;
+  }
+
+  function compactClick(data) {
+    const row = Array.isArray(data?.clicksToday) ? data.clicksToday[0] : null;
+    if (!row) return '';
+    return `<div class="bt-visits-compact-line"><span class="bt-visits-key">top click</span><span>${esc(actionLabel(row))}</span><strong>${esc(safe(row.clicks, 0))}</strong></div>`;
   }
 
   function renderSummary(data) {
     const totals = data?.totals || {};
     const activeSessions = totals.activeSessions ??
       (Array.isArray(data?.activeSessions) ? data.activeSessions.length : 0);
-    return `<div class="bt-visits">
-      <div class="bt-visits-status"><span class="bt-visits-live">● LIVE</span><span>${esc(generatedTime(data))}</span><span class="bt-visits-muted">active ≤90s · refresh 15s</span></div>
-      ${sectionTitle('NOW')}
-      <div class="bt-visits-metrics">${metric('people', totals.activePeople ?? 0)}${metric('sessions', activeSessions)}</div>
-      ${activeRows(data)}
-      ${sectionTitle('TODAY')}
-      <div class="bt-visits-metrics">${metric('visitors', totals.visitorsToday ?? 0)}${metric('sessions', totals.sessionsToday ?? 0)}${metric('views', totals.pageViewsToday ?? 0)}${metric('clicks', totals.clicksToday ?? 0)}${metric('time', totals.visibleTodayLabel ?? totals.tabTimeTodayLabel ?? '0s')}</div>
-      ${cityRows(data)}
-      ${clickRows(data)}
+    return `<div class="bt-visits bt-visits-overview">
+      <div class="bt-visits-status"><span class="bt-visits-live">● LIVE</span><span>${esc(generatedTime(data))}</span><span class="bt-visits-muted">r15s</span></div>
+      <div class="bt-visits-summary-lines">
+        <div class="bt-visits-summary-line"><span class="bt-visits-summary-label">now</span>${metric('people', totals.activePeople ?? 0)}${metric('sessions', activeSessions)}</div>
+        <div class="bt-visits-summary-line"><span class="bt-visits-summary-label">today</span>${metric('visitors', totals.visitorsToday ?? 0)}${metric('sessions', totals.sessionsToday ?? 0)}${metric('views', totals.pageViewsToday ?? 0)}${metric('clicks', totals.clicksToday ?? 0)}${metric('time', totals.visibleTodayLabel ?? totals.tabTimeTodayLabel ?? '0s')}</div>
+      </div>
+      ${compactActive(data)}
+      ${compactCities(data)}
+      ${compactClick(data)}
     </div>`;
   }
 
   function renderNow(data) {
     const totals = data?.totals || {};
     return `<div class="bt-visits">
-      <div class="bt-visits-status"><span class="bt-visits-live">● NOW</span><span>${esc(generatedTime(data))}</span><span class="bt-visits-muted">active ≤90s</span></div>
+      <div class="bt-visits-status"><span class="bt-visits-live">● NOW</span><span>${esc(generatedTime(data))}</span><span class="bt-visits-muted">active ≤${ACTIVE_WINDOW_SECONDS}s</span></div>
       <div class="bt-visits-metrics">${metric('people', totals.activePeople ?? 0)}${metric('sessions', totals.activeSessions ?? 0)}</div>
       ${activeRows(data)}
     </div>`;
@@ -233,9 +281,7 @@
 
   function renderClicks(data) {
     const rows = (data?.clicksToday || []).map((row) => ({
-      label: row.appSlug
-        ? `${row.appSlug} · ${safe(row.action, 'external_open').replaceAll('_', ' ')}`
-        : safe(row.action, 'external_open').replaceAll('_', ' '),
+      label: actionLabel(row),
       clicks: row.clicks,
       lastSeenTime: row.lastSeenTime
     }));
