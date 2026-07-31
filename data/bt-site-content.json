@@ -1,0 +1,467 @@
+{
+  "schema": "BT-SITE-CONTENT-1",
+  "updated": "2026-07-31",
+  "homepage": {
+    "title": "BassThermal | Focused Windows, Android and Web Software",
+    "description": "BassThermal builds focused Windows, Android, and web software for document work, research, publishing, inventory, technical study, media, and information workflows.",
+    "intro": "Windows, Android, and web software for practical and specialist workflows.",
+    "sectionLabel": "apps"
+  },
+  "about": {
+    "title": "About BassThermal",
+    "description": "BassThermal is an independent software developer building focused Windows, Android, and web applications.",
+    "paragraphs": [
+      "BassThermal is an independent software developer based in Canada.",
+      "It builds focused Windows, Android, and web applications for technical work, research, publishing, inventory, document processing, study, and information workflows.",
+      "Products are distributed through the web and official app stores, documented with practical Guides, and supported directly by email."
+    ]
+  },
+  "support": {
+    "title": "Support | BassThermal",
+    "description": "Get direct support for BassThermal Windows, Android, and web applications, including diagnostics and issue-reporting guidance.",
+    "intro": "BassThermal support is handled directly by email. Including a few specific details helps the issue get investigated more quickly."
+  },
+  "privacyDirectory": {
+    "title": "Privacy Policies | BassThermal",
+    "description": "Read the website and product-specific privacy information for current BassThermal Windows, Android, and web applications.",
+    "intro": "Data flows differ by product. Choose the application and platform you use to see what stays on your device and what may be requested online.",
+    "website": "BassThermal records basic website activity such as pages viewed, approximate location, device type, referring site, and clicks to product or Store pages. This helps show which applications and Guides are being used. Raw IP addresses and full browser identification strings are not stored.",
+    "websiteTechnical": "A temporary same-day identifier is used to avoid counting every open tab as a different visitor."
+  },
+  "products": {
+    "dualticker": {
+      "line": "compare live headline sources and follow how coverage changes",
+      "short": "Monitor live headline sources, compare coverage, and keep a focused news board open on web, Windows, or Android.",
+      "seo": {
+        "title": "DualTicker Live Headline Monitor | Web, Windows and Android",
+        "description": "Monitor live headline sources, compare coverage, and keep a focused news board open on web, Windows, or Android."
+      },
+      "subtitle": "Monitor live headline sources and compare how coverage develops across them.",
+      "whatItDoes": "DualTicker brings live headline sources into a focused comparison view. Use it to follow developing stories, compare emphasis and wording, and keep a readable source board open without repeatedly switching between websites.",
+      "howItWorks": [
+        "Choose a focused set of headline sources or open a saved view.",
+        "Arrange the available panels so each source remains readable.",
+        "Watch story movement, pause when needed, and refine the view with source controls, search, filters, or highlights where available."
+      ],
+      "usefulFor": [
+        "media monitoring and communications awareness",
+        "researching how different publishers cover the same event",
+        "keeping a live headline board visible while working or streaming",
+        "building focused source views instead of refreshing many sites"
+      ],
+      "limits": [
+        "The web, Windows, and Android experiences may not provide exactly the same controls.",
+        "Headlines depend on public feeds and publisher websites, which can change, fail, or become unavailable.",
+        "A source board helps compare coverage; it does not verify the accuracy of a story."
+      ],
+      "guide": {
+        "href": "/guides/dualticker/compare-live-headline-sources/",
+        "label": "Compare live headline sources with DualTicker"
+      },
+      "faq": [
+        {
+          "question": "Do the web and desktop versions work exactly the same way?",
+          "answer": "No. The available layouts and controls can differ by platform, so use the product that best fits the screen and workflow you need."
+        }
+      ],
+      "privacy": {
+        "summary": "DualTicker requests public feeds and publisher websites to show headline content.",
+        "local": "Views, source choices, and application settings are handled by the platform or application where you use them. DualTicker does not require access to your private working documents.",
+        "online": "The app requests the public feed, page, image, or article resources needed for the sources you choose. Those requests are sent to the relevant publishers or hosting services.",
+        "received": "BassThermal does not receive your private documents or passwords through normal DualTicker use. Website activity on bassthermal.com is described in the website privacy section.",
+        "deletion": "Remove saved views or settings through the application where available, clear browser data for the web version, or uninstall the application to remove its local data."
+      }
+    },
+    "retrofy": {
+      "line": "transform images with limited palettes, pixels, and dithering",
+      "short": "Transform photos and graphics with limited palettes, visible pixel structure, scaling, and dithering controls.",
+      "seo": {
+        "title": "RetroFy Retro Image Converter | Palette and Dithering Effects",
+        "description": "Transform photos and graphics with limited palettes, visible pixel structure, scaling, and dithering controls on Windows or Android."
+      },
+      "subtitle": "Transform photos and graphics with palette, scale, pixel, and dithering controls.",
+      "whatItDoes": "RetroFy processes normal images into retro-style results using limited palettes, visible pixel structure, scaling, and dithering. It is designed for quick visual experiments and repeatable image processing without requiring a full graphics editor.",
+      "howItWorks": [
+        "Open one image or prepare a group of images for processing.",
+        "Choose a palette, scale, pixel density, and dithering treatment that preserves the subject.",
+        "Compare the result at its intended viewing size, then export the processed image."
+      ],
+      "usefulFor": [
+        "retro-style social images and visual experiments",
+        "testing limited-palette directions for games or mockups",
+        "creating consistent lo-fi image sets",
+        "processing images without building a complex graphics workflow"
+      ],
+      "limits": [
+        "Automatic processing creates a retro-style image; it is not a substitute for hand-drawn pixel art.",
+        "Strong palette reduction or coarse pixels can remove faces, text, and small details.",
+        "Keep the original image separately before experimenting with new settings."
+      ],
+      "guide": {
+        "href": "/guides/retrofy/give-a-photo-a-retro-pixel-art-look/",
+        "label": "Why retro images look the way they do"
+      },
+      "faq": [
+        {
+          "question": "Does RetroFy create hand-drawn pixel art?",
+          "answer": "No. It transforms an existing image with palette, scaling, pixel, and dithering controls. The result can have a pixel-art influence without becoming hand-drawn artwork."
+        }
+      ],
+      "privacy": {
+        "summary": "RetroFy processes source images and generated output on the device.",
+        "local": "Images, settings, previews, and exported results are handled locally by the application and saved only where you choose.",
+        "online": "Normal image processing does not require sending the source image to BassThermal. Store and operating-system services may make their own network requests under their policies.",
+        "received": "BassThermal does not receive your source images or exported results through normal application use.",
+        "deletion": "Delete exported files from the location where you saved them and remove application data or uninstall the app to clear local settings."
+      }
+    },
+    "coptic-dictionary": {
+      "line": "search Coptic text, transliteration, meanings, and saved words",
+      "short": "Search Coptic text, transliteration, and English meanings, inspect detailed entries, and save vocabulary for study.",
+      "seo": {
+        "title": "Coptic Dictionary App | Search Words, Meanings and Transliteration",
+        "description": "Search Coptic text, transliteration, and English meanings, inspect detailed entries, and save vocabulary on Windows or Android."
+      },
+      "subtitle": "Search Coptic text, transliteration, English meanings, forms, and saved vocabulary.",
+      "whatItDoes": "Coptic Dictionary is a searchable lexicon and study tool. It helps you approach an entry from Coptic text, a transliterated form, or an English meaning, then inspect the details attached to the matching dictionary record.",
+      "howItWorks": [
+        "Search with Coptic text, transliteration, or a focused English term.",
+        "Compare matching entries, meanings, grammatical information, dialect labels, and written forms where available.",
+        "Save useful entries and review them as a purposeful vocabulary set."
+      ],
+      "usefulFor": [
+        "looking up unfamiliar words while reading Coptic text",
+        "finding possible Coptic entries from an English meaning",
+        "comparing transliterations, forms, and labelled dialect information",
+        "building a saved vocabulary list for repeated study"
+      ],
+      "limits": [
+        "The app is a searchable lexicon and study tool, not an automatic sentence-translation service.",
+        "Dictionary coverage and entry detail depend on the available lexicon data.",
+        "Similar English meanings can point to different Coptic words, forms, or dialects and still require human judgement."
+      ],
+      "guide": {
+        "href": "/guides/coptic-dictionary/look-up-and-save-coptic-words/",
+        "label": "Search and study Coptic words"
+      },
+      "faq": [
+        {
+          "question": "Can I translate full sentences automatically?",
+          "answer": "No. Coptic Dictionary is designed for word and entry lookup, reference, and study rather than automatic sentence translation."
+        }
+      ],
+      "privacy": {
+        "summary": "Dictionary search and saved study data are handled on the device.",
+        "local": "Search history, saved vocabulary, study progress, and application settings are stored locally where the platform supports them.",
+        "online": "Normal dictionary lookup does not send your search text to BassThermal. Store, update, or external-link services may make their own requests under their policies.",
+        "received": "BassThermal does not receive your saved vocabulary or study history through normal application use.",
+        "deletion": "Remove saved words through the app where available, clear application data, or uninstall the application to remove its local data."
+      }
+    },
+    "icon-pack-builder": {
+      "line": "generate common Windows icon outputs from one source image",
+      "short": "Generate common Windows app, installer, package, and Store-oriented icon sizes from one source image.",
+      "seo": {
+        "title": "Windows Icon Pack Builder | Generate App and Installer Icons",
+        "description": "Generate common Windows app, installer, package, and Microsoft Store-oriented icon sizes from one source image."
+      },
+      "subtitle": "Generate common Windows app, installer, package, and Store-oriented icon outputs from one image.",
+      "whatItDoes": "Icon Pack Builder turns one high-quality source image into an organized set of common Windows icon outputs. It reduces repeated manual resizing while keeping the master image as the source of truth for the pack.",
+      "howItWorks": [
+        "Open a clean square source PNG with enough resolution for downscaling.",
+        "Generate the available Windows app, installer, package, and Store-oriented sizes.",
+        "Review the smallest outputs, then export the organized pack for the destination workflow."
+      ],
+      "usefulFor": [
+        "independent Windows application publishing",
+        "creating installer and shortcut icon files",
+        "preparing common package and Store-oriented image sizes",
+        "regenerating a consistent icon set after the master artwork changes"
+      ],
+      "limits": [
+        "Destination requirements can change, so verify the current package, installer, or Store documentation before submission.",
+        "Generated sizes still need visual review, especially where small details or text are present.",
+        "The app creates image outputs; it does not guarantee acceptance by every packaging or distribution system."
+      ],
+      "guide": {
+        "href": "/guides/icon-pack-builder/create-windows-app-icons-from-one-png/",
+        "label": "Create Windows app icons from one PNG"
+      },
+      "faq": [
+        {
+          "question": "Does a generated pack guarantee Microsoft Store acceptance?",
+          "answer": "No. The app produces common Store-oriented sizes, but current submission and package requirements must still be checked for the product you are publishing."
+        }
+      ],
+      "privacy": {
+        "summary": "Icon generation and export are performed on the Windows device.",
+        "local": "The source image, generated outputs, preview state, and export folders remain local to the computer and locations you choose.",
+        "online": "Normal icon generation does not require sending the source image to BassThermal. Store and operating-system services may make their own requests under their policies.",
+        "received": "BassThermal does not receive your source artwork or generated icon files through normal application use.",
+        "deletion": "Delete exported icon files from their folders and remove application data or uninstall the app to clear local settings."
+      }
+    },
+    "favicon-harvester": {
+      "line": "collect and review website icons from URLs or domain lists",
+      "short": "Scan website URLs or domain lists, review favicon candidates, and save an organized local icon collection.",
+      "seo": {
+        "title": "Favicon Harvester for Windows | Collect Website Icons in Bulk",
+        "description": "Scan website URLs or domain lists, review favicon candidates, and save an organized local icon collection on Windows."
+      },
+      "subtitle": "Collect, review, and organize favicon candidates from websites and domain lists.",
+      "whatItDoes": "Favicon Harvester checks websites for favicon and site-icon candidates, presents the results for review, and saves accepted files into an organized local collection. It is built for repeated website-list work rather than manual browser digging.",
+      "howItWorks": [
+        "Paste one website address or prepare a clean list of domains or URLs.",
+        "Scan the sites for available favicon and site-icon candidates.",
+        "Review identity, resolution, and format before saving the accepted files locally."
+      ],
+      "usefulFor": [
+        "website and dashboard maintenance",
+        "bookmark, catalogue, and source-list projects",
+        "brand and migration research",
+        "collecting site icons without opening each website manually"
+      ],
+      "limits": [
+        "Websites expose icons in different locations and formats, and some provide no useful candidate.",
+        "Sites can block automated requests or return generic, stale, or low-resolution images.",
+        "A discovered image still requires review before it is treated as the current official icon."
+      ],
+      "guide": {
+        "href": "/guides/favicon-harvester/collect-favicons-from-a-list-of-websites/",
+        "label": "Collect favicons from a list of websites"
+      },
+      "faq": [
+        {
+          "question": "Will every website return a usable favicon?",
+          "answer": "No. Some sites block access, expose no candidate, or return an image that is generic, stale, or too small for the intended use."
+        }
+      ],
+      "privacy": {
+        "summary": "Favicon Harvester uses a local workspace while requesting public website resources.",
+        "local": "The input list, review state, accepted files, and exported collection remain in the local workspace and folders you choose.",
+        "online": "The domains or URLs you ask the app to inspect are requested from the corresponding public websites and hosting services so favicon candidates can be discovered.",
+        "received": "BassThermal does not receive your saved favicon collection through normal application use.",
+        "deletion": "Delete the local project or exported files and remove application data or uninstall the app to clear local settings."
+      }
+    },
+    "isbn-manager": {
+      "line": "build and maintain a book catalogue from ISBNs",
+      "short": "Build and maintain a book catalogue from typed, pasted, imported, or scanned ISBNs, then create labels and exports.",
+      "seo": {
+        "title": "ISBN Manager for Windows | Book Catalogue and Barcode Software",
+        "description": "Build a book catalogue from typed, pasted, imported, or scanned ISBNs, review metadata, create barcode labels, and export records."
+      },
+      "subtitle": "Build, review, label, and export a trustworthy book catalogue from ISBNs.",
+      "whatItDoes": "ISBN Manager brings ISBN entry, metadata lookup, catalogue cleanup, inventory fields, barcode labels, and export into one Windows workflow. It is designed for collections that need repeatable review rather than blind acceptance of whatever an online lookup returns.",
+      "howItWorks": [
+        "Type an ISBN, paste a larger block, import supported list or spreadsheet data, or use a compatible keyboard-style barcode scanner.",
+        "Review the detected ISBNs and verify the returned title, author, publisher, edition, identifiers, cover, and inventory fields.",
+        "Generate labels only after the records are correct, then save and export the organized catalogue."
+      ],
+      "usefulFor": [
+        "independent and used-book shops",
+        "libraries and cataloguing teams",
+        "institutional or personal book collections",
+        "inventory cleanup, barcode-label preparation, and catalogue export"
+      ],
+      "limits": [
+        "Scanner support means keyboard-style barcode input; it does not imply a built-in phone-camera scanner.",
+        "Online metadata and cover providers can return incomplete, incorrect, or missing information.",
+        "An ISBN identifies an edition, so matching titles should not be merged without checking the exact record."
+      ],
+      "guide": {
+        "href": "/guides/isbn-manager/build-a-book-catalog-from-isbns/",
+        "label": "Build a book catalogue from ISBNs"
+      },
+      "faq": [
+        {
+          "question": "Does ISBN Manager verify every metadata result automatically?",
+          "answer": "No. It speeds up lookup and entry, but the user must confirm that the returned record matches the exact edition being catalogued."
+        },
+        {
+          "question": "Can I use a barcode scanner?",
+          "answer": "Yes, when the scanner behaves like a keyboard and enters the ISBN into the Windows input field."
+        }
+      ],
+      "privacy": {
+        "summary": "ISBN Manager keeps the working catalogue locally and uses online services when book metadata or cover information is requested.",
+        "local": "Catalogue records, inventory fields, notes, generated labels, saved projects, and exports remain on the computer or in the local, network, or synchronized folder you choose.",
+        "online": "When you request book information, the ISBN may be sent to the selected metadata provider. Cover images may be requested from external image providers. Those providers process the request under their own policies.",
+        "received": "BassThermal does not receive your catalogue, inventory records, labels, or exported files through normal application use.",
+        "deletion": "Delete the catalogue and exported files from their saved locations, clear application data, or uninstall the app. Data stored in a network or synchronized folder must also be removed from that service or location."
+      }
+    },
+    "rss-crawler": {
+      "line": "discover, inspect, organize, and export RSS or Atom feeds",
+      "short": "Discover RSS and Atom feeds, review candidates and recent items, organize source sets, and export useful feed lists.",
+      "seo": {
+        "title": "RSS Crawler for Windows | Find and Export RSS and Atom Feeds",
+        "description": "Discover RSS and Atom feeds, review candidates and recent items, organize source sets, and export useful feed lists on Windows."
+      },
+      "subtitle": "Discover, inspect, organize, and export RSS and Atom feed candidates.",
+      "whatItDoes": "RSS Crawler brings several feed-discovery routes into one Windows workspace. It scans websites for RSS and Atom candidates, helps you inspect what was found, and turns a noisy result set into a reviewed source list for the next tool.",
+      "howItWorks": [
+        "Add one website or a larger source list and choose the scan depth appropriate to the job.",
+        "Review candidate endpoints, formats, discovery methods, problem states, and recent items where available.",
+        "Include useful feeds, ignore irrelevant candidates, save reusable source packs, and export the reviewed list."
+      ],
+      "usefulFor": [
+        "building feed-reader or monitoring source lists",
+        "research and media-source discovery",
+        "newsletter, publishing, and automation preparation",
+        "checking whether a website exposes section-specific or less visible feeds"
+      ],
+      "limits": [
+        "Feed discovery is best-effort. A website may publish no feed, block access, or expose stale or irrelevant endpoints.",
+        "A technically valid feed still needs review to confirm that it contains the content you intended to follow.",
+        "Deeper scans can take longer and return more candidates that require human judgement."
+      ],
+      "guide": {
+        "href": "/guides/rss-crawler/find-and-export-rss-feeds/",
+        "label": "Find hidden RSS and Atom feeds"
+      },
+      "faq": [
+        {
+          "question": "Can RSS Crawler guarantee that a website has a feed?",
+          "answer": "No. It can inspect several likely discovery routes, but a site may publish no feed, block access, or expose endpoints that are stale or unrelated."
+        }
+      ],
+      "privacy": {
+        "summary": "RSS Crawler uses a local workspace while requesting public websites and feed endpoints.",
+        "local": "Source lists, review states, saved packs, problem results, and exported feed lists remain in the local workspace and folders you choose.",
+        "online": "The websites and feed URLs you ask the app to inspect are requested from the corresponding publishers or hosting services. Reader previews also request the selected feed content.",
+        "received": "BassThermal does not receive your saved source packs or exported feed lists through normal application use.",
+        "deletion": "Delete local projects and exports, clear application data, or uninstall the app to remove its local workspace and settings."
+      }
+    },
+    "docbatch-pdf-converter": {
+      "line": "convert supported document batches to PDF locally on Windows",
+      "short": "Convert supported document batches to PDF locally on Windows, control output and conflicts, and review the finished files.",
+      "seo": {
+        "title": "DocBatch PDF Converter | Batch Convert Documents on Windows",
+        "description": "Convert DOCX, DOC, RTF, ODT, and TXT batches to PDF locally on Windows, control output and conflicts, and review the results."
+      },
+      "subtitle": "Convert supported document batches to PDF locally and control how the output is written.",
+      "whatItDoes": "DocBatch PDF Converter processes groups of supported office and text documents into PDF on Windows. It keeps source selection, converter choice, output location, and existing-file behavior in one repeatable batch workflow.",
+      "howItWorks": [
+        "Add supported DOCX, DOC, RTF, ODT, or TXT files and remove temporary or damaged inputs.",
+        "Choose the available converter, output folder, and conflict behavior for existing PDF names.",
+        "Run the batch, investigate individual failures, and open representative outputs before delivery or archiving."
+      ],
+      "usefulFor": [
+        "converting groups of Word and text documents",
+        "processing mixed supported formats with one output policy",
+        "keeping document conversion on the Windows computer",
+        "preparing review, delivery, or archive PDF sets"
+      ],
+      "limits": [
+        "Available conversion paths can depend on the software and components installed on the computer.",
+        "A completed conversion does not guarantee perfect visual fidelity for fonts, tables, images, headers, footers, or page breaks.",
+        "Keep the editable originals until the resulting PDFs have been reviewed and accepted."
+      ],
+      "guide": {
+        "href": "/guides/docbatch-pdf-converter/convert-a-folder-of-documents-to-pdf/",
+        "label": "Batch convert documents to PDF"
+      },
+      "faq": [
+        {
+          "question": "Are documents uploaded to BassThermal for conversion?",
+          "answer": "No. The conversion workflow is performed on the Windows computer using the available local conversion path."
+        }
+      ],
+      "privacy": {
+        "summary": "Document conversion is performed on the Windows device.",
+        "local": "Source documents, queue state, conversion settings, logs, and generated PDFs remain on the computer and in the folders you choose.",
+        "online": "Normal document conversion does not send the source documents to BassThermal. Installed converter, Store, operating-system, or update services may make their own requests under their policies.",
+        "received": "BassThermal does not receive your source documents or converted PDFs through normal application use.",
+        "deletion": "Delete generated PDFs and working files from their folders, clear application data, or uninstall the app to remove local settings."
+      }
+    },
+    "website-image-inventory": {
+      "line": "scan reachable public pages and inventory their image assets",
+      "short": "Scan reachable public pages and create a structured inventory of image URLs, source pages, dimensions, formats, sizes, and repeats.",
+      "seo": {
+        "title": "Website Image Inventory | Audit Images for Redesign or Migration",
+        "description": "Scan reachable public pages and inventory image URLs, source pages, dimensions, formats, sizes, and repeated references on Windows."
+      },
+      "subtitle": "Scan reachable public pages and organize their discovered image references and metadata.",
+      "whatItDoes": "Website Image Inventory crawls from a public starting URL and creates a reviewable inventory of discovered image references. The result is designed for analysis and handoff, not merely as a folder of downloaded files.",
+      "howItWorks": [
+        "Choose a starting URL and scan scope that match the website section being reviewed.",
+        "Collect reachable image references and available source-page, host, dimension, format, size, and repeat information.",
+        "Review the findings and export an inventory for cleanup, redesign, migration, estimation, or research."
+      ],
+      "usefulFor": [
+        "website redesign and migration planning",
+        "finding large or widely repeated image references",
+        "reviewing external image hosts and older file formats",
+        "creating a structured worksheet for web teams and site owners"
+      ],
+      "limits": [
+        "The scan covers reachable public pages within the selected scope; private, authenticated, blocked, or unreachable content is not assumed to be included.",
+        "Repeated references do not automatically prove that different URLs contain identical image bytes.",
+        "The inventory does not decide copyright status, accessibility quality, brand relevance, or whether an asset is safe to consolidate."
+      ],
+      "guide": {
+        "href": "/guides/website-image-inventory/audit-images-used-on-a-website/",
+        "label": "Create a website image inventory"
+      },
+      "faq": [
+        {
+          "question": "Does the scan include private or authenticated pages?",
+          "answer": "No assumption should be made that private, authenticated, blocked, or unreachable content is included. The inventory covers the reachable public scope of the run."
+        }
+      ],
+      "privacy": {
+        "summary": "Website Image Inventory uses a local workspace while requesting reachable public pages and image resources.",
+        "local": "Scan settings, project state, reviewed results, and exported inventories remain in the local workspace and folders you choose.",
+        "online": "The public pages and image URLs included in the scan are requested from the corresponding websites, content hosts, or delivery services.",
+        "received": "BassThermal does not receive your saved project or exported inventory through normal application use.",
+        "deletion": "Delete local projects and exports, clear application data, or uninstall the app to remove its local workspace and settings."
+      }
+    },
+    "courselab-beam": {
+      "line": "model determinate beams and inspect reactions, shear, and moment",
+      "short": "Model determinate beam cases and inspect reactions, shear-force diagrams, bending-moment diagrams, and calculation steps.",
+      "seo": {
+        "title": "CourseLab Beam | Shear Force and Bending Moment Calculator",
+        "description": "Model determinate beam cases and inspect reactions, shear-force diagrams, bending-moment diagrams, and calculation steps."
+      },
+      "subtitle": "Model determinate beam cases and connect the reactions, shear, moment, and calculation steps.",
+      "whatItDoes": "CourseLab Beam is an educational and checking utility for determinate beam-loading cases. It helps connect the structural model you enter to support reactions, shear-force diagrams, bending-moment diagrams, cursor values, and calculation steps.",
+      "howItWorks": [
+        "Define the beam span, support arrangement, coordinates, and unit system.",
+        "Add point loads, distributed loads, or applied moments with the intended positions and signs.",
+        "Check equilibrium and support reactions before interpreting the shear and bending-moment diagrams."
+      ],
+      "usefulFor": [
+        "studying determinate beam behaviour",
+        "checking statics and structural-analysis exercises",
+        "comparing the effect of one load or support change at a time",
+        "reviewing reactions, diagrams, cursor values, and calculation steps"
+      ],
+      "limits": [
+        "The app calculates the model entered; it cannot decide whether the supports, loads, coordinates, signs, or units match the intended engineering problem.",
+        "It is an educational and checking utility, not a substitute for professional engineering judgement, code review, or sealed design.",
+        "Keep one consistent unit system throughout each case."
+      ],
+      "guide": {
+        "href": "/guides/courselab-beam/build-and-review-a-beam-case/",
+        "label": "Build a beam case and understand the diagrams"
+      },
+      "faq": [
+        {
+          "question": "Can CourseLab Beam be used as a sealed design application?",
+          "answer": "No. It is intended for education and checking of determinate beam cases, not professional sealed design."
+        }
+      ],
+      "privacy": {
+        "summary": "Beam definitions, calculations, and generated results are handled on the device.",
+        "local": "Beam geometry, supports, loads, calculation state, and exported reports remain on the device and in the locations you choose.",
+        "online": "Normal beam calculation does not require sending the model to BassThermal. Store and operating-system services may make their own requests under their policies.",
+        "received": "BassThermal does not receive your beam models or exported reports through normal application use.",
+        "deletion": "Delete saved cases and exports, clear application data, or uninstall the app to remove local settings."
+      }
+    }
+  }
+}
