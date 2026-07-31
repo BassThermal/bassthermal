@@ -51,8 +51,8 @@
 
   function ensureVisitsRuntime() {
     if (!document.querySelector('.terminal.home')) return;
-    appendStyle('/visits-terminal.css?v=4', 'visits-terminal');
-    appendScript('/visits-terminal.js?v=4', 'visits-terminal');
+    appendStyle('/visits-terminal.css?v=5', 'visits-terminal');
+    appendScript('/visits-terminal.js?v=5', 'visits-terminal');
   }
 
   function ensurePublisherContext() {
