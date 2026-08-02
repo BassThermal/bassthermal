@@ -2,6 +2,8 @@ import worker from './worker-v2.js';
 
 const HOMEPAGE_PATHS = new Set(['/', '/index.html']);
 const RETIRED_READOUT = '10 apps · Windows · Android · Web';
+const LOGO_LAB_PATH = '/bassthermal-logo-lab.v1.js';
+const LOGO_LAB_SCRIPT = `<script src="${LOGO_LAB_PATH}?v=1" defer></script>`;
 
 export function stripRetiredHomepageReadout(html) {
   return String(html)
@@ -9,6 +11,18 @@ export function stripRetiredHomepageReadout(html) {
     .replace(/\n?\s*const readout = document\.getElementById\("readout"\);\n?/, '\n')
     .replace(/\n?\s*function updateReadout\(\) \{[\s\S]*?\n\s*\}\n/, '\n')
     .replace(/\n?\s*updateReadout\(\);\n?/, '\n');
+}
+
+export function injectHomepageLogoLab(html) {
+  let output = String(html).replace(/<strong>BASSTHERMAL<\/strong>/, '<strong>bassthermal</strong>');
+  if (!output.includes(LOGO_LAB_PATH)) {
+    output = output.replace('</head>', `  ${LOGO_LAB_SCRIPT}\n</head>`);
+  }
+  return output;
+}
+
+export function transformHomepage(html) {
+  return injectHomepageLogoLab(stripRetiredHomepageReadout(html));
 }
 
 export default {
@@ -25,14 +39,18 @@ export default {
     }
 
     const original = await response.text();
-    const cleaned = stripRetiredHomepageReadout(original);
+    const transformed = transformHomepage(original);
     const headers = new Headers(response.headers);
     headers.delete('content-length');
     headers.delete('etag');
     headers.set('cache-control', 'no-cache, no-store, must-revalidate');
-    headers.set('x-bassthermal-homepage-cleanup', cleaned.includes(RETIRED_READOUT) ? 'failed' : 'readout-removed');
+    headers.set('x-bassthermal-homepage-cleanup', transformed.includes(RETIRED_READOUT) ? 'failed' : 'readout-removed');
+    headers.set(
+      'x-bassthermal-logo-lab',
+      transformed.includes(LOGO_LAB_PATH) && transformed.includes('<strong>bassthermal</strong>') ? 'ready' : 'failed'
+    );
 
-    return new Response(cleaned, {
+    return new Response(transformed, {
       status: response.status,
       statusText: response.statusText,
       headers
