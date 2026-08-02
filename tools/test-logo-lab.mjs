@@ -6,32 +6,44 @@ const fixture = `<!doctype html><html><head><title>x</title></head><body><header
 
 const injected = injectHomepageLogoLab(fixture);
 assert(injected.includes('<strong>bassthermal</strong>'));
-assert(injected.includes('<script src="/bassthermal-logo-lab.v1.js?v=1" defer></script>'));
-assert.equal((injectHomepageLogoLab(injected).match(/bassthermal-logo-lab\.v1\.js/g) || []).length, 1);
+assert(injected.includes('<script src="/bassthermal-logo-lab.v2.js?v=2" defer></script>'));
+assert.equal((injectHomepageLogoLab(injected).match(/bassthermal-logo-lab\.v2\.js/g) || []).length, 1);
 
 const transformed = transformHomepage(fixture);
 assert(!transformed.includes('id="readout"'));
 assert(!transformed.includes('function updateReadout()'));
 assert(!transformed.includes('updateReadout();'));
 assert(transformed.includes('<strong>bassthermal</strong>'));
-assert.equal((transformed.match(/bassthermal-logo-lab\.v1\.js/g) || []).length, 1);
+assert.equal((transformed.match(/bassthermal-logo-lab\.v2\.js/g) || []).length, 1);
 
-const runtime = fs.readFileSync(new URL('../public/bassthermal-logo-lab.v1.js', import.meta.url), 'utf8');
-for (const command of [
-  '/logo source',
-  '/logo header on|off',
-  '/logo word lower|upper|hide|show',
-  '/logo bg on|off',
-  '/logo position left|center|right',
-  '/logo preset clean|ambient|bold|minimal',
-  '/logo reset'
-]) assert(runtime.includes(command), `missing command contract: ${command}`);
+const runtime = fs.readFileSync(new URL('../public/bassthermal-logo-lab.v2.js', import.meta.url), 'utf8');
+for (const contract of [
+  'Logo Lab',
+  'Live browser-local preview',
+  'Choose image',
+  'Header mark',
+  'Background mark',
+  'Header size',
+  'Mark gap',
+  'Horizontal',
+  'Vertical',
+  'Export recipe',
+  'bassthermal.logo-lab.recipe.v1',
+  'action === "close"',
+  'action === "reset"',
+  'action === "export"',
+  'action === "source" || action === "image"'
+]) assert(runtime.includes(contract), `missing Logo Lab contract: ${contract}`);
 
-assert(runtime.includes('this browser only · no upload'));
-assert(runtime.includes('indexedDB.open'));
+assert(runtime.includes('setTimeout(closeTerminalOverlay, 0)'));
 assert(runtime.includes('backgroundEnabled: false'));
+assert(runtime.includes('indexedDB.open'));
+assert(runtime.includes('window.crypto.subtle.digest'));
 assert(!runtime.includes('fetch('));
 assert(!/https?:\/\//.test(runtime));
 assert(!runtime.includes('data:image/'));
+assert(!runtime.includes('/logo opacity'));
+assert(!runtime.includes('/logo scale'));
+assert(!runtime.includes('/logo position'));
 
 console.log('logo lab tests passed');
