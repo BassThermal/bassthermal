@@ -33,7 +33,7 @@
     "test:site-truth-visits": "node tools/test-site-truth-visits-v2.mjs",
     "test:visits-renderer": "node tools/test-visits-direct-renderer.mjs",
     "test:accents": "node tools/test-accent-system.mjs",
-    "test:logo-lab": "node --check src/worker-entry.js && node --check public/bassthermal-logo-lab.v1.js && node tools/test-logo-lab.mjs",
+    "test:logo-lab": "node --check src/worker-entry.js && node --check public/bassthermal-logo-lab.v2.js && node tools/test-logo-lab.mjs",
     "test:install-scripts": "node tools/test-install-script-policy.mjs",
     "test:all": "npm run test:redirects && npm run test:content && npm run test:product-pages && npm run test:site-composition && npm run test:guide-content && npm run test:publisher && npm run test:site-truth-visits && npm run test:visits-renderer && npm run test:accents && npm run test:logo-lab && npm run test:install-scripts && npm run test:terminal-visits && npm run test:app-icons",
     "test:terminal-visits": "node tools/test-terminal-visits.mjs",
