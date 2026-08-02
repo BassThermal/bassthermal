@@ -1,0 +1,2 @@
+BassThermal Logo Lab v2 correction branch
+purpose: replace command-only controls with a live visual panel
