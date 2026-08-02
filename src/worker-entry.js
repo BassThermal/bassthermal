@@ -2,8 +2,8 @@ import worker from './worker-v2.js';
 
 const HOMEPAGE_PATHS = new Set(['/', '/index.html']);
 const RETIRED_READOUT = '10 apps · Windows · Android · Web';
-const LOGO_LAB_PATH = '/bassthermal-logo-lab.v1.js';
-const LOGO_LAB_SCRIPT = `<script src="${LOGO_LAB_PATH}?v=1" defer></script>`;
+const LOGO_LAB_PATH = '/bassthermal-logo-lab.v2.js';
+const LOGO_LAB_SCRIPT = `<script src="${LOGO_LAB_PATH}?v=2" defer></script>`;
 
 export function stripRetiredHomepageReadout(html) {
   return String(html)
@@ -47,7 +47,7 @@ export default {
     headers.set('x-bassthermal-homepage-cleanup', transformed.includes(RETIRED_READOUT) ? 'failed' : 'readout-removed');
     headers.set(
       'x-bassthermal-logo-lab',
-      transformed.includes(LOGO_LAB_PATH) && transformed.includes('<strong>bassthermal</strong>') ? 'ready' : 'failed'
+      transformed.includes(LOGO_LAB_PATH) && transformed.includes('<strong>bassthermal</strong>') ? 'ready-v2' : 'failed'
     );
 
     return new Response(transformed, {
