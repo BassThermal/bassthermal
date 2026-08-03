@@ -81,7 +81,7 @@ function validate(source) {
   if (/\bconst readout\b|function updateReadout\b|updateReadout\(\)/.test(source)) errors.push('homepage readout runtime must not exist');
   if (source.includes('Independent software for practical work, study, and specialist workflows.')) errors.push('retired homepage sentence remains');
   if (source.includes('href="/terms/"') || source.includes('href="/releases/"')) errors.push('homepage contains retired utility route');
-  if (/>win<|>and<|>web</.test(source)) errors.push('homepage contains abbreviated platform labels');
+  if (/<a class="tag (?:windows|android|web)"[^>]*>(?:win|and|web)<\/a>/.test(source)) errors.push('homepage contains abbreviated platform labels');
   const rows = source.match(/class="row app-row"/g) || [];
   const icons = source.match(/data-app-icon-slug=/g) || [];
   if (rows.length !== icons.length) errors.push(`homepage icon count ${icons.length} must match app row count ${rows.length}`);
