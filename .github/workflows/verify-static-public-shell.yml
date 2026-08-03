@@ -29,9 +29,19 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Reconstruct exact selected mark
+      - name: Verify transfer chunks and reconstruct exact selected mark
         run: |
-          cat .brand-transfer/mark-q80-*.b64 | base64 --decode > public/assets/brand/bassthermal-mark-v1.webp
+          test "$(wc -c < .brand-transfer/mark-q80-00.b64)" = "4000"
+          test "$(wc -c < .brand-transfer/mark-q80-01.b64)" = "4000"
+          test "$(wc -c < .brand-transfer/mark-q80-02.b64)" = "4000"
+          test "$(wc -c < .brand-transfer/mark-q80-03.b64)" = "4000"
+          test "$(wc -c < .brand-transfer/mark-q80-04.b64)" = "3424"
+          echo "9d123e483d071981e66ba2869b749f636f2507533e406f7eb31b94386e22bd1d  .brand-transfer/mark-q80-00.b64" | sha256sum --check --strict
+          echo "814de926b6a29eab74667424b6e5da54c1cf1f3ce9d674e615c394f4f68c85da  .brand-transfer/mark-q80-01.b64" | sha256sum --check --strict
+          echo "4b8a8d34815e0cb6fa037127c41c5e67565d0459a5191d11cb85a37c5ee4358c  .brand-transfer/mark-q80-02.b64" | sha256sum --check --strict
+          echo "0192b2d7959d15e59024acbf03deb319934bef9be00bdc366c43f19bd88dc92d  .brand-transfer/mark-q80-03.b64" | sha256sum --check --strict
+          echo "a82b13a437432dbd866504b6f2891072d48c86afc71509a3d1a3bcefb4c32920  .brand-transfer/mark-q80-04.b64" | sha256sum --check --strict
+          cat .brand-transfer/mark-q80-00.b64 .brand-transfer/mark-q80-01.b64 .brand-transfer/mark-q80-02.b64 .brand-transfer/mark-q80-03.b64 .brand-transfer/mark-q80-04.b64 | base64 --decode > public/assets/brand/bassthermal-mark-v1.webp
           test "$(wc -c < public/assets/brand/bassthermal-mark-v1.webp)" = "14568"
           echo "a059081c7b34f0e1d768801e86ed82fd6d93c9c4e2bf474c22c09285e54d5ed2  public/assets/brand/bassthermal-mark-v1.webp" | sha256sum --check --strict
       - run: npm ci
