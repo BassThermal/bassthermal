@@ -12,12 +12,12 @@
   const RUNTIME = '/bassthermal-brand-lab.v3.js?v=3';
   const DEFAULT_SETTINGS = Object.freeze({
     headerEnabled: true,
-    markSize: 38,
-    markGap: 8,
+    markSize: 32,
+    markGap: 7,
     markX: 0,
     markY: -1,
     markOpacity: 1,
-    markGlow: 10,
+    markGlow: 8,
     backgroundEnabled: true,
     backgroundOpacity: 0.23,
     backgroundScale: 1.1,
@@ -169,7 +169,6 @@
 
   async function activate(action = 'open') {
     await seedDefaults();
-    try { localStorage.setItem(ACTIVE_KEY, '1'); } catch (error) {}
     removeStaticBackground();
     const api = await waitForRestoredProject(await loadRuntime());
     if (action === 'close') return api.close();
@@ -197,14 +196,13 @@
     }, true);
   }
 
-  function shouldRestoreActiveProject() {
-    try {
-      return new URLSearchParams(location.search).get('brandlab') === '1' || localStorage.getItem(ACTIVE_KEY) === '1';
-    } catch (error) {
-      return false;
-    }
+  function requestedByUrl() {
+    try { return new URLSearchParams(location.search).get('brandlab') === '1'; }
+    catch (error) { return false; }
   }
 
+  try { localStorage.removeItem(ACTIVE_KEY); } catch (error) {}
+  document.documentElement.removeAttribute('data-bt-brand-header');
   attachCommandBoundary();
-  if (shouldRestoreActiveProject()) activate('open').catch((error) => console.error('[Brand Lab]', error));
+  if (requestedByUrl()) activate('open').catch((error) => console.error('[Brand Lab]', error));
 })();
