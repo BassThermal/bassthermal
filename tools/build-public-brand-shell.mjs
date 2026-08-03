@@ -12,6 +12,14 @@ const SHELL_VERSION = '1.2.0';
 const STORE_WINDOWS = 'https://apps.microsoft.com/search/publisher?name=BassThermal&amp;hl=en-US&amp;gl=CA';
 const STORE_ANDROID = 'https://play.google.com/store/apps/developer?id=BassThermal';
 const errors = [];
+const catalog = JSON.parse(fs.readFileSync(path.join(root, 'data', 'bt-catalog.json'), 'utf8'));
+const publicAppRoutes = new Set(catalog.apps
+  .filter((app) => app.visibility?.showOnWebsite !== false)
+  .map((app) => `/apps/${app.slug}/`));
+const publicPrivacyRoutes = new Set(catalog.apps
+  .filter((app) => app.visibility?.showOnWebsite !== false)
+  .map((app) => app.links?.privacy)
+  .filter(Boolean));
 
 const escapeHtml = (value) => String(value ?? '')
   .replaceAll('&', '&amp;')
@@ -35,11 +43,11 @@ function routeFor(relative) {
 
 function isPublicShellRoute(route) {
   return route === '/'
-    || /^\/apps\/[^/]+\/$/.test(route)
+    || publicAppRoutes.has(route)
     || route === '/guides/'
     || /^\/guides\/.+\/$/.test(route)
     || ['/about/', '/support/', '/security/', '/privacy/'].includes(route)
-    || /^\/privacy\/[^/]+\/$/.test(route);
+    || publicPrivacyRoutes.has(route);
 }
 
 function stripTags(value) {
@@ -183,9 +191,11 @@ for (const file of files) {
 }
 
 if (!files.length) errors.push('no public shell routes were found');
+for (const route of publicAppRoutes) if (!files.some((file) => file.route === route)) errors.push(`catalog product route missing from public build: ${route}`);
+for (const route of publicPrivacyRoutes) if (!files.some((file) => file.route === route)) errors.push(`catalog privacy route missing from public build: ${route}`);
 if (errors.length) {
   console.error(`public brand shell ${validateOnly ? 'validation' : 'build'} failed (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log(`PASS  Permanent public brand shell ${validateOnly ? 'validated' : 'built'} into ${files.length} HTML routes`);
+console.log(`PASS  Permanent public brand shell ${validateOnly ? 'validated' : 'built'} into ${files.length} canonical HTML routes`);
