@@ -3,12 +3,14 @@ import worker from './worker-v2.js';
 const HOMEPAGE_PATHS = new Set(['/', '/index.html']);
 const RETIRED_READOUT = '10 apps · Windows · Android · Web';
 const BRAND_ASSET_PATH = '/assets/brand/bassthermal-mark-v1.webp';
+const BRAND_FAVICON_PATH = '/favicon-32x32.png';
 const SHELL_STYLE_PATH = '/bt-site-shell.css';
 const SHELL_RUNTIME_PATH = '/bt-site-shell.js';
 const BRAND_LOADER_PATH = '/bassthermal-brand-lab-loader.v3.js';
 const SHELL_STYLE = `<link rel="stylesheet" href="${SHELL_STYLE_PATH}?v=2" data-bt-site-shell-style="1">`;
 const SHELL_RUNTIME = `<script src="${SHELL_RUNTIME_PATH}?v=2" defer data-bt-site-shell-runtime="1"></script>`;
 const BRAND_LOADER = `<script src="${BRAND_LOADER_PATH}?v=4" defer data-bt-brand-lab-loader="1"></script>`;
+const BRAND_FAVICON = `<link rel="icon" type="image/png" sizes="32x32" href="${BRAND_FAVICON_PATH}?v=1" data-bt-brand-favicon="1">\n  <link rel="shortcut icon" type="image/png" href="${BRAND_FAVICON_PATH}?v=1">\n  <meta name="theme-color" content="#000000">`;
 const STORE_WINDOWS = 'https://apps.microsoft.com/search/publisher?name=BassThermal&amp;hl=en-US&amp;gl=CA';
 const STORE_ANDROID = 'https://play.google.com/store/apps/developer?id=BassThermal';
 
@@ -103,11 +105,17 @@ export function injectStaticBrandBackground(html) {
   return output.replace(/(<body\b[^>]*>)/i, `$1\n  ${brandBackgroundMarkup()}`);
 }
 
+export function injectBrandFavicon(html) {
+  const output = String(html);
+  if (output.includes('data-bt-brand-favicon="1"')) return output;
+  return output.replace('</head>', `  ${BRAND_FAVICON}\n</head>`);
+}
+
 export function injectBrandShell(html, pathname = '/') {
   let output = String(html)
     .replace(/<strong>BASSTHERMAL<\/strong>/g, '<strong>bassthermal</strong>')
     .replace(/\s*<script src="\/bassthermal-logo-lab\.v2\.js\?v=2" defer><\/script>/g, '');
-  output = injectStaticBrandBackground(injectStaticSiteHeader(output, pathname));
+  output = injectBrandFavicon(injectStaticBrandBackground(injectStaticSiteHeader(output, pathname)));
   if (!output.includes(SHELL_STYLE_PATH)) output = output.replace('</head>', `  ${SHELL_STYLE}\n</head>`);
   if (!output.includes(SHELL_RUNTIME_PATH)) output = output.replace('</head>', `  ${SHELL_RUNTIME}\n</head>`);
   if (!output.includes(BRAND_LOADER_PATH)) output = output.replace('</head>', `  ${BRAND_LOADER}\n</head>`);
