@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -15,6 +16,17 @@ const routes = [
   ['public/privacy/isbn-manager/index.html', ['bassthermal', 'Privacy', 'ISBN Manager']]
 ];
 
+const canonicalHtml = fs.readdirSync(path.join(root, 'public'), { recursive: true })
+  .filter((relative) => relative.endsWith('index.html'))
+  .map((relative) => path.join(root, 'public', relative));
+const htmlDigest = () => crypto.createHash('sha256')
+  .update(canonicalHtml.map((file) => fs.readFileSync(file)).join('\0'))
+  .digest('hex');
+execFileSync(process.execPath, ['tools/build-public-brand-shell.mjs'], { cwd: root, stdio: 'pipe' });
+const firstBuild = htmlDigest();
+execFileSync(process.execPath, ['tools/build-public-brand-shell.mjs'], { cwd: root, stdio: 'pipe' });
+assert.equal(htmlDigest(), firstBuild, 'shell builder must be idempotent on a second run');
+
 for (const [relative, labels] of routes) {
   const html = read(relative);
   assert.equal((html.match(/class="bt-site-header"/g) || []).length, 1, `${relative}: one static header`);
@@ -23,9 +35,9 @@ for (const [relative, labels] of routes) {
   assert.equal((html.match(/data-bt-site-shell-style="1"/g) || []).length, 1, `${relative}: one shell stylesheet`);
   assert.equal((html.match(/data-bt-brand-lab-loader="1"/g) || []).length, 1, `${relative}: one experimental loader`);
   assert(html.includes('data-bt-site-shell="1.2.0"'), `${relative}: shell 1.2.0`);
-  assert(html.includes('class="bt-site-mark" src="/assets/brand/bassthermal-mark-v1.webp"'), `${relative}: selected mark`);
-  assert(html.includes('class="bt-brand-background-asset" src="/assets/brand/bassthermal-mark-v1.webp"'), `${relative}: selected background`);
-  assert(html.includes('/bt-site-shell.css?v=3'), `${relative}: cache-busted shell CSS`);
+  assert(html.includes('class="bt-site-mark" src="/assets/brand/bassthermal-mark-v1.webp?v=2"'), `${relative}: selected mark`);
+  assert(html.includes('class="bt-brand-background-asset" src="/assets/brand/bassthermal-mark-v1.webp?v=2"'), `${relative}: selected background`);
+  assert(html.includes('/bt-site-shell.css?v=4'), `${relative}: cache-busted shell CSS`);
   assert(html.includes('/bassthermal-brand-lab-loader.v3.js?v=5'), `${relative}: experimental loader`);
   assert(!html.includes('class="topline"'), `${relative}: no legacy top-line header`);
   assert(!html.includes('class="product-breadcrumb"'), `${relative}: no product breadcrumb`);
@@ -35,7 +47,7 @@ for (const [relative, labels] of routes) {
 }
 
 const css = read('public/bt-site-shell.css');
-for (const contract of ['position:sticky', 'top:0', 'min-height:52px', '--bt-brand-mark-size:32px', '@media(max-width:900px)', '@media(max-width:520px)']) {
+for (const contract of ['position:sticky', 'top:0', 'min-height:52px', '--bt-brand-mark-size:38px', '@media(max-width:1100px)', '@media(max-width:520px)']) {
   assert(css.includes(contract), `shell CSS missing ${contract}`);
 }
 
