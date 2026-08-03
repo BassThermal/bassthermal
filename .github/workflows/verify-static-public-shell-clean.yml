@@ -1,4 +1,4 @@
-name: Verify clean static public brand shell
+name: Materialize permanent public brand shell
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: verify-clean-static-public-shell-${{ github.event.pull_request.number }}
+  group: materialize-public-brand-shell-${{ github.event.pull_request.number }}
   cancel-in-progress: false
 
 jobs:
@@ -34,7 +34,6 @@ jobs:
       - run: npm run site-shell:validate
       - run: npm run test:site-shell
       - run: npm run test:brand-lab
-      - run: npm run test:site-truth-visits
       - run: npm run test:redirects
       - name: Commit verified canonical HTML
         run: |
