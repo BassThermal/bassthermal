@@ -1,0 +1,11 @@
+ 3999 .brand-transfer/mark-q80-00.b64
+ 4000 .brand-transfer/mark-q80-01.b64
+ 4000 .brand-transfer/mark-q80-02.b64
+ 4000 .brand-transfer/mark-q80-03.b64
+ 3424 .brand-transfer/mark-q80-04.b64
+19423 total
+9b0676f98011eb9eb32be69f71ac2120ce2838b2df01b4707aa4da09f83ab684  .brand-transfer/mark-q80-00.b64
+814de926b6a29eab74667424b6e5da54c1cf1f3ce9d674e615c394f4f68c85da  .brand-transfer/mark-q80-01.b64
+4b8a8d34815e0cb6fa037127c41c5e67565d0459a5191d11cb85a37c5ee4358c  .brand-transfer/mark-q80-02.b64
+0192b2d7959d15e59024acbf03deb319934bef9be00bdc366c43f19bd88dc92d  .brand-transfer/mark-q80-03.b64
+a82b13a437432dbd866504b6f2891072d48c86afc71509a3d1a3bcefb4c32920  .brand-transfer/mark-q80-04.b64
