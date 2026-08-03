@@ -15,12 +15,22 @@ assert.deepEqual(routeModel('/privacy/isbn-manager/', 'ISBN Manager'), [
 
 const runtime = fs.readFileSync(new URL('../public/bt-site-shell.js', import.meta.url), 'utf8');
 const css = fs.readFileSync(new URL('../public/bt-site-shell.css', import.meta.url), 'utf8');
-for (const value of ['bt-site-header', 'aria-label', 'Breadcrumb', 'aria-current', 'bassthermal', 'Microsoft Store', 'Google Play', 'removeLegacyIdentity', 'bt:site-shell-ready']) {
-  assert(runtime.includes(value), `missing site shell contract: ${value}`);
-}
+for (const value of [
+  'bt-site-header', 'aria-label', 'Breadcrumb', 'aria-current', 'bassthermal',
+  'Microsoft Store', 'Google Play', 'removeLegacyIdentity', 'bt:site-shell-ready',
+  '/assets/brand/bassthermal-mark-v1.webp', 'BT_BRAND_DEFAULTS', 'ensureDefaultBackground'
+]) assert(runtime.includes(value), `missing site shell contract: ${value}`);
 assert(runtime.includes("document.querySelectorAll('.product-breadcrumb, .guide-breadcrumb')"));
-assert(css.includes('@media(max-width:820px)'));
+assert(runtime.includes("dataset.btBrandFit = 'contain'"));
+assert(css.includes('position:sticky'));
+assert(css.includes('top:0'));
+assert(css.includes('min-height:60px'));
+assert(css.includes('background:rgba(0,0,0,.965)'));
+assert(css.includes('scroll-padding-top:78px'));
+assert(css.includes('@media(max-width:900px)'));
+assert(css.includes('@media(max-width:520px)'));
 assert(css.includes('@media(prefers-reduced-motion:reduce)'));
+assert(css.includes('#btBrandBackground[data-active="1"]'));
 assert(!runtime.includes('innerHTML ='));
 assert(!runtime.includes('fetch('));
 console.log('site shell tests passed');
