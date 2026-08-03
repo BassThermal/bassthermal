@@ -33,12 +33,14 @@
     "test:site-truth-visits": "node tools/test-site-truth-visits-v2.mjs",
     "test:visits-renderer": "node tools/test-visits-direct-renderer.mjs",
     "test:accents": "node tools/test-accent-system.mjs",
-    "test:logo-lab": "node --check src/worker-entry.js && node --check public/bassthermal-logo-lab.v2.js && node tools/test-logo-lab.mjs",
+    "test:site-shell": "node --check public/bt-site-shell.js && node tools/test-site-shell.mjs && node tools/test-brand-shell-worker.mjs",
+    "test:brand-lab": "node --check public/bassthermal-brand-lab-loader.v3.js && node --check public/bassthermal-brand-lab.v3.js && node tools/test-brand-lab.mjs && node tools/test-brand-project.mjs",
     "test:install-scripts": "node tools/test-install-script-policy.mjs",
-    "test:all": "npm run test:redirects && npm run test:content && npm run test:product-pages && npm run test:site-composition && npm run test:guide-content && npm run test:publisher && npm run test:site-truth-visits && npm run test:visits-renderer && npm run test:accents && npm run test:logo-lab && npm run test:install-scripts && npm run test:terminal-visits && npm run test:app-icons",
+    "test:all": "npm run test:redirects && npm run test:content && npm run test:product-pages && npm run test:site-composition && npm run test:guide-content && npm run test:publisher && npm run test:site-truth-visits && npm run test:visits-renderer && npm run test:accents && npm run test:site-shell && npm run test:brand-lab && npm run test:install-scripts && npm run test:terminal-visits && npm run test:app-icons",
     "test:terminal-visits": "node tools/test-terminal-visits.mjs",
     "test:app-icons": "npm run assets:index && node tools/test-app-icons.mjs",
-    "verify:public": "node tools/verify-public-site.mjs"
+    "verify:public": "node tools/verify-public-site.mjs",
+    "verify:brand-shell": "node tools/verify-brand-shell-public.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.16.0"
