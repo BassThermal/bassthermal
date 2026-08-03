@@ -53,8 +53,8 @@ for (const route of ['"/"', '"/apps/*"', '"/guides/*"', '"/about/*"', '"/support
 }
 
 const brand = fs.readFileSync(path.join(root, 'public/assets/brand/bassthermal-mark-v1.webp'));
-assert.equal(brand.length, 19612, 'selected mark byte count');
-assert.equal(crypto.createHash('sha256').update(brand).digest('hex'), '0d6f0043cc69126935ca71d04e85420872c1a1963486633df690fc3da124c61f', 'selected mark SHA-256');
+assert.equal(brand.length, 18112, 'selected mark byte count');
+assert.equal(crypto.createHash('sha256').update(brand).digest('hex'), '5c2eed9b056ac6c65886cfa08d26012196df62b1b3dfcfbd8607f93a1e95c87b', 'selected mark SHA-256');
 const favicon = fs.readFileSync(path.join(root, 'public/favicon-32x32.png'));
 assert.equal(favicon.length, 1976, 'favicon byte count');
 
