@@ -123,13 +123,12 @@ function stripExistingShell(html) {
     .replace(/\s*<link[^>]+rel="shortcut icon"[^>]+favicon-32x32\.png[^>]*>/gi, '');
 }
 
-function stripLegacyIdentity(html, route) {
-  let output = html
+function stripLegacyIdentity(html) {
+  return html
+    .replace(/\s*<header class="topline">[\s\S]*?<\/header>/gi, '')
     .replace(/\s*<div class="product-breadcrumb">[\s\S]*?<\/div>/gi, '')
-    .replace(/\s*<div class="guide-breadcrumb">[\s\S]*?<\/div>/gi, '');
-  if (route === '/') output = output.replace(/\s*<header class="topline">[\s\S]*?<\/header>/i, '');
-  output = output.replace(/(<header class="bt-page-head">)\s*<div class="dim">([\s\S]*?)<\/div>/i, (match, start, text) => /BASSTHERMAL/i.test(text) ? start : match);
-  return output;
+    .replace(/\s*<div class="guide-breadcrumb">[\s\S]*?<\/div>/gi, '')
+    .replace(/(<header class="bt-page-head">)\s*<div class="dim">([\s\S]*?)<\/div>/i, (match, start, text) => /BASSTHERMAL/i.test(text) ? start : match);
 }
 
 function injectHead(html) {
@@ -146,7 +145,7 @@ function injectHead(html) {
 }
 
 function transform(html, route) {
-  let output = stripLegacyIdentity(stripExistingShell(html), route);
+  let output = stripLegacyIdentity(stripExistingShell(html));
   output = injectHead(output);
   if (!/<body\b[^>]*>/i.test(output)) throw new Error('body tag missing');
   output = output.replace(/(<body\b[^>]*>)/i, `$1\n  ${backgroundMarkup()}`);
@@ -165,7 +164,7 @@ function validate(html, route, relative) {
     [html.includes(`data-bt-site-shell="${SHELL_VERSION}"`), 'must contain current shell version'],
     [html.includes(`class="bt-site-mark" src="${BRAND_ASSET}"`), 'must contain selected public header mark'],
     [html.includes(`class="bt-brand-background-asset" src="${BRAND_ASSET}"`), 'must contain selected permanent background'],
-    [!html.includes('class="topline"'), 'must not retain homepage legacy header'],
+    [!html.includes('class="topline"'), 'must not retain a legacy top-line header'],
     [!html.includes('class="product-breadcrumb"'), 'must not retain product breadcrumb'],
     [!html.includes('class="guide-breadcrumb"'), 'must not retain guide breadcrumb'],
     [!html.includes('/bt-site-shell.js?'), 'must not load runtime-generated public shell'],
