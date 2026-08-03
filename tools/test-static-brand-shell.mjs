@@ -27,7 +27,7 @@ for (const [relative, labels] of routes) {
   assert(html.includes('class="bt-brand-background-asset" src="/assets/brand/bassthermal-mark-v1.webp"'), `${relative}: selected background`);
   assert(html.includes('/bt-site-shell.css?v=3'), `${relative}: cache-busted shell CSS`);
   assert(html.includes('/bassthermal-brand-lab-loader.v3.js?v=5'), `${relative}: explicit Brand Lab loader`);
-  assert(!html.includes('class="topline"'), `${relative}: no homepage legacy header`);
+  assert(!html.includes('class="topline"'), `${relative}: no legacy top-line header`);
   assert(!html.includes('class="product-breadcrumb"'), `${relative}: no product legacy breadcrumb`);
   assert(!html.includes('class="guide-breadcrumb"'), `${relative}: no Guide legacy breadcrumb`);
   assert(!html.includes('/bt-site-shell.js?'), `${relative}: no runtime-created public shell`);
@@ -47,8 +47,9 @@ assert(loader.includes("get('brandlab') === '1'"), 'explicit URL activation must
 const workerEntry = read('src/worker-entry.js');
 assert.equal(workerEntry.trim(), "import worker from './worker-v2.js';\n\n// Public HTML is generated with its permanent brand shell before deployment.\n// The Worker now owns only redirects, Visits APIs, and server-side behavior.\nexport default worker;", 'Worker entry must not transform public HTML');
 const wrangler = read('wrangler.toml');
-assert(wrangler.includes('run_worker_first = ["/api/*"]'), 'only APIs should run Worker-first');
-assert(!wrangler.includes('"/apps/*"'), 'HTML routes must be served directly from built assets');
+for (const route of ['"/"', '"/apps/*"', '"/guides/*"', '"/about/*"', '"/support/*"', '"/privacy/*"', '"/security/*"', '"/api/*"']) {
+  assert(wrangler.includes(route), `Worker-first redirect/API route missing: ${route}`);
+}
 
 const brand = fs.readFileSync(path.join(root, 'public/assets/brand/bassthermal-mark-v1.webp'));
 assert.equal(brand.length, 19612, 'selected brand asset byte count');
