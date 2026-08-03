@@ -7,8 +7,8 @@
   const DB_VERSION = 1;
   const STORE_NAME = 'assets';
   const BRAND_ASSET = '/assets/brand/bassthermal-mark-v1.webp';
-  const BRAND_BYTES = 25166;
-  const BRAND_SHA256 = 'd206176050151e0381956d41f9a00e4dcc657fad323fce697df28fe7d2c0aa40';
+  const BRAND_BYTES = 14568;
+  const BRAND_SHA256 = 'a059081c7b34f0e1d768801e86ed82fd6d93c9c4e2bf474c22c09285e54d5ed2';
   const RUNTIME = '/bassthermal-brand-lab.v3.js?v=3';
   const DEFAULT_SETTINGS = Object.freeze({
     headerEnabled: true,
