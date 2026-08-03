@@ -31,6 +31,14 @@ function removeLegacyReadoutRuntime(source) {
     .replace(/^\s*updateReadout\(\);\r?\n/m, '');
 }
 
+function removeLegacyHeaderStyles(source) {
+  return source
+    .replace(/\n\s*\.topline\s*\{[\s\S]*?\}\s*\n\s*\.topline strong\s*\{[\s\S]*?\}\s*/g, '\n')
+    .replace(/\n\s*\.right\s*\{[\s\S]*?\}\s*/g, '\n')
+    .replace(/\n\s*\.topline\s*\{\s*display:\s*block;\s*\}\s*/g, '\n')
+    .replace(/\n\s*\.right\s*\{\s*display:\s*block;\s*text-align:\s*left;\s*margin-top:\s*2px;\s*\}\s*/g, '\n');
+}
+
 function transform(source) {
   const canonicalHeaderPattern = /(<header class="bt-site-header"[\s\S]*?<\/header>)/;
   const legacyHeaderPattern = /(<header class="topline">[\s\S]*?<\/header>)/;
@@ -57,6 +65,7 @@ function transform(source) {
   output = output.replace(headerPattern, `$1\n    ${INTRO}\n    ${SECTION_LABEL}`);
   output = normalizePlatformLabels(addIcons(output));
   output = removeLegacyReadoutRuntime(output);
+  output = removeLegacyHeaderStyles(output);
   output = output.replace(/\s*<script src="\/visits-terminal-v2\.js\?v=2"[^>]*><\/script>/g, '');
 
   if (!output.includes('/visits-terminal.css')) output = output.replace(/<\/head>/i, `  ${VISITS_STYLE}\n</head>`);
@@ -78,6 +87,7 @@ function validate(source) {
   if (!source.includes('/visits-terminal.js?v=3')) errors.push('homepage direct Visits renderer missing');
   if (source.includes('/visits-terminal-v2.js')) errors.push('legacy Visits adapter remains');
   if (source.includes('id="readout"') || source.includes('10 apps · Windows · Android · Web')) errors.push('homepage status readout must not exist');
+  if (source.includes('.topline')) errors.push('homepage legacy top-line styles must not exist');
   if (/\bconst readout\b|function updateReadout\b|updateReadout\(\)/.test(source)) errors.push('homepage readout runtime must not exist');
   if (source.includes('Independent software for practical work, study, and specialist workflows.')) errors.push('retired homepage sentence remains');
   if (source.includes('href="/terms/"') || source.includes('href="/releases/"')) errors.push('homepage contains retired utility route');
