@@ -31,7 +31,7 @@ jobs:
           cache: npm
       - name: Reconstruct exact selected mark
         run: |
-          base64 --decode .brand-transfer/mark-q80.b64 > public/assets/brand/bassthermal-mark-v1.webp
+          cat .brand-transfer/mark-q80-*.b64 | base64 --decode > public/assets/brand/bassthermal-mark-v1.webp
           test "$(wc -c < public/assets/brand/bassthermal-mark-v1.webp)" = "14568"
           echo "a059081c7b34f0e1d768801e86ed82fd6d93c9c4e2bf474c22c09285e54d5ed2  public/assets/brand/bassthermal-mark-v1.webp" | sha256sum --check --strict
       - run: npm ci
