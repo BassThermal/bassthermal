@@ -11,8 +11,9 @@ const wrangler = read('wrangler.toml');
 const workerEntry = read('src/worker-entry.js');
 assert.match(wrangler, /main = "src\/worker-entry\.js"/);
 assert.match(workerEntry, /import worker from '\.\/worker-v2\.js'/);
-assert.ok(wrangler.includes('run_worker_first = ["/api/*"]'), 'Visits and report APIs must remain Worker-first');
-for (const route of ['"/"', '"/apps/*"', '"/guides/*"', '"/privacy/*"']) assert.ok(!wrangler.includes(route), `public HTML must not be Worker-first: ${route}`);
+for (const route of ['"/"', '"/apps/*"', '"/guides/*"', '"/about/*"', '"/support/*"', '"/privacy/*"', '"/security/*"', '"/api/*"']) {
+  assert.ok(wrangler.includes(route), `Worker-first redirect/API route missing: ${route}`);
+}
 assert.equal(exists('public/site-visits.js'), true);
 assert.equal(exists('public/visits-terminal.js'), true);
 assert.equal(exists('public/visits-terminal.css'), true);
