@@ -32,19 +32,23 @@ function removeLegacyReadoutRuntime(source) {
 }
 
 function transform(source) {
+  const canonicalHeaderPattern = /(<header class="bt-site-header"[\s\S]*?<\/header>)/;
+  const legacyHeaderPattern = /(<header class="topline">[\s\S]*?<\/header>)/;
+  const hasCanonicalHeader = canonicalHeaderPattern.test(source);
+  const headerPattern = hasCanonicalHeader ? canonicalHeaderPattern : legacyHeaderPattern;
   const navPattern = /<nav class="topnav" aria-label="Primary">[\s\S]*?<\/nav>/;
   const footerPattern = /<footer class="footer">[\s\S]*?<\/footer>/;
   const readoutPattern = /\s*<div class="right" id="readout">[\s\S]*?<\/div>/;
-  const existingIntroPattern = /\s*<div class="line soft">[\s\S]*?<\/div>/;
+  const existingIntroPattern = /\s*<div class="line soft(?: home-intro)?">[\s\S]*?<\/div>/;
   const existingLabelPattern = /\s*<div class="line dim home-section-label">[\s\S]*?<\/div>/;
-  const headerPattern = /(<header class="topline">[\s\S]*?<\/header>)/;
 
-  if (!navPattern.test(source)) throw new Error('homepage primary navigation marker missing');
+  if (!hasCanonicalHeader && !navPattern.test(source)) throw new Error('homepage primary navigation marker missing');
   if (!footerPattern.test(source)) throw new Error('homepage footer marker missing');
   if (!headerPattern.test(source)) throw new Error('homepage header marker missing');
 
-  let output = source
-    .replace(navPattern, TOPNAV)
+  let output = source;
+  if (!hasCanonicalHeader) output = output.replace(navPattern, TOPNAV);
+  output = output
     .replace(footerPattern, FOOTER)
     .replace(readoutPattern, '')
     .replace(existingIntroPattern, '')
@@ -62,7 +66,10 @@ function transform(source) {
 
 function validate(source) {
   const errors = [];
-  if (!source.includes(TOPNAV)) errors.push('homepage top navigation is not canonical');
+  const hasCanonicalHeader = source.includes('class="bt-site-header"');
+  if (hasCanonicalHeader) {
+    if (!source.includes('class="bt-site-primary"')) errors.push('homepage canonical primary navigation is missing');
+  } else if (!source.includes(TOPNAV)) errors.push('homepage top navigation is not canonical');
   if (!source.includes(FOOTER)) errors.push('homepage footer is not canonical');
   if (!source.includes(INTRO)) errors.push('homepage factual introduction is missing');
   if (!source.includes(SECTION_LABEL)) errors.push('homepage apps section label is missing');
@@ -74,7 +81,7 @@ function validate(source) {
   if (/\bconst readout\b|function updateReadout\b|updateReadout\(\)/.test(source)) errors.push('homepage readout runtime must not exist');
   if (source.includes('Independent software for practical work, study, and specialist workflows.')) errors.push('retired homepage sentence remains');
   if (source.includes('href="/terms/"') || source.includes('href="/releases/"')) errors.push('homepage contains retired utility route');
-  if (/>win<|>and<|>web</.test(source)) errors.push('homepage contains abbreviated platform labels');
+  if (/<a class="tag (?:windows|android|web)"[^>]*>(?:win|and|web)<\/a>/.test(source)) errors.push('homepage contains abbreviated platform labels');
   const rows = source.match(/class="row app-row"/g) || [];
   const icons = source.match(/data-app-icon-slug=/g) || [];
   if (rows.length !== icons.length) errors.push(`homepage icon count ${icons.length} must match app row count ${rows.length}`);
