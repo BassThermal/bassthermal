@@ -46,6 +46,8 @@
     status: null,
     backgroundRoot: null,
     backgroundMedia: null,
+    backgroundNode: null,
+    backgroundSignature: '',
     mask: null,
     inputs: {},
     open: false,
@@ -151,6 +153,27 @@
   function readAsset(key) { return databaseAction('readonly', function (store) { return store.get(key); }); }
   function writeAsset(key, value) { return databaseAction('readwrite', function (store) { store.put(value, key); return null; }); }
   function deleteAsset(key) { return databaseAction('readwrite', function (store) { store.delete(key); return null; }); }
+
+  async function replaceProjectAssets(records) {
+    var database = await openDatabase();
+    return new Promise(function (resolve, reject) {
+      var transaction = database.transaction(STORE_NAME, 'readwrite');
+      var store = transaction.objectStore(STORE_NAME);
+      ['header', 'background', 'poster'].forEach(function (key) {
+        if (records[key]) store.put(records[key], key);
+        else store.delete(key);
+      });
+      transaction.oncomplete = function () { database.close(); resolve(); };
+      transaction.onerror = function () {
+        var error = transaction.error || new Error('Project storage transaction failed');
+        database.close(); reject(error);
+      };
+      transaction.onabort = function () {
+        var error = transaction.error || new Error('Project storage transaction aborted');
+        database.close(); reject(error);
+      };
+    });
+  }
 
   async function sha256(blob) {
     if (!window.crypto || !window.crypto.subtle) throw new Error('Secure hashing is unavailable');
@@ -265,33 +288,53 @@
     ensureBackground();
     var root = state.backgroundRoot;
     var selected = chooseBackgroundAsset();
-    state.backgroundMedia.textContent = '';
-    root.dataset.active = state.settings.backgroundEnabled && selected ? '1' : '0';
+    var active = state.settings.backgroundEnabled && selected;
+    root.dataset.active = active ? '1' : '0';
     root.dataset.reposition = state.repositioning ? '1' : '0';
-    if (!state.settings.backgroundEnabled || !selected) return;
+    if (!active) {
+      if (state.backgroundNode && state.backgroundNode.tagName === 'VIDEO') state.backgroundNode.pause();
+      state.backgroundMedia.textContent = '';
+      state.backgroundNode = null;
+      state.backgroundSignature = '';
+      return;
+    }
+
     var role = selected === state.assets.poster ? 'poster' : 'background';
     var url = state.urls[role];
-    var node;
-    if (selected.meta.kind === 'video') {
-      node = document.createElement('video');
-      node.muted = true;
-      node.defaultMuted = true;
-      node.playsInline = true;
+    var signature = role + ':' + selected.meta.kind + ':' + url;
+    var node = state.backgroundNode;
+    if (!node || state.backgroundSignature !== signature) {
+      if (node && node.tagName === 'VIDEO') node.pause();
+      state.backgroundMedia.textContent = '';
+      if (selected.meta.kind === 'video') {
+        node = document.createElement('video');
+        node.muted = true;
+        node.defaultMuted = true;
+        node.playsInline = true;
+        node.preload = 'metadata';
+        node.src = url;
+      } else {
+        node = document.createElement('img');
+        node.alt = '';
+        node.decoding = 'async';
+        node.src = url;
+      }
+      node.className = 'bt-brand-background-asset';
+      state.backgroundMedia.append(node);
+      state.backgroundNode = node;
+      state.backgroundSignature = signature;
+    }
+
+    if (node.tagName === 'VIDEO') {
       node.loop = state.settings.backgroundLoop;
-      node.preload = 'metadata';
       node.playbackRate = state.settings.backgroundSpeed;
       if (state.urls.poster) node.poster = state.urls.poster;
-      node.src = url;
-      var play = node.play();
-      if (play && play.catch) play.catch(function () { setStatus('Video loaded; browser blocked autoplay', 'warn'); });
-    } else {
-      node = document.createElement('img');
-      node.alt = '';
-      node.decoding = 'async';
-      node.src = url;
+      else node.removeAttribute('poster');
+      if (!document.hidden && node.paused) {
+        var play = node.play();
+        if (play && play.catch) play.catch(function () { setStatus('Video loaded; browser blocked autoplay', 'warn'); });
+      }
     }
-    node.className = 'bt-brand-background-asset';
-    state.backgroundMedia.append(node);
   }
 
   function apply() {
@@ -666,10 +709,7 @@
         next[role] = await recordFromBytes(meta, data);
       }
       var nextSettings = sanitize(manifest.settings || {});
-      for (var key of ['header', 'background', 'poster']) {
-        if (next[key]) await writeAsset(key, next[key]);
-        else await deleteAsset(key);
-      }
+      await replaceProjectAssets(next);
       state.assets = next;
       state.settings = nextSettings;
       ['header', 'background', 'poster'].forEach(setUrl);
