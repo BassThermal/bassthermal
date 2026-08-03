@@ -8,6 +8,7 @@ const BRAND_ASSET = '/assets/brand/bassthermal-mark-v1.webp';
 const FAVICON = '/favicon-32x32.png?v=2';
 const SHELL_CSS = '/bt-site-shell.css?v=3';
 const BRAND_LOADER = '/bassthermal-brand-lab-loader.v3.js?v=5';
+const SITE_VISITS = '/site-visits.js?v=2';
 const SHELL_VERSION = '1.2.0';
 const STORE_WINDOWS = 'https://apps.microsoft.com/search/publisher?name=BassThermal&amp;hl=en-US&amp;gl=CA';
 const STORE_ANDROID = 'https://play.google.com/store/apps/developer?id=BassThermal';
@@ -139,7 +140,8 @@ function injectHead(html) {
     `<link rel="shortcut icon" type="image/png" href="${FAVICON}">`,
     '<meta name="theme-color" content="#000000">',
     `<link rel="stylesheet" href="${SHELL_CSS}" data-bt-site-shell-style="1">`,
-    `<script src="${BRAND_LOADER}" defer data-bt-brand-lab-loader="1"></script>`
+    `<script src="${BRAND_LOADER}" defer data-bt-brand-lab-loader="1"></script>`,
+    ...(html.includes(SITE_VISITS) ? [] : [`<script src="${SITE_VISITS}" defer></script>`])
   ].join('\n  ');
   const withoutDuplicateTheme = html.replace(/\s*<meta name="theme-color" content="[^"]*"\s*\/?>(?:\s*)/gi, '\n  ');
   if (!/<\/head>/i.test(withoutDuplicateTheme)) throw new Error('closing head tag missing');
@@ -163,6 +165,7 @@ function validate(html, route, relative) {
     [(html.match(/data-bt-brand-favicon="1"/g) || []).length === 1, 'must contain exactly one canonical favicon'],
     [(html.match(/data-bt-site-shell-style="1"/g) || []).length === 1, 'must contain exactly one shell stylesheet'],
     [(html.match(/data-bt-brand-lab-loader="1"/g) || []).length === 1, 'must contain exactly one experimental Brand Lab loader'],
+    [html.includes(SITE_VISITS), 'must contain the site visits runtime'],
     [html.includes(`data-bt-site-shell="${SHELL_VERSION}"`), 'must contain current shell version'],
     [html.includes(`class="bt-site-mark" src="${BRAND_ASSET}"`), 'must contain selected public header mark'],
     [html.includes(`class="bt-brand-background-asset" src="${BRAND_ASSET}"`), 'must contain selected permanent background'],
