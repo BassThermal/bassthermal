@@ -22,33 +22,26 @@ for (const [route, labels] of routes) {
   if (!response.ok) errors.push(`${route} returned ${response.status}`);
   if ((html.match(/class="bt-site-header"/g) || []).length !== 1) errors.push(`${route} does not contain exactly one built site header`);
   if ((html.match(/id="btBrandBackground"/g) || []).length !== 1) errors.push(`${route} does not contain exactly one permanent background`);
-  if ((html.match(/data-bt-brand-favicon="1"/g) || []).length !== 1) errors.push(`${route} does not contain exactly one selected favicon contract`);
-  if (!html.includes(`href="${BRAND_FAVICON}?v=2"`)) errors.push(`${route} missing selected Chrome favicon`);
-  if (!html.includes('data-bt-site-shell="1.2.0"')) errors.push(`${route} missing built shell version`);
-  if (!html.includes('class="bt-site-path" aria-label="Breadcrumb"')) errors.push(`${route} missing static breadcrumb navigation`);
-  if (!html.includes('class="bt-site-primary" aria-label="Primary"')) errors.push(`${route} missing static primary navigation`);
+  if ((html.match(/data-bt-brand-favicon="1"/g) || []).length !== 1) errors.push(`${route} does not contain exactly one favicon contract`);
+  if (!html.includes(`href="${BRAND_FAVICON}?v=2"`)) errors.push(`${route} missing selected favicon`);
+  if (!html.includes('data-bt-site-shell="1.2.0"')) errors.push(`${route} missing shell version`);
+  if (!html.includes('class="bt-site-path" aria-label="Breadcrumb"')) errors.push(`${route} missing breadcrumb navigation`);
+  if (!html.includes('class="bt-site-primary" aria-label="Primary"')) errors.push(`${route} missing primary navigation`);
   if (!html.includes(`class="bt-site-mark" src="${BRAND_ASSET}"`)) errors.push(`${route} missing selected header mark`);
-  if (!html.includes(`class="bt-brand-background-asset" src="${BRAND_ASSET}"`)) errors.push(`${route} missing selected background asset`);
+  if (!html.includes(`class="bt-brand-background-asset" src="${BRAND_ASSET}"`)) errors.push(`${route} missing selected background`);
   for (const label of labels) if (!html.includes(`>${label}<`)) errors.push(`${route} missing path label ${label}`);
   for (const asset of ['/bt-site-shell.css?v=3', '/bassthermal-brand-lab-loader.v3.js?v=5']) {
     if (!html.includes(asset)) errors.push(`${route} missing ${asset}`);
   }
-  if (html.includes('/bt-site-shell.js?')) errors.push(`${route} still loads a runtime-created public shell`);
+  if (html.includes('/bt-site-shell.js?')) errors.push(`${route} still loads the retired shell runtime`);
   if (html.includes('class="topline"') || html.includes('class="product-breadcrumb"') || html.includes('class="guide-breadcrumb"')) {
-    errors.push(`${route} still contains a legacy visible identity`);
+    errors.push(`${route} still contains a legacy identity`);
   }
 }
-for (const asset of [
-  '/bt-site-shell.css?v=3',
-  '/bassthermal-brand-lab-loader.v3.js?v=5',
-  '/bassthermal-brand-lab.v3.js?v=3',
-  '/bassthermal-brand-lab.v3.css?v=3',
-  BRAND_ASSET,
-  BRAND_FAVICON
-]) {
+for (const asset of ['/bt-site-shell.css?v=3', '/bassthermal-brand-lab-loader.v3.js?v=5', '/bassthermal-brand-lab.v3.js?v=3', '/bassthermal-brand-lab.v3.css?v=3', BRAND_ASSET, BRAND_FAVICON]) {
   const response = await fetch(base + asset);
   if (!response.ok) errors.push(`${asset} returned ${response.status}`);
-  if (asset === BRAND_ASSET && Number(response.headers.get('content-length') || 0) !== 25166) errors.push(`${BRAND_ASSET} byte count is not 25166`);
+  if (asset === BRAND_ASSET && Number(response.headers.get('content-length') || 0) !== 14568) errors.push(`${BRAND_ASSET} byte count is not 14568`);
   if (asset === BRAND_FAVICON && Number(response.headers.get('content-length') || 0) !== 1976) errors.push(`${BRAND_FAVICON} byte count is not 1976`);
 }
 if (errors.length) {
