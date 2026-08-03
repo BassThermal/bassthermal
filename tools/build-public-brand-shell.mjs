@@ -33,7 +33,7 @@ function walk(directory) {
   if (!fs.existsSync(directory)) return [];
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const absolute = path.join(directory, entry.name);
-    return entry.isDirectory() ? walk(absolute) : (entry.isFile() && entry.name === 'index.html' ? [absolute] : []);
+    return entry.isDirectory() ? walk(absolute) : (entry.isFile() && entry.name.endsWith('.html') ? [absolute] : []);
   });
 }
 
@@ -77,7 +77,9 @@ function titleCase(value) {
 }
 
 function routeModel(route, html) {
-  const rootItem = { label: 'bassthermal', href: '/' };
+  const rootItem = route === '/'
+    ? { label: 'bassthermal', current: true }
+    : { label: 'bassthermal', href: '/' };
   if (route === '/') return [rootItem];
   const parts = route.split('/').filter(Boolean);
   if (parts[0] === 'apps') {
@@ -105,7 +107,7 @@ function headerMarkup(route, html) {
       : '';
     const content = item.href
       ? `<a href="${item.href}"${index === 0 ? ' class="bt-site-wordmark"' : ''}>${escapeHtml(item.label)}</a>`
-      : `<span${item.current ? ' aria-current="page"' : ''}>${escapeHtml(item.label)}</span>`;
+      : `<span${index === 0 ? ' class="bt-site-wordmark"' : ''}${item.current ? ' aria-current="page"' : ''}>${escapeHtml(item.label)}</span>`;
     return `<li class="${index === 0 ? 'bt-site-root' : 'bt-site-segment'}">${mark}${content}</li>`;
   }).join('');
   return `<header class="bt-site-header" data-bt-site-shell="${SHELL_VERSION}"><nav class="bt-site-path" aria-label="Breadcrumb"><ol>${items}</ol></nav><nav class="bt-site-primary" aria-label="Primary"><a href="/guides/">Guides</a><a href="/support/">Support</a><a href="${STORE_WINDOWS}">Microsoft Store</a><a href="${STORE_ANDROID}">Google Play</a></nav></header>`;
@@ -143,9 +145,15 @@ function injectHead(html) {
     `<script src="${BRAND_LOADER}" defer data-bt-brand-lab-loader="1"></script>`,
     ...(html.includes(SITE_VISITS) ? [] : [`<script src="${SITE_VISITS}" defer></script>`])
   ].join('\n  ');
-  const withoutDuplicateTheme = html.replace(/\s*<meta name="theme-color" content="[^"]*"\s*\/?>(?:\s*)/gi, '\n  ');
+  const withoutDuplicateTheme = html.replace(/\s*<meta name="theme-color" content="[^"]*"\s*\/?>(?:\s*)/gi, '\n');
   if (!/<\/head>/i.test(withoutDuplicateTheme)) throw new Error('closing head tag missing');
   return withoutDuplicateTheme.replace(/<\/head>/i, `  ${tags}\n</head>`);
+}
+
+function ensureVisitsRuntime(html) {
+  if (html.includes(SITE_VISITS)) return html;
+  if (!/<\/head>/i.test(html)) throw new Error('closing head tag missing');
+  return html.replace(/<\/head>/i, `  <script src="${SITE_VISITS}" defer></script>\n</head>`);
 }
 
 function transform(html, route) {
@@ -192,6 +200,27 @@ for (const file of files) {
   catch (error) { errors.push(`${file.relative}: ${error.message}`); continue; }
   validate(next, file.route, file.relative);
   if (!validateOnly && next !== current) fs.writeFileSync(file.absolute, next, 'utf8');
+}
+
+// The Visits contract covers every non-home public HTML document, including
+// standalone demos and retained app assets that are outside the site shell.
+for (const absolute of walk(publicRoot).filter((file) => path.basename(file) === 'index.html')) {
+  const relative = path.relative(publicRoot, absolute).replaceAll('\\', '/');
+  if (relative === 'index.html') continue;
+  const current = fs.readFileSync(absolute, 'utf8');
+  let next;
+  try { next = ensureVisitsRuntime(current); }
+  catch (error) { errors.push(`${relative}: ${error.message}`); continue; }
+  if (!validateOnly && next !== current) fs.writeFileSync(absolute, next, 'utf8');
+}
+
+for (const absolute of walk(publicRoot).filter((file) => path.basename(file) !== 'index.html')) {
+  const relative = path.relative(publicRoot, absolute).replaceAll('\\', '/');
+  const current = fs.readFileSync(absolute, 'utf8');
+  let next;
+  try { next = ensureVisitsRuntime(current); }
+  catch (error) { errors.push(`${relative}: ${error.message}`); continue; }
+  if (!validateOnly && next !== current) fs.writeFileSync(absolute, next, 'utf8');
 }
 
 if (!files.length) errors.push('no public shell routes were found');
