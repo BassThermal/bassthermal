@@ -24,7 +24,7 @@ assert(!/https?:\/\/(?!apps\.microsoft|play\.google)/.test(runtime));
 for (const value of [
   'seedDefaults', 'fetchVerifiedBrandAsset', 'writeMissingAssets', 'waitForRestoredProject',
   '/assets/brand/bassthermal-mark-v1.webp',
-  '0d6f0043cc69126935ca71d04e85420872c1a1963486633df690fc3da124c61f',
+  'd206176050151e0381956d41f9a00e4dcc657fad323fce697df28fe7d2c0aa40',
   "localStorage.removeItem(ACTIVE_KEY)", "get('brandlab') === '1'", '/bassthermal-brand-lab.v3.js?v=3',
   "form.addEventListener('submit'", "event.stopImmediatePropagation()", 'data-default="1"'
 ]) assert(loader.includes(value), `missing Brand Lab loader contract: ${value}`);
