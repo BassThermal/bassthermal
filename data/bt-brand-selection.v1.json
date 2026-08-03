@@ -1,0 +1,59 @@
+{
+  "schema": "bassthermal.brand-selection.v1",
+  "selectedAt": "2026-08-03T03:19:04.356Z",
+  "sourceProject": {
+    "schema": "bassthermal.brand-project.v1",
+    "brandLabVersion": "3.0.0",
+    "sha256": "393a0b5359e022adf3220d2e9413c8ccc4e071115670e077f38095e61cb42f04"
+  },
+  "sourceAsset": {
+    "name": "bassthermal-sweep-2-.png",
+    "type": "image/png",
+    "bytes": 244109,
+    "width": 4096,
+    "height": 2151,
+    "sha256": "88d65da8e729202a3b613dd6986a372a522eea6195efec9e437e48e29f09a77a"
+  },
+  "deployedAsset": {
+    "path": "/assets/brand/bassthermal-mark-v1.webp",
+    "type": "image/webp",
+    "bytes": 19612,
+    "width": 512,
+    "height": 512,
+    "sha256": "0d6f0043cc69126935ca71d04e85420872c1a1963486633df690fc3da124c61f"
+  },
+  "settings": {
+    "headerEnabled": true,
+    "markSize": 38,
+    "markGap": 8,
+    "markX": 0,
+    "markY": -1,
+    "markOpacity": 1,
+    "markGlow": 10,
+    "backgroundEnabled": true,
+    "backgroundOpacity": 0.23,
+    "backgroundScale": 1.1,
+    "backgroundX": 24,
+    "backgroundY": 48,
+    "backgroundBlur": 7,
+    "backgroundFit": "contain",
+    "backgroundSpeed": 1,
+    "backgroundLoop": false,
+    "maskStrength": 0.26,
+    "reducedMotion": "hide",
+    "mobilePolicy": "allow"
+  },
+  "shell": {
+    "desktopMinimumHeightPx": 60,
+    "sticky": true,
+    "desktopMarkSizePx": 38,
+    "compactBreakpointPx": 900,
+    "phoneBreakpointPx": 520
+  },
+  "notes": [
+    "The selected transparent source canvas was cropped to its visible mark before producing the deployed WebP.",
+    "The crop removes unused transparent padding; the header offsets and apparent size were therefore normalized rather than copied numerically from the source project.",
+    "The same selected visual asset is intentionally reused for the header mark and atmospheric page background.",
+    "Brand Lab seeds its browser-local defaults from this committed same-origin asset only after explicit activation."
+  ]
+}
