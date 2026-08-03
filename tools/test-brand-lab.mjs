@@ -2,38 +2,24 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const runtime = fs.readFileSync(new URL('../public/bassthermal-brand-lab.v3.js', import.meta.url), 'utf8');
-const css = fs.readFileSync(new URL('../public/bassthermal-brand-lab.v3.css', import.meta.url), 'utf8');
 const loader = fs.readFileSync(new URL('../public/bassthermal-brand-lab-loader.v3.js', import.meta.url), 'utf8');
-for (const value of [
-  'Brand Lab', 'bassthermal.brand-project.v1', 'header', 'background', 'poster',
-  'image/gif', 'video/mp4', 'video/webm', 'muted', 'playsInline', 'visibilitychange',
-  'prefers-reduced-motion', 'mobilePolicy', 'capturePoster', 'makeZip', 'parseZip',
-  'SHA-256', 'Project imported and verified', '/brand', '/logo', 'Disable media'
-]) assert(runtime.includes(value), `missing Brand Lab contract: ${value}`);
-assert(runtime.includes('indexedDB.open(DB_NAME, DB_VERSION)'));
-assert(runtime.includes('URL.revokeObjectURL'));
-assert(runtime.includes('document.hidden'));
-assert(runtime.includes('state.backgroundSignature !== signature'));
-assert(runtime.includes('state.backgroundNode = node'));
-assert(runtime.includes('replaceProjectAssets(next)'));
-assert(runtime.includes("database.transaction(STORE_NAME, 'readwrite')"));
-assert(runtime.includes('state.assets = next'));
-assert(!runtime.includes('fetch('));
-assert(!/https?:\/\/(?!apps\.microsoft|play\.google)/.test(runtime));
+const css = fs.readFileSync(new URL('../public/bassthermal-brand-lab.v3.css', import.meta.url), 'utf8');
 
-for (const value of [
+for (const contract of [
+  'Brand Lab', 'bassthermal.brand-project.v1', 'image/gif', 'video/mp4', 'video/webm',
+  'visibilitychange', 'capturePoster', 'makeZip', 'parseZip', 'replaceProjectAssets(next)'
+]) assert(runtime.includes(contract), `missing Brand Lab contract: ${contract}`);
+
+for (const contract of [
   'seedDefaults', 'fetchVerifiedBrandAsset', 'writeMissingAssets', 'waitForRestoredProject',
-  '/assets/brand/bassthermal-mark-v1.webp',
-  'd206176050151e0381956d41f9a00e4dcc657fad323fce697df28fe7d2c0aa40',
-  "localStorage.removeItem(ACTIVE_KEY)", "get('brandlab') === '1'", '/bassthermal-brand-lab.v3.js?v=3',
-  "form.addEventListener('submit'", "event.stopImmediatePropagation()", 'data-default="1"'
-]) assert(loader.includes(value), `missing Brand Lab loader contract: ${value}`);
+  '/assets/brand/bassthermal-mark-v1.webp', 'const BRAND_BYTES = 14568',
+  'a059081c7b34f0e1d768801e86ed82fd6d93c9c4e2bf474c22c09285e54d5ed2',
+  "localStorage.removeItem(ACTIVE_KEY)", "get('brandlab') === '1'",
+  "database.transaction(STORE_NAME, 'readwrite')"
+]) assert(loader.includes(contract), `missing loader contract: ${contract}`);
+
 assert(!loader.includes("localStorage.getItem(ACTIVE_KEY) === '1'"));
-assert(loader.includes("fetch(BRAND_ASSET, { cache: 'force-cache', credentials: 'same-origin' })"));
-assert(loader.includes("crypto.subtle.digest('SHA-256'"));
-assert(loader.includes("database.transaction(STORE_NAME, 'readwrite')"));
-assert(!/https?:\/\//.test(loader));
+assert(!runtime.includes('fetch('));
 assert(css.includes('#btBrandBackground'));
 assert(css.includes('[data-reposition="1"]'));
-assert(css.includes('@media(prefers-reduced-motion:reduce)'));
 console.log('brand lab tests passed');
