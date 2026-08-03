@@ -24,7 +24,6 @@ html[data-bt-brand-header="on"] .bt-site-mark-slot[data-ready="1"]{display:inlin
 .bt-site-primary a{white-space:nowrap;color:var(--soft,#8b949e)}
 .bt-site-primary a:hover,.bt-site-primary a:focus-visible,.bt-site-path a:hover,.bt-site-path a:focus-visible{color:var(--hot,#f0f6fc)}
 .bt-site-primary a:focus-visible,.bt-site-path a:focus-visible{outline:1px solid currentColor;outline-offset:3px}
-.product-header,.guide-header,.bt-page-head{padding-top:0!important}
 @media(max-width:820px){
   .bt-site-header{grid-template-columns:1fr;gap:9px}
   .bt-site-primary{justify-content:flex-start;text-align:left}
