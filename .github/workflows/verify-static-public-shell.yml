@@ -29,6 +29,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Diagnose transfer chunks
+        run: |
+          wc -c .brand-transfer/mark-q80-00.b64 .brand-transfer/mark-q80-01.b64 .brand-transfer/mark-q80-02.b64 .brand-transfer/mark-q80-03.b64 .brand-transfer/mark-q80-04.b64
+          sha256sum .brand-transfer/mark-q80-00.b64 .brand-transfer/mark-q80-01.b64 .brand-transfer/mark-q80-02.b64 .brand-transfer/mark-q80-03.b64 .brand-transfer/mark-q80-04.b64
+          exit 1
       - name: Verify transfer chunks and reconstruct exact selected mark
         run: |
           test "$(wc -c < .brand-transfer/mark-q80-00.b64)" = "4000"
