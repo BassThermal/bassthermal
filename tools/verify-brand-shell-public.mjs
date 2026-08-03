@@ -48,7 +48,7 @@ for (const asset of [
 ]) {
   const response = await fetch(base + asset);
   if (!response.ok) errors.push(`${asset} returned ${response.status}`);
-  if (asset === BRAND_ASSET && Number(response.headers.get('content-length') || 0) !== 19612) errors.push(`${BRAND_ASSET} byte count is not 19612`);
+  if (asset === BRAND_ASSET && Number(response.headers.get('content-length') || 0) !== 25166) errors.push(`${BRAND_ASSET} byte count is not 25166`);
   if (asset === BRAND_FAVICON && Number(response.headers.get('content-length') || 0) !== 1976) errors.push(`${BRAND_FAVICON} byte count is not 1976`);
 }
 if (errors.length) {
