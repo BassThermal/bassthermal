@@ -1,7 +1,7 @@
 {
   "schema": "BT-CATALOG-1",
   "version": "2026.07.22.3",
-  "generatedAt": "2026-07-23T02:31:34.466Z",
+  "generatedAt": "2026-08-03T15:02:46.708Z",
   "publisher": {
     "name": "BassThermal",
     "url": "https://bassthermal.com/",
@@ -226,8 +226,8 @@
         "windows",
         "android"
       ],
-      "line": "live headline monitor · coverage movement scanner",
-      "short": "Monitor live headlines, scan coverage movement, and keep a source-aware news board open while you work.",
+      "line": "compare live headline sources and follow how coverage changes",
+      "short": "Monitor live headline sources, compare coverage, and keep a focused news board open on web, Windows, or Android.",
       "capabilities": [
         "Live headline monitoring",
         "Source-aware coverage scanning",
@@ -242,8 +242,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "DualTicker live headline comparison app for web, Windows, and Android | BassThermal",
-        "description": "Monitor live headlines, scan coverage movement across sources, and keep a source-aware news board open on web, Windows, or Android.",
+        "title": "DualTicker Live Headline Monitor | Web, Windows and Android",
+        "description": "Monitor live headline sources, compare coverage, and keep a focused news board open on web, Windows, or Android.",
         "canonical": "https://bassthermal.com/apps/dualticker/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "NewsApplication",
@@ -301,8 +301,8 @@
         "windows",
         "android"
       ],
-      "line": "retro image converter · palette and dithering output",
-      "short": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready output.",
+      "line": "transform images with limited palettes, pixels, and dithering",
+      "short": "Transform photos and graphics with limited palettes, visible pixel structure, scaling, and dithering controls.",
       "capabilities": [
         "Palette-limited image conversion",
         "Dithering style controls",
@@ -317,8 +317,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "RetroFy retro image converter with palette and dithering effects | BassThermal",
-        "description": "Convert images into retro-styled artwork with palette limits, dithering controls, and export-ready image output.",
+        "title": "RetroFy Retro Image Converter | Palette and Dithering Effects",
+        "description": "Transform photos and graphics with limited palettes, visible pixel structure, scaling, and dithering controls on Windows or Android.",
         "canonical": "https://bassthermal.com/apps/retrofy/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "MultimediaApplication",
@@ -374,8 +374,8 @@
         "windows",
         "android"
       ],
-      "line": "coptic lookup · meanings, forms, saved words",
-      "short": "Search Coptic and English terms, review forms and transliterations, and save words for study.",
+      "line": "search Coptic text, transliteration, meanings, and saved words",
+      "short": "Search Coptic text, transliteration, and English meanings, inspect detailed entries, and save vocabulary for study.",
       "capabilities": [
         "Coptic and English lookup",
         "Forms and transliteration review",
@@ -390,8 +390,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "English to Coptic and Coptic to English dictionary app | BassThermal",
-        "description": "Search Coptic and English terms, review forms and transliterations, and save vocabulary for study on Windows or Android.",
+        "title": "Coptic Dictionary App | Search Words, Meanings and Transliteration",
+        "description": "Search Coptic text, transliteration, and English meanings, inspect detailed entries, and save vocabulary on Windows or Android.",
         "canonical": "https://bassthermal.com/apps/coptic-dictionary/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "EducationalApplication",
@@ -445,8 +445,8 @@
       "platforms": [
         "windows"
       ],
-      "line": "app icon builder · store-ready asset export",
-      "short": "Generate Windows app icons from one source PNG, produce package and Store asset sizes, and export an organized icon pack.",
+      "line": "generate common Windows icon outputs from one source image",
+      "short": "Generate common Windows app, installer, package, and Store-oriented icon sizes from one source image.",
       "capabilities": [
         "Multi-size icon generation",
         "Store asset packaging",
@@ -461,8 +461,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "Windows App Icon Pack Builder | Store and Installer Assets | BassThermal",
-        "description": "Generate Windows app icons from one source PNG, produce package and Store asset sizes, and export an organized icon pack.",
+        "title": "Windows Icon Pack Builder | Generate App and Installer Icons",
+        "description": "Generate common Windows app, installer, package, and Microsoft Store-oriented icon sizes from one source image.",
         "canonical": "https://bassthermal.com/apps/icon-pack-builder/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "DeveloperApplication",
@@ -521,8 +521,8 @@
       "platforms": [
         "windows"
       ],
-      "line": "favicon extractor · domain icon asset capture",
-      "short": "Extract favicon assets from website URLs, process URL or domain lists, and organize discovered website icons for research or migrations.",
+      "line": "collect and review website icons from URLs or domain lists",
+      "short": "Scan website URLs or domain lists, review favicon candidates, and save an organized local icon collection.",
       "capabilities": [
         "URL and domain icon extraction",
         "Batch favicon collection",
@@ -537,8 +537,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "Favicon Harvester for Windows | Bulk Website Icon Collector | BassThermal",
-        "description": "Extract favicon assets from website URLs, process URL or domain lists, and organize discovered website icons for research or migrations.",
+        "title": "Favicon Harvester for Windows | Collect Website Icons in Bulk",
+        "description": "Scan website URLs or domain lists, review favicon candidates, and save an organized local icon collection on Windows.",
         "canonical": "https://bassthermal.com/apps/favicon-harvester/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "DeveloperApplication",
@@ -604,8 +604,8 @@
       "platforms": [
         "windows"
       ],
-      "line": "book inventory · ISBN lookup and labels",
-      "short": "Look up ISBN metadata, clean book inventory records, generate barcode labels, and export organized book catalogs on Windows.",
+      "line": "build and maintain a book catalogue from ISBNs",
+      "short": "Build and maintain a book catalogue from typed, pasted, imported, or scanned ISBNs, then create labels and exports.",
       "capabilities": [
         "ISBN metadata lookup",
         "Book inventory cleanup",
@@ -620,8 +620,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "ISBN Manager for Windows | Lookup, Inventory and Barcode Labels | BassThermal",
-        "description": "Look up ISBN metadata, clean book inventory records, generate barcode labels, and export organized book catalogs on Windows.",
+        "title": "ISBN Manager for Windows | Book Catalogue and Barcode Software",
+        "description": "Build a book catalogue from typed, pasted, imported, or scanned ISBNs, review metadata, create barcode labels, and export records.",
         "canonical": "https://bassthermal.com/apps/isbn-manager/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "BusinessApplication",
@@ -679,8 +679,8 @@
       "platforms": [
         "windows"
       ],
-      "line": "feed discovery · crawl and inspect RSS/Atom feeds",
-      "short": "Find RSS and Atom feeds from websites, inspect hidden feed endpoints, review discovered URLs, and export organized feed lists on Windows.",
+      "line": "discover, inspect, organize, and export RSS or Atom feeds",
+      "short": "Discover RSS and Atom feeds, review candidates and recent items, organize source sets, and export useful feed lists.",
       "capabilities": [
         "RSS and Atom feed discovery",
         "Feed URL inspection",
@@ -695,8 +695,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "RSS Crawler for Windows | Find, Inspect and Export RSS Feeds | BassThermal",
-        "description": "Find RSS and Atom feeds from websites, inspect hidden feed endpoints, review discovered URLs, and export organized feed lists on Windows.",
+        "title": "RSS Crawler for Windows | Find and Export RSS and Atom Feeds",
+        "description": "Discover RSS and Atom feeds, review candidates and recent items, organize source sets, and export useful feed lists on Windows.",
         "canonical": "https://bassthermal.com/apps/rss-crawler/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "DeveloperApplication",
@@ -756,8 +756,8 @@
       "platforms": [
         "windows"
       ],
-      "line": "document converter · batch Word, RTF, ODT, and TXT files to PDF",
-      "short": "Batch-convert DOCX, DOC, RTF, ODT, and TXT files into local PDF output on Windows.",
+      "line": "convert supported document batches to PDF locally on Windows",
+      "short": "Convert supported document batches to PDF locally on Windows, control output and conflicts, and review the finished files.",
       "capabilities": [
         "Batch document conversion",
         "DOCX, DOC, RTF, ODT, and TXT input",
@@ -773,8 +773,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "DocBatch PDF Converter batch document conversion app for Windows | BassThermal",
-        "description": "Batch-convert DOCX, DOC, RTF, ODT, and TXT files into PDF locally on Windows with configurable output and conflict handling.",
+        "title": "DocBatch PDF Converter | Batch Convert Documents on Windows",
+        "description": "Convert DOCX, DOC, RTF, ODT, and TXT batches to PDF locally on Windows, control output and conflicts, and review the results.",
         "canonical": "https://bassthermal.com/apps/docbatch-pdf-converter/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "UtilitiesApplication",
@@ -830,8 +830,8 @@
       "platforms": [
         "windows"
       ],
-      "line": "web asset inventory · scan sites and organize discovered images",
-      "short": "Scan public websites and create an organized inventory of discovered image assets.",
+      "line": "scan reachable public pages and inventory their image assets",
+      "short": "Scan reachable public pages and create a structured inventory of image URLs, source pages, dimensions, formats, sizes, and repeats.",
       "capabilities": [
         "Public website scanning",
         "Discovered image inventory",
@@ -847,8 +847,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "Website Image Inventory website image audit tool for Windows | BassThermal",
-        "description": "Scan public websites and create an organized local inventory of discovered image assets, URLs, dimensions, and metadata.",
+        "title": "Website Image Inventory | Audit Images for Redesign or Migration",
+        "description": "Scan reachable public pages and inventory image URLs, source pages, dimensions, formats, sizes, and repeated references on Windows.",
         "canonical": "https://bassthermal.com/apps/website-image-inventory/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "DeveloperApplication",
@@ -908,8 +908,8 @@
         "windows",
         "android"
       ],
-      "line": "beam calculator · reactions, shear, moment, and calculation steps",
-      "short": "Build determinate beam cases and inspect reactions, shear diagrams, moment diagrams, and calculation steps.",
+      "line": "model determinate beams and inspect reactions, shear, and moment",
+      "short": "Model determinate beam cases and inspect reactions, shear-force diagrams, bending-moment diagrams, and calculation steps.",
       "capabilities": [
         "Determinate beam modeling",
         "Point loads, distributed loads, and moments",
@@ -926,8 +926,8 @@
         "support": "/support/"
       },
       "seo": {
-        "title": "CourseLab Beam shear force and bending moment calculator for Windows and Android | BassThermal",
-        "description": "Build determinate beam cases and view support reactions, shear-force diagrams, bending-moment diagrams, and calculation steps on Windows or Android.",
+        "title": "CourseLab Beam | Shear Force and Bending Moment Calculator",
+        "description": "Model determinate beam cases and inspect reactions, shear-force diagrams, bending-moment diagrams, and calculation steps.",
         "canonical": "https://bassthermal.com/apps/courselab-beam/",
         "schemaType": "SoftwareApplication",
         "applicationCategory": "EducationalApplication",
