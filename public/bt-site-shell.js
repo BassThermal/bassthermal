@@ -1,9 +1,44 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
+  const BRAND_ASSET = '/assets/brand/bassthermal-mark-v1.webp';
   const STORE_WINDOWS = 'https://apps.microsoft.com/search/publisher?name=BassThermal&hl=en-US&gl=CA';
   const STORE_ANDROID = 'https://play.google.com/store/apps/developer?id=BassThermal';
+  const BRAND_DEFAULTS = Object.freeze({
+    schema: 'bassthermal.brand-defaults.v1',
+    asset: Object.freeze({
+      url: BRAND_ASSET,
+      name: 'bassthermal-mark-v1.webp',
+      type: 'image/webp',
+      kind: 'image',
+      bytes: 19612,
+      width: 512,
+      height: 512,
+      sha256: '0d6f0043cc69126935ca71d04e85420872c1a1963486633df690fc3da124c61f'
+    }),
+    settings: Object.freeze({
+      headerEnabled: true,
+      markSize: 38,
+      markGap: 8,
+      markX: 0,
+      markY: -1,
+      markOpacity: 1,
+      markGlow: 10,
+      backgroundEnabled: true,
+      backgroundOpacity: 0.23,
+      backgroundScale: 1.1,
+      backgroundX: 24,
+      backgroundY: 48,
+      backgroundBlur: 7,
+      backgroundFit: 'contain',
+      backgroundSpeed: 1,
+      backgroundLoop: false,
+      maskStrength: 0.26,
+      reducedMotion: 'hide',
+      mobilePolicy: 'allow'
+    })
+  });
 
   const titleCase = (value) => String(value || '')
     .split(/[-\s]+/)
@@ -66,6 +101,21 @@
     return anchor;
   }
 
+  function createMark() {
+    const mark = document.createElement('span');
+    mark.className = 'bt-site-mark-slot';
+    mark.dataset.ready = '1';
+    mark.setAttribute('aria-hidden', 'true');
+    const image = document.createElement('img');
+    image.className = 'bt-site-mark';
+    image.src = BRAND_ASSET;
+    image.alt = '';
+    image.decoding = 'async';
+    image.fetchPriority = 'high';
+    mark.append(image);
+    return mark;
+  }
+
   function createPath(model) {
     const nav = document.createElement('nav');
     nav.className = 'bt-site-path';
@@ -75,17 +125,7 @@
     model.forEach((item, index) => {
       const row = document.createElement('li');
       row.className = index === 0 ? 'bt-site-root' : 'bt-site-segment';
-      if (index === 0) {
-        const mark = document.createElement('span');
-        mark.className = 'bt-site-mark-slot';
-        mark.setAttribute('aria-hidden', 'true');
-        const image = document.createElement('img');
-        image.className = 'bt-site-mark';
-        image.alt = '';
-        image.decoding = 'async';
-        mark.append(image);
-        row.append(mark);
-      }
+      if (index === 0) row.append(createMark());
       if (item.href) row.append(link(item.href, item.label, index === 0 ? 'bt-site-wordmark' : ''));
       else {
         const span = document.createElement('span');
@@ -119,16 +159,48 @@
     if (publisherPath && /bassthermal\s*\//i.test(publisherPath.textContent || '')) publisherPath.remove();
   }
 
+  function ensureMark(header) {
+    const slot = header.querySelector('.bt-site-mark-slot');
+    const image = slot?.querySelector('.bt-site-mark');
+    if (!slot || !image) return;
+    if (!image.getAttribute('src')) image.src = BRAND_ASSET;
+    slot.dataset.ready = '1';
+  }
+
+  function ensureDefaultBackground() {
+    if (document.getElementById('btBrandBackground')) return;
+    const root = document.createElement('div');
+    root.id = 'btBrandBackground';
+    root.dataset.active = '1';
+    root.dataset.default = '1';
+    root.setAttribute('aria-hidden', 'true');
+    const media = document.createElement('div');
+    media.className = 'bt-brand-media';
+    const image = document.createElement('img');
+    image.className = 'bt-brand-background-asset';
+    image.src = BRAND_ASSET;
+    image.alt = '';
+    image.decoding = 'async';
+    const mask = document.createElement('div');
+    mask.className = 'bt-brand-mask';
+    media.append(image);
+    root.append(media, mask);
+    document.body.prepend(root);
+  }
+
   function announceReady() {
     document.documentElement.dataset.btSiteShell = VERSION;
+    if (!document.documentElement.dataset.btBrandFit) document.documentElement.dataset.btBrandFit = 'contain';
     document.dispatchEvent(new CustomEvent('bt:site-shell-ready', { detail: { version: VERSION } }));
   }
 
   function install() {
     const main = document.querySelector('main');
     if (!main) return false;
+    ensureDefaultBackground();
     let header = document.querySelector('.bt-site-header');
     if (header) {
+      ensureMark(header);
       announceReady();
       return true;
     }
@@ -146,6 +218,7 @@
     return true;
   }
 
+  window.BT_BRAND_DEFAULTS = BRAND_DEFAULTS;
   window.BT_SITE_SHELL = Object.freeze({ version: VERSION, install, routeModel });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
   else install();
