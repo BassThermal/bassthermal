@@ -29,7 +29,7 @@ The built HTML itself contains:
 - the shell stylesheet;
 - only the lightweight experimental Brand Lab command loader.
 
-The Worker does not create, replace or repair public HTML. Public HTML routes are served directly from built assets; only `/api/*` remains Worker-first.
+The Worker does not create, replace or repair public HTML. Public routes remain Worker-first only so canonical-host and legacy redirects can execute; after redirect handling, the Worker returns the already-built static asset unchanged. Visits and report APIs remain Worker-owned.
 
 The desktop shell is a 52 px minimum-height sticky rail aligned to the page content edges. It uses an almost-opaque black surface, a restrained divider and shadow, a 32 px mark, a lowercase wordmark, and one vertically centered navigation row.
 
@@ -90,12 +90,12 @@ Executable gates cover:
 - static shell build and validation across all supported routes;
 - deterministic route models;
 - exactly one site header, background, favicon, stylesheet and experimental loader;
-- absence of legacy homepage, product and Guide identities;
+- absence of legacy top-line, product and Guide identities;
 - absence of the runtime public-shell script;
 - sticky, compact and anchor-offset CSS contracts;
 - selected asset path, byte count and SHA-256 identity;
 - explicit-only Brand Lab activation and exact default seeding;
-- Worker pass-through ownership and `/api/*` routing;
+- Worker pass-through ownership with public redirect routes and `/api/*` handling;
 - Brand Lab video continuity and transactional project imports;
 - exact-byte stored-ZIP round trip;
 - CRC corruption and unsafe-path rejection.
