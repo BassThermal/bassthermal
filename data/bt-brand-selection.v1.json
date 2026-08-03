@@ -17,10 +17,10 @@
   "deployedAsset": {
     "path": "/assets/brand/bassthermal-mark-v1.webp",
     "type": "image/webp",
-    "bytes": 19612,
+    "bytes": 25166,
     "width": 512,
     "height": 512,
-    "sha256": "0d6f0043cc69126935ca71d04e85420872c1a1963486633df690fc3da124c61f"
+    "sha256": "d206176050151e0381956d41f9a00e4dcc657fad323fce697df28fe7d2c0aa40"
   },
   "settings": {
     "headerEnabled": true,
@@ -53,8 +53,8 @@
     "phoneBreakpointPx": 520
   },
   "notes": [
-    "The selected transparent source canvas was cropped to its visible mark before producing the deployed WebP.",
-    "The crop removes unused transparent padding; the header offsets and apparent size were therefore normalized rather than copied numerically from the source project.",
+    "The selected transparent source canvas was cropped to its visible mark before producing the deployed lossless WebP.",
+    "The crop removes unused transparent padding; the header offsets and apparent size were normalized rather than copied numerically from the source project.",
     "The same selected visual asset is intentionally reused for the header mark and atmospheric page background.",
     "The permanent logo, path header, background, favicon, and shell stylesheet are generated into public HTML before deployment for every visitor.",
     "Brand Lab seeds its browser-local defaults from this committed same-origin asset only after an explicit command or brandlab=1 URL. Stored experiments never auto-apply to an ordinary visit."
