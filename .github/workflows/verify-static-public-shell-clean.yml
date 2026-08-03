@@ -1,0 +1,49 @@
+name: Verify clean static public brand shell
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verify-clean-static-public-shell-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  verify-and-materialize:
+    if: github.head_ref == 'agent/static-public-brand-shell-clean' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run site-shell:build
+      - run: npm run site-shell:validate
+      - run: npm run test:site-shell
+      - run: npm run test:brand-lab
+      - run: npm run test:site-truth-visits
+      - run: npm run test:redirects
+      - name: Commit verified canonical HTML
+        run: |
+          if git diff --quiet -- ':(glob)public/**/index.html'; then
+            echo "Canonical HTML already matches the verified shell."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ':(glob)public/**/index.html'
+          git commit -m "Materialize permanent public brand shell"
+          git push origin HEAD:${{ github.head_ref }}
