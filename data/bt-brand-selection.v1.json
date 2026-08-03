@@ -17,10 +17,10 @@
   "deployedAsset": {
     "path": "/assets/brand/bassthermal-mark-v1.webp",
     "type": "image/webp",
-    "bytes": 25166,
+    "bytes": 14568,
     "width": 512,
     "height": 512,
-    "sha256": "d206176050151e0381956d41f9a00e4dcc657fad323fce697df28fe7d2c0aa40"
+    "sha256": "a059081c7b34f0e1d768801e86ed82fd6d93c9c4e2bf474c22c09285e54d5ed2"
   },
   "settings": {
     "headerEnabled": true,
@@ -53,7 +53,7 @@
     "phoneBreakpointPx": 520
   },
   "notes": [
-    "The selected transparent source canvas was cropped to its visible mark before producing the deployed lossless WebP.",
+    "The selected transparent source canvas was cropped to its visible mark before producing the deployed compact WebP.",
     "The crop removes unused transparent padding; the header offsets and apparent size were normalized rather than copied numerically from the source project.",
     "The same selected visual asset is intentionally reused for the header mark and atmospheric page background.",
     "The permanent logo, path header, background, favicon, and shell stylesheet are generated into public HTML before deployment for every visitor.",
