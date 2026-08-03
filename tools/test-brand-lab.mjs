@@ -10,9 +10,13 @@ for (const value of [
   'prefers-reduced-motion', 'mobilePolicy', 'capturePoster', 'makeZip', 'parseZip',
   'SHA-256', 'Project imported and verified', '/brand', '/logo', 'Disable media'
 ]) assert(runtime.includes(value), `missing Brand Lab contract: ${value}`);
-assert(runtime.includes("indexedDB.open(DB_NAME, DB_VERSION)"));
+assert(runtime.includes('indexedDB.open(DB_NAME, DB_VERSION)'));
 assert(runtime.includes('URL.revokeObjectURL'));
 assert(runtime.includes('document.hidden'));
+assert(runtime.includes('state.backgroundSignature !== signature'));
+assert(runtime.includes('state.backgroundNode = node'));
+assert(runtime.includes('replaceProjectAssets(next)'));
+assert(runtime.includes("database.transaction(STORE_NAME, 'readwrite')"));
 assert(runtime.includes('state.assets = next'));
 assert(!runtime.includes('fetch('));
 assert(!/https?:\/\/(?!apps\.microsoft|play\.google)/.test(runtime));
