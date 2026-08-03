@@ -119,11 +119,19 @@
     if (publisherPath && /bassthermal\s*\//i.test(publisherPath.textContent || '')) publisherPath.remove();
   }
 
+  function announceReady() {
+    document.documentElement.dataset.btSiteShell = VERSION;
+    document.dispatchEvent(new CustomEvent('bt:site-shell-ready', { detail: { version: VERSION } }));
+  }
+
   function install() {
     const main = document.querySelector('main');
     if (!main) return false;
     let header = document.querySelector('.bt-site-header');
-    if (header) return true;
+    if (header) {
+      announceReady();
+      return true;
+    }
 
     const legacyHome = document.querySelector('header.topline');
     header = document.createElement('header');
@@ -134,8 +142,7 @@
     if (legacyHome && main.contains(legacyHome)) legacyHome.replaceWith(header);
     else main.prepend(header);
     removeLegacyIdentity();
-    document.documentElement.dataset.btSiteShell = VERSION;
-    document.dispatchEvent(new CustomEvent('bt:site-shell-ready', { detail: { version: VERSION } }));
+    announceReady();
     return true;
   }
 
