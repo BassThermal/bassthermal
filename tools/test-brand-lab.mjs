@@ -25,9 +25,10 @@ for (const value of [
   'seedDefaults', 'fetchVerifiedBrandAsset', 'writeMissingAssets', 'waitForRestoredProject',
   '/assets/brand/bassthermal-mark-v1.webp',
   '0d6f0043cc69126935ca71d04e85420872c1a1963486633df690fc3da124c61f',
-  "localStorage.getItem(ACTIVE_KEY) === '1'", '/bassthermal-brand-lab.v3.js?v=3',
+  "localStorage.removeItem(ACTIVE_KEY)", "get('brandlab') === '1'", '/bassthermal-brand-lab.v3.js?v=3',
   "form.addEventListener('submit'", "event.stopImmediatePropagation()", 'data-default="1"'
 ]) assert(loader.includes(value), `missing Brand Lab loader contract: ${value}`);
+assert(!loader.includes("localStorage.getItem(ACTIVE_KEY) === '1'"));
 assert(loader.includes("fetch(BRAND_ASSET, { cache: 'force-cache', credentials: 'same-origin' })"));
 assert(loader.includes("crypto.subtle.digest('SHA-256'"));
 assert(loader.includes("database.transaction(STORE_NAME, 'readwrite')"));
