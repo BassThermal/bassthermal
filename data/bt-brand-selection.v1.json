@@ -24,12 +24,12 @@
   },
   "settings": {
     "headerEnabled": true,
-    "markSize": 38,
-    "markGap": 8,
+    "markSize": 32,
+    "markGap": 7,
     "markX": 0,
     "markY": -1,
     "markOpacity": 1,
-    "markGlow": 10,
+    "markGlow": 8,
     "backgroundEnabled": true,
     "backgroundOpacity": 0.23,
     "backgroundScale": 1.1,
@@ -44,9 +44,11 @@
     "mobilePolicy": "allow"
   },
   "shell": {
-    "desktopMinimumHeightPx": 60,
+    "version": "1.2.0",
+    "ownership": "static-build",
+    "desktopMinimumHeightPx": 52,
     "sticky": true,
-    "desktopMarkSizePx": 38,
+    "desktopMarkSizePx": 32,
     "compactBreakpointPx": 900,
     "phoneBreakpointPx": 520
   },
@@ -54,6 +56,7 @@
     "The selected transparent source canvas was cropped to its visible mark before producing the deployed WebP.",
     "The crop removes unused transparent padding; the header offsets and apparent size were therefore normalized rather than copied numerically from the source project.",
     "The same selected visual asset is intentionally reused for the header mark and atmospheric page background.",
-    "Brand Lab seeds its browser-local defaults from this committed same-origin asset only after explicit activation."
+    "The permanent logo, path header, background, favicon, and shell stylesheet are generated into public HTML before deployment for every visitor.",
+    "Brand Lab seeds its browser-local defaults from this committed same-origin asset only after an explicit command or brandlab=1 URL. Stored experiments never auto-apply to an ordinary visit."
   ]
 }
