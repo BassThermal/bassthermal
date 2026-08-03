@@ -7,7 +7,11 @@ const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const exists = (file) => fs.existsSync(path.join(root, file));
 
-assert.equal(read('wrangler.toml').includes('main = "src/worker-v2.js"'), true);
+const wrangler = read('wrangler.toml');
+const workerEntry = read('src/worker-entry.js');
+assert.match(wrangler, /main = "src\/worker-entry\.js"/);
+assert.match(workerEntry, /import worker from '\.\/worker-v2\.js'/);
+for (const route of ['"/"', '"/apps/*"', '"/guides/*"', '"/privacy/*"']) assert.ok(wrangler.includes(route), `Worker-first route missing: ${route}`);
 assert.equal(exists('public/site-visits.js'), true);
 assert.equal(exists('public/visits-terminal.js'), true);
 assert.equal(exists('public/visits-terminal.css'), true);
