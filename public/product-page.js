@@ -4,7 +4,7 @@
   let initialized = false;
 
   function ensureStyles() {
-    for (const [href, key] of [['/product-page-v2.css?v=5', 'product-page-v2'], ['/product-page-media.css?v=4', 'product-page-media']]) {
+    for (const [href, key] of [['/product-page-v2.css?v=6', 'product-page-v2'], ['/product-page-media.css?v=4', 'product-page-media']]) {
       if (document.querySelector(`link[data-product-style="${key}"]`)) continue;
       const link = document.createElement('link');
       link.rel = 'stylesheet';
