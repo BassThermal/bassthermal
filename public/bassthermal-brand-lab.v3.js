@@ -340,7 +340,6 @@
   function apply() {
     state.settings = sanitize(state.settings);
     var root = document.documentElement;
-    root.dataset.btBrandHeader = state.settings.headerEnabled && state.assets.header ? 'on' : 'off';
     root.style.setProperty('--bt-brand-mark-size', state.settings.markSize + 'px');
     root.style.setProperty('--bt-brand-mark-gap', state.settings.markGap + 'px');
     root.style.setProperty('--bt-brand-mark-x', state.settings.markX + 'px');
@@ -357,13 +356,17 @@
 
     document.querySelectorAll('.bt-site-mark-slot').forEach(function (slot) {
       var image = slot.querySelector('.bt-site-mark');
-      if (state.assets.header && state.urls.header) {
+      if (!image) return;
+      var defaultSrc = image.dataset.defaultSrc || image.getAttribute('src') || '';
+      var useCustom = state.settings.headerEnabled && state.assets.header && state.urls.header;
+      if (useCustom) {
         image.src = state.urls.header;
-        slot.dataset.ready = '1';
+        slot.dataset.custom = '1';
       } else {
-        image.removeAttribute('src');
-        slot.dataset.ready = '0';
+        if (defaultSrc) image.src = defaultSrc;
+        slot.dataset.custom = '0';
       }
+      slot.dataset.ready = '1';
     });
     renderBackground();
     saveSettings();
@@ -411,10 +414,10 @@
     panel.id = 'btBrandLab';
     panel.setAttribute('aria-label', 'Brand Lab');
     panel.innerHTML = [
-      '<header class="btbl-head"><div><strong>Brand Lab</strong><div>Independent mark, background media and exact project package</div></div><button type="button" data-action="close" aria-label="Close">×</button></header>',
+      '<header class="btbl-head"><div><strong>Brand Lab</strong><div>Optional logo override, background media and exact project package</div></div><button type="button" data-action="close" aria-label="Close">×</button></header>',
       '<div class="btbl-body">',
-        '<section><h2>Header</h2><div class="btbl-asset"><div><strong data-summary="header">none</strong><small>PNG · JPEG · WebP · GIF · max 8 MB</small></div><div><button type="button" data-action="choose-header">Choose</button><button type="button" data-action="clear-header">Clear</button></div></div>',
-        '<label class="btbl-check"><input type="checkbox" data-setting="headerEnabled"> Show header mark</label>',
+        '<section><h2>Logo override</h2><div class="btbl-asset"><div><strong data-summary="header">none</strong><small>PNG · JPEG · WebP · GIF · max 8 MB</small></div><div><button type="button" data-action="choose-header">Choose</button><button type="button" data-action="clear-header">Clear</button></div></div>',
+        '<label class="btbl-check"><input type="checkbox" data-setting="headerEnabled"> Use custom logo</label>',
         range('Size', 'markSize', 16, 72, 1), range('Gap', 'markGap', 0, 32, 1), range('Horizontal', 'markX', -20, 20, 1), range('Vertical', 'markY', -20, 20, 1), range('Opacity', 'markOpacity', .1, 1, .05), range('Glow', 'markGlow', 0, 24, 1),
         '</section>',
         '<section><h2>Background</h2><div class="btbl-asset"><div><strong data-summary="background">none</strong><small>PNG · JPEG · WebP · GIF · MP4 · WebM · max 56 MB</small></div><div><button type="button" data-action="choose-background">Choose</button><button type="button" data-action="clear-background">Clear</button></div></div>',
@@ -483,9 +486,10 @@
 
   function resetControls() {
     state.settings = Object.assign({}, DEFAULTS);
+    state.settings.headerEnabled = false;
     state.repositioning = false;
     apply();
-    setStatus('Controls reset; assets kept', 'ok');
+    setStatus('Controls reset; committed logo restored', 'ok');
   }
 
   function disableMedia() {
@@ -493,7 +497,7 @@
     state.settings.backgroundEnabled = false;
     state.repositioning = false;
     apply();
-    setStatus('All brand media disabled', 'ok');
+    setStatus('Custom logo and background disabled', 'ok');
   }
 
   function beginDrag(event) {

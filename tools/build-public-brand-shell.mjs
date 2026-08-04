@@ -4,9 +4,10 @@ import path from 'node:path';
 const root = process.cwd();
 const publicRoot = path.join(root, 'public');
 const validateOnly = process.argv.includes('--validate-only');
-const BRAND_ASSET = '/assets/brand/bassthermal-mark-v1.webp?v=2';
+const HEADER_ASSET = '/assets/brand/bassthermal-header-mark-v1.png?v=1';
+const BACKGROUND_ASSET = '/assets/brand/bassthermal-mark-v1.webp?v=2';
 const FAVICON = '/favicon-32x32.png?v=2';
-const SHELL_CSS = '/bt-site-shell.css?v=4';
+const SHELL_CSS = '/bt-site-shell.css?v=5';
 const BRAND_LOADER = '/bassthermal-brand-lab-loader.v3.js?v=5';
 const SITE_VISITS = '/site-visits.js?v=2';
 const SHELL_VERSION = '1.2.0';
@@ -103,7 +104,7 @@ function routeModel(route, html) {
 function headerMarkup(route, html) {
   const items = routeModel(route, html).map((item, index) => {
     const mark = index === 0
-      ? `<span class="bt-site-mark-slot" data-ready="1" aria-hidden="true"><img class="bt-site-mark" src="${BRAND_ASSET}" alt="" width="32" height="32" decoding="async" fetchpriority="high"></span>`
+      ? `<span class="bt-site-mark-slot" data-ready="1" aria-hidden="true"><img class="bt-site-mark" src="${HEADER_ASSET}" data-default-src="${HEADER_ASSET}" alt="" width="36" height="36" decoding="async" fetchpriority="high"></span>`
       : '';
     const content = item.href
       ? `<a href="${item.href}"${index === 0 ? ' class="bt-site-wordmark"' : ''}>${escapeHtml(item.label)}</a>`
@@ -114,7 +115,7 @@ function headerMarkup(route, html) {
 }
 
 function backgroundMarkup() {
-  return `<div id="btBrandBackground" data-active="1" data-default="1" aria-hidden="true"><div class="bt-brand-media"><img class="bt-brand-background-asset" src="${BRAND_ASSET}" alt="" decoding="async"></div><div class="bt-brand-mask"></div></div>`;
+  return `<div id="btBrandBackground" data-active="1" data-default="1" aria-hidden="true"><div class="bt-brand-media"><img class="bt-brand-background-asset" src="${BACKGROUND_ASSET}" alt="" decoding="async"></div><div class="bt-brand-mask"></div></div>`;
 }
 
 function stripExistingShell(html) {
@@ -175,8 +176,8 @@ function validate(html, route, relative) {
     [(html.match(/data-bt-brand-lab-loader="1"/g) || []).length === 1, 'must contain exactly one experimental Brand Lab loader'],
     [html.includes(SITE_VISITS), 'must contain the site visits runtime'],
     [html.includes(`data-bt-site-shell="${SHELL_VERSION}"`), 'must contain current shell version'],
-    [html.includes(`class="bt-site-mark" src="${BRAND_ASSET}"`), 'must contain selected public header mark'],
-    [html.includes(`class="bt-brand-background-asset" src="${BRAND_ASSET}"`), 'must contain selected permanent background'],
+    [html.includes(`class="bt-site-mark" src="${HEADER_ASSET}" data-default-src="${HEADER_ASSET}"`), 'must contain permanent public header mark'],
+    [html.includes(`class="bt-brand-background-asset" src="${BACKGROUND_ASSET}"`), 'must contain selected permanent background'],
     [!html.includes('class="topline"'), 'must not retain a legacy top-line header'],
     [!html.includes('class="product-breadcrumb"'), 'must not retain product breadcrumb'],
     [!html.includes('class="guide-breadcrumb"'), 'must not retain guide breadcrumb'],

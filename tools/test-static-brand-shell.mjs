@@ -35,9 +35,9 @@ for (const [relative, labels] of routes) {
   assert.equal((html.match(/data-bt-site-shell-style="1"/g) || []).length, 1, `${relative}: one shell stylesheet`);
   assert.equal((html.match(/data-bt-brand-lab-loader="1"/g) || []).length, 1, `${relative}: one experimental loader`);
   assert(html.includes('data-bt-site-shell="1.2.0"'), `${relative}: shell 1.2.0`);
-  assert(html.includes('class="bt-site-mark" src="/assets/brand/bassthermal-mark-v1.webp?v=2"'), `${relative}: selected mark`);
+  assert(html.includes('class="bt-site-mark" src="/assets/brand/bassthermal-header-mark-v1.png?v=1" data-default-src="/assets/brand/bassthermal-header-mark-v1.png?v=1"'), `${relative}: permanent header mark`);
   assert(html.includes('class="bt-brand-background-asset" src="/assets/brand/bassthermal-mark-v1.webp?v=2"'), `${relative}: selected background`);
-  assert(html.includes('/bt-site-shell.css?v=4'), `${relative}: cache-busted shell CSS`);
+  assert(html.includes('/bt-site-shell.css?v=5'), `${relative}: cache-busted shell CSS`);
   assert(html.includes('/bassthermal-brand-lab-loader.v3.js?v=5'), `${relative}: experimental loader`);
   assert(!html.includes('class="topline"'), `${relative}: no legacy top-line header`);
   assert(!html.includes('class="product-breadcrumb"'), `${relative}: no product breadcrumb`);
@@ -47,7 +47,7 @@ for (const [relative, labels] of routes) {
 }
 
 const css = read('public/bt-site-shell.css');
-for (const contract of ['position:sticky', 'top:0', 'min-height:52px', '--bt-brand-mark-size:38px', '@media(max-width:1100px)', '@media(max-width:520px)']) {
+for (const contract of ['position:sticky', 'top:0', 'min-height:52px', '--bt-brand-mark-size:36px', '@media(max-width:1100px)', '@media(max-width:520px)']) {
   assert(css.includes(contract), `shell CSS missing ${contract}`);
 }
 
@@ -65,6 +65,10 @@ for (const route of ['"/"', '"/apps/*"', '"/guides/*"', '"/about/*"', '"/support
 }
 
 const brand = fs.readFileSync(path.join(root, 'public/assets/brand/bassthermal-mark-v1.webp'));
+const headerMark = fs.readFileSync(path.join(root, 'public/assets/brand/bassthermal-header-mark-v1.png'));
+assert.equal(headerMark.readUInt32BE(16), 256, 'header mark width');
+assert.equal(headerMark.readUInt32BE(20), 256, 'header mark height');
+assert(headerMark.length > 1000, 'header mark must contain real image bytes');
 assert.equal(brand.length, 18112, 'selected mark byte count');
 assert.equal(crypto.createHash('sha256').update(brand).digest('hex'), '5c2eed9b056ac6c65886cfa08d26012196df62b1b3dfcfbd8607f93a1e95c87b', 'selected mark SHA-256');
 const favicon = fs.readFileSync(path.join(root, 'public/favicon-32x32.png'));

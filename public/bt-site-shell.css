@@ -1,10 +1,10 @@
 :root{
-  --bt-brand-mark-size:38px;
-  --bt-brand-mark-gap:7px;
+  --bt-brand-mark-size:36px;
+  --bt-brand-mark-gap:8px;
   --bt-brand-mark-x:0px;
-  --bt-brand-mark-y:-1px;
+  --bt-brand-mark-y:0px;
   --bt-brand-mark-opacity:1;
-  --bt-brand-mark-glow:8px;
+  --bt-brand-mark-glow:0px;
   --bt-brand-bg-opacity:.23;
   --bt-brand-bg-scale:1.1;
   --bt-brand-bg-x:24%;
@@ -30,7 +30,9 @@ html{scroll-padding-top:68px}
   box-shadow:0 9px 22px rgba(0,0,0,.30);
   -webkit-backdrop-filter:blur(10px) saturate(.82);
   backdrop-filter:blur(10px) saturate(.82);
-  isolation:isolate
+  isolation:isolate;
+  align-self:start;
+  width:100%
 }
 .bt-site-path,.bt-site-primary{min-width:0;font:inherit}
 .bt-site-path ol{display:flex;flex-wrap:wrap;align-items:center;gap:0;min-width:0;margin:0;padding:0;list-style:none}
@@ -40,10 +42,10 @@ html{scroll-padding-top:68px}
 .bt-site-root{font-weight:700}
 .bt-site-wordmark{color:var(--hot,#f0f6fc);font-size:15px;letter-spacing:-.01em;text-transform:lowercase}
 .bt-site-segment [aria-current="page"]{color:var(--fg,#c9d1d9)}
-.bt-site-mark-slot{display:inline-flex;width:var(--bt-brand-mark-size);height:var(--bt-brand-mark-size);padding:1px;margin-right:var(--bt-brand-mark-gap);border-radius:7px;flex:0 0 auto;transform:translate(var(--bt-brand-mark-x),var(--bt-brand-mark-y));opacity:var(--bt-brand-mark-opacity);background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,248,218,.10)}
-html[data-bt-brand-header="off"] .bt-site-mark-slot{display:none}
-html[data-bt-brand-header="on"] .bt-site-mark-slot[data-ready="1"]{display:inline-flex}
-.bt-site-mark{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(1.12) contrast(1.08) drop-shadow(0 0 1px rgba(255,248,218,.82)) drop-shadow(0 0 7px rgba(255,248,218,.16))}
+.bt-site-mark-slot{display:inline-flex;width:36px;height:36px;margin-right:8px;padding:0;border:0;border-radius:0;flex:0 0 36px;background:none;box-shadow:none;transform:none;opacity:1}
+.bt-site-mark{display:block;width:100%;height:100%;object-fit:contain;filter:none}
+.bt-site-mark-slot[data-custom="1"]{width:var(--bt-brand-mark-size);height:var(--bt-brand-mark-size);margin-right:var(--bt-brand-mark-gap);flex-basis:var(--bt-brand-mark-size);transform:translate(var(--bt-brand-mark-x),var(--bt-brand-mark-y));opacity:var(--bt-brand-mark-opacity)}
+.bt-site-mark-slot[data-custom="1"] .bt-site-mark{filter:drop-shadow(0 0 var(--bt-brand-mark-glow) rgba(255,248,218,.72))}
 .bt-site-primary{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:4px 14px;text-align:right;font-size:13px;line-height:1.2}
 .bt-site-primary a{white-space:nowrap;color:var(--soft,#8b949e)}
 .bt-site-primary a:hover,.bt-site-primary a:focus-visible,.bt-site-path a:hover,.bt-site-path a:focus-visible{color:var(--hot,#f0f6fc)}
@@ -60,7 +62,12 @@ html[data-bt-brand-header="on"] .bt-site-mark-slot[data-ready="1"]{display:inlin
   .bt-site-header{grid-template-columns:1fr;align-items:start;gap:5px;min-height:0;padding:6px 0 7px;margin-bottom:12px}
   .bt-site-primary{justify-content:flex-start;text-align:left;gap:4px 12px;font-size:12.5px}
   .bt-site-wordmark{font-size:14.5px}
-  .bt-site-mark-slot{width:32px;height:32px}
+  .bt-site-mark-slot{width:32px;height:32px;flex-basis:32px}
+  .bt-site-mark-slot[data-custom="1"]{width:var(--bt-brand-mark-size);height:var(--bt-brand-mark-size);flex-basis:var(--bt-brand-mark-size)}
+}
+@media(max-width:820px){
+  html,body{overflow-x:clip!important}
+  .terminal.home{display:block;height:auto;min-height:100svh}
 }
 @media(max-width:520px){
   html{scroll-padding-top:96px}
@@ -69,7 +76,8 @@ html[data-bt-brand-header="on"] .bt-site-mark-slot[data-ready="1"]{display:inlin
   .bt-site-path li+li::before{margin:0 5px}
   .bt-site-primary{gap:4px 10px;font-size:12px}
   .bt-site-wordmark{font-size:14px}
-  .bt-site-mark-slot{width:30px;height:30px;margin-right:6px}
+  .bt-site-mark-slot{width:30px;height:30px;flex-basis:30px;margin-right:6px}
+  .bt-site-mark-slot[data-custom="1"]{width:var(--bt-brand-mark-size);height:var(--bt-brand-mark-size);flex-basis:var(--bt-brand-mark-size);margin-right:var(--bt-brand-mark-gap)}
   .bt-site-path .bt-site-segment:last-child{white-space:normal;overflow-wrap:break-word;word-break:normal}
   .bt-brand-background-asset{left:35%;width:min(112vw,820px);opacity:.17}
   .bt-brand-mask{background:rgba(0,0,0,.38)}
