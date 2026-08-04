@@ -1,0 +1,7 @@
+.guide-page .guide-header{grid-template-columns:minmax(0,1fr)}
+.guide-page .guide-header.has-guide-icon{grid-template-columns:62px minmax(0,1fr);align-items:start}
+.guide-page .guide-header.has-guide-icon .guide-icon{grid-column:1;grid-row:1;align-self:start}
+.guide-page .guide-header.has-guide-icon .guide-heading{grid-column:2;grid-row:1;min-width:0}
+@media(max-width:700px){
+  .guide-page .guide-header.has-guide-icon{grid-template-columns:48px minmax(0,1fr)}
+}
