@@ -1,0 +1,252 @@
+--- a/public/bt-site-shell.css
++++ b/public/bt-site-shell.css
+@@ -1,10 +1,10 @@
+ :root{
+-  --bt-brand-mark-size:38px;
+-  --bt-brand-mark-gap:7px;
++  --bt-brand-mark-size:36px;
++  --bt-brand-mark-gap:8px;
+   --bt-brand-mark-x:0px;
+-  --bt-brand-mark-y:-1px;
++  --bt-brand-mark-y:0px;
+   --bt-brand-mark-opacity:1;
+-  --bt-brand-mark-glow:8px;
++  --bt-brand-mark-glow:0px;
+   --bt-brand-bg-opacity:.23;
+   --bt-brand-bg-scale:1.1;
+   --bt-brand-bg-x:24%;
+@@ -16,6 +16,7 @@
+ :where([id]){scroll-margin-top:68px}
+ .bt-site-header{
+   position:sticky;
++  position:-webkit-sticky;
+   top:0;
+   z-index:1000;
+   display:grid;
+@@ -30,7 +31,9 @@
+   box-shadow:0 9px 22px rgba(0,0,0,.30);
+   -webkit-backdrop-filter:blur(10px) saturate(.82);
+   backdrop-filter:blur(10px) saturate(.82);
+-  isolation:isolate
++  isolation:isolate;
++  align-self:start;
++  width:100%
+ }
+ .bt-site-path,.bt-site-primary{min-width:0;font:inherit}
+ .bt-site-path ol{display:flex;flex-wrap:wrap;align-items:center;gap:0;min-width:0;margin:0;padding:0;list-style:none}
+@@ -40,10 +43,10 @@
+ .bt-site-root{font-weight:700}
+ .bt-site-wordmark{color:var(--hot,#f0f6fc);font-size:15px;letter-spacing:-.01em;text-transform:lowercase}
+ .bt-site-segment [aria-current="page"]{color:var(--fg,#c9d1d9)}
+-.bt-site-mark-slot{display:inline-flex;width:var(--bt-brand-mark-size);height:var(--bt-brand-mark-size);padding:1px;margin-right:var(--bt-brand-mark-gap);border-radius:7px;flex:0 0 auto;transform:translate(var(--bt-brand-mark-x),var(--bt-brand-mark-y));opacity:var(--bt-brand-mark-opacity);background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,248,218,.10)}
+-html[data-bt-brand-header="off"] .bt-site-mark-slot{display:none}
+-html[data-bt-brand-header="on"] .bt-site-mark-slot[data-ready="1"]{display:inline-flex}
+-.bt-site-mark{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(1.12) contrast(1.08) drop-shadow(0 0 1px rgba(255,248,218,.82)) drop-shadow(0 0 7px rgba(255,248,218,.16))}
++.bt-site-mark-slot{display:inline-flex;width:36px;height:36px;margin-right:8px;padding:0;border:0;border-radius:0;flex:0 0 36px;background:none;box-shadow:none;transform:none;opacity:1}
++.bt-site-mark{display:block;width:100%;height:100%;object-fit:contain;filter:none}
++.bt-site-mark-slot[data-custom="1"]{width:var(--bt-brand-mark-size);height:var(--bt-brand-mark-size);margin-right:var(--bt-brand-mark-gap);flex-basis:var(--bt-brand-mark-size);transform:translate(var(--bt-brand-mark-x),var(--bt-brand-mark-y));opacity:var(--bt-brand-mark-opacity)}
++.bt-site-mark-slot[data-custom="1"] .bt-site-mark{filter:drop-shadow(0 0 var(--bt-brand-mark-glow) rgba(255,248,218,.72))}
+ .bt-site-primary{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:4px 14px;text-align:right;font-size:13px;line-height:1.2}
+ .bt-site-primary a{white-space:nowrap;color:var(--soft,#8b949e)}
+ .bt-site-primary a:hover,.bt-site-primary a:focus-visible,.bt-site-path a:hover,.bt-site-path a:focus-visible{color:var(--hot,#f0f6fc)}
+@@ -60,7 +63,8 @@
+   .bt-site-header{grid-template-columns:1fr;align-items:start;gap:5px;min-height:0;padding:6px 0 7px;margin-bottom:12px}
+   .bt-site-primary{justify-content:flex-start;text-align:left;gap:4px 12px;font-size:12.5px}
+   .bt-site-wordmark{font-size:14.5px}
+-  .bt-site-mark-slot{width:32px;height:32px}
++  .bt-site-mark-slot{width:32px;height:32px;flex-basis:32px}
++  .bt-site-mark-slot[data-custom="1"]{width:var(--bt-brand-mark-size);height:var(--bt-brand-mark-size);flex-basis:var(--bt-brand-mark-size)}
+ }
+ @media(max-width:520px){
+   html{scroll-padding-top:96px}
+@@ -69,7 +73,8 @@
+   .bt-site-path li+li::before{margin:0 5px}
+   .bt-site-primary{gap:4px 10px;font-size:12px}
+   .bt-site-wordmark{font-size:14px}
+-  .bt-site-mark-slot{width:30px;height:30px;margin-right:6px}
++  .bt-site-mark-slot{width:30px;height:30px;flex-basis:30px;margin-right:6px}
++  .bt-site-mark-slot[data-custom="1"]{width:var(--bt-brand-mark-size);height:var(--bt-brand-mark-size);flex-basis:var(--bt-brand-mark-size);margin-right:var(--bt-brand-mark-gap)}
+   .bt-site-path .bt-site-segment:last-child{white-space:normal;overflow-wrap:break-word;word-break:normal}
+   .bt-brand-background-asset{left:35%;width:min(112vw,820px);opacity:.17}
+   .bt-brand-mask{background:rgba(0,0,0,.38)}
+--- a/public/bassthermal-brand-lab.v3.js
++++ b/public/bassthermal-brand-lab.v3.js
+@@ -340,7 +340,6 @@
+   function apply() {
+     state.settings = sanitize(state.settings);
+     var root = document.documentElement;
+-    root.dataset.btBrandHeader = state.settings.headerEnabled && state.assets.header ? 'on' : 'off';
+     root.style.setProperty('--bt-brand-mark-size', state.settings.markSize + 'px');
+     root.style.setProperty('--bt-brand-mark-gap', state.settings.markGap + 'px');
+     root.style.setProperty('--bt-brand-mark-x', state.settings.markX + 'px');
+@@ -357,13 +356,17 @@
+ 
+     document.querySelectorAll('.bt-site-mark-slot').forEach(function (slot) {
+       var image = slot.querySelector('.bt-site-mark');
+-      if (state.assets.header && state.urls.header) {
++      if (!image) return;
++      var defaultSrc = image.dataset.defaultSrc || image.getAttribute('src') || '';
++      var useCustom = state.settings.headerEnabled && state.assets.header && state.urls.header;
++      if (useCustom) {
+         image.src = state.urls.header;
+-        slot.dataset.ready = '1';
++        slot.dataset.custom = '1';
+       } else {
+-        image.removeAttribute('src');
+-        slot.dataset.ready = '0';
++        if (defaultSrc) image.src = defaultSrc;
++        slot.dataset.custom = '0';
+       }
++      slot.dataset.ready = '1';
+     });
+     renderBackground();
+     saveSettings();
+@@ -411,10 +414,10 @@
+     panel.id = 'btBrandLab';
+     panel.setAttribute('aria-label', 'Brand Lab');
+     panel.innerHTML = [
+-      '<header class="btbl-head"><div><strong>Brand Lab</strong><div>Independent mark, background media and exact project package</div></div><button type="button" data-action="close" aria-label="Close">×</button></header>',
++      '<header class="btbl-head"><div><strong>Brand Lab</strong><div>Optional logo override, background media and exact project package</div></div><button type="button" data-action="close" aria-label="Close">×</button></header>',
+       '<div class="btbl-body">',
+-        '<section><h2>Header</h2><div class="btbl-asset"><div><strong data-summary="header">none</strong><small>PNG · JPEG · WebP · GIF · max 8 MB</small></div><div><button type="button" data-action="choose-header">Choose</button><button type="button" data-action="clear-header">Clear</button></div></div>',
+-        '<label class="btbl-check"><input type="checkbox" data-setting="headerEnabled"> Show header mark</label>',
++        '<section><h2>Logo override</h2><div class="btbl-asset"><div><strong data-summary="header">none</strong><small>PNG · JPEG · WebP · GIF · max 8 MB</small></div><div><button type="button" data-action="choose-header">Choose</button><button type="button" data-action="clear-header">Clear</button></div></div>',
++        '<label class="btbl-check"><input type="checkbox" data-setting="headerEnabled"> Use custom logo</label>',
+         range('Size', 'markSize', 16, 72, 1), range('Gap', 'markGap', 0, 32, 1), range('Horizontal', 'markX', -20, 20, 1), range('Vertical', 'markY', -20, 20, 1), range('Opacity', 'markOpacity', .1, 1, .05), range('Glow', 'markGlow', 0, 24, 1),
+         '</section>',
+         '<section><h2>Background</h2><div class="btbl-asset"><div><strong data-summary="background">none</strong><small>PNG · JPEG · WebP · GIF · MP4 · WebM · max 56 MB</small></div><div><button type="button" data-action="choose-background">Choose</button><button type="button" data-action="clear-background">Clear</button></div></div>',
+@@ -493,7 +496,7 @@
+     state.settings.backgroundEnabled = false;
+     state.repositioning = false;
+     apply();
+-    setStatus('All brand media disabled', 'ok');
++    setStatus('Custom logo and background disabled', 'ok');
+   }
+ 
+   function beginDrag(event) {
+--- a/tools/build-public-brand-shell.mjs
++++ b/tools/build-public-brand-shell.mjs
+@@ -4,9 +4,10 @@
+ const root = process.cwd();
+ const publicRoot = path.join(root, 'public');
+ const validateOnly = process.argv.includes('--validate-only');
+-const BRAND_ASSET = '/assets/brand/bassthermal-mark-v1.webp?v=2';
++const HEADER_ASSET = '/assets/brand/bassthermal-header-mark-v1.png?v=1';
++const BACKGROUND_ASSET = '/assets/brand/bassthermal-mark-v1.webp?v=2';
+ const FAVICON = '/favicon-32x32.png?v=2';
+-const SHELL_CSS = '/bt-site-shell.css?v=4';
++const SHELL_CSS = '/bt-site-shell.css?v=5';
+ const BRAND_LOADER = '/bassthermal-brand-lab-loader.v3.js?v=5';
+ const SITE_VISITS = '/site-visits.js?v=2';
+ const SHELL_VERSION = '1.2.0';
+@@ -103,7 +104,7 @@
+ function headerMarkup(route, html) {
+   const items = routeModel(route, html).map((item, index) => {
+     const mark = index === 0
+-      ? `<span class="bt-site-mark-slot" data-ready="1" aria-hidden="true"><img class="bt-site-mark" src="${BRAND_ASSET}" alt="" width="32" height="32" decoding="async" fetchpriority="high"></span>`
++      ? `<span class="bt-site-mark-slot" data-ready="1" aria-hidden="true"><img class="bt-site-mark" src="${HEADER_ASSET}" data-default-src="${HEADER_ASSET}" alt="" width="36" height="36" decoding="async" fetchpriority="high"></span>`
+       : '';
+     const content = item.href
+       ? `<a href="${item.href}"${index === 0 ? ' class="bt-site-wordmark"' : ''}>${escapeHtml(item.label)}</a>`
+@@ -114,7 +115,7 @@
+ }
+ 
+ function backgroundMarkup() {
+-  return `<div id="btBrandBackground" data-active="1" data-default="1" aria-hidden="true"><div class="bt-brand-media"><img class="bt-brand-background-asset" src="${BRAND_ASSET}" alt="" decoding="async"></div><div class="bt-brand-mask"></div></div>`;
++  return `<div id="btBrandBackground" data-active="1" data-default="1" aria-hidden="true"><div class="bt-brand-media"><img class="bt-brand-background-asset" src="${BACKGROUND_ASSET}" alt="" decoding="async"></div><div class="bt-brand-mask"></div></div>`;
+ }
+ 
+ function stripExistingShell(html) {
+@@ -175,8 +176,8 @@
+     [(html.match(/data-bt-brand-lab-loader="1"/g) || []).length === 1, 'must contain exactly one experimental Brand Lab loader'],
+     [html.includes(SITE_VISITS), 'must contain the site visits runtime'],
+     [html.includes(`data-bt-site-shell="${SHELL_VERSION}"`), 'must contain current shell version'],
+-    [html.includes(`class="bt-site-mark" src="${BRAND_ASSET}"`), 'must contain selected public header mark'],
+-    [html.includes(`class="bt-brand-background-asset" src="${BRAND_ASSET}"`), 'must contain selected permanent background'],
++    [html.includes(`class="bt-site-mark" src="${HEADER_ASSET}" data-default-src="${HEADER_ASSET}"`), 'must contain permanent public header mark'],
++    [html.includes(`class="bt-brand-background-asset" src="${BACKGROUND_ASSET}"`), 'must contain selected permanent background'],
+     [!html.includes('class="topline"'), 'must not retain a legacy top-line header'],
+     [!html.includes('class="product-breadcrumb"'), 'must not retain product breadcrumb'],
+     [!html.includes('class="guide-breadcrumb"'), 'must not retain guide breadcrumb'],
+--- a/tools/test-site-shell.mjs
++++ b/tools/test-site-shell.mjs
+@@ -18,14 +18,17 @@
+ const css = fs.readFileSync(new URL('../public/bt-site-shell.css', import.meta.url), 'utf8');
+ for (const value of [
+   'bt-site-header', 'aria-label', 'Breadcrumb', 'aria-current', 'bassthermal',
+-  'Microsoft Store', 'Google Play', '/assets/brand/bassthermal-mark-v1.webp?v=2',
++  'Microsoft Store', 'Google Play', '/assets/brand/bassthermal-header-mark-v1.png?v=1',
+   'stripLegacyIdentity', 'injectHead', 'data-bt-site-shell="${SHELL_VERSION}"'
+ ]) assert(builder.includes(value), `missing static shell builder contract: ${value}`);
+ assert(builder.includes('class="product-breadcrumb"'));
+ assert(builder.includes('class="guide-breadcrumb"'));
+-assert(builder.includes('/bt-site-shell.css?v=4'));
++assert(builder.includes('/bt-site-shell.css?v=5'));
+ assert(builder.includes('/bassthermal-brand-lab-loader.v3.js?v=5'));
+ assert(css.includes('position:sticky'));
++assert(css.includes('position:-webkit-sticky'));
++assert(css.includes('align-self:start'));
++assert(css.includes('width:100%'));
+ assert(css.includes('top:0'));
+ assert(css.includes('min-height:52px'));
+ assert(css.includes('background:rgba(0,0,0,.985)'));
+@@ -36,6 +39,10 @@
+ assert(css.includes('#btBrandBackground[data-active="1"]'));
+ assert(!css.includes('overflow-wrap:anywhere'));
+ assert(!css.includes('word-break:break-all'));
++assert(!css.includes('data-bt-brand-header'));
++assert(!css.includes('background:rgba(255,255,255,.035)'));
++assert(!css.includes('box-shadow:inset 0 0 0 1px'));
++assert(css.includes('.bt-site-mark{display:block;width:100%;height:100%;object-fit:contain;filter:none}'));
+ assert(!css.includes('.site-shell,main,footer,.terminal-overlay,.asset-panel'));
+ assert(!builder.includes('window.BT_SITE_SHELL'));
+ 
+--- a/tools/test-static-brand-shell.mjs
++++ b/tools/test-static-brand-shell.mjs
+@@ -35,9 +35,9 @@
+   assert.equal((html.match(/data-bt-site-shell-style="1"/g) || []).length, 1, `${relative}: one shell stylesheet`);
+   assert.equal((html.match(/data-bt-brand-lab-loader="1"/g) || []).length, 1, `${relative}: one experimental loader`);
+   assert(html.includes('data-bt-site-shell="1.2.0"'), `${relative}: shell 1.2.0`);
+-  assert(html.includes('class="bt-site-mark" src="/assets/brand/bassthermal-mark-v1.webp?v=2"'), `${relative}: selected mark`);
++  assert(html.includes('class="bt-site-mark" src="/assets/brand/bassthermal-header-mark-v1.png?v=1" data-default-src="/assets/brand/bassthermal-header-mark-v1.png?v=1"'), `${relative}: permanent header mark`);
+   assert(html.includes('class="bt-brand-background-asset" src="/assets/brand/bassthermal-mark-v1.webp?v=2"'), `${relative}: selected background`);
+-  assert(html.includes('/bt-site-shell.css?v=4'), `${relative}: cache-busted shell CSS`);
++  assert(html.includes('/bt-site-shell.css?v=5'), `${relative}: cache-busted shell CSS`);
+   assert(html.includes('/bassthermal-brand-lab-loader.v3.js?v=5'), `${relative}: experimental loader`);
+   assert(!html.includes('class="topline"'), `${relative}: no legacy top-line header`);
+   assert(!html.includes('class="product-breadcrumb"'), `${relative}: no product breadcrumb`);
+@@ -47,7 +47,7 @@
+ }
+ 
+ const css = read('public/bt-site-shell.css');
+-for (const contract of ['position:sticky', 'top:0', 'min-height:52px', '--bt-brand-mark-size:38px', '@media(max-width:1100px)', '@media(max-width:520px)']) {
++for (const contract of ['position:sticky', 'top:0', 'min-height:52px', '--bt-brand-mark-size:36px', '@media(max-width:1100px)', '@media(max-width:520px)']) {
+   assert(css.includes(contract), `shell CSS missing ${contract}`);
+ }
+ 
+@@ -65,6 +65,10 @@
+ }
+ 
+ const brand = fs.readFileSync(path.join(root, 'public/assets/brand/bassthermal-mark-v1.webp'));
++const headerMark = fs.readFileSync(path.join(root, 'public/assets/brand/bassthermal-header-mark-v1.png'));
++assert.equal(headerMark.readUInt32BE(16), 256, 'header mark width');
++assert.equal(headerMark.readUInt32BE(20), 256, 'header mark height');
++assert(headerMark.length > 1000, 'header mark must contain real image bytes');
+ assert.equal(brand.length, 18112, 'selected mark byte count');
+ assert.equal(crypto.createHash('sha256').update(brand).digest('hex'), '5c2eed9b056ac6c65886cfa08d26012196df62b1b3dfcfbd8607f93a1e95c87b', 'selected mark SHA-256');
+ const favicon = fs.readFileSync(path.join(root, 'public/favicon-32x32.png'));
+--- a/tools/test-brand-lab.mjs
++++ b/tools/test-brand-lab.mjs
+@@ -20,6 +20,12 @@
+ assert(!loader.includes('indexedDB.open'));
+ assert(!loader.includes('fetch(BRAND_ASSET'));
+ assert(!runtime.includes('fetch('));
++assert(runtime.includes('image.dataset.defaultSrc'));
++assert(runtime.includes("slot.dataset.custom = '1'"));
++assert(runtime.includes("slot.dataset.custom = '0'"));
++assert(!runtime.includes('image.removeAttribute(\'src\')'));
++assert(!runtime.includes('root.dataset.btBrandHeader'));
++assert(runtime.includes('Use custom logo'));
+ assert(css.includes('#btBrandBackground'));
+ assert(css.includes('[data-reposition="1"]'));
+ console.log('brand lab tests passed');
