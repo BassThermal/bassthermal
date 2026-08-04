@@ -5,6 +5,15 @@
     return slug ? window.BT_STORE_ASSETS?.apps?.[slug] : null;
   }
 
+  function ensureLayoutStyles() {
+    if (document.querySelector('link[data-guide-layout-style]')) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/guide-page-layout-v2.css?v=1';
+    link.dataset.guideLayoutStyle = '1';
+    document.head.append(link);
+  }
+
   function ensureMediaStyles() {
     if (document.querySelector('link[data-guide-media-style]')) return;
     const link = document.createElement('link');
@@ -23,7 +32,7 @@
         script.src = '/screenshot-explorer.js?v=1';
         script.defer = true;
         script.dataset.btScreenshotExplorer = '1';
-        document.head.append(script);
+        document.head.appendChild(script);
       }
       script.addEventListener('load', () => window.BTScreenshotExplorer ? resolve(window.BTScreenshotExplorer) : reject(new Error('Screenshot explorer unavailable')), { once: true });
       script.addEventListener('error', reject, { once: true });
@@ -97,6 +106,7 @@
     }
   }
 
+  ensureLayoutStyles();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
   else init();
 })();
