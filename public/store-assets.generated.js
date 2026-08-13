@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-08-13T17:54:41.611Z",
+  "generatedAt": "2026-08-13T19:39:09.185Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -102,8 +102,11 @@ window.BT_STORE_ASSETS = {
       "screenshots": {
         "android": [],
         "windows": [
-          "/assets/apps/icon-pack-builder/windows/shot-1.png",
-          "/assets/apps/icon-pack-builder/windows/shot-2.png"
+          "/assets/apps/icon-pack-builder/windows/shot-01.png",
+          "/assets/apps/icon-pack-builder/windows/shot-02.png",
+          "/assets/apps/icon-pack-builder/windows/shot-03.png",
+          "/assets/apps/icon-pack-builder/windows/shot-04.png",
+          "/assets/apps/icon-pack-builder/windows/shot-05.png"
         ],
         "web": []
       }
