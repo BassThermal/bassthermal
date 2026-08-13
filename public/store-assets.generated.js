@@ -1,5 +1,5 @@
 window.BT_STORE_ASSETS = {
-  "generatedAt": "2026-08-03T17:02:58.406Z",
+  "generatedAt": "2026-08-12T13:36:57.942Z",
   "source": "tools/build-asset-manifest.mjs manual-local-scan",
   "apps": {
     "coptic-dictionary": {
@@ -58,7 +58,7 @@ window.BT_STORE_ASSETS = {
       "icon": {
         "fallback": "/assets/apps/dualticker/android/icon.png",
         "android": "/assets/apps/dualticker/android/icon.png",
-        "windows": null,
+        "windows": "/assets/apps/dualticker/windows/icon.png",
         "web": null
       },
       "screenshots": {
