@@ -1,0 +1,27 @@
+name: ISBN Manager website
+
+on:
+  pull_request:
+    paths:
+      - 'tools/isbn-manager-web.template.html'
+      - 'tools/build-isbn-manager-website.mjs'
+      - 'tools/test-isbn-manager-website.mjs'
+      - 'package.json'
+      - '.github/workflows/isbnmanager-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Publish static routes
+        run: npm run isbnmanager:build
+      - name: Validate routes and publishing boundaries
+        run: npm run isbnmanager:validate
