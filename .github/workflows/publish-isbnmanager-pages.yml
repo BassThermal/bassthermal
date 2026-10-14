@@ -1,0 +1,65 @@
+name: Publish ISBN Manager static pages
+
+# The ISBN Manager builder originally ran only inside CI/Cloudflare builds.
+# This workflow also commits the generated public files to main, so hosts
+# serving /public directly do not return 404 for /isbnmanager/.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/isbn-manager-web.template.html'
+      - 'tools/build-isbn-manager-website.mjs'
+      - 'tools/test-isbn-manager-website.mjs'
+      - '.github/workflows/publish-isbnmanager-pages.yml'
+  pull_request:
+    paths:
+      - 'tools/isbn-manager-web.template.html'
+      - 'tools/build-isbn-manager-website.mjs'
+      - 'tools/test-isbn-manager-website.mjs'
+      - '.github/workflows/publish-isbnmanager-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: isbnmanager-pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Generate ISBN Manager website into public assets
+        run: npm run isbnmanager:build
+
+      - name: Validate every published route
+        run: npm run isbnmanager:validate
+
+      - name: Save generated website for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: isbnmanager-static-pages
+          path: public/isbnmanager/
+          retention-days: 7
+
+      - name: Commit built pages to main
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && github.actor != 'github-actions[bot]'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/isbnmanager public/robots.txt
+          if git diff --cached --quiet; then
+            echo "ISBN Manager pages already materialized."
+          else
+            git commit -m "Publish generated ISBN Manager website [skip ci]"
+            git push origin HEAD:main
+          fi
