@@ -46,17 +46,6 @@ for (const [relative, labels] of routes) {
   for (const label of labels) assert(html.includes(`>${label}<`), `${relative}: path label ${label}`);
 }
 
-const isbnPage = read('public/apps/isbn-manager/index.html');
-assert.equal((isbnPage.match(/class="bt-site-header"/g) || []).length, 1, 'ISBN Manager: exactly one bassthermal header');
-assert.match(isbnPage, /<div id="btStickyProductHeader" class="bt-isbn-brand-bar">\s*<header class="bt-site-header"/, 'ISBN Manager: header must live in root sticky mount');
-assert(isbnPage.indexOf('id="btStickyProductHeader"') < isbnPage.indexOf('<main id="main">'), 'ISBN Manager: parent header precedes product content');
-assert(isbnPage.includes('body[data-bt-isbn-brand-bridge] > header#site-header'), 'ISBN Manager: original product navigation must be visually hidden, not removed from script-dependent DOM');
-assert(isbnPage.includes('id="import-template-data"'), 'ISBN Manager: preserve template downloads');
-assert(isbnPage.includes('/site-visits.js?v=2'), 'ISBN Manager: preserve site visits tracking');
-assert(isbnPage.includes('id="app-preview"'), 'ISBN Manager: preserve interactive preview');
-assert(isbnPage.includes('href="https://isbnmanager.com/"'), 'ISBN Manager: canonical points to the authoritative product domain');
-assert(!isbnPage.includes('class="product-header"'), 'ISBN Manager: legacy product overview is removed');
-
 const css = read('public/bt-site-shell.css');
 for (const contract of ['position:sticky', 'top:0', 'min-height:52px', '--bt-brand-mark-size:36px', '@media(max-width:1100px)', '@media(max-width:520px)']) {
   assert(css.includes(contract), `shell CSS missing ${contract}`);

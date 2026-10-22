@@ -84,7 +84,6 @@ function routeModel(route, html) {
   if (route === '/') return [rootItem];
   const parts = route.split('/').filter(Boolean);
   if (parts[0] === 'apps') {
-    if (route === '/apps/isbn-manager/' && html.includes('id="btStickyProductHeader"')) return [rootItem, { label: 'ISBN Manager', current: true }];
     const label = firstText(html, [/<h1 class="product-title">([\s\S]*?)<\/h1>/i, /<h1(?:\s[^>]*)?>([\s\S]*?)<\/h1>/i]) || titleCase(parts[1]);
     return [rootItem, { label, current: true }];
   }
@@ -164,14 +163,7 @@ function transform(html, route) {
   if (!/<body\b[^>]*>/i.test(output)) throw new Error('body tag missing');
   output = output.replace(/(<body\b[^>]*>)/i, `$1\n  ${backgroundMarkup()}`);
   if (!/<main\b[^>]*>/i.test(output)) throw new Error('main tag missing');
-  if (route === '/apps/isbn-manager/' && output.includes('id="btStickyProductHeader"')) {
-    // Keep the parent-brand header sticky for the entire page, including the product footer.
-    const mount = /(<div id="btStickyProductHeader"[^>]*>)(\s*)(<\/div>)/i;
-    if (!mount.test(output)) throw new Error('ISBN Manager sticky header mount missing');
-    output = output.replace(mount, (_match, open, _space, close) => `${open}${headerMarkup(route, output)}${close}`);
-  } else {
-    output = output.replace(/(<main\b[^>]*>)/i, `$1\n    ${headerMarkup(route, output)}`);
-  }
+  output = output.replace(/(<main\b[^>]*>)/i, `$1\n    ${headerMarkup(route, output)}`);
   return output;
 }
 

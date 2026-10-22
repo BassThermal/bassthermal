@@ -6,7 +6,8 @@ const appSlugs = ['dualticker','retrofy','coptic-dictionary','icon-pack-builder'
 
 function expectRedirect(path, target, method = 'GET', host = 'bassthermal.com') {
   const out = resolveRedirectUrl(`https://${host}${path}`, method);
-  assert.equal(out, `https://bassthermal.com${target}`, `${method} ${host}${path}`);
+  const expected = target.startsWith('https://') ? target : `https://bassthermal.com${target}`;
+  assert.equal(out, expected, `${method} ${host}${path}`);
   assert.equal(status, 308);
   assert.equal(resolveRedirectUrl(out, method), null, `redirect chain for ${path}`);
 }
@@ -26,15 +27,24 @@ expectRedirect('/apps', '/', 'HEAD');
 expectRedirect('/tools/', '/', 'HEAD');
 
 for (const [source, target] of Object.entries(LEGACY_REDIRECTS)) {
-  expectRedirect(source, target);
-  if (!source.endsWith('/')) expectRedirect(`${source}/`, target);
-  expectRedirect(`${source}?source=test`, `${target}?source=test`);
-  expectRedirect(source, target, 'HEAD');
-  expectRedirect(`${source}?source=test`, `${target}?source=test`, 'GET', 'www.bassthermal.com');
+  const destination = target === '/apps/isbn-manager/' ? 'https://isbnmanager.com/' : target;
+  expectRedirect(source, destination);
+  if (!source.endsWith('/')) expectRedirect(`${source}/`, destination);
+  expectRedirect(`${source}?source=test`, `${destination}?source=test`);
+  expectRedirect(source, destination, 'HEAD');
+  expectRedirect(`${source}?source=test`, `${destination}?source=test`, 'GET', 'www.bassthermal.com');
 }
 
 assert.equal(resolveRedirectUrl('https://www.bassthermal.com/tools/find-hidden-rss-feeds/?source=test'), 'https://bassthermal.com/apps/rss-crawler/?source=test');
-for (const slug of appSlugs) expectUntouched(`/apps/${slug}/`);
+for (const slug of appSlugs.filter((slug) => slug !== 'isbn-manager')) expectUntouched(`/apps/${slug}/`);
+for (const route of ['/apps/isbn-manager', '/apps/isbn-manager/', '/apps/isbn-manager/index.html']) {
+  expectRedirect(route, 'https://isbnmanager.com/');
+  expectRedirect(route, 'https://isbnmanager.com/', 'HEAD');
+  expectRedirect(route + '?campaign=publisher', 'https://isbnmanager.com/?campaign=publisher');
+  expectRedirect(route, 'https://isbnmanager.com/', 'GET', 'www.bassthermal.com');
+}
+expectUntouched('/apps/isbn-manager/', 'POST');
+assert.equal(resolveRedirectUrl('https://isbnmanager.com/'), null, 'external target must not redirect again');
 for (const path of ['/tools/unknown-page/','/tools-extra/','/bt-tools-feed.v1.json','/bt-tools-overlay.v1.js','/style.css']) expectUntouched(path);
 
 for (const host of ['bassthermal.com', 'www.bassthermal.com']) {
