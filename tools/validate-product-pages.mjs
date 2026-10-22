@@ -31,6 +31,22 @@ function validateTags(file, html){
 }
 for (const [slug,title,file] of pages){
   const html = fs.readFileSync(file,'utf8');
+  if (slug === 'isbn-manager') {
+    // The dedicated site intentionally replaces the common BassThermal product template.
+    for (const marker of [
+      'data-bt-isbn-brand-bridge="1"',
+      'id="btStickyProductHeader"',
+      '<main id="main">',
+      'id="import-template-data"',
+      'id="app-preview"',
+      'rel="canonical" href="https://isbnmanager.com/"',
+      'Your books. <em>In good order.</em>',
+      'href="https://apps.microsoft.com/detail/9nr0nblx10fb"',
+      '/site-visits.js?v=2'
+    ]) if (!html.includes(marker)) fail(file, `missing ISBN Manager branded site contract: ${marker}`);
+    if ((html.match(/<h1\\b[^>]*>/gi) || []).length !== 1) fail(file, 'dedicated ISBN Manager page needs exactly one h1');
+    continue;
+  }
   validateTags(file, html);
   const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
   if (h1s.length !== 1) fail(file, `expected exactly one h1, found ${h1s.length}`);
