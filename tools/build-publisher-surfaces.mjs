@@ -100,7 +100,6 @@ function injectRuntime(html) {
 const htmlFiles = walkHtml(path.join(root, 'public'));
 for (const absolute of htmlFiles) {
   const current = fs.readFileSync(absolute, 'utf8');
-  if (current.includes('data-bt-isbn-brand-bridge="1"')) continue; // Preserve canonical product styling and script behavior.
   const next = injectRuntime(current);
   if (!validateOnly && next !== current) fs.writeFileSync(absolute, next);
 }

@@ -186,17 +186,7 @@ for (const app of catalog.apps) {
   const source = content.products[app.slug];
   ensure(Boolean(source), `missing content for ${app.slug}`);
   if (!source) continue;
-  if (app.slug === 'isbn-manager') {
-    // This product route is a maintained snapshot of the standalone ISBN Manager site.
-    // The generic product generator must never overwrite the full presentation.
-    const brandedPage = path.join(publicRoot, 'apps/isbn-manager/index.html');
-    ensure(
-      fs.existsSync(brandedPage) && fs.readFileSync(brandedPage, 'utf8').includes('data-bt-isbn-brand-bridge="1"'),
-      'ISBN Manager branded product page missing; refusing to replace it with a generic product page'
-    );
-  } else {
-    write(`apps/${app.slug}/index.html`, productPage(app, source));
-  }
+  write(`apps/${app.slug}/index.html`, productPage(app, source));
   write(`${app.links.privacy.replace(/^\//, '')}index.html`, privacyPage(app, source));
 }
 write('about/index.html', aboutPage());

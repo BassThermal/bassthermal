@@ -1,3 +1,6 @@
+const ISBN_MANAGER_SITE = 'https://isbnmanager.com/';
+const ISBN_MANAGER_PATHS = new Set(['/apps/isbn-manager', '/apps/isbn-manager/', '/apps/isbn-manager/index.html']);
+
 export const LEGACY_REDIRECTS = Object.freeze({
   "/apps": "/",
   "/apps/": "/",
@@ -47,6 +50,12 @@ export function resolveRedirectUrl(inputUrl, method = "GET") {
   if (isApiPath(url.pathname)) return null;
 
   const targetPath = legacyTargetForPath(url.pathname);
+  // The product domain is authoritative; bypass the duplicated page in one hop.
+  if (ISBN_MANAGER_PATHS.has(url.pathname) || targetPath === '/apps/isbn-manager/') {
+    const destination = new URL(ISBN_MANAGER_SITE);
+    destination.search = url.search;
+    return destination.toString();
+  }
   const canonicalHost = url.hostname === "www.bassthermal.com";
   if (!targetPath && !canonicalHost) return null;
   url.protocol = "https:";
