@@ -52,6 +52,7 @@ assert.match(isbnPage, /<div id="btStickyProductHeader" class="bt-isbn-brand-bar
 assert(isbnPage.indexOf('id="btStickyProductHeader"') < isbnPage.indexOf('<main id="main">'), 'ISBN Manager: parent header precedes product content');
 assert(isbnPage.includes('body[data-bt-isbn-brand-bridge] > header#site-header'), 'ISBN Manager: original product navigation must be visually hidden, not removed from script-dependent DOM');
 assert(isbnPage.includes('id="import-template-data"'), 'ISBN Manager: preserve template downloads');
+assert(isbnPage.includes('/site-visits.js?v=2'), 'ISBN Manager: preserve site visits tracking');
 assert(isbnPage.includes('id="app-preview"'), 'ISBN Manager: preserve interactive preview');
 assert(isbnPage.includes('href="https://isbnmanager.com/"'), 'ISBN Manager: canonical points to the authoritative product domain');
 assert(!isbnPage.includes('class="product-header"'), 'ISBN Manager: legacy product overview is removed');
