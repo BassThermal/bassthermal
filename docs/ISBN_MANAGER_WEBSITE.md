@@ -40,3 +40,12 @@ Authoritative editable design source: `tools/isbn-manager-web.template.html`. Bu
 6. Merge PR and deploy via existing Cloudflare process after approval. PR creation does **not** deploy.
 
 This source is intended as the initial website implementation. It is not a claim that unbuilt server functions are live.
+
+
+## BassThermal product-route presentation
+
+The existing `/apps/isbn-manager/` route is a full-page snapshot of `BassThermal/isbnmanager-website/index.html`, **not** the older generic application listing and **not** the generated `/isbnmanager/` multipage prototype. The snapshot's source blob is documented in its HTML comment. The only visible site-wide navigation on this route is the root-level sticky BassThermal header; the standalone page's own navigation stays in the DOM for its JavaScript dependencies but is visually hidden.
+
+Keep the source product design, illustration data, and interactive demo unchanged when refreshing from the `isbnmanager-website` repository. Copy a vetted current `index.html` into this route and reapply the documented parent-brand header mount. Do not put the standalone page inside an iframe or replace its real content with a redirect. Review the source's product claims before publishing. Keep the `https://isbnmanager.com/` canonical link to avoid competing search-index copies.
+
+The generic content generator, generic product validator, publisher runtime injector, and accent runtime injector deliberately exempt this route. `tools/build-public-brand-shell.mjs` owns only its root-level BassThermal navigation injection. Run `npm run content:build`, `npm run test:product-pages`, and `npm run test:site-shell` after updates.

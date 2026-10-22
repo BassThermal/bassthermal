@@ -35,6 +35,7 @@ const files = walk(publicRoot);
 for (const absolute of files) {
   const relative = path.relative(root, absolute).replaceAll('\\', '/');
   const current = fs.readFileSync(absolute, 'utf8');
+  if (current.includes('data-bt-isbn-brand-bridge="1"')) continue; // Do not inject unrelated site-wide styling into the standalone design.
   const next = inject(current);
   if (!next.includes('/bt-accent-system.css?v=2')) errors.push(`${relative} missing accent stylesheet`);
   if (!next.includes('/bt-accent-system.js?v=1')) errors.push(`${relative} missing accent runtime`);
