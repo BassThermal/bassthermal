@@ -153,9 +153,10 @@
       "privacy": {
         "summary": "Dictionary search and saved study data are handled on the device.",
         "local": "Search history, saved vocabulary, study progress, and application settings are stored locally where the platform supports them.",
-        "online": "Normal dictionary lookup does not send your search text to BassThermal. Store, update, or external-link services may make their own requests under their policies.",
+        "online": "Normal dictionary lookup does not send your search text to BassThermal. Store, update, or external-link services may make their own requests under their policies. On Android, the app displays banner ads through Google AdMob. Google and its advertising partners may process IP addresses, device or advertising identifiers, app interactions, diagnostics and advertising performance data for ad delivery, measurement, security and fraud prevention. Processing depends on device settings, region, consent and Google’s policies. Google’s privacy policy is available at https://policies.google.com/privacy.",
         "received": "BassThermal does not receive your saved vocabulary or study history through normal application use.",
-        "deletion": "Remove saved words through the app where available, clear application data, or uninstall the application to remove its local data."
+        "deletion": "Remove saved words through the app where available, clear application data, or uninstall the application to remove its local data.",
+        "updated": "November 24, 2026"
       }
     },
     "icon-pack-builder": {
@@ -458,9 +459,10 @@
       "privacy": {
         "summary": "Beam definitions, calculations, and generated results are handled on the device.",
         "local": "Beam geometry, supports, loads, calculation state, and exported reports remain on the device and in the locations you choose.",
-        "online": "Normal beam calculation does not require sending the model to BassThermal. Store and operating-system services may make their own requests under their policies.",
+        "online": "Normal beam calculation does not require sending the model to BassThermal. Store and operating-system services may make their own requests under their policies. On Android, the app displays banner ads through Google AdMob. Google and its advertising partners may process IP addresses, device or advertising identifiers, app interactions, diagnostics and advertising performance data for ad delivery, measurement, security and fraud prevention. Processing depends on device settings, region, consent and Google’s policies. Google’s privacy policy is available at https://policies.google.com/privacy.",
         "received": "BassThermal does not receive your beam models or exported reports through normal application use.",
-        "deletion": "Delete saved cases and exports, clear application data, or uninstall the app to remove local settings."
+        "deletion": "Delete saved cases and exports, clear application data, or uninstall the app to remove local settings.",
+        "updated": "November 24, 2026"
       }
     }
   }
